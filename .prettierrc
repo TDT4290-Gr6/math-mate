@@ -3,5 +3,6 @@
     "tabWidth": 4,
     "semi": true,
     "singleQuote": true,
-    "endOfLine": "lf"
+    "endOfLine": "lf",
+    "plugins": ["prettier-plugin-tailwindcss", "prettier-plugin-sort-imports", "prettier-plugin-prisma"]
 }
