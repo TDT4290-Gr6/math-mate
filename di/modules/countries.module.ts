@@ -1,8 +1,8 @@
-import { createCountryUseCase } from "@/src/application/use-cases/create-country.use-case";
-import { CountriesRepositoryMock } from "@/src/infrastructure/countries.repository.mock";
-import { createCountryController } from "@/src/interface-adapters/controllers/create-country.controller";
-import { createModule } from "@evyweb/ioctopus";
-import { DI_SYMBOLS } from "../types";
+import { createCountryController } from '@/src/interface-adapters/controllers/create-country.controller';
+import { createCountryUseCase } from '@/src/application/use-cases/create-country.use-case';
+import { CountriesRepositoryMock } from '@/src/infrastructure/countries.repository.mock';
+import { createModule } from '@evyweb/ioctopus';
+import { DI_SYMBOLS } from '../types';
 
 export function countriesModule() {
     const countriesModule = createModule();

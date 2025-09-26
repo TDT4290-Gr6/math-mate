@@ -5,8 +5,6 @@ export type ICreateCountryUseCase = ReturnType<typeof createCountryUseCase>;
 
 export const createCountryUseCase =
     (countryRepository: ICountriesRepository) =>
-    async  (name: string): Promise<Country> => {
-        
-        return countryRepository.createCountry({name});
-        
+    async (name: string): Promise<Country> => {
+        return countryRepository.createCountry({ name });
     };
