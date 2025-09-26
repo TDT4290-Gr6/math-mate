@@ -1,6 +1,4 @@
-import {
-    ICreateCountryUseCase,
-} from '@/src/application/use-cases/create-country.use-case';
+import { ICreateCountryUseCase } from '@/src/application/use-cases/create-country.use-case';
 import { Country } from '@/src/entities/models/country';
 
 function presenter(countries: Country[]) {

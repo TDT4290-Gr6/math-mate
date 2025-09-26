@@ -1,7 +1,6 @@
+import { countriesModule } from './modules/countries.module';
 import { createContainer } from '@evyweb/ioctopus';
 import { Registry } from './types';
-import { countriesModule } from './modules/countries.module';
-
 
 export const container = createContainer<Registry>();
 
