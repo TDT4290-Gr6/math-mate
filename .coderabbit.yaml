@@ -1,0 +1,26 @@
+language: 'en-US'
+early_access: false
+
+reviews:
+    profile: 'chill'
+    high_level_summary: true
+    poem: false
+    review_status: true
+    auto_review:
+        enabled: true
+        drafts: false
+    tools:
+        languagetool:
+            enabled: true
+            level: 'default'
+        gitleaks:
+            enabled: true
+        prismaLint:
+            enabled: true
+
+chat:
+    auto_reply: true
+
+knowledge_base:
+    web_search:
+        enabled: true
