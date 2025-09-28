@@ -1,7 +1,7 @@
 import { ICountriesRepository } from '../../application/repositories/countries.repository.interface';
 import { CountryInsert, Country } from '../../entities/models/country';
 
-export class CountriesRepositoryMock implements ICountriesRepository {
+export class MockCountriesRepository implements ICountriesRepository {
     private _countries: Country[];
 
     constructor() {

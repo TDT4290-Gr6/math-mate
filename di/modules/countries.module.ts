@@ -1,18 +1,23 @@
 import { createCountryController } from '@/src/interface-adapters/controllers/create-country.controller';
+import { MockCountriesRepository } from '@/src/infrastructure/repositories/countries.repository.mock';
 import { createCountryUseCase } from '@/src/application/use-cases/create-country.use-case';
-import { CountriesRepositoryMock } from '@/src/infrastructure/countries.repository.mock';
 import { createModule } from '@evyweb/ioctopus';
 import { DI_SYMBOLS } from '../types';
 
 export function countriesModule() {
     const countriesModule = createModule();
-    countriesModule
-        .bind(DI_SYMBOLS.ICountryRepository)
-        .toClass(CountriesRepositoryMock);
+    if (process.env.NODE_ENV === 'test') {
+        countriesModule
+            .bind(DI_SYMBOLS.ICountryRepository)
+            .toClass(MockCountriesRepository);
+    } else {
+        throw new Error('No real countries repository implemented yet.');
+    }
     countriesModule
         .bind(DI_SYMBOLS.ICreateCountryController)
         .toHigherOrderFunction(createCountryController, [
             DI_SYMBOLS.ICreateCountryUseCase,
+            DI_SYMBOLS.IAuthenticationService,
         ]);
     countriesModule
         .bind(DI_SYMBOLS.ICreateCountryUseCase)
