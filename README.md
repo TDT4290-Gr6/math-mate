@@ -34,6 +34,7 @@ This project follows the principles of [Clean Architecture](https://blog.cleanco
 - Business logic lives in the inner layers (use cases, domain) without framework or DB code
 - Frameworks and external services live in the outer layers
 - Dependencies only point inwards, never from core logic outwards
+- We follow a one controller per use case pattern, with each controller corresponding to a specific topic in the logical view
 
 For a practical reference, see this example of [Clean Architecture in Next.js](https://github.com/nikolovlazar/nextjs-clean-architecture).
 
