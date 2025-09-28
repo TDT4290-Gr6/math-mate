@@ -1,6 +1,19 @@
+import { zodResponseFormat } from 'openai/helpers/zod';
 import { Method, Problem } from './problem.entity';
 import OpenAI from 'openai';
 import dotenv from 'dotenv';
+import { z } from 'zod';
+
+const MethodSchema = z.object({
+    title: z.string(),
+    description: z.string(),
+    steps: z.array(z.string()),
+});
+
+const ProblemMethodsResponseSchema = z.object({
+    title: z.string(),
+    methods: z.array(MethodSchema),
+});
 
 dotenv.config({ quiet: true });
 
@@ -10,55 +23,33 @@ const model = 'openai/gpt-5';
 
 export const giveStepsPrompt = `You are an educational assistant specializing in teaching mathematics. Your task is to guide students by demonstrating three diverse methods for solving a given math problem.
 
-First create a concise title for the problem (\`title\`). Then, for each of the three methods, provide the following details:
-- Provide a very short and descriptive title (\`title\`) for the method.
-- Write a brief explanation (\`explanation\`) describing the relevance of the method to the problem without including specific solution steps.
-- Outline the solution process using a list of steps (\`steps\`). Each step should:
-  - Be a single, concise line without sub-steps.
-  - Avoid stating the final answer until the last step.
-  - Ensure the final step explicitly provides the final answer.
+First, create a concise title for the problem. Then, for each of the three methods, provide the following details:
 
-At the end of processing the math problem, provide your response in the following JSON format:
-{
-    "title": "short_title",
-    "methods": [
-    {
-        "title": "short_title_1",
-        "explanation": "brief_explanation_1",
-        "steps": [
-            "step_1",
-            "step_2",
-            "final_step_with_final_answer"
-        ]
-    },
-    {
-        "title": "short_title_2",
-        "explanation": "brief_explanation_2",
-        "steps": [
-            "step_1",
-            "step_2",
-            "final_step_with_final_answer"
-        ]
-    },
-    {
-        "title": "short_title_3",
-        "explanation": "brief_explanation_3",
-        "steps": [
-            "step_1",
-            "step_2",
-            "final_step_with_final_answer"
-        ]
-    }
-]}
+For each method:
+- Provide a very short and descriptive title for the method
+- Write a brief explanation describing the relevance of the method to the problem without including specific solution steps
+- Outline the solution process using a list of steps. Each step should:
+  - Be a single, concise line without sub-steps
+  - Avoid stating the final answer until the last step
+  - Ensure the final step explicitly provides the final answer
 
-When displaying math, use LaTeX formatting for clarity. Ensure clarity, consistency, and accuracy in structuring the JSON response, with all necessary characters escaped.
+Guidelines:
+- Use LaTeX formatting for mathematical expressions (e.g., $x^2$, $\\frac{a}{b}$)
+- Each method should use a different mathematical approach or technique
+- Steps should be clear and educational, suitable for students learning the concept
+- Do not perform actual calculations in your response - focus on the methodology
+- Each step should be concise and fit on a single line
 
-Do not perform any actual calculations or provide steps that exceed the constraints of a single line.`;
+The three methods should represent different approaches to solving the same problem, such as:
+- Different mathematical techniques (algebraic vs geometric vs numerical)
+- Different levels of complexity or abstraction
+- Different problem-solving strategies`;
 
-function generateMethodsForProblem(problem: Problem) {
+async function generateMethodsForProblem(problem: Problem) {
     const client = new OpenAI({ baseURL: endpoint, apiKey: token });
 
-    const response = client.chat.completions.create({
+    const response = await client.chat.completions.create({
+        model: model,
         messages: [
             { role: 'system', content: giveStepsPrompt },
             { role: 'user', content: problem.description },
@@ -67,43 +58,29 @@ function generateMethodsForProblem(problem: Problem) {
                 content: `Subject: ${problem.topic}. Final answer: $${problem.solution}$`,
             },
         ],
-        model: model,
+        response_format: zodResponseFormat(
+            ProblemMethodsResponseSchema,
+            'problem_methods',
+        ),
     });
 
-    return response;
+    return ProblemMethodsResponseSchema.parse(
+        response.choices[0].message?.content,
+    );
 }
 
-function parseResponse(response: string): { title: string; methods: Method[] } {
-    const parsed = JSON.parse(response);
-    if (!parsed.title || typeof parsed.title !== 'string') {
-        throw new Error(
-            "Invalid response format: 'title' field is missing or not a string",
-        );
-    }
-    const title: string = parsed.title;
+function parseMethods(response: z.infer<typeof MethodSchema>[]) {
+    const methods: Method[] = response.map((item, index: number) => ({
+        methodID: `method_${index + 1}`,
+        title: item.title,
+        description: item.description,
+        steps: item.steps.map((step: string, index: number) => ({
+            stepID: `step_${index + 1}`,
+            content: step,
+        })),
+    }));
 
-    if (!parsed.methods || !Array.isArray(parsed.methods)) {
-        throw new Error(
-            "Invalid response format: 'methods' field is missing or not an array",
-        );
-    }
-
-    const methods: Method[] = parsed.methods.map(
-        (
-            item: { title: string; explanation: string; steps: string[] },
-            index: number,
-        ) => ({
-            methodID: `method_${index + 1}`,
-            title: item.title,
-            explanation: item.explanation,
-            steps: item.steps.map((step: string, index: number) => ({
-                stepID: `step_${index + 1}`,
-                content: step,
-            })),
-        }),
-    );
-
-    return { title, methods };
+    return methods;
 }
 
 export async function generateMethods(problem: Problem): Promise<Problem> {
@@ -112,25 +89,13 @@ export async function generateMethods(problem: Problem): Promise<Problem> {
     }
 
     const answer = await generateMethodsForProblem(problem);
-
-    if (!answer.choices || answer.choices.length === 0) {
-        throw new Error('No choices returned from OpenAI');
+    if (!answer) {
+        throw new Error('No parsed response from OpenAI');
     }
+    problem.title = answer.title;
 
-    if (!answer.choices[0].message.content) {
-        throw new Error('No content in the first choice message');
-    }
-
-    const content = answer.choices[0].message.content;
-
-    try {
-        const { title, methods } = parseResponse(content);
-        problem.title = title;
-        problem.methods = methods;
-    } catch (error) {
-        console.log('Failed to parse JSON response:', content);
-        throw error;
-    }
+    const methods = parseMethods(answer.methods);
+    problem.methods = methods;
 
     return problem;
 }
