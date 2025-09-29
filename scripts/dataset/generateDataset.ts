@@ -1,15 +1,6 @@
 import { access, constants, open as openPromise } from 'fs/promises';
+import { Problem, LLMProviderType, DatasetEntry } from './types';
 import { generateMethods } from './generateMethods';
-import { Problem } from './problem.entity';
-
-interface DatasetEntry {
-    problem: string;
-    solution: string;
-    answer: string;
-    subject: string;
-    level: number;
-    unique_id: string;
-}
 
 async function loadDataset(filePath: string): Promise<DatasetEntry[]> {
     const dataset: DatasetEntry[] = [];
@@ -49,20 +40,25 @@ async function getProblems(): Promise<Problem[]> {
 
 async function saveProblems(problems: Problem[]) {
     const file = await openPromise('problems.json', 'w');
-    await file.writeFile(JSON.stringify(problems), 'utf-8');
+    await file.writeFile(JSON.stringify(problems, null, 4), 'utf-8');
     file.close();
 }
 
 async function main() {
     const problems = await getProblems();
+    const llmProvider = LLMProviderType.GEMINI;
 
     for (let i = 0; i < problems.length; i++) {
         const problem = problems[i];
         console.log(`Generating methods for problem ID: ${problem.problemID}`);
-        const updatedProblem = await generateMethods(problem);
-        console.dir(updatedProblem, { depth: null });
+
+        const updatedProblem = await generateMethods(problem, llmProvider);
         problems[i] = updatedProblem;
+
         await saveProblems(problems);
+        console.log(
+            `Done generating methods for problem ID: ${problem.problemID}`,
+        );
     }
 }
 

@@ -5,13 +5,14 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
-    "generateDataset": "tsx ./scripts/generateDataset.ts",
+    "generateDataset": "tsx ./scripts/dataset/generateDataset.ts",
     "start": "next start",
     "lint": "eslint .",
     "format": "prettier --write ."
   },
   "dependencies": {
     "@evyweb/ioctopus": "^1.3.0",
+    "@google/genai": "^1.21.0",
     "@prisma/client": "^6.16.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
