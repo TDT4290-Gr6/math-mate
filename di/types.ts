@@ -1,7 +1,7 @@
-import { ICreateCountryController } from '@/src/interface-adapters/controllers/create-country.controller';
-import { ICountriesRepository } from '@/src/application/repositories/countries.repository.interface';
-import { ICreateCountryUseCase } from '@/src/application/use-cases/create-country.use-case';
-import { IAuthenticationService } from '@/src/application/services/auth.service.interface';
+import { ICreateCountryController } from '@/interface-adapters/controllers/create-country.controller';
+import { ICountriesRepository } from '@/application/repositories/countries.repository.interface';
+import { ICreateCountryUseCase } from '@/application/use-cases/create-country.use-case';
+import { IAuthenticationService } from '@/application/services/auth.service.interface';
 
 export const DI_SYMBOLS = {
     // Services

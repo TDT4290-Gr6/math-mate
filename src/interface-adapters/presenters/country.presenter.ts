@@ -1,4 +1,4 @@
-import { Country } from '@/src/entities/models/country';
+import { Country } from '@/entities/models/country';
 
 export function countryPresenter(countries: Country[]) {
     return countries.map((country) => ({

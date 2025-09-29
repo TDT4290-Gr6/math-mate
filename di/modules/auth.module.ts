@@ -1,4 +1,4 @@
-import { MockAuthenticationService } from '@/src/infrastructure/services/auth.service.mock';
+import { MockAuthenticationService } from '@/infrastructure/services/auth.service.mock';
 import { createModule } from '@evyweb/ioctopus';
 import { DI_SYMBOLS } from '../types';
 

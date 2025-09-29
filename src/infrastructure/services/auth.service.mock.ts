@@ -1,4 +1,4 @@
-import { IAuthenticationService } from '@/src/application/services/auth.service.interface';
+import { IAuthenticationService } from '@/application/services/auth.service.interface';
 
 export class MockAuthenticationService implements IAuthenticationService {
     private userMap: Map<string, string> = new Map(); // sessionId -> userId

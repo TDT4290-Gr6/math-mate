@@ -1,5 +1,5 @@
 import { ICountriesRepository } from '../repositories/countries.repository.interface';
-import { Country } from '@/src/entities/models/country';
+import { Country } from '@/entities/models/country';
 
 export type ICreateCountryUseCase = ReturnType<typeof createCountryUseCase>;
 

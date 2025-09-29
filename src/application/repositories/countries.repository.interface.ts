@@ -1,4 +1,4 @@
-import { Country, CountryInsert } from '@/src/entities/models/country';
+import { Country, CountryInsert } from '@/entities/models/country';
 
 export interface ICountriesRepository {
     createCountry(country: CountryInsert): Promise<Country>;

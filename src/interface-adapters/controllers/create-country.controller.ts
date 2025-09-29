@@ -1,8 +1,8 @@
-import { ICreateCountryUseCase } from '@/src/application/use-cases/create-country.use-case';
-import { IAuthenticationService } from '@/src/application/services/auth.service.interface';
+import { ICreateCountryUseCase } from '@/application/use-cases/create-country.use-case';
+import { IAuthenticationService } from '@/application/services/auth.service.interface';
 import { countryPresenter } from '../presenters/country.presenter';
-import { UnauthenticatedError } from '@/src/entities/errors/auth';
-import { InputParseError } from '@/src/entities/errors/common';
+import { UnauthenticatedError } from '@/entities/errors/auth';
+import { InputParseError } from '@/entities/errors/common';
 import { z } from 'zod';
 
 const inputSchema = z.object({ name: z.string().min(1) });

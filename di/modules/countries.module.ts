@@ -1,6 +1,6 @@
-import { createCountryController } from '@/src/interface-adapters/controllers/create-country.controller';
-import { MockCountriesRepository } from '@/src/infrastructure/repositories/countries.repository.mock';
-import { createCountryUseCase } from '@/src/application/use-cases/create-country.use-case';
+import { createCountryController } from '@/interface-adapters/controllers/create-country.controller';
+import { MockCountriesRepository } from '@/infrastructure/repositories/countries.repository.mock';
+import { createCountryUseCase } from '@/application/use-cases/create-country.use-case';
 import { createModule } from '@evyweb/ioctopus';
 import { DI_SYMBOLS } from '../types';
 
