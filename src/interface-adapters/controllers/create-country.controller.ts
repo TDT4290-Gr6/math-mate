@@ -16,7 +16,7 @@ export const createCountryController =
         createCountryUseCase: ICreateCountryUseCase,
         authenticationService: IAuthenticationService,
     ) =>
-    async (input: { name: string }, sessionId: string) => {
+    async (input: z.infer<typeof inputSchema>, sessionId: string) => {
         // check authentication
         const isAuthenticated =
             await authenticationService.validateSession(sessionId);
