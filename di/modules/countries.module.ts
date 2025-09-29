@@ -22,7 +22,7 @@ export function countriesModule() {
     countriesModule
         .bind(DI_SYMBOLS.ICreateCountryUseCase)
         .toHigherOrderFunction(createCountryUseCase, [
-            DI_SYMBOLS.ICountryRepository,
+            DI_SYMBOLS.ICountriesRepository,
         ]);
     return countriesModule;
 }
