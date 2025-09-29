@@ -16,7 +16,7 @@ export const createCountryController =
         createCountryUseCase: ICreateCountryUseCase,
         authenticationService: IAuthenticationService,
     ) =>
-    async (input: string, sessionId: string) => {
+    async (input: { name: string }, sessionId: string) => {
         // check authentication
         const isAuthenticated =
             await authenticationService.validateSession(sessionId);
