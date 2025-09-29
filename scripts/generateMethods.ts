@@ -1,4 +1,3 @@
-import { zodResponseFormat } from 'openai/helpers/zod';
 import { Method, Problem } from './problem.entity';
 import OpenAI from 'openai';
 import dotenv from 'dotenv';
@@ -58,14 +57,20 @@ async function generateMethodsForProblem(problem: Problem) {
                 content: `Subject: ${problem.topic}. Final answer: $${problem.solution}$`,
             },
         ],
-        response_format: zodResponseFormat(
-            ProblemMethodsResponseSchema,
-            'problem_methods',
-        ),
+        response_format: {
+            type: 'json_schema',
+            json_schema: {
+                name: 'problem_methods',
+                strict: true,
+                schema: z.toJSONSchema(ProblemMethodsResponseSchema),
+            },
+        },
     });
 
+    const message = response.choices[0]?.message;
+
     return ProblemMethodsResponseSchema.parse(
-        response.choices[0].message?.content,
+        JSON.parse(message.content || ''),
     );
 }
 
@@ -92,10 +97,12 @@ export async function generateMethods(problem: Problem): Promise<Problem> {
     if (!answer) {
         throw new Error('No parsed response from OpenAI');
     }
-    problem.title = answer.title;
+
+    const returnProblem = { ...problem };
+    returnProblem.title = answer.title;
 
     const methods = parseMethods(answer.methods);
-    problem.methods = methods;
+    returnProblem.methods = methods;
 
-    return problem;
+    return returnProblem;
 }

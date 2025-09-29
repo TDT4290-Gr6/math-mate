@@ -1,5 +1,5 @@
+import { access, constants, open as openPromise } from 'fs/promises';
 import { generateMethods } from './generateMethods';
-import { open as openPromise } from 'fs/promises';
 import { Problem } from './problem.entity';
 
 interface DatasetEntry {
@@ -18,6 +18,7 @@ async function loadDataset(filePath: string): Promise<DatasetEntry[]> {
     for await (const line of file.readLines()) {
         if (line.trim()) dataset.push(JSON.parse(line));
     }
+    file.close();
     return dataset;
 }
 
@@ -33,14 +34,36 @@ function datasetToProblems(dataset: DatasetEntry[]): Problem[] {
     }));
 }
 
-async function main() {
-    const dataset = await loadDataset('MATH-500/test.jsonl');
-    const problems = datasetToProblems(dataset);
-    const problem = problems[2];
+async function getProblems(): Promise<Problem[]> {
+    try {
+        await access('problems.json', constants.F_OK);
+        const file = await openPromise('problems.json', 'r');
+        const data = await file.readFile('utf-8');
+        file.close();
+        return JSON.parse(data);
+    } catch {
+        const dataset = await loadDataset('MATH-500/test.jsonl');
+        return datasetToProblems(dataset);
+    }
+}
 
-    generateMethods(problem).then((problem) => {
-        console.dir(problem, { depth: null });
-    });
+async function saveProblems(problems: Problem[]) {
+    const file = await openPromise('problems.json', 'w');
+    await file.writeFile(JSON.stringify(problems), 'utf-8');
+    file.close();
+}
+
+async function main() {
+    const problems = await getProblems();
+
+    for (let i = 0; i < problems.length; i++) {
+        const problem = problems[i];
+        console.log(`Generating methods for problem ID: ${problem.problemID}`);
+        const updatedProblem = await generateMethods(problem);
+        console.dir(updatedProblem, { depth: null });
+        problems[i] = updatedProblem;
+        await saveProblems(problems);
+    }
 }
 
 main();

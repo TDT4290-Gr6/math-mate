@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
+    "generateDataset": "tsx ./scripts/generateDataset.ts",
     "start": "next start",
     "lint": "eslint .",
     "format": "prettier --write ."
