@@ -8,7 +8,7 @@ export const DI_SYMBOLS = {
     IAuthenticationService: Symbol.for('IAuthenticationService'),
 
     // Repositories
-    ICountryRepository: Symbol.for('ICountryRepository'),
+    ICountriesRepository: Symbol.for('ICountriesRepository'),
 
     // Use Cases
     ICreateCountryUseCase: Symbol.for('ICreateCountryUseCase'),
@@ -22,7 +22,7 @@ export interface Registry {
     [DI_SYMBOLS.IAuthenticationService]: IAuthenticationService;
 
     // Repositories
-    [DI_SYMBOLS.ICountryRepository]: ICountriesRepository;
+    [DI_SYMBOLS.ICountriesRepository]: ICountriesRepository;
 
     // Use Cases
     [DI_SYMBOLS.ICreateCountryUseCase]: ICreateCountryUseCase;
