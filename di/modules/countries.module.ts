@@ -8,7 +8,7 @@ export function countriesModule() {
     const countriesModule = createModule();
     if (process.env.NODE_ENV === 'test') {
         countriesModule
-            .bind(DI_SYMBOLS.ICountryRepository)
+            .bind(DI_SYMBOLS.ICountriesRepository)
             .toClass(MockCountriesRepository);
     } else {
         throw new Error('No real countries repository implemented yet.');
