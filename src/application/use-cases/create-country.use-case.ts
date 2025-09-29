@@ -8,5 +8,7 @@ export const createCountryUseCase =
     async (name: string): Promise<Country> => {
         // HINT: this is where you'd do authorization checks - is this user authorized to create a country
 
+        // HINT: this is where you'd do validation - is the country name valid, does it already exist, etc.
+
         return countryRepository.createCountry({ name });
     };
