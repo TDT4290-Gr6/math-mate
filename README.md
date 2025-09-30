@@ -45,3 +45,26 @@ For a practical reference, see this example of [Clean Architecture in Next.js](h
 - shadcn
 - eslint/prettier
 - ioctopus (for di)
+
+## Generating methods and steps for a dataset
+
+There is a script in `scripts/dataset/generateDataset.ts` that can be used to generate methods and steps for a dataset. This script would need to be modified depending on the structure of the dataset, to adhere to the `Problem` interface in `scripts/dataset/types.ts` (`methods` should be set to an empty array). The methods and steps will be generated when calling `generateMethods` defined in `scripts/dataset/generateMethods.ts`.
+
+The generation of methods and steps can be done by either using OpenAI or Gemini, depending on the `llmProvider` variable passed to `generateMethods`. Running the script can be done by running `npm run generateDataset`, which will create a new file `problems.json` with the generated methods and steps. The methods and steps are persisted, so the script can be run multiple times without generating methods and steps for problems that already have them. Note: the `title`-field will be overwritten based on what the LLM generates.
+
+Currently the MATH-500 dataset is used. To use the script for MATH-500, you need to download the dataset from [Hugging Face](https://huggingface.co/datasets/HuggingFaceH4/MATH-500). The dataset should be placed in `MATH-500/test.jsonl`, and can be downloaded using git:
+
+```bash
+git lfs install
+git clone git@hf.co:datasets/HuggingFaceH4/MATH-500
+```
+
+To use Gemini or OpenAI, you need to set the respective API keys in a `.env` file in the root of the project. You can use the `.env.example` file as a template.
+
+### OpenAI API key
+
+The script uses OpenAI models via GitHub's API. You will have to create a personal access token (PAT) with the `read:models` scope. You can create a PAT with the correct permissions in [GitHub's Developer Settings](https://github.com/settings/personal-access-tokens/new?description=Used+to+call+GitHub+Models+APIs+to+easily+run+LLMs%3A+https%3A%2F%2Fdocs.github.com%2Fgithub-models%2Fquickstart%23step-2-make-an-api-call&name=GitHub+Models+token&user_models=read).
+
+### Gemini API key
+
+You can get a Gemini API key by creating a new project in the [Gemini AI Studio](https://aistudio.google.com/api-keys).
