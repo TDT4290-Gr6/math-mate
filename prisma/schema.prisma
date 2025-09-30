@@ -1,8 +1,9 @@
-// This is your Prisma schema file,
+// This is your Prisma schema file, 
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// Prisma
 
 generator client {
     provider = "prisma-client-js"
@@ -12,4 +13,27 @@ generator client {
 datasource db {
     provider = "postgresql"
     url      = env("DATABASE_URL")
+}
+
+enum Subject {
+  Prealgebra
+  Algebra
+  Number_Theory
+  Counting_and_Probability
+  Geometry
+  Intermediate_Algebra
+  Precalculus
+}
+
+model Problem {
+  id        Int      @id @default(autoincrement())
+  uniqueId  String   @unique     @map("unique_id")
+  subject   Subject
+  level     Int
+  problem   String
+  solution  String
+  answer    String
+  createdAt DateTime @default(now())
+
+  @@index([subject, level])
 }
