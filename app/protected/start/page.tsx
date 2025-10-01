@@ -33,7 +33,7 @@ export default function StartPage() {
         if (selectedSubjects?.includes(subject)) {
             setSelectedSubjects(selectedSubjects.filter((s) => s !== subject));
         } else {
-            setSelectedSubjects([...(selectedSubjects || []), subject]);
+            setSelectedSubjects([...(selectedSubjects ?? []), subject]);
         }
     }
 
@@ -70,10 +70,9 @@ export default function StartPage() {
                                     subject={subject as keyof typeof subjects}
                                     // Set checked to false on initial render, then update based on local storage
                                     checked={
-                                        !!(
-                                            isHydrated &&
-                                            selectedSubjects?.includes(subject)
-                                        )
+                                        isHydrated &&
+                                        (selectedSubjects?.includes(subject) ??
+                                            false)
                                     }
                                     onToggle={toggleSubject}
                                 />

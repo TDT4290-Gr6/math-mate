@@ -1,11 +1,11 @@
 import {
+    Binary,
     Calculator,
     Dice5,
     Divide,
-    Key,
-    SlidersHorizontal,
     TrendingUp,
     Triangle,
+    Variable,
 } from 'lucide-react';
 import { Checkbox } from './ui/checkbox';
 import React from 'react';
@@ -14,8 +14,8 @@ export const subjects = {
     Algebra: Divide,
     'Counting & Probability': Dice5,
     Geometry: Triangle,
-    'Intermediate Algebra': SlidersHorizontal,
-    'Number Theory': Key,
+    'Intermediate Algebra': Variable,
+    'Number Theory': Binary,
     Prealgebra: Calculator,
     Precalculus: TrendingUp,
 };
@@ -23,7 +23,7 @@ export const subjects = {
 interface SubjectCheckboxProps {
     subject: keyof typeof subjects;
     checked: boolean;
-    onToggle: (subject: string) => void;
+    onToggle: (subject: keyof typeof subjects) => void;
 }
 
 export default function SubjectCheckbox({
