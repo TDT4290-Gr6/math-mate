@@ -8,6 +8,7 @@ import {
     CardHeader,
     CardTitle,
 } from '../../components/ui/card';
+import SubjectCheckbox, { subjects } from '../../components/SubjectCheckbox';
 import { ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -38,9 +39,13 @@ export default function StartPage() {
                         Choose which categories of math you want to work with:
                     </p>
                     <div className="flex flex-wrap justify-center gap-2">
-                        {
-                            // TODO: List the subjects
-                        }
+                        {subjects &&
+                            Object.keys(subjects).map((subject) => (
+                                <SubjectCheckbox
+                                    key={subject}
+                                    subject={subject as keyof typeof subjects}
+                                />
+                            ))}
                     </div>
                     Ready? Then press {'"Start Practicing"'} and get your first
                     math question.
