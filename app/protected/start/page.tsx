@@ -7,9 +7,9 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
-} from '../../components/ui/card';
+} from '@/components/ui/card';
 import { Subject, subjectIcons } from '../../constants/subjects';
-import SubjectCheckbox from '../../components/subject-checkbox';
+import SubjectCheckbox from '@/components/subject-checkbox';
 import { ChevronRight } from 'lucide-react';
 import { useLocalStorage } from 'react-use';
 import { useState, useEffect } from 'react';
