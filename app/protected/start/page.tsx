@@ -27,11 +27,12 @@ export default function StartPage() {
                             className="m-2"
                         />
                     </CardTitle>
-                    <CardDescription>
+                    <CardDescription className="relative">
                         This website is made to help students learn math in a
                         simple and supportive way. You can explore step-by-step
                         solutions to math problems, so you not only see the
                         answer but also understand how to get there.
+                        <div className="bg-primary absolute top-0 -left-15 h-full w-8 rounded-sm"></div>
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="flex flex-col items-center gap-4">
