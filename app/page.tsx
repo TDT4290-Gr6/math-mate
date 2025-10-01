@@ -6,8 +6,9 @@ export default async function HomePage() {
   /* const user = await getCurrentUser(); // server-side check */
 
   // TODO: Replace with real auth check
-  if (false) {
-    redirect("/dashboard"); // logged-in users go to dashboard
+  const isAuthenticated = false; // Replace with actual auth logic
+  if (isAuthenticated) {
+    redirect("/protected/dashboard"); // logged-in users go to dashboard
   } else {
     redirect("/login"); // not logged-in users go to login
   }
