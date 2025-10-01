@@ -22,11 +22,13 @@ export const subjects = {
 
 interface SubjectCheckboxProps {
     subject: keyof typeof subjects;
+    checked: boolean;
     onToggle: (subject: string) => void;
 }
 
 export default function SubjectCheckbox({
     subject,
+    checked,
     onToggle,
 }: SubjectCheckboxProps) {
     const Icon = subjects[subject];
@@ -41,6 +43,7 @@ export default function SubjectCheckbox({
             <Checkbox
                 className="size-4 rounded-full"
                 id={subject}
+                checked={checked}
                 onCheckedChange={() => onToggle(subject)}
             />
         </label>

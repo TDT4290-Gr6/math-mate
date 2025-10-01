@@ -8,9 +8,10 @@ import {
     CardHeader,
     CardTitle,
 } from '../../components/ui/card';
-import SubjectCheckbox, { subjects } from '../../components/SubjectCheckbox';
+import SubjectCheckbox, { subjects } from '../../components/subject-checkbox';
 import { ChevronRight } from 'lucide-react';
 import { useLocalStorage } from 'react-use';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -20,6 +21,13 @@ export default function StartPage() {
         'selectedSubjects',
         [],
     );
+
+    // Track hydration to prevent SSR mismatch
+    const [isHydrated, setIsHydrated] = useState(false);
+
+    useEffect(() => {
+        setIsHydrated(true);
+    }, []);
 
     function toggleSubject(subject: string) {
         if (selectedSubjects?.includes(subject)) {
@@ -60,6 +68,13 @@ export default function StartPage() {
                                 <SubjectCheckbox
                                     key={subject}
                                     subject={subject as keyof typeof subjects}
+                                    // Set checked to false on initial render, then update based on local storage
+                                    checked={
+                                        !!(
+                                            isHydrated &&
+                                            selectedSubjects?.includes(subject)
+                                        )
+                                    }
                                     onToggle={toggleSubject}
                                 />
                             ))}
