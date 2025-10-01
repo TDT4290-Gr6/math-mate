@@ -10,10 +10,25 @@ import {
 } from '../../components/ui/card';
 import SubjectCheckbox, { subjects } from '../../components/SubjectCheckbox';
 import { ChevronRight } from 'lucide-react';
+import { useLocalStorage } from 'react-use';
 import Image from 'next/image';
 import Link from 'next/link';
 
 export default function StartPage() {
+    // Store selected subjects in local storage
+    const [selectedSubjects, setSelectedSubjects] = useLocalStorage<string[]>(
+        'selectedSubjects',
+        [],
+    );
+
+    function toggleSubject(subject: string) {
+        if (selectedSubjects?.includes(subject)) {
+            setSelectedSubjects(selectedSubjects.filter((s) => s !== subject));
+        } else {
+            setSelectedSubjects([...(selectedSubjects || []), subject]);
+        }
+    }
+
     return (
         <div className="flex min-h-screen items-center justify-center">
             <Card className="relative w-2xl p-5">
@@ -45,6 +60,7 @@ export default function StartPage() {
                                 <SubjectCheckbox
                                     key={subject}
                                     subject={subject as keyof typeof subjects}
+                                    onToggle={toggleSubject}
                                 />
                             ))}
                     </div>
