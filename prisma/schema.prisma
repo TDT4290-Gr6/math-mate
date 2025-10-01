@@ -16,24 +16,24 @@ datasource db {
 }
 
 enum Subject {
-  Prealgebra
-  Algebra
-  Number_Theory
-  Counting_and_Probability
-  Geometry
-  Intermediate_Algebra
-  Precalculus
+    Prealgebra
+    Algebra
+    Number_Theory
+    Counting_and_Probability
+    Geometry
+    Intermediate_Algebra
+    Precalculus
 }
 
 model Problem {
-  id        Int      @id @default(autoincrement())
-  uniqueId  String   @unique     @map("unique_id")
-  subject   Subject
-  level     Int
-  problem   String
-  solution  String
-  answer    String
-  createdAt DateTime @default(now())
+    id        Int      @id @default(autoincrement())
+    uniqueId  String   @unique @map("unique_id")
+    subject   Subject
+    level     Int
+    problem   String
+    solution  String
+    answer    String
+    createdAt DateTime @default(now())
 
-  @@index([subject, level])
+    @@index([subject, level])
 }
