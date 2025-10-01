@@ -1,8 +1,8 @@
 import { countrySchema } from './country';
-import z from 'zod';
+import { z } from 'zod';
 
 export const userSchema = z.object({
-    id: z.int(),
+    id: z.uuid(),
     // missmatch to supabase, score optional
     score: z.float64().min(0).max(1).default(0),
     country: countrySchema.shape.id,

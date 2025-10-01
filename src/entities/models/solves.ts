@@ -8,7 +8,7 @@ export const solvesSchema = z.object({
     problemId: problemSchema.shape.id,
     // missmatch to supabase -> in supabase optional
     // are they really optional? i mean it needs to be if you want to create a solves entry before finishing it
-    attemps: z.int().min(1),
+    attempts: z.int().min(1),
     startedSolvingAt: z.date(),
     finishedSolvingAt: z.date(),
     stepsUsed: z.int().min(0),
@@ -20,7 +20,7 @@ export type Solves = z.infer<typeof solvesSchema>;
 export const insertSolvesSchema = solvesSchema.pick({
     userId: true,
     problemId: true,
-    attemps: true,
+    attempts: true,
     startedSolvingAt: true,
     finishedSolvingAt: true,
     stepsUsed: true,
