@@ -1,7 +1,10 @@
 name: lighthouse.ci
 
 on: 
+  pull_request:
   push:
+    branches:
+      - main
 
 jobs:
   lighthouseci:
@@ -11,6 +14,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18
+          cache: 'npm'
       - run: npm install && npm install -g @lhci/cli@0.15.x
       - run: npm run build
       - run: lhci autorun
