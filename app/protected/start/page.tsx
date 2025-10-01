@@ -8,7 +8,8 @@ import {
     CardHeader,
     CardTitle,
 } from '../../components/ui/card';
-import SubjectCheckbox, { subjects } from '../../components/subject-checkbox';
+import { Subject, subjectIcons } from '../../constants/subjects';
+import SubjectCheckbox from '../../components/subject-checkbox';
 import { ChevronRight } from 'lucide-react';
 import { useLocalStorage } from 'react-use';
 import { useState, useEffect } from 'react';
@@ -17,7 +18,7 @@ import Link from 'next/link';
 
 export default function StartPage() {
     // Store selected subjects in local storage
-    const [selectedSubjects, setSelectedSubjects] = useLocalStorage<string[]>(
+    const [selectedSubjects, setSelectedSubjects] = useLocalStorage<Subject[]>(
         'selectedSubjects',
         [],
     );
@@ -29,7 +30,7 @@ export default function StartPage() {
         setIsHydrated(true);
     }, []);
 
-    function toggleSubject(subject: string) {
+    function toggleSubject(subject: Subject) {
         if (selectedSubjects?.includes(subject)) {
             setSelectedSubjects(selectedSubjects.filter((s) => s !== subject));
         } else {
@@ -63,20 +64,21 @@ export default function StartPage() {
                         Choose which categories of math you want to work with:
                     </p>
                     <div className="flex flex-wrap justify-center gap-2">
-                        {subjects &&
-                            Object.keys(subjects).map((subject) => (
-                                <SubjectCheckbox
-                                    key={subject}
-                                    subject={subject as keyof typeof subjects}
-                                    // Set checked to false on initial render, then update based on local storage
-                                    checked={
-                                        isHydrated &&
-                                        (selectedSubjects?.includes(subject) ??
-                                            false)
-                                    }
-                                    onToggle={toggleSubject}
-                                />
-                            ))}
+                        {Object.keys(subjectIcons).map((subject) => (
+                            <SubjectCheckbox
+                                key={subject}
+                                subject={subject as Subject}
+                                // Set checked to false on initial render, then update based on local storage
+                                checked={
+                                    isHydrated &&
+                                    (selectedSubjects?.includes(
+                                        subject as Subject,
+                                    ) ??
+                                        false)
+                                }
+                                onToggle={toggleSubject}
+                            />
+                        ))}
                     </div>
                     Ready? Then press {'"Start Practicing"'} and get your first
                     math question.

@@ -1,29 +1,11 @@
-import {
-    Binary,
-    Calculator,
-    Dice5,
-    Divide,
-    TrendingUp,
-    Triangle,
-    Variable,
-} from 'lucide-react';
+import { subjectIcons, Subject } from '../constants/subjects';
 import { Checkbox } from './ui/checkbox';
 import React from 'react';
 
-export const subjects = {
-    Algebra: Divide,
-    'Counting & Probability': Dice5,
-    Geometry: Triangle,
-    'Intermediate Algebra': Variable,
-    'Number Theory': Binary,
-    Prealgebra: Calculator,
-    Precalculus: TrendingUp,
-};
-
 interface SubjectCheckboxProps {
-    subject: keyof typeof subjects;
+    subject: Subject;
     checked: boolean;
-    onToggle: (subject: keyof typeof subjects) => void;
+    onToggle: (subject: Subject) => void;
 }
 
 export default function SubjectCheckbox({
@@ -31,7 +13,7 @@ export default function SubjectCheckbox({
     checked,
     onToggle,
 }: SubjectCheckboxProps) {
-    const Icon = subjects[subject];
+    const Icon = subjectIcons[subject];
 
     return (
         <label
