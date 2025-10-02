@@ -8,6 +8,8 @@ const inputSchema = z.object({
     uuid: z.uuid(),
 });
 
+export type ISignInController = ReturnType<typeof signInController>;
+
 export const signInController =
     (
         createUserUseCase: ICreateUserUseCase,
