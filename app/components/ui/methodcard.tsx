@@ -42,7 +42,10 @@ export default function MethodCard({
 
             {/* Button */}
             <div className="absolute right-8 -bottom-5">
-                <Button className="px-6 py-2 bg-[var(--accent)]" onClick={onButtonClick}>
+                <Button
+                    className="bg-[var(--accent)] px-6 py-2"
+                    onClick={onButtonClick}
+                >
                     {buttonText}
                 </Button>
             </div>
