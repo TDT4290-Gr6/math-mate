@@ -4,11 +4,12 @@ import MethodCard from '@/components/ui/methodcard';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function MethodPage() {
     //TODO: backend functionality for method and methodcount
     const [methodCount, setMethodCount] = useState(3);
-
+    const router = useRouter();
     return (
         <div className="flex min-h-screen flex-col items-center gap-6">
             <div className="flex w-full flex-col border-b-1">
@@ -32,11 +33,11 @@ export default function MethodPage() {
             <div className="px-[15%] pt-4">
                 <p className="text-[var(--foreground)]">
                     To help you with the math problem you will be provided a set
-                    of methods you can use to solve the problem. You dont have
+                    of methods you can use to solve the problem. You don't have
                     to use any of these provided methods, but they are meant to
-                    provide guidance in solving the problem. Its up to you which
+                    provide guidance in solving the problem. It's up to you which
                     method to use.
-                </p>
+                </p>    
             </div>
 
             {/* TODO: add backend titles and descriptions */}
@@ -60,9 +61,7 @@ export default function MethodPage() {
                 {/* TODO: change link to "solve on your own" page */}
                 <Button
                     className="mb-20 w-46"
-                    onClick={() =>
-                        (window.location.href = '/protected/dashboard')
-                    }
+                    onClick={() => router.push('/protected/dashboard')}
                 >
                     Solve on your own
                 </Button>
