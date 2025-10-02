@@ -21,7 +21,7 @@ export default function MethodCard({
             <Title title={title} />
 
             {/* Description */}
-            <p className="mb-4 line-clamp-7 text-gray-600">{description}</p>
+            <p className="mb-4 line-clamp-7 text-[var(--foreground)]">{description}</p>
 
             {/* Button */}
             <div className="absolute right-8 -bottom-5">
