@@ -10,6 +10,7 @@ export default function LoginPage() {
                 //TODO: Change when auth is implemented
                 href="/protected/dashboard"
                 className="rounded-lg bg-indigo-600 px-4 py-2 text-white shadow hover:bg-indigo-700"
+            >
                 Go to Dashboard
             </Link>
         </div>
