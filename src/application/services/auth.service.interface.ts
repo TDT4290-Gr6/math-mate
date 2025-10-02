@@ -1,7 +1,7 @@
-export type OAuthProvider = 'google' | 'github';
+export type OAuthProvider = 'github';
 
 export interface IAuthenticationService {
-    signIn(provider: string, redirectUrl?: string): Promise<void>;
+    signIn(provider: OAuthProvider, redirectUrl?: string): Promise<void>;
     signOut(): Promise<void>;
     validateSession(): Promise<boolean>;
 }
