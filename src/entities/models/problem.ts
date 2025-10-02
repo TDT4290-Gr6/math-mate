@@ -2,13 +2,11 @@ import { z } from 'zod';
 
 export const problemSchema = z.object({
     id: z.int(),
-    title: z.string(),
+    title: z.string().optional(),
     problem: z.string(),
     solution: z.string(),
     subject: z.string(),
     level: z.int().min(1).max(5),
-    // missmatch to supabase, title and description is optional
-    // why descrption? should be in problem attribute
 });
 
 export type Problem = z.infer<typeof problemSchema>;

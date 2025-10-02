@@ -4,7 +4,6 @@ import { z } from 'zod';
 export const methodSchema = z.object({
     id: z.int(),
     problemId: problemSchema.shape.id,
-    // missmatch to supabase, optional?
     title: z.string(),
     description: z.string(),
 });

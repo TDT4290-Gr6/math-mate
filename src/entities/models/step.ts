@@ -6,7 +6,6 @@ export const stepSchema = z.object({
     id: z.int(),
     methodId: methodSchema.shape.id,
     problemId: problemSchema.shape.id,
-    // missmatch to superbase, optional?
     stepNumber: z.int().min(0),
     content: z.string(),
 });
