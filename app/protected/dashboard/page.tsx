@@ -13,7 +13,7 @@ export default function DashboardPage() {
                 Back to Login
             </Link>
             <Link
-                href="/login"
+                href="/protected/solve-yourself"
                 className="rounded-lg bg-green-600 px-4 py-2 text-white shadow hover:bg-green-700"
             >
                 Go to solve yourself
