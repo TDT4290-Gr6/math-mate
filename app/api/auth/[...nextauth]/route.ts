@@ -1,11 +1,14 @@
+import { ISignInController } from '@/interface-adapters/controllers/signIn.controller';
 import GithubProvider from 'next-auth/providers/github';
-import NextAuth from 'next-auth';
+import NextAuth, { NextAuthOptions } from 'next-auth';
+import { container } from '@/di/container';
+import { DI_SYMBOLS } from '@/di/types';
 
 if (!process.env.GITHUB_ID || !process.env.GITHUB_SECRET) {
     throw new Error('Missing GITHUB_ID or GITHUB_SECRET environment variables');
 }
-const handler = NextAuth({
-    // Configure one or more authentication providers
+
+export const authOptions: NextAuthOptions = {
     providers: [
         GithubProvider({
             clientId: process.env.GITHUB_ID,
@@ -13,24 +16,27 @@ const handler = NextAuth({
         }),
         // ...add more providers here
     ],
+    pages: {
+        signIn: '/auth/signin', // custom sign-in page
+    },
     callbacks: {
-        async signIn({ user, account, profile, email, credentials }) {
-            // TODO upcoming issues
+        async signIn({ user }) {
+            const signInController = container.get<ISignInController>(
+                DI_SYMBOLS.ISignInController,
+            );
+
+            try {
+                await signInController({
+                    uuid: user.id + '',
+                });
+            } catch (error) {
+                console.error('[nextauth] signIn error', error);
+                return false;
+            }
             return true;
         },
-        async redirect({ url, baseUrl }) {
-            // TODO upcoming issues
-            return baseUrl;
-        },
-        async session({ session, user, token }) {
-            // TODO upcoming issues
-            return session;
-        },
-        async jwt({ token, user, account, profile, isNewUser }) {
-            // TODO upcoming issues
-            return token;
-        },
     },
-});
+};
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };

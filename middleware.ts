@@ -2,7 +2,7 @@ import { withAuth } from 'next-auth/middleware';
 
 export default withAuth({
     pages: {
-        signIn: '/login', // Redirect unauthenticated users to /login
+        signIn: '/auth/signIn', // Redirect unauthenticated users to /auth/signIn
     },
 });
 
