@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
-import React from 'react';
 import Title from './title';
+import React from 'react';
 
 interface MethodCardProps {
     title: string;
@@ -16,15 +16,15 @@ export default function MethodCard({
     onButtonClick,
 }: MethodCardProps) {
     return (
-        <div className="w-min-128 relative mx-4 my-4 flex h-min-64 flex-col items-start justify-start rounded-xl bg-[var(--background)] p-4 text-start shadow-sm">
+        <div className="w-min-128 h-min-64 relative mx-4 my-4 flex flex-col items-start justify-start rounded-xl bg-[var(--background)] p-4 text-start shadow-sm">
             {/* Title */}
             <Title title={title} />
 
             {/* Description */}
-            <p className="mb-4 text-gray-600 line-clamp-7">{description}</p>
+            <p className="mb-4 line-clamp-7 text-gray-600">{description}</p>
 
             {/* Button */}
-            <div className="absolute -bottom-5 right-8">
+            <div className="absolute right-8 -bottom-5">
                 <Button className="px-6 py-2" onClick={onButtonClick}>
                     {buttonText}
                 </Button>
