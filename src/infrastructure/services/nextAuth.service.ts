@@ -1,21 +1,9 @@
 import { IAuthenticationService } from '@/application/services/auth.service.interface';
-import { getSession, signIn, signOut } from 'next-auth/react';
+import { getServerSession } from 'next-auth';
 
 export class NextAuthService implements IAuthenticationService {
-    async signIn(provider: string, redirectUrl?: string): Promise<void> {
-        await signIn(provider, { callbackUrl: redirectUrl });
-    }
-
-    async signOut(): Promise<void> {
-        await signOut();
-    }
-
-    async getSession() {
-        return await getSession(); // returns session or null
-    }
-
-    async validateSession(): Promise<boolean> {
-        const session = await this.getSession();
+    async isAuthenticated(): Promise<boolean> {
+        const session = await getServerSession();
         return !!session;
     }
 }
