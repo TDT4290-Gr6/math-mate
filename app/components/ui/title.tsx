@@ -6,7 +6,7 @@ type TitleProps = {
 
 /**
  * A React component that displays a title with a dynamic underline.
- * 
+ *
  * The underline width automatically matches the width of the title text.
  *
  * @param {TitleProps} props - The props for the component.

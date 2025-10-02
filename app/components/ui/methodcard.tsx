@@ -12,7 +12,6 @@ interface MethodCardProps {
     onButtonClick?: () => void;
 }
 
-
 /**
  * A card component representing a method, with a title, description, and button.
  *
