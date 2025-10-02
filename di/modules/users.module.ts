@@ -19,4 +19,6 @@ export function usersModule() {
         .toHigherOrderFunction(createUserUseCase, [
             DI_SYMBOLS.IUsersRepository,
         ]);
+
+    return usersModule;
 }
