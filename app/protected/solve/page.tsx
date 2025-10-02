@@ -1,5 +1,6 @@
 'use client';
 
+import ChatbotWindow, { ChatHistory } from '@/components/chatbot-window';
 import { Button } from '@/components/ui/button';
 import Steps from '@/components/steps';
 import { useState } from 'react';
@@ -37,6 +38,51 @@ const mockSteps: Step[] = [
     },
 ];
 
+const mochChatHistory: ChatHistory = {
+    messages: [
+        {
+            chatID: '1',
+            sender: 'bot',
+            timestamp: new Date(),
+            isLoading: false,
+            content:
+                'Lorem ipsum dolor sit amet,consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+        },
+        {
+            chatID: '2',
+            sender: 'user',
+            timestamp: new Date(),
+            isLoading: false,
+            content:
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+        },
+        {
+            chatID: '3',
+            sender: 'bot',
+            timestamp: new Date(),
+            isLoading: false,
+            content:
+                'Lorem ipsum dolor sit amet,consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+        },
+        {
+            chatID: '4',
+            sender: 'user',
+            timestamp: new Date(),
+            isLoading: false,
+            content:
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+        },
+        {
+            chatID: '5',
+            sender: 'bot',
+            timestamp: new Date(),
+            isLoading: false,
+            content:
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+        },
+    ],
+};
+
 export default function SolvingPage() {
     const [currentStep, setCurrentStep] = useState(1);
     const totalSteps = mockSteps.length;
@@ -72,6 +118,9 @@ export default function SolvingPage() {
                             </Button>
                         )}
                     </div>
+                </div>
+                <div className="flex w-1/2 flex-col p-4">
+                    <ChatbotWindow chatHistory={mochChatHistory} />
                 </div>
             </div>
         </div>
