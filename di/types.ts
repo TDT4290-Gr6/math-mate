@@ -1,6 +1,5 @@
 import type { ICreateCountryController } from '@/interface-adapters/controllers/create-country.controller';
 import type { ICountriesRepository } from '@/application/repositories/countries.repository.interface';
-import { ICreateUserController } from '@/interface-adapters/controllers/create-user.controller';
 import type { ICreateCountryUseCase } from '@/application/use-cases/create-country.use-case';
 import type { IAuthenticationService } from '@/application/services/auth.service.interface';
 import { IUsersRepository } from '@/application/repositories/users.repository.interface';
@@ -21,7 +20,6 @@ export const DI_SYMBOLS = {
 
     // Controllers
     ICreateCountryController: Symbol.for('ICreateCountryController'),
-    ICreateUserController: Symbol.for('ICreateUserController'),
     ISignInController: Symbol.for('ISignInController'),
 };
 
@@ -39,6 +37,5 @@ export interface Registry {
 
     // Controllers
     [DI_SYMBOLS.ICreateCountryController]: ICreateCountryController;
-    [DI_SYMBOLS.ICreateUserController]: ICreateUserController;
     [DI_SYMBOLS.ISignInController]: ISignInController;
 }
