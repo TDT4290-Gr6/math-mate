@@ -31,7 +31,7 @@ export default function MethodPage() {
                     <div className="h-10 w-10 bg-[var(--accent)]"></div>
                 </div>
                 {/* TODO: Replace with question component :) */}
-                <div className="flex h-50 w-5xl flex-row items-center gap-4"></div>
+                <div className="flex h-40 w-5xl flex-row items-center gap-4"></div>
             </div>
 
             <div className="px-[15%] pt-4">
@@ -64,7 +64,7 @@ export default function MethodPage() {
                 <p className="pb-4 text-[var(--foreground)]">or</p>
                 {/* TODO: change link to "solve on your own" page */}
                 <Button
-                    className="mb-20 w-46"
+                    className="mb-20 w-46 bg-[var(--accent)]"
                     onClick={() => router.push('/protected/dashboard')}
                 >
                     Solve on your own
