@@ -6,6 +6,10 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Link from 'next/link';
 
+/**
+ * The page component that displays a set of method cards to help solve
+ * a math problem. Users can also choose to solve the problem on their own.
+ */
 export default function MethodPage() {
     //TODO: backend functionality for method and methodcount
     const [methodCount, setMethodCount] = useState(3);
