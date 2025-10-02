@@ -1,5 +1,5 @@
 import { MockAuthenticationService } from '@/infrastructure/services/auth.service.mock';
-import { AuthenticationService } from '@/infrastructure/services/auth.service';
+import { NextAuthService } from '@/infrastructure/services/nextAuth.service';
 import { createModule } from '@evyweb/ioctopus';
 import { DI_SYMBOLS } from '../types';
 
@@ -13,7 +13,7 @@ export function authModule() {
     } else {
         authModule
             .bind(DI_SYMBOLS.IAuthenticationService)
-            .toClass(AuthenticationService);
+            .toClass(NextAuthService);
     }
 
     return authModule;
