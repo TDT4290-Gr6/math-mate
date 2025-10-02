@@ -2,9 +2,9 @@
 
 import MethodCard from '@/components/ui/methodcard';
 import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 export default function MethodPage() {
     //TODO: backend functionality for method and methodcount
@@ -35,9 +35,9 @@ export default function MethodPage() {
                     To help you with the math problem you will be provided a set
                     of methods you can use to solve the problem. You don't have
                     to use any of these provided methods, but they are meant to
-                    provide guidance in solving the problem. It's up to you which
-                    method to use.
-                </p>    
+                    provide guidance in solving the problem. It's up to you
+                    which method to use.
+                </p>
             </div>
 
             {/* TODO: add backend titles and descriptions */}
