@@ -15,6 +15,7 @@ const eslintConfig = [
         'next/typescript',
         'next',
         'prettier',
+        'plugin:jsx-a11y/recommended',
     ),
     {
         ignores: [
