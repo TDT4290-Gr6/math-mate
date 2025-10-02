@@ -2,7 +2,7 @@ import type { IAuthenticationService } from '@/application/services/auth.service
 export class MockAuthenticationService implements IAuthenticationService {
     private isAuthenticated = false;
 
-    async signIn(provider: string, redirectUr?: string): Promise<void> {
+    async signIn(provider: string, redirectUrl?: string): Promise<void> {
         // Simulate sign in
         this.isAuthenticated = true;
         return;
