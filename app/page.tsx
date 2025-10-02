@@ -10,7 +10,7 @@ export default async function HomePage() {
     if (isAuthenticated) {
         redirect('/protected/dashboard'); // logged-in users go to dashboard
     } else {
-        redirect('/login'); // not logged-in users go to login
+        redirect('/protected/solve'); // not logged-in users go to login
     }
 
     return null; // nothing renders because of redirect

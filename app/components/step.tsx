@@ -1,0 +1,49 @@
+
+interface Step {
+    stepID: string,
+    content: string 
+}
+
+interface Steps {
+    steps: Array<Step>,
+    currentStep: number
+}
+
+// Mock steps data for testing
+const mockSteps: Step[] = [
+    {
+        stepID: "step-1",
+        content: "First, identify what we need to solve. We have the equation: 2x + 5 = 13"
+    },
+    {
+        stepID: "step-2", 
+        content: "Subtract 5 from both sides to isolate the term with x: 2x + 5 - 5 = 13 - 5"
+    },
+    {
+        stepID: "step-3",
+        content: "Simplify both sides: 2x = 8"
+    },
+    {
+        stepID: "step-4",
+        content: "Divide both sides by 2 to solve for x: 2x ÷ 2 = 8 ÷ 2"
+    },
+    {
+        stepID: "step-5",
+        content: "Final answer: x = 4. Let's verify by substituting back: 2(4) + 5 = 8 + 5 = 13 ✓"
+    }
+];
+
+export default function Steps({steps = mockSteps, currentStep}: Steps ) {
+    const visibleSteps: Step[] = steps.slice(0, currentStep)
+
+    return (
+        <div className="space-y-4">
+            {visibleSteps.map((step, index) => (
+                <div key={step.stepID} className="p-4 border rounded-lg bg-gray-50">
+                    <h3 className="font-semibold text-lg mb-2">Step {index + 1}</h3>
+                    <p>{step.content}</p>
+                </div>
+            ))}
+        </div>
+    );
+}
