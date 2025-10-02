@@ -13,7 +13,24 @@ const handler = NextAuth({
         }),
         // ...add more providers here
     ],
-    callbacks: {},
+    callbacks: {
+        async signIn({ user, account, profile, email, credentials }) {
+            // TODO upcoming issues
+            return true;
+        },
+        async redirect({ url, baseUrl }) {
+            // TODO upcoming issues
+            return baseUrl;
+        },
+        async session({ session, user, token }) {
+            // TODO upcoming issues
+            return session;
+        },
+        async jwt({ token, user, account, profile, isNewUser }) {
+            // TODO upcoming issues
+            return token;
+        },
+    },
 });
 
 export { handler as GET, handler as POST };
