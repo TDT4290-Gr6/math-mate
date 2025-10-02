@@ -1,4 +1,4 @@
-import { MockUsersRepository } from '@/infrastructure/repositories/users.repositroy.mock';
+import { MockUsersRepository } from '@/infrastructure/repositories/users.repository.mock';
 import { createUserUseCase } from '@/application/use-cases/create-user.use-case';
 import { createModule } from '@evyweb/ioctopus';
 import { DI_SYMBOLS } from '../types';
@@ -6,7 +6,10 @@ import { DI_SYMBOLS } from '../types';
 export function usersModule() {
     const usersModule = createModule();
 
-    if (process.env.NODE_ENV === 'test') {
+    if (
+        process.env.NODE_ENV === 'development' ||
+        process.env.NODE_ENV === 'test'
+    ) {
         usersModule
             .bind(DI_SYMBOLS.IUsersRepository)
             .toClass(MockUsersRepository);

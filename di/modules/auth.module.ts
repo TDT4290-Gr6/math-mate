@@ -21,7 +21,6 @@ export function authModule() {
         .bind(DI_SYMBOLS.ISignInController)
         .toHigherOrderFunction(signInController, [
             DI_SYMBOLS.ICreateUserUseCase,
-            DI_SYMBOLS.IAuthenticationService,
         ]);
 
     return authModule;
