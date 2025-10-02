@@ -1,4 +1,5 @@
 import { MockAuthenticationService } from '@/infrastructure/services/auth.service.mock';
+import { AuthenticationService } from '@/infrastructure/services/auth.service';
 import { createModule } from '@evyweb/ioctopus';
 import { DI_SYMBOLS } from '../types';
 
@@ -10,7 +11,9 @@ export function authModule() {
             .bind(DI_SYMBOLS.IAuthenticationService)
             .toClass(MockAuthenticationService);
     } else {
-        throw new Error('No real authentication service implemented yet.');
+        authModule
+            .bind(DI_SYMBOLS.IAuthenticationService)
+            .toClass(AuthenticationService);
     }
 
     return authModule;
