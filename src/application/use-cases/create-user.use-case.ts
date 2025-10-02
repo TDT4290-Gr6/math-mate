@@ -1,5 +1,3 @@
-// export type ICreateUserUseCase = ReturnType<
-
 import { IUsersRepository } from '../repositories/users.repository.interface';
 import { User } from '@/entities/models/user';
 
