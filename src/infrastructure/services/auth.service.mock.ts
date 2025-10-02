@@ -1,17 +1,21 @@
 import type { IAuthenticationService } from '@/application/services/auth.service.interface';
-
 export class MockAuthenticationService implements IAuthenticationService {
-    private userMap: Map<string, string> = new Map(); // sessionId -> userId
+    private isAuthenticated = false;
 
-    async validateSession(sessionId: string): Promise<boolean> {
-        return this.userMap.has(sessionId);
+    async signIn(provider: string, redirectUr?: string): Promise<void> {
+        // Simulate sign in
+        this.isAuthenticated = true;
+        return;
     }
-    async createSession(userId: string): Promise<string> {
-        const sessionId = `session-${Math.random().toString(36)}`;
-        this.userMap.set(sessionId, userId);
-        return sessionId;
+
+    async signOut(): Promise<void> {
+        // Simulate sign out
+        this.isAuthenticated = false;
+        return;
     }
-    async invalidateSession(sessionId: string): Promise<boolean> {
-        return this.userMap.delete(sessionId);
+
+    async validateSession(): Promise<boolean> {
+        // Simulate session validation
+        return this.isAuthenticated;
     }
 }
