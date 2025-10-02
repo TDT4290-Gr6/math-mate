@@ -2,8 +2,8 @@ import { IAuthenticationService } from '@/application/services/auth.service.inte
 import { getSession, signIn, signOut } from 'next-auth/react';
 
 export class NextAuthService implements IAuthenticationService {
-    async signIn(): Promise<void> {
-        await signIn('github');
+    async signIn(provider: string, redirectUrl?: string): Promise<void> {
+        await signIn(provider, { callbackUrl: redirectUrl });
     }
 
     async signOut(): Promise<void> {
