@@ -1,6 +1,6 @@
-import type { IEventsRepository } from "@/application/repositories/events.repository.interface";
-import type { InsertEvent, Event } from "@/entities/models/event";
+import type { IEventsRepository } from '@/application/repositories/events.repository.interface';
 import { logger } from '@/infrastructure/services/logging/logger';
+import type { InsertEvent, Event } from '@/entities/models/event';
 
 export class MockEventsRepository implements IEventsRepository {
     private _events: Event[] = [];
@@ -13,8 +13,14 @@ export class MockEventsRepository implements IEventsRepository {
         };
 
         this._events.push(createdEvent);
-        logger.info({ action: createdEvent.actionName, loggedAt: createdEvent.loggedAt.toISOString(), 
-            id: createdEvent.id }, 'Event opprettet i MockEventsRepository');
+        logger.info(
+            {
+                action: createdEvent.actionName,
+                loggedAt: createdEvent.loggedAt.toISOString(),
+                id: createdEvent.id,
+            },
+            'Event opprettet i MockEventsRepository',
+        );
         return createdEvent;
     }
 

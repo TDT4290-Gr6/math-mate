@@ -1,7 +1,7 @@
 import { LogEventUseCase } from '@/application/use-cases/log-event.use-case';
-import { z } from 'zod';
 import { InputParseError } from '@/entities/errors/common';
- 
+import { z } from 'zod';
+
 const LogEventDTO = z.object({
     userId: z.number().int(),
     sessionId: z.string(),
@@ -12,25 +12,24 @@ const LogEventDTO = z.object({
     loggedAt: z.coerce.date().optional(),
     payload: z.union([z.string(), z.any()]).optional(),
 });
- 
+
 export type ICreateEventController = ReturnType<typeof createEventController>;
- 
+
 export const createEventController =
-    (logEventUseCase: LogEventUseCase) =>
-    async (raw: unknown) => {
+    (logEventUseCase: LogEventUseCase) => async (raw: unknown) => {
         // Validate input med safeParse (try-catch alternativt)
         const { data, error } = LogEventDTO.safeParse(raw);
- 
+
         if (error) {
             throw new InputParseError('Invalid input data', { cause: error });
         }
- 
+
         // Sørg for at payload er string som forventet
         const payloadString =
             typeof data.payload === 'string' || data.payload === undefined
                 ? data.payload
                 : JSON.stringify(data.payload);
- 
+
         // Kall use case med renset data
         const out = await logEventUseCase.execute({
             userId: data.userId,
@@ -42,7 +41,7 @@ export const createEventController =
             stepId: data.stepId,
             payload: payloadString,
         });
- 
+
         // Returner formatert respons (kan justeres etter behov)
         return { status: 201, body: { id: out.id, loggedAt: out.loggedAt } };
     };
