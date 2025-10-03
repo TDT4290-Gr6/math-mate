@@ -19,12 +19,12 @@ export const signInController =
 
         if (!result.success) {
             // handle validation errors
-            throw new InputParseError('Invalid input');
+            throw new InputParseError('Invalid input', { cause: result.error });
         }
 
         // call use case
         const { uuid } = result.data;
-        const userId = await createUserUseCase(uuid);
+        const user = await createUserUseCase(uuid);
 
-        return { userId: userId };
+        return { userId: user.id };
     };
