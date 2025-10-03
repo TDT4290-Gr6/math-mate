@@ -4,15 +4,17 @@ import NextAuth, { NextAuthOptions } from 'next-auth';
 import { container } from '@/di/container';
 import { DI_SYMBOLS } from '@/di/types';
 
-if (!process.env.GITHUB_ID || !process.env.GITHUB_SECRET) {
-    throw new Error('Missing GITHUB_ID or GITHUB_SECRET environment variables');
+if (!process.env.NEXT_AUTH_GITHUB_ID || !process.env.NEXT_AUTH_GITHUB_SECRET) {
+    throw new Error(
+        'Missing NEXT_AUTH_GITHUB_ID or NEXT_AUTH_GITHUB_SECRET environment variables',
+    );
 }
 
 export const authOptions: NextAuthOptions = {
     providers: [
         GithubProvider({
-            clientId: process.env.GITHUB_ID,
-            clientSecret: process.env.GITHUB_SECRET,
+            clientId: process.env.NEXT_AUTH_GITHUB_ID,
+            clientSecret: process.env.NEXT_AUTH_GITHUB_SECRET,
         }),
         // ...add more providers here
     ],
