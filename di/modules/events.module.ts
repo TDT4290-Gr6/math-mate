@@ -1,52 +1,35 @@
-// di/modules/events.module.ts
-
-import type { Registry } from '../types';
-
-import type { IEventsRepository } from '@/application/repositories/events.repository.interface';
+import { createModule } from '@evyweb/ioctopus';
+import { DI_SYMBOLS } from '../types';
+ 
+import { createEventController } from '@/interface-adapters/controllers/create-event.controller';
 import { LogEventUseCase } from '@/application/use-cases/log-event.use-case';
-
-// local backends (no external services needed)
-import { EventsRepositoryMemory } from '@/infrastructure/repositories/events.repository.memory';
-import { EventsRepositoryFile } from '@/infrastructure/repositories/events.repository.file';
-// prod backend (enable later)
-// import { EventsRepositorySupabase } from "@/src/infrastructure/repositories/events.repository.supabase";
-
-/** Narrow structural type for the container (matches what we actually use). */
-type ContainerLike = {
-    register: (
-        key: keyof Registry & string,
-        factory: (c: ContainerLike) => any,
-    ) => void;
-    resolve: <T = any>(key: keyof Registry & string) => T;
-};
-
-type Module = () => (container: ContainerLike) => void | (() => void);
-
-function makeEventsRepo(): IEventsRepository {
-    const mode = (process.env.USE_EVENT_REPO ?? 'memory').toLowerCase();
-    switch (mode) {
-        case 'file':
-            return new EventsRepositoryFile();
-        // case "supabase":
-        //   return new EventsRepositorySupabase();
-        case 'memory':
-        default:
-            return new EventsRepositoryMemory();
-    }
+ 
+// TODO: swap these to your real repo when ready
+import { MockEventsRepository } from '@/infrastructure/repositories/events.repository.mock';
+// import { EventsRepository } from '@/infrastructure/repositories/events.repository';
+ 
+export function eventsModule() {
+  const events = createModule();
+ 
+  // Repository
+  if (process.env.NODE_ENV === 'test') {
+    events.bind(DI_SYMBOLS.IEventsRepository).toClass(MockEventsRepository);
+  } else {
+    // events.bind(DI_SYMBOLS.IEventsRepository).toClass(EventsRepository);
+    events.bind(DI_SYMBOLS.IEventsRepository).toClass(MockEventsRepository); // temp
+  }
+ 
+  // Use case (class)
+  events.bind(DI_SYMBOLS.ILogEventUseCase).toClass(LogEventUseCase);
+ 
+  // Controller (higher-order function factory)
+  events
+    .bind(DI_SYMBOLS.ICreateEventController)
+    .toHigherOrderFunction(createEventController, [
+      DI_SYMBOLS.ILogEventUseCase,
+    ]);
+ 
+  return events;
 }
-
-export const eventsModule: Module = () => (container) => {
-    // repositories
-    container.register('EventsRepository', () => makeEventsRepo());
-
-    // use cases
-    container.register(
-        'LogEventUseCase',
-        (c) => new LogEventUseCase(c.resolve('EventsRepository')),
-    );
-
-    // optional disposer
-    return () => {
-        /* no-op */
-    };
-};
+ 
+ 

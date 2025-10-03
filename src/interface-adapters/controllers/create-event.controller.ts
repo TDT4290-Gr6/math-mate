@@ -1,43 +1,48 @@
 import { LogEventUseCase } from '@/application/use-cases/log-event.use-case';
 import { z } from 'zod';
-
+import { InputParseError } from '@/entities/errors/common';
+ 
 const LogEventDTO = z.object({
     userId: z.number().int(),
     sessionId: z.string(),
     actionName: z.string().min(1).max(100),
-    // Optional numeric FKs:
     problemId: z.number().int().optional(),
     methodId: z.number().int().optional(),
     stepId: z.number().int().optional(),
-    // loggedAt is optional here; use case will default to now()
     loggedAt: z.coerce.date().optional(),
-    // Your entity expects string; accept any and stringify if needed:
     payload: z.union([z.string(), z.any()]).optional(),
 });
-
-export class CreateEventController {
-    constructor(private useCase: LogEventUseCase) {}
-
-    async handle(raw: unknown) {
-        const dto = LogEventDTO.parse(raw);
-
-        // Ensure payload is string per your entity schema
+ 
+export type ICreateEventController = ReturnType<typeof createEventController>;
+ 
+export const createEventController =
+    (logEventUseCase: LogEventUseCase) =>
+    async (raw: unknown) => {
+        // Validate input med safeParse (try-catch alternativt)
+        const { data, error } = LogEventDTO.safeParse(raw);
+ 
+        if (error) {
+            throw new InputParseError('Invalid input data', { cause: error });
+        }
+ 
+        // Sørg for at payload er string som forventet
         const payloadString =
-            typeof dto.payload === 'string' || dto.payload === undefined
-                ? dto.payload
-                : JSON.stringify(dto.payload);
-
-        const out = await this.useCase.execute({
-            userId: dto.userId,
-            sessionId: dto.sessionId,
-            actionName: dto.actionName,
-            loggedAt: dto.loggedAt, // may be undefined; use case fills now()
-            problemId: dto.problemId,
-            methodId: dto.methodId,
-            stepId: dto.stepId,
+            typeof data.payload === 'string' || data.payload === undefined
+                ? data.payload
+                : JSON.stringify(data.payload);
+ 
+        // Kall use case med renset data
+        const out = await logEventUseCase.execute({
+            userId: data.userId,
+            sessionId: data.sessionId,
+            actionName: data.actionName,
+            loggedAt: data.loggedAt,
+            problemId: data.problemId,
+            methodId: data.methodId,
+            stepId: data.stepId,
             payload: payloadString,
         });
-
+ 
+        // Returner formatert respons (kan justeres etter behov)
         return { status: 201, body: { id: out.id, loggedAt: out.loggedAt } };
-    }
-}
+    };
