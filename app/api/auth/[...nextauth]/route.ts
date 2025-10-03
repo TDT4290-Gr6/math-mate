@@ -17,7 +17,7 @@ export const authOptions: NextAuthOptions = {
         // ...add more providers here
     ],
     pages: {
-        signIn: '/auth/signin', // custom sign-in page
+        signIn: '/auth/signIn', // custom sign-in page
     },
     callbacks: {
         async signIn({ user }) {
