@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const countrySchema = z.object({
-    id: z.string().min(1).max(3),
+    id: z.int().min(1),
     name: z.string().min(1).max(100),
 });
 

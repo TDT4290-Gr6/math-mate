@@ -9,7 +9,7 @@ export class MockCountriesRepository implements ICountriesRepository {
     }
 
     async createCountry(country: CountryInsert): Promise<Country> {
-        const id = this._countries.length.toString();
+        const id = this._countries.length + 1;
         const created = { id, ...country };
         this._countries.push(created);
         return created;
