@@ -2,10 +2,10 @@
 
 import MethodCard from '@/components/ui/methodcard';
 import { Button } from '@/components/ui/button';
+import Header from '@/components/ui/header';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Link from 'next/link';
-import Header from '@/components/ui/header';
 
 /**
  * The page component that displays a set of method cards to help solve
@@ -17,9 +17,16 @@ export default function MethodPage() {
     const router = useRouter();
     return (
         <div className="flex min-h-screen flex-col items-center gap-6">
-
-                {/* TODO: Replace with question component :) */}
-                <Header variant="question" mathQuestion={<div className="flex h-40 w-5xl flex-row items-center justify-center gap-4"> <p>TODO fix question component</p></div>} />
+            {/* TODO: Replace with question component :) */}
+            <Header
+                variant="question"
+                mathQuestion={
+                    <div className="flex h-40 w-5xl flex-row items-center justify-center gap-4">
+                        {' '}
+                        <p>TODO fix question component</p>
+                    </div>
+                }
+            />
 
             <div className="px-[15%] pt-4">
                 <p className="text-[var(--foreground)]">
