@@ -53,7 +53,7 @@ export default function ChatbotWindow({
             <div className="relative">
 
             {onClose &&
-            <ChevronDown onClick={onClose} color="#000000" strokeWidth={2.25} />
+            <ChevronDown onClick={onClose} strokeWidth={2} className="cursor-pointer text-[#3D3C3A] hover:text-[#EB5E28]"/>
         }
         </div>
             <div className="flex h-full max-h-80 flex-col-reverse space-y-2 overflow-y-auto">
@@ -79,10 +79,9 @@ export default function ChatbotWindow({
                     />
                     <SendHorizontal 
                         onClick={handleSendMessage}
-                        color="#3D3C3A" 
                         strokeWidth={2.5} 
                         size={20}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer hover:color-[#d54e20] transition-colors"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-[#3D3C3A] hover:text-[#EB5E28] transition-colors"
                     />
                 </div>
             </div>

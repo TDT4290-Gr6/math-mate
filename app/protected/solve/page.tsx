@@ -2,10 +2,10 @@
 
 import ChatbotWindow, { ChatHistory } from '@/components/chatbot-window';
 import { Button } from '@/components/ui/button';
+import { Sparkles } from 'lucide-react';
 import Steps from '@/components/steps';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
-import { Sparkles } from 'lucide-react';
 
 // Define the Step type
 interface Step {
@@ -102,7 +102,7 @@ export default function SolvingPage() {
                 {/* To-do: Add question card */}
                 <h2>Question</h2>
             </div>
-            <div className="flex w-full border-t-2 h-[calc(100vh-14rem)]">
+            <div className="flex h-[calc(100vh-14rem)] w-full border-t-2">
                 <div
                     className={cn(
                         'flex flex-col items-center p-4',
@@ -112,7 +112,7 @@ export default function SolvingPage() {
                     <div className="w-full flex-1">
                         <Steps steps={mockSteps} currentStep={currentStep} />
                     </div>
-                    <div className="flex w-full justify-center gap-2 mt-4">
+                    <div className="mt-4 flex w-full justify-center gap-2">
                         <Button className="w-1/4 rounded-full">
                             Go to answer
                         </Button>
@@ -128,15 +128,18 @@ export default function SolvingPage() {
                 </div>
                 {isChatOpen ? (
                     <div className="flex w-1/2 flex-col p-4">
-                        <ChatbotWindow chatHistory={mochChatHistory} onClose={() => setIsChatOpen(!isChatOpen)}/>
+                        <ChatbotWindow
+                            chatHistory={mochChatHistory}
+                            onClose={() => setIsChatOpen(!isChatOpen)}
+                        />
                     </div>
                 ) : (
                     <Button
-                onClick={() => setIsChatOpen(!isChatOpen)}
-                className="fixed bottom-6 right-6 h-14 w-14 rounded-full bg-[#E6E4E1] shadow-lg hover:shadow-xl transition-shadow"
-            >
-                <Sparkles strokeWidth={2.25} color="#3D3C3A" />
-            </Button>
+                        onClick={() => setIsChatOpen(!isChatOpen)}
+                        className="fixed right-6 bottom-6 h-14 w-14 rounded-full bg-[#E6E4E1] shadow-lg transition-shadow hover:shadow-xl"
+                    >
+                        <Sparkles strokeWidth={2.25} color="#3D3C3A" />
+                    </Button>
                 )}
             </div>
         </div>
