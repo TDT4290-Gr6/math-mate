@@ -4,7 +4,6 @@ import MethodCard from '@/components/ui/methodcard';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 
 /**
  * The page component that displays a set of method cards to help solve

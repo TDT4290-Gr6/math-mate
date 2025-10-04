@@ -1,8 +1,8 @@
 'use client';
 import { ChevronLeft, Menu } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import SidebarMenu from './sidebarMenu';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 /**
  * Header component with navigation and optional math question display.
@@ -43,20 +43,15 @@ export default function Header({
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
-            const target = e.target as HTMLElement | null;
-            if (
-                target &&
-                target.closest(
-                    'input, textarea, select, [contenteditable="true"], [role="textbox"]',
-                )
-            ) {
-                return;
-            }
-            if (e.key === 'e') {
-                setIsOpen(true); // open menu
-            } else if (e.key === 'Escape') {
-                setIsOpen(false); // close menu
-            }
+        const target = e.target as HTMLElement | null;
+        if (target && (target.closest('input, textarea, select, [contenteditable="true"], [role="textbox"]'))) {
+            return;
+        }
+        if (e.key === 'e')  {
+            setIsOpen(true); // open menu
+        } else if (e.key === 'Escape') {
+            setIsOpen(false); // close menu
+        }
         };
 
         window.addEventListener('keydown', handleKeyDown);
@@ -97,17 +92,10 @@ export default function Header({
             {/* Sidebar overlay */}
             {isOpen && (
                 <div className="fixed inset-0 z-40 flex">
-                    {/* Clickable background */}
-                    <div
+                    <button
+                        type="button"
                         className="fixed inset-0"
                         onClick={() => setIsOpen(false)}
-                        onKeyDown={(e) => {
-                            if (e.key === 'Escape') {
-                                setIsOpen(false);
-                            }
-                        }}
-                        role="button"
-                        tabIndex={0}
                         aria-label="Close sidebar menu"
                     />
                     <SidebarMenu onClose={() => setIsOpen(false)} />
