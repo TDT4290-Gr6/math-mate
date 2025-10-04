@@ -37,10 +37,10 @@ export default function MethodPage() {
             <div className="px-[15%] pt-4">
                 <p className="text-[var(--foreground)]">
                     To help you with the math problem you will be provided a set
-                    of methods you can use to solve the problem. You don't have
-                    to use any of these provided methods, but they are meant to
-                    provide guidance in solving the problem. It's up to you
-                    which method to use.
+                    of methods you can use to solve the problem. You don&#39;t
+                    have to use any of these provided methods, but they are
+                    meant to provide guidance in solving the problem. It&#39;s
+                    up to you which method to use.
                 </p>
             </div>
 
