@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import Link from 'next/link';
 
 /**
  * The page component that displays a set of method cards to help solve
@@ -13,7 +12,7 @@ import Link from 'next/link';
  */
 export default function MethodPage() {
     //TODO: backend functionality for method and methodcount
-    const [methodCount, setMethodCount] = useState(3);
+    const [methodCount] = useState(3);
     const router = useRouter();
     return (
         <div className="flex min-h-screen flex-col items-center gap-6">

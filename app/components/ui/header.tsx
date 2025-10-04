@@ -1,15 +1,34 @@
 'use client';
 import { ChevronLeft, Menu } from 'lucide-react';
 import SidebarMenu from './sidebarMenu';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 /**
- * Header component with navigation links.
+ * Header component with navigation and optional math question display.
+ *
+ * Features:
+ *   - Displays a back button (ChevronLeft) — functionality to be implemented.
+ *   - Displays a math question when `variant` is 'question'.
+ *   - Hamburger menu button that opens a `SidebarMenu` overlay.
+ *   - Global keyboard shortcuts:
+ *       - Press "e" to open the sidebar menu
+ *       - Press "Escape" to close the sidebar menu
+ *   - Click outside the sidebar closes it.
+ *
  * Props:
- * - variant: 'simple' | 'question' - determines the layout of the header
- * - mathQuestion: ReactNode - the math question to display when variant is 'question'
- * Default variant is 'simple'.
+ * @param variant - 'simple' | 'question' (optional, default: 'simple')
+ *     Determines the layout of the header.
+ *     - 'simple': basic header with back button and menu
+ *     - 'question': header includes a math question display
+ * @param mathQuestion - ReactNode (optional)
+ *     The math question content to display when `variant` is 'question'. Normally a question component.
+ *
+ * Notes:
+ *   - The back button does not yet have implemented functionality.
+ *   - Sidebar overlay is rendered conditionally when `isOpen` is true.
+ *   - Keyboard event listeners are attached to the window for global shortcut handling.
  */
+
 interface HeaderProps {
     variant?: 'simple' | 'question';
     mathQuestion?: React.ReactNode;
@@ -19,6 +38,20 @@ export default function Header({
     mathQuestion,
 }: HeaderProps) {
     const [isOpen, setIsOpen] = useState(false);
+
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'e') {
+            setIsOpen(true); // open menu
+        } else if (e.key === 'Escape') {
+            setIsOpen(false); // close menu
+        }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, []);
 
     //TODO: Implement back button functionality
 
@@ -49,6 +82,14 @@ export default function Header({
                     <div
                         className="fixed inset-0"
                         onClick={() => setIsOpen(false)}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Escape') {
+                                setIsOpen(false);
+                            }
+                        }}
+                        role="button"
+                        tabIndex={0}
+                        aria-label="Close sidebar menu"
                     />
                     <SidebarMenu onClose={() => setIsOpen(false)} />
                 </div>

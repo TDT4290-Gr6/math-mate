@@ -1,12 +1,8 @@
 'use client';
 
-import SubjectCheckbox from '../subject-checkbox';
 import { Switch } from '@/components/ui/switch';
-import { UserRound, Moon } from 'lucide-react';
-import { Check, User, X } from 'lucide-react';
+import { UserRound, Moon, X } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { Checkbox } from './checkbox';
-import { Button } from './button';
 import React from 'react';
 
 interface SidebarMenuProps {
@@ -14,8 +10,28 @@ interface SidebarMenuProps {
 }
 
 /**
- * SidebarMenu component for settings and previously solved problems.
+ * SidebarMenu component.
+ *
+ * This component renders a sidebar on the right side of the screen containing:
+ *   - User information (currently a placeholder for User ID)
+ *   - Settings section with a dark mode toggle
+ *   - Logout button (currently logs to console)
+ *   - List of previously solved math problems
+ *
+ * Features:
+ *   - Controlled by `onClose` callback to close the sidebar
+ *   - Dark mode toggle uses `next-themes` to switch between 'light' and 'dark'
+ *   - Responsive hover and click interactions
+ *
+ * Props:
+ * @param onClose - Function called to close the sidebar. Typically updates parent state.
+ *
+ * Notes:
+ *   - The `dummyProblems` array is placeholder data and should be replaced with real user data.
+ *   - The component uses a `mounted` state to ensure theme-dependent UI only renders on the client.
+ *   - Logout functionality is not fully implemented and currently logs a message to the console.
  */
+
 export default function SidebarMenu({ onClose }: SidebarMenuProps) {
     // Theme handling
     const { theme, setTheme } = useTheme();
@@ -39,11 +55,7 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
         'Factor a quadratic trinomial',
         'Convert degrees to radians',
         'Sum of a geometric series',
-        'Probability of dice roll',
-        'Quadratic equation roots',
-        'Area of a triangle formula',
-        'Derivative of a polynomial',
-        'Definite integral evaluation',
+        'Probability of dice roll'
     ];
     return (
         <div className="fixed top-0 right-0 flex h-full w-70 flex-col bg-[var(--sidebar)] shadow-[-2px_0_8px_rgba(0,0,0,0.3)]">
@@ -82,21 +94,20 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                     <h1 className="text-[var(--sidebar-primary-foreground)]">
                         Dark mode
                     </h1>
-                    {/* TODO: TOGGLE */}
                     {mounted && (
-                        <Switch
-                            className="absolute right-10 h-6 w-10 p-1"
-                            checked={theme === 'dark'}
-                            onCheckedChange={(checked) =>
-                                setTheme(checked ? 'dark' : 'light')
-                            }
-                        />
+                      <Switch
+                        className="absolute right-10 h-6 w-10 p-1"
+                        checked={theme === 'dark'}
+                        onCheckedChange={(checked) =>
+                          setTheme(checked ? 'dark' : 'light')
+                        }
+                      />
                     )}
                 </div>
                 {/* Logout button */}
                 <div
                     className="mt-4 flex h-[44px] flex-row items-center gap-2 rounded-[30px] bg-[var(--sidebar-primary)] p-2 font-semibold text-[var(--sidebar-primary-foreground)]"
-                    onClick={() => {}}
+                    onClick={() => {handleLogout(); onClose();}}
                 >
                     <UserRound className="mx-2 h-5 w-5 text-[var(--sidebar-primary-foreground)]" />
                     <h1 className="text-[var(--sidebar-primary-foreground)]">
