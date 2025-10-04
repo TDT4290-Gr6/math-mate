@@ -13,7 +13,7 @@ export default function ProtectedLayout({
     }
 
     return (
-        <div className="flex min-h-screen flex-col bg-gray-50">
+        <div className="flex min-h-screen flex-col">
             {/* optional shared navbar or sidebar for protected pages */}
             {children}
         </div>

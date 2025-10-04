@@ -5,16 +5,27 @@ import { useState } from 'react';
 
 /**
  * Header component with navigation links.
+ * Props:
+ * - variant: 'simple' | 'question' - determines the layout of the header
+ * - mathQuestion: ReactNode - the math question to display when variant is 'question'
+ * Default variant is 'simple'.
  */
-
-export default function Header() {
+interface HeaderProps {
+  variant?: 'simple' | 'question';
+  mathQuestion?: React.ReactNode;
+}
+export default function Header({ variant = 'simple', mathQuestion }: HeaderProps) {
     const [isOpen, setIsOpen] = useState(false);
 
-    return (
-        <div className="flex w-full flex-row items-center justify-between px-10 py-6">
-            {/* Back button */}
+    //TODO: Implement back button functionality
 
-            <ChevronLeft className="h-8 w-8" />
+    return (
+        <div className={`flex w-full flex-row items-top justify-between px-10 py-6 ${variant === 'question' ? 'border-b' : ''}`}>
+            {/* Back button */}
+            <ChevronLeft className="h-8 w-8 text-[var(--foreground)]" />
+
+            {/* Math question display */}
+            {variant === 'question' && mathQuestion}
             {/* Hamburger menu */}
             <button
                 type="button"
@@ -23,15 +34,16 @@ export default function Header() {
                     setIsOpen(true);
                 }}
             >
-                <Menu className="h-9 w-9" />
+                <Menu className="h-9 w-9 text-[var(--foreground)]" />
             </button>
+
 
             {/* Sidebar overlay */}
             {isOpen && (
                 <div className="fixed inset-0 z-40 flex">
                     {/* Clickable background */}
                     <div
-                        className="fixed inset-0 bg-black/40"
+                        className="fixed inset-0"
                         onClick={() => setIsOpen(false)}
                     />
                     <SidebarMenu onClose={() => setIsOpen(false)} />
