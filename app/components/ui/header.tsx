@@ -1,7 +1,7 @@
 'use client';
 import { ChevronLeft, Menu } from 'lucide-react';
-import { useState } from 'react';
 import SidebarMenu from './sidebarMenu';
+import { useState } from 'react';
 
 /**
  * Header component with navigation links.
@@ -19,7 +19,9 @@ export default function Header() {
             <button
                 type="button"
                 className="flex h-10 w-10 items-center justify-center"
-                onClick={() => {setIsOpen(true)}}
+                onClick={() => {
+                    setIsOpen(true);
+                }}
             >
                 <Menu className="h-9 w-9" />
             </button>
@@ -27,12 +29,12 @@ export default function Header() {
             {/* Sidebar overlay */}
             {isOpen && (
                 <div className="fixed inset-0 z-40 flex">
-                {/* Clickable background */}
-                <div
-                    className="fixed inset-0 bg-black/40"
-                    onClick={() => setIsOpen(false)}
-                />
-                <SidebarMenu onClose={() => setIsOpen(false)} />
+                    {/* Clickable background */}
+                    <div
+                        className="fixed inset-0 bg-black/40"
+                        onClick={() => setIsOpen(false)}
+                    />
+                    <SidebarMenu onClose={() => setIsOpen(false)} />
                 </div>
             )}
         </div>

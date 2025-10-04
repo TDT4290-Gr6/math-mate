@@ -1,8 +1,8 @@
 'use client';
 
-import Link from 'next/link';
-import { Menu } from 'lucide-react';
 import Header from '@/components/ui/header';
+import { Menu } from 'lucide-react';
+import Link from 'next/link';
 
 export default function DashboardPage() {
     return (
