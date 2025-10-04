@@ -1,7 +1,7 @@
 'use client';
 
-import { Switch } from '@/components/ui/switch';
 import { UserRound, Moon, X } from 'lucide-react';
+import { Switch } from '@/components/ui/switch';
 import { useTheme } from 'next-themes';
 import React from 'react';
 
@@ -55,7 +55,7 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
         'Factor a quadratic trinomial',
         'Convert degrees to radians',
         'Sum of a geometric series',
-        'Probability of dice roll'
+        'Probability of dice roll',
     ];
     return (
         <div className="fixed top-0 right-0 flex h-full w-72 flex-col bg-[var(--sidebar)] shadow-[-2px_0_8px_rgba(0,0,0,0.3)]">
@@ -95,15 +95,20 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                         Dark mode
                     </h1>
                     <Switch
-                    className="ml-auto h-6 w-10 p-1"
+                        className="ml-auto h-6 w-10 p-1"
                         checked={theme === 'dark'}
-                        onCheckedChange={(checked) => setTheme(checked ? 'dark' : 'light')}
+                        onCheckedChange={(checked) =>
+                            setTheme(checked ? 'dark' : 'light')
+                        }
                     />
                 </div>
                 {/* Logout button */}
                 <div
                     className="mt-4 flex h-[44px] flex-row items-center gap-2 rounded-[30px] bg-[var(--sidebar-primary)] p-2 font-semibold text-[var(--sidebar-primary-foreground)]"
-                    onClick={() => {handleLogout(); onClose();}}
+                    onClick={() => {
+                        handleLogout();
+                        onClose();
+                    }}
                 >
                     <UserRound className="mx-2 h-5 w-5 text-[var(--sidebar-primary-foreground)]" />
                     <h1 className="text-[var(--sidebar-primary-foreground)]">

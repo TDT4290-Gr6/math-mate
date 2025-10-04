@@ -1,8 +1,8 @@
 'use client';
 import { ChevronLeft, Menu } from 'lucide-react';
-import SidebarMenu from './sidebarMenu';
-import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import SidebarMenu from './sidebarMenu';
 
 /**
  * Header component with navigation and optional math question display.
@@ -43,15 +43,20 @@ export default function Header({
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
-        const target = e.target as HTMLElement | null;
-        if (target && (target.closest('input, textarea, select, [contenteditable="true"], [role="textbox"]'))) {
-            return;
-        }
-        if (e.key === 'e')  {
-            setIsOpen(true); // open menu
-        } else if (e.key === 'Escape') {
-            setIsOpen(false); // close menu
-        }
+            const target = e.target as HTMLElement | null;
+            if (
+                target &&
+                target.closest(
+                    'input, textarea, select, [contenteditable="true"], [role="textbox"]',
+                )
+            ) {
+                return;
+            }
+            if (e.key === 'e') {
+                setIsOpen(true); // open menu
+            } else if (e.key === 'Escape') {
+                setIsOpen(false); // close menu
+            }
         };
 
         window.addEventListener('keydown', handleKeyDown);
