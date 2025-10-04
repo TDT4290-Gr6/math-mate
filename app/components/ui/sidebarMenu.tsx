@@ -2,8 +2,8 @@
 
 import SubjectCheckbox from '../subject-checkbox';
 import { Switch } from '@/components/ui/switch';
-import { Check, User, X } from 'lucide-react';
 import { UserRound, Moon } from 'lucide-react';
+import { Check, User, X } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { Checkbox } from './checkbox';
 import { Button } from './button';
@@ -84,13 +84,13 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                     </h1>
                     {/* TODO: TOGGLE */}
                     {mounted && (
-                      <Switch
-                        className="absolute right-10 h-6 w-10 p-1"
-                        checked={theme === 'dark'}
-                        onCheckedChange={(checked) =>
-                          setTheme(checked ? 'dark' : 'light')
-                        }
-                      />
+                        <Switch
+                            className="absolute right-10 h-6 w-10 p-1"
+                            checked={theme === 'dark'}
+                            onCheckedChange={(checked) =>
+                                setTheme(checked ? 'dark' : 'light')
+                            }
+                        />
                     )}
                 </div>
                 {/* Logout button */}
