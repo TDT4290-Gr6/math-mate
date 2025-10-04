@@ -11,16 +11,21 @@ import { useState } from 'react';
  * Default variant is 'simple'.
  */
 interface HeaderProps {
-  variant?: 'simple' | 'question';
-  mathQuestion?: React.ReactNode;
+    variant?: 'simple' | 'question';
+    mathQuestion?: React.ReactNode;
 }
-export default function Header({ variant = 'simple', mathQuestion }: HeaderProps) {
+export default function Header({
+    variant = 'simple',
+    mathQuestion,
+}: HeaderProps) {
     const [isOpen, setIsOpen] = useState(false);
 
     //TODO: Implement back button functionality
 
     return (
-        <div className={`flex w-full flex-row items-top justify-between px-10 py-6 ${variant === 'question' ? 'border-b' : ''}`}>
+        <div
+            className={`items-top flex w-full flex-row justify-between px-10 py-6 ${variant === 'question' ? 'border-b' : ''}`}
+        >
             {/* Back button */}
             <ChevronLeft className="h-8 w-8 text-[var(--foreground)]" />
 
@@ -36,7 +41,6 @@ export default function Header({ variant = 'simple', mathQuestion }: HeaderProps
             >
                 <Menu className="h-9 w-9 text-[var(--foreground)]" />
             </button>
-
 
             {/* Sidebar overlay */}
             {isOpen && (
