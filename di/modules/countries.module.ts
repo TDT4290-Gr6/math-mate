@@ -6,7 +6,10 @@ import { DI_SYMBOLS } from '../types';
 
 export function countriesModule() {
     const countriesModule = createModule();
-    if (process.env.NODE_ENV === 'test') {
+    if (
+        process.env.NODE_ENV === 'test' ||
+        process.env.NODE_ENV === 'development'
+    ) {
         countriesModule
             .bind(DI_SYMBOLS.ICountriesRepository)
             .toClass(MockCountriesRepository);
