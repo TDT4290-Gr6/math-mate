@@ -103,18 +103,20 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                     />
                 </div>
                 {/* Logout button */}
-                <div
-                    className="mt-4 flex h-[44px] flex-row items-center gap-2 rounded-[30px] bg-[var(--sidebar-primary)] p-2 font-semibold text-[var(--sidebar-primary-foreground)]"
-                    onClick={() => {
-                        handleLogout();
-                        onClose();
-                    }}
+                <button
+                  type="button"
+                  className="mt-4 flex h-[44px] w-full flex-row items-center gap-2 rounded-[30px] bg-[var(--sidebar-primary)] p-2 font-semibold text-[var(--sidebar-primary-foreground)]"
+                  onClick={() => {
+                    handleLogout();
+                    onClose();
+                  }}
                 >
-                    <UserRound className="mx-2 h-5 w-5 text-[var(--sidebar-primary-foreground)]" />
-                    <h1 className="text-[var(--sidebar-primary-foreground)]">
-                        Log out
-                    </h1>
-                </div>
+                  <UserRound className="mx-2 h-5 w-5 text-[var(--sidebar-primary-foreground)]" />
+                  <span className="text-[var(--sidebar-primary-foreground)]">
+                    Log out
+                  </span>
+                </button>
+
 
                 {/* Previously solved questions */}
                 <div className="mt-10 font-semibold text-[var(--foreground)]">
