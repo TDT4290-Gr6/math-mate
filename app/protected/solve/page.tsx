@@ -3,7 +3,9 @@
 import ChatbotWindow, { ChatHistory } from '@/components/chatbot-window';
 import { Button } from '@/components/ui/button';
 import Steps from '@/components/steps';
+import { cn } from '@/lib/utils';
 import { useState } from 'react';
+import { Sparkles } from 'lucide-react';
 
 // Define the Step type
 interface Step {
@@ -86,6 +88,7 @@ const mochChatHistory: ChatHistory = {
 export default function SolvingPage() {
     const [currentStep, setCurrentStep] = useState(1);
     const totalSteps = mockSteps.length;
+    const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
 
     const handleNextStep = () => {
         if (currentStep < totalSteps) {
@@ -96,32 +99,45 @@ export default function SolvingPage() {
     return (
         <div>
             <div className="h-48 w-full">
-                {/* To-do: Add question component */}
+                {/* To-do: Add question card */}
                 <h2>Question</h2>
             </div>
-            <div className="flex w-full flex-row border-t-2">
-                {/* mx-auto for when the chat is closed */}
-                <div className="flex w-1/2 flex-col items-center gap-2 p-4">
+            <div className="flex w-full border-t-2">
+                <div
+                    className={cn(
+                        'flex flex-col items-center gap-2 p-4',
+                        isChatOpen ? 'w-1/2 border-x-2' : 'mx-auto w-3/5',
+                    )}
+                >
                     <div className="w-full flex-1">
                         <Steps steps={mockSteps} currentStep={currentStep} />
                     </div>
-                    <div className="w-full">
-                        <Button className="m-1 w-1/4 rounded-full">
+                    <div className="flex w-full justify-center gap-2">
+                        <Button className="w-1/4 rounded-full">
                             Go to answer
                         </Button>
                         {currentStep < totalSteps && (
                             <Button
                                 onClick={() => handleNextStep()}
-                                className="m-1 w-1/4 rounded-full bg-[#EB5E28]"
+                                className="w-1/4 rounded-full bg-[#EB5E28]"
                             >
                                 Next step
                             </Button>
                         )}
                     </div>
                 </div>
-                <div className="flex w-1/2 flex-col p-4">
-                    <ChatbotWindow chatHistory={mochChatHistory} />
-                </div>
+                {isChatOpen ? (
+                    <div className="flex w-1/2 flex-col p-4">
+                        <ChatbotWindow chatHistory={mochChatHistory} onClose={() => setIsChatOpen(!isChatOpen)}/>
+                    </div>
+                ) : (
+                    <Button
+                onClick={() => setIsChatOpen(!isChatOpen)}
+                className="fixed bottom-6 right-6 h-14 w-14 rounded-full bg-[#E6E4E1] shadow-lg hover:shadow-xl transition-shadow"
+            >
+                <Sparkles strokeWidth={2.25} color="#3D3C3A" />
+            </Button>
+                )}
             </div>
         </div>
     );
