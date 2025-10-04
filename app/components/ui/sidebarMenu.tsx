@@ -83,13 +83,15 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                         Dark mode
                     </h1>
                     {/* TODO: TOGGLE */}
-                    <Switch
+                    {mounted && (
+                      <Switch
                         className="absolute right-10 h-6 w-10 p-1"
                         checked={theme === 'dark'}
                         onCheckedChange={(checked) =>
-                            setTheme(checked ? 'dark' : 'light')
+                          setTheme(checked ? 'dark' : 'light')
                         }
-                    />
+                      />
+                    )}
                 </div>
                 {/* Logout button */}
                 <div
