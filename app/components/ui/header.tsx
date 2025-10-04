@@ -8,7 +8,7 @@ import SidebarMenu from './sidebarMenu';
  * Header component with navigation and optional math question display.
  *
  * Features:
- *   - Displays a back button (ChevronLeft) — functionality to be implemented.
+ *   - Displays a back button (ChevronLeft) that navigates to the previous page.
  *   - Displays a math question when `variant` is 'question'.
  *   - Hamburger menu button that opens a `SidebarMenu` overlay.
  *   - Global keyboard shortcuts:
@@ -25,7 +25,6 @@ import SidebarMenu from './sidebarMenu';
  *     The math question content to display when `variant` is 'question'. Normally a question component.
  *
  * Notes:
- *   - The back button does not yet have implemented functionality.
  *   - Sidebar overlay is rendered conditionally when `isOpen` is true.
  *   - Keyboard event listeners are attached to the window for global shortcut handling.
  */
@@ -64,7 +63,6 @@ export default function Header({
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, []);
 
-    //TODO: Implement back button functionality
 
     return (
         <div
