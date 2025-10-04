@@ -14,11 +14,11 @@ export default function Steps({ steps, currentStep }: StepsProps) {
     const visibleSteps: Step[] = steps.slice(0, currentStep);
 
     return (
-        <div className="flex max-h-96 flex-col-reverse space-y-2 overflow-y-auto rounded-lg border">
+        <div className="flex max-h-80 flex-col-reverse space-y-2 overflow-y-auto rounded-lg">
             {visibleSteps
                 .map((step, index) => (
-                    <div key={step.stepID} className="p-4">
-                        <h3 className="mb-2 flex flex-row text-lg font-semibold">
+                    <div key={step.stepID} className="p-2">
+                        <h3 className="flex flex-row text-lg font-semibold">
                             <Minus
                                 color="#EB5E28"
                                 strokeWidth={6}
@@ -26,7 +26,7 @@ export default function Steps({ steps, currentStep }: StepsProps) {
                             />
                             Step {index + 1}
                         </h3>
-                        <p>{step.content}</p>
+                        <p className="text-sm">{step.content}</p>
                     </div>
                 ))
                 .reverse()}

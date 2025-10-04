@@ -1,12 +1,5 @@
+import { ChatMessage } from './chatbot-window';
 import { cn } from '@/lib/utils';
-
-interface ChatMessage {
-    chatID: string;
-    sender: 'user' | 'bot';
-    timestamp: Date;
-    isLoading?: boolean;
-    content: string;
-}
 
 interface MessageBubbleProps {
     message: ChatMessage;
@@ -24,7 +17,7 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
         >
             <div
                 className={cn(
-                    'rounded-lg px-4 py-2 break-words',
+                    'rounded-lg px-4 py-2 text-sm break-words',
                     isUser
                         ? 'max-w-[70%] rounded-br-sm bg-[#E6E4E1]'
                         : 'text-gray-900',
