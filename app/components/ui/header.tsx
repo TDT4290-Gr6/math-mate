@@ -2,6 +2,7 @@
 import { ChevronLeft, Menu } from 'lucide-react';
 import SidebarMenu from './sidebarMenu';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 /**
  * Header component with navigation and optional math question display.
@@ -38,10 +39,15 @@ export default function Header({
     mathQuestion,
 }: HeaderProps) {
     const [isOpen, setIsOpen] = useState(false);
+    const router = useRouter();
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key === 'e') {
+        const target = e.target as HTMLElement | null;
+        if (target && (target.closest('input, textarea, select, [contenteditable="true"], [role="textbox"]'))) {
+            return;
+        }
+        if (e.key === 'e')  {
             setIsOpen(true); // open menu
         } else if (e.key === 'Escape') {
             setIsOpen(false); // close menu
@@ -60,14 +66,22 @@ export default function Header({
             className={`items-top flex w-full flex-row justify-between px-10 py-6 ${variant === 'question' ? 'border-b' : ''}`}
         >
             {/* Back button */}
-            <ChevronLeft className="h-8 w-8 text-[var(--foreground)]" />
-
+            <button
+                type="button"
+                aria-label="Go back"
+                className="flex h-10 w-10 items-center justify-center"
+                onClick={() => router.back()}
+            >
+                <ChevronLeft className="h-8 w-8 text-[var(--foreground)]" />
+            </button>
             {/* Math question display */}
             {variant === 'question' && mathQuestion}
             {/* Hamburger menu */}
             <button
                 type="button"
                 className="flex h-10 w-10 items-center justify-center"
+                aria-haspopup="dialog"
+                aria-expanded={isOpen}
                 onClick={() => {
                     setIsOpen(true);
                 }}

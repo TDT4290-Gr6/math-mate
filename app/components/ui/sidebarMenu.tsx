@@ -58,7 +58,7 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
         'Probability of dice roll'
     ];
     return (
-        <div className="fixed top-0 right-0 flex h-full w-70 flex-col bg-[var(--sidebar)] shadow-[-2px_0_8px_rgba(0,0,0,0.3)]">
+        <div className="fixed top-0 right-0 flex h-full w-72 flex-col bg-[var(--sidebar)] shadow-[-2px_0_8px_rgba(0,0,0,0.3)]">
             <div className="p-6">
                 {/* Header with close button */}
                 <div className="mb-1 flex items-center justify-between">
@@ -81,28 +81,24 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                 {/* Menu content */}
 
                 {/* Border under user ID */}
-                <div className="flex flex-col border-b-1"></div>
+                <div className="flex flex-col border-b"></div>
 
                 {/* Settings */}
                 <div className="mt-10 font-semibold text-[var(--foreground)]">
                     Settings:
                 </div>
-                <div className="mt-1 flex flex-col border-b-1"></div>
+                <div className="mt-1 flex flex-col border-b"></div>
                 {/* Darkmode toggle */}
                 <div className="mt-8 flex h-[44px] flex-row items-center gap-2 rounded-[30px] bg-[var(--sidebar-primary)] p-2 font-semibold text-[var(--sidebar-primary-foreground)]">
                     <Moon className="mx-2 h-5 w-5 text-[var(--sidebar-primary-foreground)]" />
                     <h1 className="text-[var(--sidebar-primary-foreground)]">
                         Dark mode
                     </h1>
-                    {mounted && (
-                      <Switch
-                        className="absolute right-10 h-6 w-10 p-1"
+                    <Switch
+                    className="ml-auto h-6 w-10 p-1"
                         checked={theme === 'dark'}
-                        onCheckedChange={(checked) =>
-                          setTheme(checked ? 'dark' : 'light')
-                        }
-                      />
-                    )}
+                        onCheckedChange={(checked) => setTheme(checked ? 'dark' : 'light')}
+                    />
                 </div>
                 {/* Logout button */}
                 <div
@@ -119,13 +115,13 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                 <div className="mt-10 font-semibold text-[var(--foreground)]">
                     Previously solved questions:
                 </div>
-                <div className="mt-1 flex flex-col border-b-1"></div>
+                <div className="mt-1 flex flex-col border-b"></div>
             </div>
             <div className="mt-1 flex-1 overflow-y-auto pr-2 pl-6">
                 {dummyProblems.map((problem, index) => (
                     <div
                         key={index}
-                        className="mt-4 flex h-[44px] cursor-pointer flex-row items-center gap-2 rounded-[8px] p-2 font-normal text-[var(--foreground)] hover:bg-[var(--sidebar-accent)]"
+                        className="mt-4 flex h-[44px] flex-row items-center gap-2 rounded-[8px] p-2 font-normal text-[var(--foreground)] hover:bg-[var(--sidebar-accent)]"
                     >
                         <p className="text-[var(--foreground)]">{problem}</p>
                     </div>

@@ -12,7 +12,7 @@ import { useState } from 'react';
  */
 export default function MethodPage() {
     //TODO: backend functionality for method and methodcount
-    const [methodCount] = useState(3);
+    const methodCount = 3;
     const router = useRouter();
     return (
         <div className="flex min-h-screen flex-col items-center gap-6">
@@ -20,7 +20,7 @@ export default function MethodPage() {
             <Header
                 variant="question"
                 mathQuestion={
-                    <div className="flex h-40 w-5xl flex-row items-center justify-center gap-4">
+                    <div className="flex h-40 w-full max-w-5xl flex-row items-center justify-center gap-4">
                         {' '}
                         <p>TODO fix question component</p>
                     </div>
@@ -57,7 +57,7 @@ export default function MethodPage() {
                 <p className="pb-4 text-[var(--foreground)]">or</p>
                 {/* TODO: change link to "solve on your own" page */}
                 <Button
-                    className="mb-20 w-46 bg-[var(--accent)]"
+                    className="mb-20 w-48 bg-[var(--accent)]"
                     onClick={() => router.push('/protected/dashboard')}
                 >
                     Solve on your own
