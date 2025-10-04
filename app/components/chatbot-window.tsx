@@ -51,11 +51,14 @@ export default function ChatbotWindow({
     return (
         <div>
             <div className="relative">
-
-            {onClose &&
-            <ChevronDown onClick={onClose} color="#000000" strokeWidth={2.25} />
-        }
-        </div>
+                {onClose && (
+                    <ChevronDown
+                        onClick={onClose}
+                        color="#000000"
+                        strokeWidth={2.25}
+                    />
+                )}
+            </div>
             <div className="flex h-full max-h-80 flex-col-reverse space-y-2 overflow-y-auto">
                 {initialMessage && (
                     <MessageBubble
@@ -74,15 +77,15 @@ export default function ChatbotWindow({
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
                         onKeyDown={handleKeyDown}
-                        placeholder={placeholder || "Type a message..."}
-                        className="w-full px-3 py-2 pr-12 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#EB5E28] focus:border-transparent"
+                        placeholder={placeholder || 'Type a message...'}
+                        className="w-full rounded-lg border border-gray-300 px-3 py-2 pr-12 text-sm focus:border-transparent focus:ring-2 focus:ring-[#EB5E28] focus:outline-none"
                     />
-                    <SendHorizontal 
+                    <SendHorizontal
                         onClick={handleSendMessage}
-                        color="#3D3C3A" 
-                        strokeWidth={2.5} 
+                        color="#3D3C3A"
+                        strokeWidth={2.5}
                         size={20}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer hover:color-[#d54e20] transition-colors"
+                        className="hover:color-[#d54e20] absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer transition-colors"
                     />
                 </div>
             </div>

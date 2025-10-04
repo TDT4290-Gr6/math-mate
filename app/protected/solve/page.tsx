@@ -2,10 +2,10 @@
 
 import ChatbotWindow, { ChatHistory } from '@/components/chatbot-window';
 import { Button } from '@/components/ui/button';
+import { Sparkles } from 'lucide-react';
 import Steps from '@/components/steps';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
-import { Sparkles } from 'lucide-react';
 
 // Define the Step type
 interface Step {
@@ -128,15 +128,18 @@ export default function SolvingPage() {
                 </div>
                 {isChatOpen ? (
                     <div className="flex w-1/2 flex-col p-4">
-                        <ChatbotWindow chatHistory={mochChatHistory} onClose={() => setIsChatOpen(!isChatOpen)}/>
+                        <ChatbotWindow
+                            chatHistory={mochChatHistory}
+                            onClose={() => setIsChatOpen(!isChatOpen)}
+                        />
                     </div>
                 ) : (
                     <Button
-                onClick={() => setIsChatOpen(!isChatOpen)}
-                className="fixed bottom-6 right-6 h-14 w-14 rounded-full bg-[#E6E4E1] shadow-lg hover:shadow-xl transition-shadow"
-            >
-                <Sparkles strokeWidth={2.25} color="#3D3C3A" />
-            </Button>
+                        onClick={() => setIsChatOpen(!isChatOpen)}
+                        className="fixed right-6 bottom-6 h-14 w-14 rounded-full bg-[#E6E4E1] shadow-lg transition-shadow hover:shadow-xl"
+                    >
+                        <Sparkles strokeWidth={2.25} color="#3D3C3A" />
+                    </Button>
                 )}
             </div>
         </div>
