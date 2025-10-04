@@ -63,7 +63,6 @@ export default function Header({
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, []);
 
-
     return (
         <div
             className={`items-top flex w-full flex-row justify-between px-10 py-6 ${variant === 'question' ? 'border-b' : ''}`}
