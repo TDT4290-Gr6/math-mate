@@ -12,6 +12,12 @@ export default function DashboardPage() {
             >
                 Back to Login
             </Link>
+            <Link
+                href="/protected/method"
+                className="rounded-lg bg-green-600 px-4 py-2 text-white shadow hover:bg-green-700"
+            >
+                Go to Method Page
+            </Link>
         </div>
     );
 }
