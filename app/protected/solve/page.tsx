@@ -102,17 +102,17 @@ export default function SolvingPage() {
                 {/* To-do: Add question card */}
                 <h2>Question</h2>
             </div>
-            <div className="flex w-full border-t-2">
+            <div className="flex w-full border-t-2 h-[calc(100vh-14rem)]">
                 <div
                     className={cn(
-                        'flex flex-col items-center gap-2 p-4',
+                        'flex flex-col items-center p-4',
                         isChatOpen ? 'w-1/2 border-x-2' : 'mx-auto w-3/5',
                     )}
                 >
                     <div className="w-full flex-1">
                         <Steps steps={mockSteps} currentStep={currentStep} />
                     </div>
-                    <div className="flex w-full justify-center gap-2">
+                    <div className="flex w-full justify-center gap-2 mt-4">
                         <Button className="w-1/4 rounded-full">
                             Go to answer
                         </Button>
