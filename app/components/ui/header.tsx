@@ -90,17 +90,7 @@ export default function Header({
             </button>
 
             {/* Sidebar overlay */}
-            {isOpen && (
-                <div className="fixed inset-0 z-40 flex">
-                    <button
-                        type="button"
-                        className="fixed inset-0"
-                        onClick={() => setIsOpen(false)}
-                        aria-label="Close sidebar menu"
-                    />
-                    <SidebarMenu onClose={() => setIsOpen(false)} />
-                </div>
-            )}
+            {isOpen && <SidebarMenu onClose={() => setIsOpen(false)} />}
         </div>
     );
 }
