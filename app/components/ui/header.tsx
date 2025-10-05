@@ -71,10 +71,10 @@ export default function Header({
             <button
                 type="button"
                 aria-label="Go back"
-                className="flex h-10 w-10 items-center justify-center"
+                className="flex size-10 cursor-pointer items-center justify-center"
                 onClick={() => router.back()}
             >
-                <ChevronLeft className="h-8 w-8 text-[var(--foreground)]" />
+                <ChevronLeft size={36} />
             </button>
             {/* Math question display */}
             {variant === 'question' && mathQuestion}
