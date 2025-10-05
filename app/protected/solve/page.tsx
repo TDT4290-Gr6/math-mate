@@ -10,6 +10,15 @@ import Steps from '@/components/steps';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 
+// Privacy notice for chat
+const PRIVACY_INITIAL_MESSAGE: ChatMessage = {
+    chatID: 'privacy-notice',
+    sender: 'bot',
+    content: 'Privacy Notice: Please do not share any personal information in this chat. I\'m here to help you with math problems only!',
+    timestamp: new Date(),
+    className: 'bg-blue-50 border border-blue-200 text-blue-800',
+};
+
 // Define the Step type
 interface Step {
     stepID: string;
@@ -135,7 +144,7 @@ export default function SolvingPage() {
                     <div className="w-full flex-1">
                         <Steps steps={mockSteps} currentStep={currentStep} />
                     </div>
-                    <div className="flex w-full justify-center gap-2">
+                    <div className="mt-4 flex w-full justify-center gap-2">
                         <Button className="w-1/4 rounded-full">
                             Go to answer
                         </Button>
@@ -156,6 +165,7 @@ export default function SolvingPage() {
                             onClose={() => setIsChatOpen(!isChatOpen)}
                             onSendMessage={handleSendMessage}
                             isLoading={isLoading}
+                            initialMessage={PRIVACY_INITIAL_MESSAGE}
                         />
                     </div>
                 ) : (
