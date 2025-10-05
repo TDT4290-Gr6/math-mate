@@ -82,38 +82,34 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                 {/* Menu content */}
 
                 {/* Settings */}
-                <div className="mt-10 font-semibold text-[var(--foreground)]">
-                    Settings:
+                {/* Settings */}
+                <div className="flex flex-col gap-4">
+                    <p className="border-b pb-1 font-semibold">Settings:</p>
+                    {/* Darkmode toggle */}
+                    <div className="bg-sidebar-primary flex items-center justify-around gap-2 rounded-4xl px-4 py-2">
+                        <Moon size={20} />
+                        <p className="font-semibold">Dark mode</p>
+                        <Switch
+                            className="ml-auto h-6 w-10 cursor-pointer p-1"
+                            checked={theme === 'dark'}
+                            onCheckedChange={(checked) =>
+                                setTheme(checked ? 'dark' : 'light')
+                            }
+                        />
+                    </div>
+                    {/* Logout button */}
+                    <button
+                        type="button"
+                        className="bg-sidebar-primary hover:bg-sidebar-accent flex cursor-pointer items-center gap-2 rounded-4xl px-4 py-2"
+                        onClick={() => {
+                            handleLogout();
+                            onClose();
+                        }}
+                    >
+                        <UserRound size={20} />
+                        <p className="font-semibold">Log out</p>
+                    </button>
                 </div>
-                <div className="mt-1 flex flex-col border-b"></div>
-                {/* Darkmode toggle */}
-                <div className="mt-8 flex h-[44px] flex-row items-center gap-2 rounded-[30px] bg-[var(--sidebar-primary)] p-2 font-semibold text-[var(--sidebar-primary-foreground)]">
-                    <Moon className="mx-2 h-5 w-5 text-[var(--sidebar-primary-foreground)]" />
-                    <h1 className="text-[var(--sidebar-primary-foreground)]">
-                        Dark mode
-                    </h1>
-                    <Switch
-                        className="ml-auto h-6 w-10 p-1"
-                        checked={theme === 'dark'}
-                        onCheckedChange={(checked) =>
-                            setTheme(checked ? 'dark' : 'light')
-                        }
-                    />
-                </div>
-                {/* Logout button */}
-                <button
-                    type="button"
-                    className="mt-4 flex h-[44px] w-full flex-row items-center gap-2 rounded-[30px] bg-[var(--sidebar-primary)] p-2 font-semibold text-[var(--sidebar-primary-foreground)]"
-                    onClick={() => {
-                        handleLogout();
-                        onClose();
-                    }}
-                >
-                    <UserRound className="mx-2 h-5 w-5 text-[var(--sidebar-primary-foreground)]" />
-                    <span className="text-[var(--sidebar-primary-foreground)]">
-                        Log out
-                    </span>
-                </button>
 
                 {/* Previously solved questions */}
                 <div className="mt-10 font-semibold text-[var(--foreground)]">
