@@ -68,13 +68,15 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                     </p>
 
                     {/* Close button */}
-                    <button
-                        onClick={onClose}
-                        className="rounded p-1 text-[var(--foreground)] hover:bg-[var(--accent-hover)]"
+                    <Button
+                        size="icon"
+                        variant="ghost"
+                        className="cursor-pointer"
                         aria-label="Close sidebar"
+                        onClick={onClose}
                     >
-                        <X className="h-5 w-5" />
-                    </button>
+                        <X />
+                    </Button>
                 </div>
 
                 {/* Menu content */}
