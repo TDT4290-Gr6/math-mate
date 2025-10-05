@@ -6,16 +6,14 @@ import {
     CardDescription,
     CardFooter,
     CardHeader,
-    CardTitle,
 } from '@/components/ui/card';
 import { Subject, subjectIcons } from '../../constants/subjects';
 import SubjectCheckbox from '@/components/subject-checkbox';
+import WideLogo from '@/components/ui/wideLogo';
 import Header from '@/components/ui/header';
 import { ChevronRight } from 'lucide-react';
 import { useLocalStorage } from 'react-use';
 import { useState, useEffect } from 'react';
-import { useTheme } from 'next-themes';
-import Image from 'next/image';
 import Link from 'next/link';
 
 export default function StartPage() {
@@ -24,7 +22,6 @@ export default function StartPage() {
         'selectedSubjects',
         [],
     );
-    const { theme } = useTheme();
 
     // Track hydration to prevent SSR mismatch
     const [isHydrated, setIsHydrated] = useState(false);
@@ -47,19 +44,7 @@ export default function StartPage() {
             <div className="flex min-h-screen flex-col items-center justify-center">
                 <Card className="relative w-2xl p-5">
                     <CardHeader>
-                        <CardTitle>
-                            <Image
-                                src={
-                                    isHydrated && theme === 'dark'
-                                        ? '/wide-logo-dark.svg'
-                                        : '/wide-logo-light.svg'
-                                }
-                                alt="MathMate"
-                                width={(313 * 2) / 3}
-                                height={(110 * 2) / 3}
-                                className="m-2"
-                            />
-                        </CardTitle>
+                        <WideLogo className="m-2 h-18 w-auto" />
                         <CardDescription className="text-foreground relative text-base">
                             This website is made to help students learn math in
                             a simple and supportive way. You can explore
