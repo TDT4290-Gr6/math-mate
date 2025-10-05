@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/card';
 import { Subject, subjectIcons } from '../../constants/subjects';
 import SubjectCheckbox from '@/components/subject-checkbox';
+import CountrySelect from '@/components/ui/countrySelect';
 import { ChevronRight } from 'lucide-react';
 import { useLocalStorage } from 'react-use';
 import { useState, useEffect } from 'react';
@@ -40,6 +41,7 @@ export default function StartPage() {
 
     return (
         <div className="flex min-h-screen items-center justify-center">
+            <CountrySelect />
             <Card className="relative w-2xl p-5">
                 <CardHeader>
                     <CardTitle>
