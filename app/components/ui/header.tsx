@@ -81,14 +81,12 @@ export default function Header({
             {/* Hamburger menu */}
             <button
                 type="button"
-                className="flex h-10 w-10 items-center justify-center"
+                className="flex size-10 cursor-pointer items-center justify-center"
                 aria-haspopup="dialog"
                 aria-expanded={isOpen}
-                onClick={() => {
-                    setIsOpen(true);
-                }}
+                onClick={() => setIsOpen(true)}
             >
-                <Menu className="h-9 w-9 text-[var(--foreground)]" />
+                <Menu size={36} />
             </button>
 
             {/* Sidebar overlay */}
