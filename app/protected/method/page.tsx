@@ -27,7 +27,7 @@ export default function MethodPage() {
             />
 
             <div className="px-[15%] pt-4">
-                <p className="text-[var(--foreground)]">
+                <p>
                     To help you with the math problem you will be provided a set
                     of methods you can use to solve the problem. You don&#39;t
                     have to use any of these provided methods, but they are
@@ -53,7 +53,7 @@ export default function MethodPage() {
                 ))}
             </div>
             <div className="flex flex-col items-center">
-                <p className="pb-4 text-[var(--foreground)]">or</p>
+                <p className="pb-4">or</p>
                 {/* TODO: change link to "solve on your own" page */}
                 <Button
                     className="mb-20 w-48 bg-[var(--accent)]"

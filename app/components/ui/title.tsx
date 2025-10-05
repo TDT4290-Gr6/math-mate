@@ -30,7 +30,7 @@ export default function Title({ title }: TitleProps) {
         <div className="flex flex-col items-start pb-4">
             <h2
                 ref={titleRef}
-                className="text-xl font-semibold text-[var(--foreground)]"
+                className="text-xl font-semibold"
             >
                 {title}
             </h2>

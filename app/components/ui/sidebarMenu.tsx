@@ -4,6 +4,7 @@ import { UserRound, Moon, X } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { useTheme } from 'next-themes';
 import React from 'react';
+import { Button } from './button';
 
 interface SidebarMenuProps {
     onClose: () => void;
@@ -35,9 +36,6 @@ interface SidebarMenuProps {
 export default function SidebarMenu({ onClose }: SidebarMenuProps) {
     // Theme handling
     const { theme, setTheme } = useTheme();
-    const [mounted, setMounted] = React.useState(false);
-    React.useEffect(() => setMounted(true), []);
-    if (!mounted) return null;
 
     // TODO: Implement logout functionality
     const handleLogout = () => {
@@ -58,7 +56,7 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
         'Probability of dice roll',
     ];
     return (
-        <div className="bg-sidebar fixed top-0 right-0 flex h-full w-72 flex-col p-6 shadow-[-2px_0_8px_rgba(0,0,0,0.3)]">
+        <div className="bg-sidebar z-50 fixed top-0 right-0 flex h-full w-72 flex-col p-6 shadow-[-2px_0_8px_rgba(0,0,0,0.3)]">
             <div className="flex flex-col gap-6">
                 {/* Header with close button */}
                 <div className="flex items-center justify-between border-b">
@@ -86,9 +84,9 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                 <div className="flex flex-col gap-4">
                     <p className="border-b pb-1 font-semibold">Settings:</p>
                     {/* Darkmode toggle */}
-                    <div className="bg-sidebar-primary flex items-center justify-around gap-2 rounded-4xl px-4 py-2">
+                    <div className="bg-sidebar-primary flex items-center justify-around gap-2 rounded-4xl px-4 py-2 text-[var(--sidebar-primary-foreground)]">
                         <Moon size={20} />
-                        <p className="font-semibold">Dark mode</p>
+                        <p className="font-semibold text-[var(--sidebar-primary-foreground)]">Dark mode</p>
                         <Switch
                             className="ml-auto h-6 w-10 cursor-pointer p-1"
                             checked={theme === 'dark'}
@@ -100,14 +98,14 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                     {/* Logout button */}
                     <button
                         type="button"
-                        className="bg-sidebar-primary hover:bg-sidebar-accent flex cursor-pointer items-center gap-2 rounded-4xl px-4 py-2"
+                        className="bg-sidebar-primary hover:bg-sidebar-accent  flex cursor-pointer items-center gap-2 rounded-4xl px-4 py-2"
                         onClick={() => {
                             handleLogout();
                             onClose();
                         }}
                     >
-                        <UserRound size={20} />
-                        <p className="font-semibold">Log out</p>
+                        <UserRound size={20} className='text-[var(--sidebar-primary-foreground)]'/>
+                        <p className="font-semibold text-[var(--sidebar-primary-foreground)]">Log out</p>
                     </button>
                 </div>
 
@@ -120,9 +118,9 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                 {dummyProblems.map((problem, index) => (
                     <div
                         key={index}
-                        className="mt-4 flex h-[44px] flex-row items-center gap-2 rounded-[8px] p-2 font-normal text-[var(--foreground)] hover:bg-[var(--sidebar-accent)]"
+                        className="mt-4 flex h-[44px] flex-row items-center gap-2 rounded-[8px] p-2 font-normal hover:bg-[var(--sidebar-accent)]"
                     >
-                        <p className="text-[var(--foreground)]">{problem}</p>
+                        <p>{problem}</p>
                     </div>
                 ))}
             </div>
