@@ -6,126 +6,125 @@
 
 // prisma/schema.prisma
 generator client {
-  provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+    provider = "prisma-client-js"
+    output   = "../src/generated/prisma"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
 
 model User {
-  id      BigInt  @id @default(autoincrement()) @db.BigInt
-  score   Int?    @db.Integer
-  country BigInt  @db.BigInt   // FK -> Country.id (required, RESTRICT on delete)
-  uuid    String? @unique @db.Text
+    id      BigInt  @id @default(autoincrement()) @db.BigInt
+    score   Int?    @db.Integer
+    country BigInt  @db.BigInt // FK -> Country.id (required, RESTRICT on delete)
+    uuid    String? @unique @db.Text
 
-  // relations
-  countryRef Country @relation(fields: [country], references: [id], onDelete: Restrict)
+    // relations
+    countryRef Country @relation(fields: [country], references: [id], onDelete: Restrict)
 
-  // back-relations
-  events Event[]
-  solves Solves[]
+    // back-relations
+    events Event[]
+    solves Solves[]
 
-  @@index([country])
+    @@index([country])
 }
 
 model Country {
-  id   BigInt @id @default(autoincrement()) @db.BigInt
-  Name String @unique @db.Text
+    id   BigInt @id @default(autoincrement()) @db.BigInt
+    Name String @unique @db.Text
 
-  // back-relations
-  User User[]
+    // back-relations
+    User User[]
 }
 
 model Problem {
-  id       BigInt  @id @default(autoincrement()) @db.BigInt
-  problem  String? @db.Text
-  solution String? @db.Text
-  subject  String? @db.Text
-  level    Int?    @db.SmallInt
-  title    String? @db.Text
+    id       BigInt  @id @default(autoincrement()) @db.BigInt
+    problem  String? @db.Text
+    solution String? @db.Text
+    subject  String? @db.Text
+    level    Int?    @db.SmallInt
+    title    String? @db.Text
 
-  // back-relations
-  Method Method[]
-  Step   Step[]
-  Event  Event[]
-  Solves Solves[]
+    // back-relations
+    Method Method[]
+    Step   Step[]
+    Event  Event[]
+    Solves Solves[]
 }
 
 model Method {
-  id          BigInt  @id @default(autoincrement()) @db.BigInt
-  problemId   BigInt  @db.BigInt   // FK -> Problem.id (required, CASCADE)
-  title       String? @db.Text
-  description String? @db.Text
+    id          BigInt  @id @default(autoincrement()) @db.BigInt
+    problemId   BigInt  @db.BigInt // FK -> Problem.id (required, CASCADE)
+    title       String? @db.Text
+    description String? @db.Text
 
-  // relations
-  problem Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
+    // relations
+    problem Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
 
-  // back-relations
-  Step  Step[]
-  Event Event[]
+    // back-relations
+    Step  Step[]
+    Event Event[]
 
-  @@index([problemId])
+    @@index([problemId])
 }
 
 model Step {
-  id         BigInt @id @default(autoincrement()) @db.BigInt
-  methodId   BigInt @db.BigInt  // required, CASCADE
-  problemId  BigInt @db.BigInt  // required, CASCADE (enforce consistency at DB level)
-  stepNumber Int?   @db.Integer
-  content    String? @db.Text
+    id         BigInt  @id @default(autoincrement()) @db.BigInt
+    methodId   BigInt  @db.BigInt // required, CASCADE
+    problemId  BigInt  @db.BigInt // required, CASCADE (enforce consistency at DB level)
+    stepNumber Int?    @db.Integer
+    content    String? @db.Text
 
-  // relations
-  method  Method  @relation(fields: [methodId], references: [id], onDelete: Cascade)
-  problem Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
+    // relations
+    method  Method  @relation(fields: [methodId], references: [id], onDelete: Cascade)
+    problem Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
 
-  // back-relations
-  Event Event[]
+    // back-relations
+    Event Event[]
 
-  @@index([methodId])
-  @@index([problemId])
+    @@index([methodId])
+    @@index([problemId])
 }
 
 model Event {
-  id         BigInt   @id @default(autoincrement()) @db.BigInt
-  loggedAt   DateTime @db.Timestamptz(6)
-  sessionId  BigInt?  @db.BigInt
-  actionName String?  @db.Text
-  Payload    String?  @db.Text
-  userId     BigInt?  @db.BigInt   // optional, RESTRICT
-  problemId  BigInt?  @db.BigInt   // optional, RESTRICT
-  methodId   BigInt?  @db.BigInt   // optional, RESTRICT
-  stepId     BigInt?  @db.BigInt   // optional, RESTRICT
+    id         BigInt   @id @default(autoincrement()) @db.BigInt
+    loggedAt   DateTime @db.Timestamptz(6)
+    sessionId  BigInt?  @db.BigInt
+    actionName String?  @db.Text
+    Payload    String?  @db.Text
+    userId     BigInt?  @db.BigInt // optional, RESTRICT
+    problemId  BigInt?  @db.BigInt // optional, RESTRICT
+    methodId   BigInt?  @db.BigInt // optional, RESTRICT
+    stepId     BigInt?  @db.BigInt // optional, RESTRICT
 
-  // relations (all optional, RESTRICT on delete)
-  user    User?    @relation(fields: [userId], references: [id], onDelete: Restrict)
-  problem Problem? @relation(fields: [problemId], references: [id], onDelete: Restrict)
-  method  Method?  @relation(fields: [methodId], references: [id], onDelete: Restrict)
-  step    Step?    @relation(fields: [stepId], references: [id], onDelete: Restrict)
+    // relations (all optional, RESTRICT on delete)
+    user    User?    @relation(fields: [userId], references: [id], onDelete: Restrict)
+    problem Problem? @relation(fields: [problemId], references: [id], onDelete: Restrict)
+    method  Method?  @relation(fields: [methodId], references: [id], onDelete: Restrict)
+    step    Step?    @relation(fields: [stepId], references: [id], onDelete: Restrict)
 
-  @@index([userId, loggedAt])
-  @@index([problemId])
-  @@index([methodId])
-  @@index([stepId])
+    @@index([userId, loggedAt])
+    @@index([problemId])
+    @@index([methodId])
+    @@index([stepId])
 }
 
 model Solves {
-  id                BigInt   @id @default(autoincrement()) @db.BigInt
-  userId            BigInt   @db.BigInt   // CASCADE
-  problemId         BigInt   @db.BigInt   // CASCADE
-  attempts          Int?     @db.Integer
-  startedSolvingAt  DateTime? @db.Timestamptz(6)
-  finishedSolvingAt DateTime? @db.Timestamptz(6)
-  stepUsed          Int?     @db.Integer
-  feedback          String?  @db.Text
+    id                BigInt    @id @default(autoincrement()) @db.BigInt
+    userId            BigInt    @db.BigInt // CASCADE
+    problemId         BigInt    @db.BigInt // CASCADE
+    attempts          Int?      @db.Integer
+    startedSolvingAt  DateTime? @db.Timestamptz(6)
+    finishedSolvingAt DateTime? @db.Timestamptz(6)
+    stepUsed          Int?      @db.Integer
+    feedback          String?   @db.Text
 
-  // relations
-  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  problem Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
+    // relations
+    user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    problem Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
 
-  @@index([userId])
-  @@index([problemId])
+    @@index([userId])
+    @@index([problemId])
 }
-
