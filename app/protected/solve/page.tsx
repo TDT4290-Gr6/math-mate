@@ -1,6 +1,9 @@
 'use client';
 
-import ChatbotWindow, { ChatHistory, ChatMessage } from '@/components/chatbot-window';
+import ChatbotWindow, {
+    ChatHistory,
+    ChatMessage,
+} from '@/components/chatbot-window';
 import { Button } from '@/components/ui/button';
 import { Sparkles } from 'lucide-react';
 import Steps from '@/components/steps';
@@ -84,7 +87,8 @@ export default function SolvingPage() {
     const [currentStep, setCurrentStep] = useState(1);
     const totalSteps = mockSteps.length;
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
-    const [chatHistory, setChatHistory] = useState<ChatHistory>(mochChatHistory);
+    const [chatHistory, setChatHistory] =
+        useState<ChatHistory>(mochChatHistory);
     const [isLoading, setIsLoading] = useState(false);
 
     const handleNextStep = () => {
@@ -94,29 +98,26 @@ export default function SolvingPage() {
     };
 
     const handleSendMessage = async (message: string) => {
-
         const userMessage: ChatMessage = {
             chatID: `user-${Date.now()}`,
-            sender: "user",
+            sender: 'user',
             content: message,
             timestamp: new Date(),
-        }
+        };
 
-        setChatHistory(prev => ({
-            messages: [...prev.messages, userMessage]
-        }))
-        
-        setIsLoading(true)
+        setChatHistory((prev) => ({
+            messages: [...prev.messages, userMessage],
+        }));
+
+        setIsLoading(true);
         try {
             /* TO-DO: implement API call to get reponse for chatbot */
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setIsLoading(false);
         }
-        catch(error) {
-            console.log(error)
-        }
-        finally {
-            setIsLoading(false)
-        }
-    }
+    };
 
     return (
         <div>
@@ -142,7 +143,6 @@ export default function SolvingPage() {
                             <Button
                                 onClick={() => handleNextStep()}
                                 className="w-1/4 rounded-full bg-[#EB5E28]"
-                                
                             >
                                 Next step
                             </Button>

@@ -1,7 +1,7 @@
 import { ChevronDown, SendHorizontal } from 'lucide-react';
 import MessageBubble from './message-bubble';
-import { useState } from 'react';
 import { cn } from '@/lib/utils';
+import { useState } from 'react';
 
 export interface ChatMessage {
     chatID: string;
@@ -52,20 +52,29 @@ export default function ChatbotWindow({
     return (
         <div>
             <div className="relative">
-
-            {onClose &&
-            <ChevronDown onClick={onClose} strokeWidth={2} className="cursor-pointer text-[#3D3C3A] hover:text-[#EB5E28]"/>
-        }
-        </div>
-            <div className="flex h-full max-h-80 flex-col-reverse overflow-y-auto p-2 space-y-2 space-y-reverse">
+                {onClose && (
+                    <ChevronDown
+                        onClick={onClose}
+                        strokeWidth={2}
+                        className="cursor-pointer text-[#3D3C3A] hover:text-[#EB5E28]"
+                    />
+                )}
+            </div>
+            <div className="flex h-full max-h-80 flex-col-reverse space-y-2 space-y-reverse overflow-y-auto p-2">
                 {isLoading && (
                     <div className="mb-4 flex w-full justify-start">
-                        <div className="rounded-lg px-4 py-2 text-sm bg-gray-100 animate-pulse">
+                        <div className="animate-pulse rounded-lg bg-gray-100 px-4 py-2 text-sm">
                             <div className="flex items-center space-x-1">
                                 <div className="flex space-x-1">
-                                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"/>
-                                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}/>
-                                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}/>
+                                    <div className="h-2 w-2 animate-bounce rounded-full bg-gray-400" />
+                                    <div
+                                        className="h-2 w-2 animate-bounce rounded-full bg-gray-400"
+                                        style={{ animationDelay: '0.1s' }}
+                                    />
+                                    <div
+                                        className="h-2 w-2 animate-bounce rounded-full bg-gray-400"
+                                        style={{ animationDelay: '0.2s' }}
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -89,21 +98,25 @@ export default function ChatbotWindow({
                         onChange={(e) => setInputValue(e.target.value)}
                         onKeyDown={handleKeyDown}
                         disabled={isLoading}
-                        placeholder={isLoading ? "Generating a response..." : (placeholder || "Ask a question...")}
+                        placeholder={
+                            isLoading
+                                ? 'Generating a response...'
+                                : placeholder || 'Ask a question...'
+                        }
                         className={cn(
-                            "w-full px-3 py-2 pr-12 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#EB5E28] focus:border-transparent transition-opacity",
-                            isLoading && "opacity-50"
+                            'w-full rounded-lg border border-gray-300 px-3 py-2 pr-12 text-sm transition-opacity focus:border-transparent focus:ring-2 focus:ring-[#EB5E28] focus:outline-none',
+                            isLoading && 'opacity-50',
                         )}
                     />
-                    <SendHorizontal 
+                    <SendHorizontal
                         onClick={handleSendMessage}
-                        strokeWidth={2.5} 
+                        strokeWidth={2.5}
                         size={20}
                         className={cn(
-                            "absolute right-3 top-1/2 -translate-y-1/2 transition-colors",
-                            isLoading 
-                                ? "text-gray-400" 
-                                : "cursor-pointer text-[#3D3C3A] hover:text-[#EB5E28]"
+                            'absolute top-1/2 right-3 -translate-y-1/2 transition-colors',
+                            isLoading
+                                ? 'text-gray-400'
+                                : 'cursor-pointer text-[#3D3C3A] hover:text-[#EB5E28]',
                         )}
                     />
                 </div>
