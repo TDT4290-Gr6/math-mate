@@ -60,13 +60,13 @@ export default function StartPage() {
                                 className="m-2"
                             />
                         </CardTitle>
-                        <CardDescription className="relative">
+                        <CardDescription className="text-foreground relative text-base">
                             This website is made to help students learn math in
                             a simple and supportive way. You can explore
                             step-by-step solutions to math problems, so you not
                             only see the answer but also understand how to get
                             there.
-                            <div className="bg-primary absolute top-0 -left-15 h-full w-8 rounded-sm"></div>
+                            <div className="bg-accent absolute top-0 -left-15 h-full w-8 rounded-sm"></div>
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="flex flex-col items-center gap-4">
@@ -97,7 +97,7 @@ export default function StartPage() {
                     <CardFooter>
                         <Link
                             href="/protected/dashboard" // TODO: Link to correct page when it is created
-                            className="bg-primary hover:bg-primary/90 text-background absolute right-24 -bottom-5 flex gap-2 rounded-full px-6 py-2"
+                            className="bg-accent absolute right-24 -bottom-5 flex gap-2 rounded-full px-6 py-2 text-white hover:opacity-90"
                         >
                             Start Practicing <ChevronRight className="-mr-2" />
                         </Link>

@@ -18,12 +18,12 @@ export default function SubjectCheckbox({
     return (
         <label
             htmlFor={subject}
-            className="bg-foreground text-background flex cursor-pointer items-center gap-2 rounded-full px-4 py-2 hover:opacity-90"
+            className="flex cursor-pointer items-center gap-2 rounded-full bg-neutral-900 px-4 py-2 text-white hover:opacity-90"
         >
             <Icon className="size-4" />
             {subject}
             <Checkbox
-                className="size-4 rounded-full"
+                className="bg-card size-4 cursor-pointer rounded-full"
                 id={subject}
                 checked={checked}
                 onCheckedChange={() => onToggle(subject)}
