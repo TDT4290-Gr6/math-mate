@@ -31,7 +31,7 @@ export default function MethodCard({
     onButtonClick,
 }: MethodCardProps) {
     return (
-        <div className="relative mx-4 my-4 flex min-h-[64px] min-w-[128px] flex-col items-start justify-start rounded-xl bg-[var(--background)] p-4 text-start shadow-sm">
+        <div className="relative mx-4 my-4 flex min-h-[64px] min-w-[128px] flex-col items-start justify-start rounded-xl bg-[var(--card)] p-4 text-start shadow-sm">
             {/* Title */}
             <Title title={title} />
 
