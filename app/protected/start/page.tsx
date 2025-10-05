@@ -14,6 +14,7 @@ import Header from '@/components/ui/header';
 import { ChevronRight } from 'lucide-react';
 import { useLocalStorage } from 'react-use';
 import { useState, useEffect } from 'react';
+import { useTheme } from 'next-themes';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -23,6 +24,7 @@ export default function StartPage() {
         'selectedSubjects',
         [],
     );
+    const { theme } = useTheme();
 
     // Track hydration to prevent SSR mismatch
     const [isHydrated, setIsHydrated] = useState(false);
@@ -47,7 +49,11 @@ export default function StartPage() {
                     <CardHeader>
                         <CardTitle>
                             <Image
-                                src="/wide-logo-light.svg" // TODO: dynamically switch between light and dark mode logos
+                                src={
+                                    isHydrated && theme === 'dark'
+                                        ? '/wide-logo-dark.svg'
+                                        : '/wide-logo-light.svg'
+                                }
                                 alt="MathMate"
                                 width={(313 * 2) / 3}
                                 height={(110 * 2) / 3}
