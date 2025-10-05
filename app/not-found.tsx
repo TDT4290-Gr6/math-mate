@@ -44,7 +44,7 @@ export default function NotFoundPage() {
                     </div>
                 </div>
                 {/* Description */}
-                <p className="text-md px-4 text-center text-[var(--fg)] md:px-14 md:text-lg">
+                <p className="text-md px-4 text-center md:px-14 md:text-lg">
                     The page you are looking for might have been removed, had
                     its name changed or is temporary unavailable.
                 </p>
