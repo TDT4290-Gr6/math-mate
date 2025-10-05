@@ -58,8 +58,8 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
         'Probability of dice roll',
     ];
     return (
-        <div className="fixed top-0 right-0 flex h-full w-72 flex-col bg-[var(--sidebar)] shadow-[-2px_0_8px_rgba(0,0,0,0.3)]">
-            <div className="p-6">
+        <div className="bg-sidebar fixed top-0 right-0 flex h-full w-72 flex-col p-6 shadow-[-2px_0_8px_rgba(0,0,0,0.3)]">
+            <div className="flex flex-col gap-6">
                 {/* Header with close button */}
                 <div className="mb-1 flex items-center justify-between">
                     {/* User ID display */}
