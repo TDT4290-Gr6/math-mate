@@ -16,10 +16,9 @@ export const createCountryController =
         createCountryUseCase: ICreateCountryUseCase,
         authenticationService: IAuthenticationService,
     ) =>
-    async (input: z.infer<typeof inputSchema>, sessionId: string) => {
+    async (input: z.infer<typeof inputSchema>) => {
         // check authentication
-        const isAuthenticated =
-            await authenticationService.validateSession(sessionId);
+        const isAuthenticated = await authenticationService.isAuthenticated();
         if (!isAuthenticated) {
             throw new UnauthenticatedError('User must be logged in.');
         }
