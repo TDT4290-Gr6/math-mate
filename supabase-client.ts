@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from '@supabase/supabase-js';
 //Supabase URL and Key from .env file is posted to teams/extramaterial/dotenv
 
 const supabaseUrl = process.env.DATABASE_URL as string;
