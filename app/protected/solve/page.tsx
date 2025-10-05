@@ -1,6 +1,6 @@
 'use client';
 
-import ChatbotWindow, { ChatHistory } from '@/components/chatbot-window';
+import ChatbotWindow, { ChatHistory, ChatMessage } from '@/components/chatbot-window';
 import { Button } from '@/components/ui/button';
 import { Sparkles } from 'lucide-react';
 import Steps from '@/components/steps';
@@ -46,15 +46,13 @@ const mochChatHistory: ChatHistory = {
             chatID: '1',
             sender: 'bot',
             timestamp: new Date(),
-            isLoading: false,
             content:
-                'Lorem ipsum dolor sit amet,consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+                'Lorem isum dolor sit amet,consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
         },
         {
             chatID: '2',
             sender: 'user',
             timestamp: new Date(),
-            isLoading: false,
             content:
                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
         },
@@ -62,7 +60,6 @@ const mochChatHistory: ChatHistory = {
             chatID: '3',
             sender: 'bot',
             timestamp: new Date(),
-            isLoading: false,
             content:
                 'Lorem ipsum dolor sit amet,consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
         },
@@ -70,7 +67,6 @@ const mochChatHistory: ChatHistory = {
             chatID: '4',
             sender: 'user',
             timestamp: new Date(),
-            isLoading: false,
             content:
                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
         },
@@ -78,7 +74,6 @@ const mochChatHistory: ChatHistory = {
             chatID: '5',
             sender: 'bot',
             timestamp: new Date(),
-            isLoading: false,
             content:
                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
         },
@@ -89,12 +84,39 @@ export default function SolvingPage() {
     const [currentStep, setCurrentStep] = useState(1);
     const totalSteps = mockSteps.length;
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
+    const [chatHistory, setChatHistory] = useState<ChatHistory>(mochChatHistory);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleNextStep = () => {
         if (currentStep < totalSteps) {
             setCurrentStep((prev) => prev + 1);
         }
     };
+
+    const handleSendMessage = async (message: string) => {
+
+        const userMessage: ChatMessage = {
+            chatID: `user-${Date.now()}`,
+            sender: "user",
+            content: message,
+            timestamp: new Date(),
+        }
+
+        setChatHistory(prev => ({
+            messages: [...prev.messages, userMessage]
+        }))
+        
+        setIsLoading(true)
+        try {
+            /* TO-DO: implement API call to get reponse for chatbot */
+        }
+        catch(error) {
+            console.log(error)
+        }
+        finally {
+            setIsLoading(false)
+        }
+    }
 
     return (
         <div>
@@ -120,6 +142,7 @@ export default function SolvingPage() {
                             <Button
                                 onClick={() => handleNextStep()}
                                 className="w-1/4 rounded-full bg-[#EB5E28]"
+                                
                             >
                                 Next step
                             </Button>
@@ -129,8 +152,10 @@ export default function SolvingPage() {
                 {isChatOpen ? (
                     <div className="flex w-1/2 flex-col p-4">
                         <ChatbotWindow
-                            chatHistory={mochChatHistory}
+                            chatHistory={chatHistory}
                             onClose={() => setIsChatOpen(!isChatOpen)}
+                            onSendMessage={handleSendMessage}
+                            isLoading={isLoading}
                         />
                     </div>
                 ) : (

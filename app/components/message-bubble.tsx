@@ -21,7 +21,6 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
                     isUser
                         ? 'max-w-[70%] rounded-br-sm bg-[#E6E4E1]'
                         : 'text-gray-900',
-                    message.isLoading && 'animate-pulse',
                 )}
             >
                 {message.content}
