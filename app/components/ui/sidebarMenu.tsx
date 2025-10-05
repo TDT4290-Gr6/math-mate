@@ -81,9 +81,6 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
 
                 {/* Menu content */}
 
-                {/* Border under user ID */}
-                <div className="flex flex-col border-b"></div>
-
                 {/* Settings */}
                 <div className="mt-10 font-semibold text-[var(--foreground)]">
                     Settings:
