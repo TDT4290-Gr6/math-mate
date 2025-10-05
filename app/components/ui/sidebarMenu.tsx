@@ -61,7 +61,7 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
         <div className="bg-sidebar fixed top-0 right-0 flex h-full w-72 flex-col p-6 shadow-[-2px_0_8px_rgba(0,0,0,0.3)]">
             <div className="flex flex-col gap-6">
                 {/* Header with close button */}
-                <div className="mb-1 flex items-center justify-between">
+                <div className="flex items-center justify-between border-b">
                     {/* User ID display */}
                     <div className="mt-2 flex flex-row text-[var(--foreground)]">
                         <p className="font-semibold">User ID:</p>
