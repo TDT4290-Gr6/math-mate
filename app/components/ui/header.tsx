@@ -3,6 +3,7 @@ import { ChevronLeft, Menu } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import SidebarMenu from './sidebarMenu';
+import { cn } from '@/lib/utils';
 
 /**
  * Header component with navigation and optional math question display.
@@ -23,6 +24,8 @@ import SidebarMenu from './sidebarMenu';
  *     - 'question': header includes a math question display
  * @param mathQuestion - ReactNode (optional)
  *     The math question content to display when `variant` is 'question'. Normally a question component.
+ * @param className - string (optional)
+ *    Additional CSS classes to apply to the header container.
  *
  * Notes:
  *   - Sidebar overlay is rendered conditionally when `isOpen` is true.
@@ -32,10 +35,12 @@ import SidebarMenu from './sidebarMenu';
 interface HeaderProps {
     variant?: 'simple' | 'question';
     mathQuestion?: React.ReactNode;
+    className?: string;
 }
 export default function Header({
     variant = 'simple',
     mathQuestion,
+    className,
 }: HeaderProps) {
     const [isOpen, setIsOpen] = useState(false);
     const router = useRouter();
@@ -65,7 +70,11 @@ export default function Header({
 
     return (
         <div
-            className={`items-top flex w-full flex-row justify-between px-10 py-6 ${variant === 'question' ? 'border-b' : ''}`}
+            className={cn(
+                'items-top flex w-full flex-row justify-between px-10 py-6',
+                variant === 'question' ? 'border-b' : '',
+                className,
+            )}
         >
             {/* Back button */}
             <button
