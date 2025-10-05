@@ -121,14 +121,15 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                     Previously solved questions:
                 </p>
             </div>
-            <div className="mt-1 flex-1 overflow-y-auto pr-2 pl-6">
+            <div className="mt-4 flex flex-col gap-4 overflow-y-auto">
                 {dummyProblems.map((problem, index) => (
-                    <div
+                    // TODO: Link to the problem
+                    <p
                         key={index}
-                        className="mt-4 flex h-[44px] flex-row items-center gap-2 rounded-[8px] p-2 font-normal hover:bg-[var(--sidebar-accent)]"
+                        className="text-foreground hover:bg-sidebar-accent h-11 rounded-xl p-2"
                     >
-                        <p>{problem}</p>
-                    </div>
+                        {problem}
+                    </p>
                 ))}
             </div>
         </div>
