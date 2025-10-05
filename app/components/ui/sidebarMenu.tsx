@@ -112,10 +112,9 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                 </div>
 
                 {/* Previously solved questions */}
-                <div className="mt-10 font-semibold text-[var(--foreground)]">
+                <p className="border-b pb-1 font-semibold">
                     Previously solved questions:
-                </div>
-                <div className="mt-1 flex flex-col border-b"></div>
+                </p>
             </div>
             <div className="mt-1 flex-1 overflow-y-auto pr-2 pl-6">
                 {dummyProblems.map((problem, index) => (
