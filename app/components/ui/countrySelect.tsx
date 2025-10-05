@@ -4,11 +4,10 @@ import {
     Dialog,
     DialogContent,
     DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
+import { CountrySelectDropdown } from './countrySelectDropdown';
 import { useState } from 'react';
 import Title from './title';
 
@@ -16,8 +15,9 @@ export default function CountrySelect() {
     const countryIsSelected = false; // TODO: Check with backend if country has been selected
     const [open, setOpen] = useState(!countryIsSelected);
 
-    function handleAction() {
+    function handleSubmit(country: string) {
         // TODO: Tell backend what country the user selected
+        console.log(country);
         setOpen(false);
     }
 
@@ -38,17 +38,7 @@ export default function CountrySelect() {
                         what is your country of residence:
                     </DialogDescription>
                 </DialogHeader>
-                {/* TODO: Country select component */}
-                <DialogFooter>
-                    <Button
-                        type="submit"
-                        onClick={handleAction}
-                        variant="default"
-                        className="bg-accent cursor-pointer px-4"
-                    >
-                        Submit
-                    </Button>
-                </DialogFooter>
+                <CountrySelectDropdown onSubmit={handleSubmit} />
             </DialogContent>
         </Dialog>
     );
