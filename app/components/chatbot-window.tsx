@@ -17,7 +17,6 @@ export interface ChatHistory {
 
 interface ChatbotWindowProps {
     chatHistory: ChatHistory;
-    placeholder?: string;
     onSendMessage?: (message: string) => void;
     onClose?: () => void;
     isLoading?: boolean;
@@ -26,7 +25,6 @@ interface ChatbotWindowProps {
 
 export default function ChatbotWindow({
     chatHistory,
-    placeholder,
     onSendMessage,
     onClose,
     isLoading,
@@ -37,13 +35,13 @@ export default function ChatbotWindow({
     const handleSendMessage = async () => {
         if (inputValue.trim() && onSendMessage && !isLoading) {
             const messageToSend = inputValue.trim();
-            setInputValue('');
+            setInputValue("");
             onSendMessage(messageToSend);
         }
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') {
+        if (e.key === "Enter") {
             e.preventDefault();
             handleSendMessage();
         }
@@ -100,12 +98,12 @@ export default function ChatbotWindow({
                         disabled={isLoading}
                         placeholder={
                             isLoading
-                                ? 'Generating a response...'
-                                : placeholder || 'Ask a question...'
+                                ? "Generating a response..."
+                                : "Ask a question..."
                         }
                         className={cn(
-                            'w-full rounded-lg border border-gray-300 px-3 py-2 pr-12 text-sm transition-opacity focus:border-transparent focus:ring-2 focus:ring-[#EB5E28] focus:outline-none',
-                            isLoading && 'opacity-50',
+                            "w-full rounded-lg border border-gray-300 px-3 py-2 pr-12 text-sm transition-opacity focus:border-transparent focus:ring-2 focus:ring-[#EB5E28] focus:outline-none",
+                            isLoading && "opacity-50",
                         )}
                     />
                     <SendHorizontal
@@ -113,10 +111,10 @@ export default function ChatbotWindow({
                         strokeWidth={2.5}
                         size={20}
                         className={cn(
-                            'absolute top-1/2 right-3 -translate-y-1/2 transition-colors',
+                            "absolute top-1/2 right-3 -translate-y-1/2 transition-colors",
                             isLoading
-                                ? 'text-gray-400'
-                                : 'cursor-pointer text-[#3D3C3A] hover:text-[#EB5E28]',
+                                ? "text-gray-400"
+                                : "cursor-pointer text-[#3D3C3A] hover:text-[#EB5E28]",
                         )}
                     />
                 </div>
