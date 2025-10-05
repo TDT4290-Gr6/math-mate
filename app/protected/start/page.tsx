@@ -40,7 +40,10 @@ export default function StartPage() {
 
     return (
         <>
-            <Header variant="simple" className="fixed" />
+            <Header
+                variant="simple"
+                className="fixed top-0 right-0 left-0 z-10"
+            />
             <div className="flex min-h-screen flex-col items-center justify-center">
                 <Card className="relative w-2xl p-5">
                     <CardHeader>
