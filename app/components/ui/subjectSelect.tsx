@@ -1,6 +1,6 @@
 'use client';
 
-import { Subject, subjectIcons } from '../../constants/subjects';
+import { Subject, SUBJECT_NAMES } from '../../constants/subjects';
 import SubjectCheckbox from '../subject-checkbox';
 import { useLocalStorage } from 'react-use';
 import { useState, useEffect } from 'react';
@@ -27,20 +27,18 @@ export default function SubjectSelect() {
 
     return (
         <>
-            {(Object.keys(subjectIcons) as (keyof typeof subjectIcons)[]).map(
-                (subject) => (
-                    <SubjectCheckbox
-                        key={subject}
-                        subject={subject}
-                        // Set checked to false on initial render, then update based on local storage
-                        checked={
-                            isHydrated &&
-                            (selectedSubjects?.includes(subject) ?? false)
-                        }
-                        onToggle={toggleSubject}
-                    />
-                ),
-            )}
+            {SUBJECT_NAMES.map((subject) => (
+                <SubjectCheckbox
+                    key={subject}
+                    subject={subject}
+                    // Set checked to false on initial render, then update based on local storage
+                    checked={
+                        isHydrated &&
+                        (selectedSubjects?.includes(subject) ?? false)
+                    }
+                    onToggle={toggleSubject}
+                />
+            ))}
         </>
     );
 }
