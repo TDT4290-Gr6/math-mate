@@ -5,7 +5,11 @@ import SubjectCheckbox from '../subject-checkbox';
 import { useLocalStorage } from 'react-use';
 import { useState, useEffect } from 'react';
 
-export default function SubjectSelect() {
+interface SubjectSelectProps {
+    size: 'small' | 'large';
+}
+
+export default function SubjectSelect({ size }: SubjectSelectProps) {
     // Store selected subjects in local storage
     const [selectedSubjects, setSelectedSubjects] = useLocalStorage<Subject[]>(
         'selectedSubjects',
@@ -31,6 +35,7 @@ export default function SubjectSelect() {
                 <SubjectCheckbox
                     key={subject}
                     subject={subject}
+                    size={size}
                     // Set checked to false on initial render, then update based on local storage
                     checked={
                         isHydrated &&

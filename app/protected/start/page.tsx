@@ -40,7 +40,7 @@ export default function StartPage() {
                         Choose which categories of math you want to work with:
                     </p>
                     <div className="flex flex-wrap justify-center gap-2">
-                        <SubjectSelect />
+                        <SubjectSelect size="large" />
                     </div>
                     Ready? Then press {'"Start Practicing"'} and get your first
                     math question.
