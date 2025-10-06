@@ -8,7 +8,7 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
-import SubjectSelect from '@/components/ui/subjectSelect';
+import SubjectSelect from '@/components/ui/subject-select';
 import { ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
