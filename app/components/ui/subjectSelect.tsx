@@ -9,6 +9,15 @@ interface SubjectSelectProps {
     size: 'small' | 'large';
 }
 
+/**
+ * Renders a list of subject checkboxes allowing users to select multiple subjects.
+ * Selected subjects are persisted in local storage and managed via state.
+ * Handles hydration to prevent SSR mismatches.
+ *
+ * @param props - The props for the SubjectSelect component.
+ * @param props.size - The size of the subject checkboxes.
+ * @returns The rendered list of subject checkboxes.
+ */
 export default function SubjectSelect({ size }: SubjectSelectProps) {
     // Store selected subjects in local storage
     const [selectedSubjects, setSelectedSubjects] = useLocalStorage<Subject[]>(
@@ -21,6 +30,13 @@ export default function SubjectSelect({ size }: SubjectSelectProps) {
 
     useEffect(() => setIsHydrated(true), []);
 
+    /**
+     * Toggles the selection state of a given subject.
+     * If the subject is already selected, it will be removed from the selection.
+     * If the subject is not selected, it will be added to the selection.
+     *
+     * @param subject - The subject to toggle in the selection.
+     */
     function toggleSubject(subject: Subject) {
         if (selectedSubjects?.includes(subject)) {
             setSelectedSubjects(selectedSubjects.filter((s) => s !== subject));
