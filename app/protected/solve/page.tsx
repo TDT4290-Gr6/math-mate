@@ -6,6 +6,7 @@ import ChatbotWindow, {
 } from '@/components/chatbot-window';
 import ChatToggle from '@/components/chat-toggle';
 import { Button } from '@/components/ui/button';
+import Header from '@/components/ui/header';
 import React, { useState } from 'react';
 import Steps from '@/components/steps';
 import { cn } from '@/lib/utils';
@@ -140,10 +141,17 @@ export default function SolvingPage() {
     return (
         <div>
             <div className="h-48 w-full">
-                {/* To-do: Add question card */}
-                <h2>Question</h2>
+                <Header
+                    variant="question"
+                    mathQuestion={
+                        <div className="flex h-40 w-full max-w-5xl flex-row items-center justify-center gap-4">
+                            {' '}
+                            <p>TODO fix question component</p>
+                        </div>
+                    }
+                />
             </div>
-            <div className="relative flex h-[calc(100vh-12rem)] w-full border-t-2">
+            <div className="relative flex h-[calc(100vh-12rem)] w-full">
                 <div
                     className={cn(
                         'flex flex-col items-center p-4',
@@ -160,7 +168,7 @@ export default function SolvingPage() {
                         {currentStep < totalSteps && (
                             <Button
                                 onClick={() => handleNextStep()}
-                                className="w-1/4 rounded-full bg-[#EB5E28]"
+                                className="w-1/4 rounded-full bg-accent"
                             >
                                 Next step
                             </Button>
@@ -168,7 +176,7 @@ export default function SolvingPage() {
                     </div>
                 </div>
                 {isChatOpen && (
-                    <div className="bg-border absolute top-0 bottom-0 left-1/2 w-0.5"></div>
+                    <div className="bg-border absolute mt-4 top-0 bottom-0 left-1/2 w-0.5"></div>
                 )}
                 {isChatOpen ? (
                     <div className="flex w-1/2 flex-col p-4">
