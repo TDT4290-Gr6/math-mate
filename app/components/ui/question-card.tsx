@@ -1,3 +1,4 @@
+import { Card } from './card';
 import Title from './title';
 
 interface QuestionCardProps {
@@ -6,11 +7,11 @@ interface QuestionCardProps {
 
 export default function QuestionCard({ description }: QuestionCardProps) {
     return (
-        <div className="mx-4 my-4 max-w-[50vw] rounded-xl bg-[var(--card)] p-4 shadow-sm">
+        <Card className="max-w-[50vw] p-4 ">
             <Title title={'Question: '} />
             <p className="mb-4 line-clamp-7 text-[var(--foreground)]">
                 {description}
             </p>
-        </div>
+        </Card>
     );
 }
