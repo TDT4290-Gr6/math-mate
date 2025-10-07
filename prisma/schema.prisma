@@ -81,7 +81,7 @@ model Step {
     //problem Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
 
     // back-relations
-    Event     Event[]
+    Event Event[]
     //@@index([problemId])
 
     @@index([methodId])
