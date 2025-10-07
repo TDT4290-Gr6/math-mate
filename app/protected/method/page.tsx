@@ -4,6 +4,7 @@ import MethodCard from '@/components/ui/methodcard';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
 import { useRouter } from 'next/navigation';
+import QuestionCard from '@/components/ui/question-card';
 
 /**
  * The page component that displays a set of method cards to help solve
@@ -15,13 +16,11 @@ export default function MethodPage() {
     const router = useRouter();
     return (
         <div className="flex min-h-screen flex-col items-center gap-6">
-            {/* TODO: Replace with question component :) */}
             <Header
                 variant="question"
                 mathQuestion={
-                    <div className="flex h-40 w-full max-w-5xl flex-row items-center justify-center gap-4">
-                        {' '}
-                        <p>TODO fix question component</p>
+                    <div className="flex h-50 flex-row items-center justify-center gap-4">
+                        <QuestionCard description='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc in nunc diam. Fusce accumsan tempor justo ac pellentesque. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'/>
                     </div>
                 }
             />
