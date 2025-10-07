@@ -49,7 +49,6 @@ model Problem {
 
     // back-relations
     Method Method[]
-    Step   Step[]
     Event  Event[]
     Solves Solves[]
 }
@@ -84,8 +83,6 @@ model Step {
     // back-relations
     Event     Event[]
     //@@index([problemId])
-    Problem   Problem? @relation(fields: [problemId], references: [id])
-    problemId BigInt?  @db.BigInt
 
     @@index([methodId])
 }
