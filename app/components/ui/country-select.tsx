@@ -7,7 +7,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
-import { CountrySelectDropdown } from './countrySelectDropdown';
+import { CountrySelectDropdown } from './country-select-dropdown';
 import { useState } from 'react';
 import Title from './title';
 
