@@ -47,6 +47,9 @@ export function CountrySelectDropdown({
         resolver: zodResolver(FormSchema),
     });
 
+    // Watch the country field so we can enable/disable the submit button
+    const selectedCountry = form.watch('country');
+
     return (
         <Form {...form}>
             <form
@@ -120,7 +123,12 @@ export function CountrySelectDropdown({
                 <Button
                     type="submit"
                     variant="default"
-                    className="bg-accent w-60 cursor-pointer"
+                    // Have button appear as disabled if no country is selected
+                    className={cn(
+                        'bg-accent w-60 cursor-pointer',
+                        !selectedCountry &&
+                            'bg-border hover:bg-border cursor-auto',
+                    )}
                 >
                     Submit
                 </Button>
