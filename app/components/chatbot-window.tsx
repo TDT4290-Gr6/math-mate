@@ -35,13 +35,13 @@ export default function ChatbotWindow({
     const handleSendMessage = async () => {
         if (inputValue.trim() && onSendMessage && !isLoading) {
             const messageToSend = inputValue.trim();
-            setInputValue("");
+            setInputValue('');
             onSendMessage(messageToSend);
         }
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === "Enter") {
+        if (e.key === 'Enter') {
             e.preventDefault();
             handleSendMessage();
         }
@@ -98,12 +98,12 @@ export default function ChatbotWindow({
                         disabled={isLoading}
                         placeholder={
                             isLoading
-                                ? "Generating a response..."
-                                : "Ask a question..."
+                                ? 'Generating a response...'
+                                : 'Ask a question...'
                         }
                         className={cn(
-                            "w-full rounded-lg bg-[var(--chatbot)] px-3 py-2 pr-12 text-sm transition-opacity",
-                            isLoading && "opacity-50",
+                            'w-full rounded-lg bg-[var(--chatbot)] px-3 py-2 pr-12 text-sm transition-opacity',
+                            isLoading && 'opacity-50',
                         )}
                     />
                     <SendHorizontal
@@ -111,10 +111,10 @@ export default function ChatbotWindow({
                         strokeWidth={2.5}
                         size={20}
                         className={cn(
-                            "absolute top-1/2 right-3 -translate-y-1/2 transition-colors",
+                            'absolute top-1/2 right-3 -translate-y-1/2 transition-colors',
                             isLoading
-                                ? "text-border"
-                                : "hover:text-accent cursor-pointer",
+                                ? 'text-border'
+                                : 'hover:text-accent cursor-pointer',
                         )}
                     />
                 </div>
