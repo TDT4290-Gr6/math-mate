@@ -14,9 +14,10 @@ import { useState } from 'react';
 const PRIVACY_INITIAL_MESSAGE: ChatMessage = {
     chatID: 'privacy-notice',
     sender: 'bot',
-    content: 'Privacy Notice: Please do not share any personal information in this chat. I\'m here to help you with math problems only!',
+    content:
+        "Privacy Notice: Please do not share any personal information in this chat. I'm here to help you with math problems only!",
     timestamp: new Date(),
-    className: 'bg-blue-50 border border-blue-200 text-blue-800',
+    className: 'bg-card border border-[var(--accent)] text-[var(--accent)]',
 };
 
 // Define the Step type
@@ -98,7 +99,7 @@ export default function SolvingPage() {
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
     const [chatHistory, setChatHistory] =
         useState<ChatHistory>(mochChatHistory);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     const handleNextStep = () => {
         if (currentStep < totalSteps) {
@@ -134,11 +135,11 @@ export default function SolvingPage() {
                 {/* To-do: Add question card */}
                 <h2>Question</h2>
             </div>
-            <div className="flex h-[calc(100vh-15rem)] w-full border-t-2">
+            <div className="flex h-[calc(100vh-12rem)] w-full border-t-2 relative">
                 <div
                     className={cn(
                         'flex flex-col items-center p-4',
-                        isChatOpen ? 'w-1/2 border-x-2' : 'mx-auto w-3/5',
+                        isChatOpen ? 'w-1/2' : 'mx-auto w-3/5',
                     )}
                 >
                     <div className="w-full flex-1">
@@ -158,6 +159,9 @@ export default function SolvingPage() {
                         )}
                     </div>
                 </div>
+                {isChatOpen && (
+                    <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-border"></div>
+                )}
                 {isChatOpen ? (
                     <div className="flex w-1/2 flex-col p-4">
                         <ChatbotWindow
@@ -171,9 +175,9 @@ export default function SolvingPage() {
                 ) : (
                     <Button
                         onClick={() => setIsChatOpen(!isChatOpen)}
-                        className="fixed right-6 bottom-6 h-14 w-14 rounded-full bg-[#E6E4E1] shadow-lg transition-shadow hover:shadow-xl"
+                        className="fixed right-6 bottom-6 h-12 w-12 rounded-full bg-[var(--chatbot)] shadow-lg transition-shadow hover:shadow-xl"
                     >
-                        <Sparkles strokeWidth={2.25} color="#3D3C3A" />
+                        <Sparkles color="currentColor" className="text-[var(--foreground)]"/>
                     </Button>
                 )}
             </div>

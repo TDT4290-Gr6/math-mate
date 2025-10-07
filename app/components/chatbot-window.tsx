@@ -54,23 +54,23 @@ export default function ChatbotWindow({
                     <ChevronDown
                         onClick={onClose}
                         strokeWidth={2}
-                        className="cursor-pointer text-[#3D3C3A] hover:text-[#EB5E28]"
+                        className="cursor-pointer hover:text-accent"
                     />
                 )}
             </div>
-            <div className="flex h-full max-h-80 flex-col-reverse space-y-2 space-y-reverse overflow-y-auto p-2">
+            <div className="flex h-full max-h-90 flex-col-reverse space-y-2 space-y-reverse overflow-y-auto p-2">
                 {isLoading && (
                     <div className="mb-4 flex w-full justify-start">
-                        <div className="animate-pulse rounded-lg bg-gray-100 px-4 py-2 text-sm">
+                        <div className="animate-pulse rounded-lg bg-[var(--loading)] px-4 py-2 text-sm">
                             <div className="flex items-center space-x-1">
                                 <div className="flex space-x-1">
-                                    <div className="h-2 w-2 animate-bounce rounded-full bg-gray-400" />
+                                    <div className="h-2 w-2 animate-bounce rounded-full bg-border" />
                                     <div
-                                        className="h-2 w-2 animate-bounce rounded-full bg-gray-400"
+                                        className="h-2 w-2 animate-bounce rounded-full bg-border"
                                         style={{ animationDelay: '0.1s' }}
                                     />
                                     <div
-                                        className="h-2 w-2 animate-bounce rounded-full bg-gray-400"
+                                        className="h-2 w-2 animate-bounce rounded-full bg-border"
                                         style={{ animationDelay: '0.2s' }}
                                     />
                                 </div>
@@ -102,7 +102,7 @@ export default function ChatbotWindow({
                                 : "Ask a question..."
                         }
                         className={cn(
-                            "w-full rounded-lg border border-gray-300 px-3 py-2 pr-12 text-sm transition-opacity focus:border-transparent focus:ring-2 focus:ring-[#EB5E28] focus:outline-none",
+                            "w-full rounded-lg bg-[var(--chatbot)] px-3 py-2 pr-12 text-sm transition-opacity",
                             isLoading && "opacity-50",
                         )}
                     />
@@ -113,8 +113,8 @@ export default function ChatbotWindow({
                         className={cn(
                             "absolute top-1/2 right-3 -translate-y-1/2 transition-colors",
                             isLoading
-                                ? "text-gray-400"
-                                : "cursor-pointer text-[#3D3C3A] hover:text-[#EB5E28]",
+                                ? "text-border"
+                                : "cursor-pointer hover:text-accent",
                         )}
                     />
                 </div>
