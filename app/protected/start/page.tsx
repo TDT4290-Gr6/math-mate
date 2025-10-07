@@ -7,37 +7,13 @@ import {
     CardFooter,
     CardHeader,
 } from '@/components/ui/card';
-import { Subject, subjectIcons } from '../../constants/subjects';
-import SubjectCheckbox from '@/components/subject-checkbox';
+import SubjectSelect from '@/components/ui/subject-select';
 import WideLogo from '@/components/ui/wideLogo';
 import Header from '@/components/ui/header';
 import { ChevronRight } from 'lucide-react';
-import { useLocalStorage } from 'react-use';
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 export default function StartPage() {
-    // Store selected subjects in local storage
-    const [selectedSubjects, setSelectedSubjects] = useLocalStorage<Subject[]>(
-        'selectedSubjects',
-        [],
-    );
-
-    // Track hydration to prevent SSR mismatch
-    const [isHydrated, setIsHydrated] = useState(false);
-
-    useEffect(() => {
-        setIsHydrated(true);
-    }, []);
-
-    function toggleSubject(subject: Subject) {
-        if (selectedSubjects?.includes(subject)) {
-            setSelectedSubjects(selectedSubjects.filter((s) => s !== subject));
-        } else {
-            setSelectedSubjects([...(selectedSubjects ?? []), subject]);
-        }
-    }
-
     return (
         <>
             <Header
@@ -63,21 +39,7 @@ export default function StartPage() {
                             with:
                         </p>
                         <div className="flex flex-wrap justify-center gap-2">
-                            {Object.keys(subjectIcons).map((subject) => (
-                                <SubjectCheckbox
-                                    key={subject}
-                                    subject={subject as Subject}
-                                    // Set checked to false on initial render, then update based on local storage
-                                    checked={
-                                        isHydrated &&
-                                        (selectedSubjects?.includes(
-                                            subject as Subject,
-                                        ) ??
-                                            false)
-                                    }
-                                    onToggle={toggleSubject}
-                                />
-                            ))}
+                            <SubjectSelect size="large" />
                         </div>
                         Ready? Then press {'"Start Practicing"'} and get your
                         first math question.
