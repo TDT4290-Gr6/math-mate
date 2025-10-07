@@ -93,7 +93,7 @@ model Event {
     loggedAt   DateTime @db.Timestamptz(6)
     sessionId  BigInt?  @db.BigInt
     actionName String?  @db.Text
-    Payload    String?  @db.Text
+    payload    String?  @db.Text
     userId     BigInt?  @db.BigInt // optional, RESTRICT
     problemId  BigInt?  @db.BigInt // optional, RESTRICT
     methodId   BigInt?  @db.BigInt // optional, RESTRICT
