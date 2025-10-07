@@ -8,7 +8,7 @@ import {
     CardHeader,
 } from '@/components/ui/card';
 import SubjectSelect from '@/components/ui/subject-select';
-import WideLogo from '@/components/ui/wideLogo';
+import WideLogo from '@/components/ui/wide-logo';
 import Header from '@/components/ui/header';
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
