@@ -27,7 +27,9 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 const FormSchema = z.object({
-    country: z.string('You are required to select a country.'),
+    country: z
+        .string({ error: 'You are required to select a country.' })
+        .min(1, 'You are required to select a country.'),
 });
 
 interface CountrySelectDropdownProps {
