@@ -4,11 +4,11 @@ import ChatbotWindow, {
     ChatHistory,
     ChatMessage,
 } from '@/components/chatbot-window';
+import ChatToggle from '@/components/chat-toggle';
 import { Button } from '@/components/ui/button';
-import { Sparkles } from 'lucide-react';
+import React, { useState } from 'react';
 import Steps from '@/components/steps';
 import { cn } from '@/lib/utils';
-import { useState } from 'react';
 
 // Privacy notice for chat
 const PRIVACY_INITIAL_MESSAGE: ChatMessage = {
@@ -101,6 +101,14 @@ export default function SolvingPage() {
         useState<ChatHistory>(mochChatHistory);
     const [isLoading, setIsLoading] = useState(true);
 
+    // Listen for the chat-toggle event
+    React.useEffect(() => {
+        const handler = () => setIsChatOpen((v) => !v);
+        window.addEventListener('chat-toggle', handler as EventListener);
+        return () =>
+            window.removeEventListener('chat-toggle', handler as EventListener);
+    }, []);
+
     const handleNextStep = () => {
         if (currentStep < totalSteps) {
             setCurrentStep((prev) => prev + 1);
@@ -135,7 +143,7 @@ export default function SolvingPage() {
                 {/* To-do: Add question card */}
                 <h2>Question</h2>
             </div>
-            <div className="flex h-[calc(100vh-12rem)] w-full border-t-2 relative">
+            <div className="relative flex h-[calc(100vh-12rem)] w-full border-t-2">
                 <div
                     className={cn(
                         'flex flex-col items-center p-4',
@@ -160,7 +168,7 @@ export default function SolvingPage() {
                     </div>
                 </div>
                 {isChatOpen && (
-                    <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-border"></div>
+                    <div className="bg-border absolute top-0 bottom-0 left-1/2 w-0.5"></div>
                 )}
                 {isChatOpen ? (
                     <div className="flex w-1/2 flex-col p-4">
@@ -173,12 +181,7 @@ export default function SolvingPage() {
                         />
                     </div>
                 ) : (
-                    <Button
-                        onClick={() => setIsChatOpen(!isChatOpen)}
-                        className="fixed right-6 bottom-6 h-12 w-12 rounded-full bg-[var(--chatbot)] shadow-lg transition-shadow hover:shadow-xl"
-                    >
-                        <Sparkles color="currentColor" className="text-[var(--foreground)]"/>
-                    </Button>
+                    <ChatToggle />
                 )}
             </div>
         </div>

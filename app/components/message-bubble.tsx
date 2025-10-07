@@ -18,9 +18,9 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
             <div
                 className={cn(
                     'rounded-lg px-4 py-2 text-sm break-words',
-                        isUser
-                            ? 'max-w-[70%] rounded-br-sm bg-[var(--chatbot)]'
-                            : '',
+                    isUser
+                        ? 'max-w-[70%] rounded-br-sm bg-[var(--chatbot)]'
+                        : '',
                     message.className, // Apply custom styling if provided
                 )}
             >

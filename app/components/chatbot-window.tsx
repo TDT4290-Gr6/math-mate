@@ -54,7 +54,7 @@ export default function ChatbotWindow({
                     <ChevronDown
                         onClick={onClose}
                         strokeWidth={2}
-                        className="cursor-pointer hover:text-accent"
+                        className="hover:text-accent cursor-pointer"
                     />
                 )}
             </div>
@@ -64,13 +64,13 @@ export default function ChatbotWindow({
                         <div className="animate-pulse rounded-lg bg-[var(--loading)] px-4 py-2 text-sm">
                             <div className="flex items-center space-x-1">
                                 <div className="flex space-x-1">
-                                    <div className="h-2 w-2 animate-bounce rounded-full bg-border" />
+                                    <div className="bg-border h-2 w-2 animate-bounce rounded-full" />
                                     <div
-                                        className="h-2 w-2 animate-bounce rounded-full bg-border"
+                                        className="bg-border h-2 w-2 animate-bounce rounded-full"
                                         style={{ animationDelay: '0.1s' }}
                                     />
                                     <div
-                                        className="h-2 w-2 animate-bounce rounded-full bg-border"
+                                        className="bg-border h-2 w-2 animate-bounce rounded-full"
                                         style={{ animationDelay: '0.2s' }}
                                     />
                                 </div>
@@ -114,7 +114,7 @@ export default function ChatbotWindow({
                             "absolute top-1/2 right-3 -translate-y-1/2 transition-colors",
                             isLoading
                                 ? "text-border"
-                                : "cursor-pointer hover:text-accent",
+                                : "hover:text-accent cursor-pointer",
                         )}
                     />
                 </div>
