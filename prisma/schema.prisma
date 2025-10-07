@@ -17,7 +17,7 @@ datasource db {
 
 model User {
     id      BigInt  @id @default(autoincrement()) @db.BigInt
-    score   Float?  @db.DoublePrecision
+    score   Float?    @db.DoublePrecision
     country BigInt  @db.BigInt // FK -> Country.id (required, RESTRICT on delete)
     uuid    String? @unique @db.Text
 
@@ -41,10 +41,10 @@ model Country {
 
 model Problem {
     id       BigInt  @id @default(autoincrement()) @db.BigInt
-    problem  String  @db.Text
-    solution String  @db.Text
-    subject  String  @db.Text
-    level    Int     @db.SmallInt
+    problem  String @db.Text
+    solution String @db.Text
+    subject  String @db.Text
+    level    Int    @db.SmallInt
     title    String? @db.Text
 
     // back-relations
@@ -55,8 +55,8 @@ model Problem {
 }
 
 model Method {
-    id          BigInt @id @default(autoincrement()) @db.BigInt
-    problemId   BigInt @db.BigInt // FK -> Problem.id (required, CASCADE)
+    id          BigInt  @id @default(autoincrement()) @db.BigInt
+    problemId   BigInt  @db.BigInt // FK -> Problem.id (required, CASCADE)
     title       String @db.Text
     description String @db.Text
 
@@ -73,34 +73,34 @@ model Method {
 model Step {
     id         BigInt  @id @default(autoincrement()) @db.BigInt
     methodId   BigInt  @db.BigInt // required, CASCADE
-    problemId  BigInt  @db.BigInt // required, CASCADE (enforce consistency at DB level)
-    stepNumber Int     @db.Integer
-    content    String? @db.Text
+    //problemId  BigInt  @db.BigInt // required, CASCADE (enforce consistency at DB level)
+    stepNumber Int    @db.Integer
+    content    String @db.Text
 
     // relations
     method  Method  @relation(fields: [methodId], references: [id], onDelete: Cascade)
-    problem Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
+    //problem Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
 
     // back-relations
     Event Event[]
 
     @@index([methodId])
-    @@index([problemId])
+    //@@index([problemId])
 }
 
 model Event {
     id         BigInt   @id @default(autoincrement()) @db.BigInt
     loggedAt   DateTime @db.Timestamptz(6)
-    sessionId  BigInt?  @db.BigInt
-    actionName String?  @db.Text
-    payload    String?  @db.Text
-    userId     BigInt?  @db.BigInt // optional, RESTRICT
+    sessionId  BigInt  @db.BigInt
+    actionName String  @db.Text
+    payload    String  @db.Text
+    userId     BigInt  @db.BigInt // optional, RESTRICT
     problemId  BigInt?  @db.BigInt // optional, RESTRICT
     methodId   BigInt?  @db.BigInt // optional, RESTRICT
     stepId     BigInt?  @db.BigInt // optional, RESTRICT
 
     // relations (all optional, RESTRICT on delete)
-    user    User?    @relation(fields: [userId], references: [id], onDelete: Restrict)
+    user    User    @relation(fields: [userId], references: [id], onDelete: Restrict)
     problem Problem? @relation(fields: [problemId], references: [id], onDelete: Restrict)
     method  Method?  @relation(fields: [methodId], references: [id], onDelete: Restrict)
     step    Step?    @relation(fields: [stepId], references: [id], onDelete: Restrict)
@@ -119,7 +119,7 @@ model Solves {
     startedSolvingAt  DateTime  @db.Timestamptz(6)
     finishedSolvingAt DateTime? @db.Timestamptz(6)
     stepUsed          Int       @db.Integer
-    feedback          String?   @db.Text
+    feedback          Int?     @db.Integer
 
     // relations
     user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
