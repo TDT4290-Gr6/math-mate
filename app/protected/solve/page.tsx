@@ -168,7 +168,7 @@ export default function SolvingPage() {
                         {currentStep < totalSteps && (
                             <Button
                                 onClick={() => handleNextStep()}
-                                className="w-1/4 rounded-full bg-accent"
+                                className="bg-accent w-1/4 rounded-full"
                             >
                                 Next step
                             </Button>
@@ -176,7 +176,7 @@ export default function SolvingPage() {
                     </div>
                 </div>
                 {isChatOpen && (
-                    <div className="bg-border absolute mt-4 top-0 bottom-0 left-1/2 w-0.5"></div>
+                    <div className="bg-border absolute top-0 bottom-0 left-1/2 mt-4 w-0.5"></div>
                 )}
                 {isChatOpen ? (
                     <div className="flex w-1/2 flex-col p-4">

@@ -54,11 +54,11 @@ export default function ChatbotWindow({
                     <ChevronDown
                         onClick={onClose}
                         strokeWidth={2}
-                        className="hover:text-accent cursor-pointer absolute mt-3"
+                        className="hover:text-accent absolute mt-3 cursor-pointer"
                     />
                 )}
             </div>
-            <div className="flex h-full mt-5 max-h-90 flex-col-reverse space-y-2 space-y-reverse overflow-y-auto p-2">
+            <div className="mt-5 flex h-full max-h-90 flex-col-reverse space-y-2 space-y-reverse overflow-y-auto p-2">
                 {isLoading && (
                     <div className="mb-4 flex w-full justify-start">
                         <div className="animate-pulse rounded-lg bg-[var(--loading)] px-4 py-2 text-sm">

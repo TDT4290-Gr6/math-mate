@@ -1,3 +1,4 @@
+import MethodCard from './ui/methodcard';
 import { Minus } from 'lucide-react';
 
 interface Step {
@@ -14,7 +15,15 @@ export default function Steps({ steps, currentStep }: StepsProps) {
     const visibleSteps: Step[] = steps.slice(0, currentStep);
 
     return (
-        <div className="mt-5 flex max-h-92 flex-col-reverse space-y-2 overflow-y-auto rounded-lg">
+        <div className="mt-5 flex max-h-92 flex-col space-y-2 overflow-y-auto rounded-lg">
+            <div className="flex w-full max-w-5xl flex-col px-10 lg:flex-row text-sm">
+                <MethodCard
+                    title="Method 1"
+                    description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                    buttonText="Get Started"
+                    disableButton={true}
+                />
+            </div>
             {visibleSteps
                 .map((step, index) => (
                     <div key={step.stepID} className="p-2">
@@ -28,8 +37,7 @@ export default function Steps({ steps, currentStep }: StepsProps) {
                         </h3>
                         <p className="text-sm">{step.content}</p>
                     </div>
-                ))
-                .reverse()}
+                ))}
         </div>
     );
 }

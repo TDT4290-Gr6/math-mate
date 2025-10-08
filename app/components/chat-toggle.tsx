@@ -14,7 +14,7 @@ export default function ChatToggle() {
     const [open, setOpen] = React.useState(true);
 
     const handleClick = () => {
-        if (typeof window !== "undefined") {
+        if (typeof window !== 'undefined') {
             window.dispatchEvent(new CustomEvent('chat-toggle'));
         }
     };
