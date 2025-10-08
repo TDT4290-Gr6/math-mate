@@ -2,9 +2,8 @@
 
 import MethodCard from '@/components/ui/methodcard';
 import { Button } from '@/components/ui/button';
+import Header from '@/components/ui/header';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import Link from 'next/link';
 
 /**
  * The page component that displays a set of method cards to help solve
@@ -12,30 +11,23 @@ import Link from 'next/link';
  */
 export default function MethodPage() {
     //TODO: backend functionality for method and methodcount
-    const [methodCount, setMethodCount] = useState(3);
+    const methodCount = 3;
     const router = useRouter();
     return (
         <div className="flex min-h-screen flex-col items-center gap-6">
-            <div className="flex w-full flex-col border-b-1">
-                <div className="flex w-full flex-row justify-between px-10 py-6">
-                    {/* TODO: Replace with backbutton */}
-                    <div className="h-10 bg-[var(--accent)]">
-                        <Link
-                            href="/protected/dashboard"
-                            className="rounded-lg bg-[var(--accent)] px-4 py-2 text-white shadow hover:bg-[var(--accent-hover)]"
-                        >
-                            Go to Dashboard
-                        </Link>
+            {/* TODO: Replace with question component :) */}
+            <Header
+                variant="question"
+                mathQuestion={
+                    <div className="flex h-40 w-full max-w-5xl flex-row items-center justify-center gap-4">
+                        {' '}
+                        <p>TODO fix question component</p>
                     </div>
-                    {/* TODO: Replace with hamburger :) */}
-                    <div className="h-10 w-10 bg-[var(--accent)]"></div>
-                </div>
-                {/* TODO: Replace with question component :) */}
-                <div className="flex h-40 w-5xl flex-row items-center gap-4"></div>
-            </div>
+                }
+            />
 
             <div className="px-[15%] pt-4">
-                <p className="text-[var(--foreground)]">
+                <p>
                     To help you with the math problem you will be provided a set
                     of methods you can use to solve the problem. You don&#39;t
                     have to use any of these provided methods, but they are
@@ -61,10 +53,10 @@ export default function MethodPage() {
                 ))}
             </div>
             <div className="flex flex-col items-center">
-                <p className="pb-4 text-[var(--foreground)]">or</p>
+                <p className="pb-4">or</p>
                 {/* TODO: change link to "solve on your own" page */}
                 <Button
-                    className="mb-20 w-46 bg-[var(--accent)]"
+                    className="mb-20 w-48 bg-[var(--accent)]"
                     onClick={() => router.push('/protected/dashboard')}
                 >
                     Solve on your own

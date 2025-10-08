@@ -33,7 +33,7 @@ export default function Title({ title, size }: TitleProps) {
             <h2
                 ref={titleRef}
                 style={{ fontSize: `${fontSize}px` }}
-                className="text-xl font-semibold text-[var(--foreground)]"
+                className="text-xl font-semibold"
             >
                 {title}
             </h2>

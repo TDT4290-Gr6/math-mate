@@ -1,12 +1,10 @@
 'use client';
 import { PanelsTopLeft, Search } from 'lucide-react';
 import { Button } from './components/ui/button';
-import { useRouter } from 'next/navigation';
 import Title from './components/ui/title';
 import Link from 'next/link';
 
 export default function NotFoundPage() {
-    const router = useRouter();
 
     return (
         <div className="flex min-h-screen flex-col items-center justify-center gap-6">
