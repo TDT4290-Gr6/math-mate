@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/card';
 import SubjectSelect from '@/components/ui/subject-select';
 import CountrySelect from '@/components/country-select';
+import { Button } from '@/components/ui/button';
 import WideLogo from '@/components/wide-logo';
 import Header from '@/components/ui/header';
 import { ChevronRight } from 'lucide-react';
@@ -47,12 +48,16 @@ export default function StartPage() {
                         first math question.
                     </CardContent>
                     <CardFooter>
-                        <Link
-                            href="/protected/problem"
-                            className="bg-accent absolute right-24 -bottom-5 flex gap-2 rounded-full px-6 py-2 text-white hover:opacity-90"
+                        <Button
+                            asChild
+                            variant="secondary"
+                            className="absolute right-24 -bottom-4 gap-2"
                         >
-                            Start Practicing <ChevronRight className="-mr-2" />
-                        </Link>
+                            <Link href="/protected/problem">
+                                Start Practicing{' '}
+                                <ChevronRight className="-mr-1" />
+                            </Link>
+                        </Button>
                     </CardFooter>
                 </Card>
             </div>
