@@ -9,10 +9,10 @@ export class UsersRepository implements IUsersRepository {
         });
 
         return {
-            id: createdUser.id,
-            uuid: createdUser.uuid,
-            score: createdUser.score,
-            country: createdUser.country,
+            id: Number(createdUser.id),
+            uuid: createdUser.uuid ?? '',
+            score: createdUser.score ?? 0,
+            country: Number(createdUser.country),
         } as User;
     }
 }
