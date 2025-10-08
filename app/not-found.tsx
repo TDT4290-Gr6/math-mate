@@ -3,6 +3,7 @@ import { PanelsTopLeft, Search } from 'lucide-react';
 import { Button } from './components/ui/button';
 import { useRouter } from 'next/navigation';
 import Title from './components/ui/title';
+import Link from 'next/link';
 
 export default function NotFoundPage() {
     const router = useRouter();
@@ -55,9 +56,9 @@ export default function NotFoundPage() {
                 <Button
                     variant="default"
                     className="m-8 bg-[var(--accent)] px-10 py-3"
-                    onClick={() => router.push('/protected/start')}
+                    asChild
                 >
-                    Go back to menu
+                    <Link href="/protected/start">Go back to menu</Link>
                 </Button>
             </div>
         </div>
