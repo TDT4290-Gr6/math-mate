@@ -1,10 +1,10 @@
 'use client';
 
+import ProblemCard from '@/components/ui/problem-card';
 import MethodCard from '@/components/ui/methodcard';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
 import { useRouter } from 'next/navigation';
-import ProblemCard from '@/components/ui/problem-card';
 
 /**
  * The page component that displays a set of method cards to help solve
