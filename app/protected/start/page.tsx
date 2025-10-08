@@ -45,7 +45,7 @@ export default function StartPage() {
                             <SubjectSelect size="large" />
                         </div>
                         Ready? Then press {'"Start Practicing"'} and get your
-                        first math question.
+                        first math problem.
                     </CardContent>
                     <CardFooter>
                         <Button

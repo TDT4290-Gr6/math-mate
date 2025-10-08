@@ -15,24 +15,24 @@ import Link from 'next/link';
  * @returns {JSX.Element} The rendered ProblemPage component.
  */
 export default function ProblemPage() {
-    const [questions, setQuestions] = useState([]);
+    const [problems, setProblems] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [offset, setOffset] = useState(0);
     const [hasMore, setHasMore] = useState(true);
 
-    // TODO: Fetcing questions
-    // GET /api/questions?subjects=algebra,geometry&offset=0&limit=5
+    // TODO: Fetching problems
+    // GET /api/problems?subjects=algebra,geometry&offset=0&limit=5
     //   useEffect(() => {
-    //   fetchQuestions(offset);
+    //   fetchProblems(offset);
     // }, []);
 
     // const handleNext = () => {
     //   const nextIndex = currentIndex + 1;
-    //   if (nextIndex >= questions.length && hasMore) {
-    //     // No more local questions — fetch more
+    //   if (nextIndex >= problems.length && hasMore) {
+    //     // No more local problems — fetch more
     //     const newOffset = offset + 5;
     //     setOffset(newOffset);
-    //     fetchQuestions(newOffset);
+    //     fetchProblems(newOffset);
     //   }
     //   setCurrentIndex(nextIndex);
     // };
@@ -40,7 +40,7 @@ export default function ProblemPage() {
     // const handlePrevious = () => {
     //   if (currentIndex > 0) setCurrentIndex(currentIndex - 1);
     // };
-    //const currentQuestion = questions[currentIndex];
+    //const currentProblem = problems[currentIndex];
 
     //Just for mocking, will be removed when api are made
     const [description, setDescription] = useState(
