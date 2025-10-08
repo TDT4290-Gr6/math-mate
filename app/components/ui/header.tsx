@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import SidebarMenu from './sidebarMenu';
 
 /**
- * Header component with navigation and optional math prioblem display.
+ * Header component with navigation and optional math problem display.
  *
  * Features:
  *   - Displays a back button (ChevronLeft) that navigates to the previous page.

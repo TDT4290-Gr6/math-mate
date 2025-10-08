@@ -1,6 +1,6 @@
 'use client';
 
-import QuestionCard from '@/components/ui/problem-card';
+import ProblemCard from '@/components/ui/problem-card';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
 import { useState } from 'react';
@@ -51,7 +51,7 @@ export default function ProblemPage() {
         <div className="flex min-h-screen flex-col items-center bg-[var(--background)] text-[var(--foreground)]">
             <Header />
             <div className="mt-20">
-                <QuestionCard description={description} variant="withButtons" />
+                <ProblemCard description={description} variant="withButtons" />
             </div>
             <div className="mt-10 flex flex-col justify-center gap-8">
                 <button className="text-opacity-20 cursor-pointer text-sm underline underline-offset-4 opacity-70 hover:opacity-90">

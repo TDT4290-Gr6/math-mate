@@ -36,14 +36,14 @@ export default function ProblemCard({
                 <div className="flex justify-center gap-12">
                     <Button onClick={onPrevious} disabled={!onPrevious}>
                         <ChevronLeft className="h-4 w-4" />
-                        Previous question
+                        Previous problem
                     </Button>
                     <Button
                         variant="secondary"
                         onClick={onNext}
                         disabled={!onNext}
                     >
-                        Another question
+                        Another problem
                         <ChevronRight className="h-4 w-4" />
                     </Button>
                 </div>
