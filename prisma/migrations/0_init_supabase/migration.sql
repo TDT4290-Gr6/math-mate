@@ -1,8 +1,5 @@
--- CreateSchema
-CREATE SCHEMA IF NOT EXISTS "public";
-
 -- CreateTable
-CREATE TABLE "public"."User" (
+CREATE TABLE "User" (
     "id" BIGSERIAL NOT NULL,
     "score" DOUBLE PRECISION,
     "country" BIGINT NOT NULL,
@@ -12,7 +9,7 @@ CREATE TABLE "public"."User" (
 );
 
 -- CreateTable
-CREATE TABLE "public"."Country" (
+CREATE TABLE "Country" (
     "id" BIGSERIAL NOT NULL,
     "name" TEXT NOT NULL,
 
@@ -20,7 +17,7 @@ CREATE TABLE "public"."Country" (
 );
 
 -- CreateTable
-CREATE TABLE "public"."Problem" (
+CREATE TABLE "Problem" (
     "id" BIGSERIAL NOT NULL,
     "problem" TEXT NOT NULL,
     "solution" TEXT NOT NULL,
@@ -32,7 +29,7 @@ CREATE TABLE "public"."Problem" (
 );
 
 -- CreateTable
-CREATE TABLE "public"."Method" (
+CREATE TABLE "Method" (
     "id" BIGSERIAL NOT NULL,
     "problemId" BIGINT NOT NULL,
     "title" TEXT NOT NULL,
@@ -42,10 +39,9 @@ CREATE TABLE "public"."Method" (
 );
 
 -- CreateTable
-CREATE TABLE "public"."Step" (
+CREATE TABLE "Step" (
     "id" BIGSERIAL NOT NULL,
     "methodId" BIGINT NOT NULL,
-    "problemId" BIGINT NOT NULL,
     "stepNumber" INTEGER NOT NULL,
     "content" TEXT NOT NULL,
 
@@ -53,7 +49,7 @@ CREATE TABLE "public"."Step" (
 );
 
 -- CreateTable
-CREATE TABLE "public"."Event" (
+CREATE TABLE "Event" (
     "id" BIGSERIAL NOT NULL,
     "loggedAt" TIMESTAMPTZ(6) NOT NULL DEFAULT (now() AT TIME ZONE 'utc'::text),
     "sessionId" BIGINT NOT NULL,
@@ -68,7 +64,7 @@ CREATE TABLE "public"."Event" (
 );
 
 -- CreateTable
-CREATE TABLE "public"."Solves" (
+CREATE TABLE "Solves" (
     "id" BIGSERIAL NOT NULL,
     "userId" BIGINT NOT NULL,
     "problemId" BIGINT NOT NULL,
@@ -82,59 +78,56 @@ CREATE TABLE "public"."Solves" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_id_key" ON "public"."User"("id");
+CREATE UNIQUE INDEX "User_id_key" ON "User"("id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_uuid_key" ON "public"."User"("uuid");
+CREATE UNIQUE INDEX "User_uuid_key" ON "User"("uuid");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Country_id_key" ON "public"."Country"("id");
+CREATE UNIQUE INDEX "Country_id_key" ON "Country"("id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Country_Name_key" ON "public"."Country"("name");
+CREATE UNIQUE INDEX "Country_Name_key" ON "Country"("name");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Problem_id_key" ON "public"."Problem"("id");
+CREATE UNIQUE INDEX "Problem_id_key" ON "Problem"("id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Method_id_key" ON "public"."Method"("id");
+CREATE UNIQUE INDEX "Method_id_key" ON "Method"("id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Step_id_key" ON "public"."Step"("id");
+CREATE UNIQUE INDEX "Step_id_key" ON "Step"("id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Event_id_key" ON "public"."Event"("id");
+CREATE UNIQUE INDEX "Event_id_key" ON "Event"("id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "solves_id_key" ON "public"."Solves"("id");
+CREATE UNIQUE INDEX "solves_id_key" ON "Solves"("id");
 
 -- AddForeignKey
-ALTER TABLE "public"."User" ADD CONSTRAINT "User_Country_fkey" FOREIGN KEY ("country") REFERENCES "public"."Country"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "User" ADD CONSTRAINT "User_Country_fkey" FOREIGN KEY ("country") REFERENCES "Country"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."Method" ADD CONSTRAINT "Method_problemId_fkey" FOREIGN KEY ("problemId") REFERENCES "public"."Problem"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Method" ADD CONSTRAINT "Method_problemId_fkey" FOREIGN KEY ("problemId") REFERENCES "Problem"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."Step" ADD CONSTRAINT "step_methodId_fkey" FOREIGN KEY ("methodId") REFERENCES "public"."Method"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Step" ADD CONSTRAINT "step_methodId_fkey" FOREIGN KEY ("methodId") REFERENCES "Method"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."Step" ADD CONSTRAINT "step_problemId_fkey" FOREIGN KEY ("problemId") REFERENCES "public"."Problem"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Event" ADD CONSTRAINT "Event_method_fkey" FOREIGN KEY ("methodId") REFERENCES "Method"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."Event" ADD CONSTRAINT "Event_method_fkey" FOREIGN KEY ("methodId") REFERENCES "public"."Method"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Event" ADD CONSTRAINT "Event_problemId_fkey" FOREIGN KEY ("problemId") REFERENCES "Problem"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."Event" ADD CONSTRAINT "Event_problemId_fkey" FOREIGN KEY ("problemId") REFERENCES "public"."Problem"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Event" ADD CONSTRAINT "Event_step_fkey" FOREIGN KEY ("stepId") REFERENCES "Step"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."Event" ADD CONSTRAINT "Event_step_fkey" FOREIGN KEY ("stepId") REFERENCES "public"."Step"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Event" ADD CONSTRAINT "Event_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."Event" ADD CONSTRAINT "Event_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Solves" ADD CONSTRAINT "solves_problemId_fkey" FOREIGN KEY ("problemId") REFERENCES "Problem"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."Solves" ADD CONSTRAINT "solves_problemId_fkey" FOREIGN KEY ("problemId") REFERENCES "public"."Problem"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "public"."Solves" ADD CONSTRAINT "solves_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Solves" ADD CONSTRAINT "solves_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
