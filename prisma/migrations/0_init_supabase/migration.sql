@@ -74,7 +74,7 @@ CREATE TABLE "public"."Solves" (
     "problemId" BIGINT NOT NULL,
     "attempts" INTEGER NOT NULL,
     "startedSolvingAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "finishedSolvingAt" TIMESTAMPTZ(6) DEFAULT CURRENT_TIMESTAMP,
+    "finishedSolvingAt" TIMESTAMPTZ(6),
     "stepsUsed" INTEGER NOT NULL,
     "feedback" INTEGER,
 
