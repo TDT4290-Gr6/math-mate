@@ -1,12 +1,18 @@
 import { IUsersRepository } from '@/application/repositories/users.repository.interface';
 import { UserInsert, User } from '@/entities/models/user';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
 
-const prisma = new PrismaClient();
 export class UsersRepository implements IUsersRepository {
-    createUser(user: UserInsert): Promise<User> {
-        return prisma.user.create({
+    async createUser(user: UserInsert): Promise<User> {
+        const createdUser = await prisma.user.create({
             data: user,
         });
+
+        return {
+            id: createdUser.id,
+            uuid: createdUser.uuid,
+            score: createdUser.score,
+            country: createdUser.country,
+        } as User;
     }
 }
