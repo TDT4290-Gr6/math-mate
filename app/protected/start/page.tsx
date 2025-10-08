@@ -9,7 +9,7 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import SubjectSelect from '@/components/ui/subject-select';
-import CountrySelect from '@/components/ui/country-select';
+import CountrySelect from '@/components/country-select';
 import { ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';

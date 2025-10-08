@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/dialog';
 import { CountrySelectDropdown } from './country-select-dropdown';
 import { useState } from 'react';
-import Title from './title';
+import Title from './ui/title';
 
 export default function CountrySelect() {
     const countryIsSelected = false; // TODO: Check with backend if country has been selected
