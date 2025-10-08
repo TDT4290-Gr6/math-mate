@@ -22,9 +22,8 @@ interface SubjectSelectPopupProps {
  * restoration if the user cancels changes. The user can:
  *
  * - **Save**: Close the popup and keep the modified subject selection.
- * - **Cancel / X**: Restore the original selection from `"initialSubjects"` and close the popup.
- * - **Click outside the card**: Close the popup without saving changes.
- *
+ * - **Cancel / X / Click outside the card**: Restore the original selection from `"initialSubjects"` and close the popup.
+ * 
  * @component
  * @param {Object} props - Component props.
  * @param {() => void} props.onClose - Callback triggered when the popup is closed.
@@ -52,6 +51,17 @@ export default function SubjectSelectPopup({
         }
     }, []);
 
+    useEffect(() => {
+        const handleEscape = (e: KeyboardEvent) => {
+             if (e.key === 'Escape') {
+                 handleCancel();
+             }
+        };
+        document.addEventListener('keydown', handleEscape);
+        return () => document.removeEventListener('keydown', handleEscape);
+    }, []);
+
+
     const handleSave = () => {
         onClose();
     };
@@ -64,7 +74,9 @@ export default function SubjectSelectPopup({
     return (
         <div
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
-            onClick={handleCancel} // Close when clicking outside the card
+            onClick={handleCancel} 
+            role="dialog"
+            aria-modal="true"
         >
             <Card
                 className="relative w-2xl p-5 py-10"
