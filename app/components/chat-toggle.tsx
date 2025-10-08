@@ -13,6 +13,11 @@ import React from 'react';
 export default function ChatToggle() {
     const [open, setOpen] = React.useState(true);
 
+    React.useEffect(() => {
+    const t = setTimeout(() => setOpen(false), 4000); // auto-close help tooltip
+    return () => clearTimeout(t);
+  }, []);
+
     const handleClick = () => {
         if (typeof window !== 'undefined') {
             window.dispatchEvent(new CustomEvent('chat-toggle'));
@@ -34,9 +39,10 @@ export default function ChatToggle() {
                 <TooltipContent
                     side="top"
                     sideOffset={10}
-                    className="relative w-64 rounded-xl bg-[var(--chatbot)] p-4 text-[var(--foreground)] shadow-lg"
+                    arrowColor="var(--chatbot)"
+                    className="relative w-58 rounded-xl bg-[var(--chatbot)] p-3 text-[var(--foreground)] shadow-lg"
                 >
-                    <div className="pr-6">
+                    <div className="text-sm">
                         <h3 className="mb-1 font-bold">
                             Need help with the math problem?
                         </h3>

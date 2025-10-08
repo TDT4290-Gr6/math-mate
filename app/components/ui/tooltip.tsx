@@ -38,8 +38,12 @@ function TooltipContent({
     className,
     sideOffset = 0,
     children,
+    // Optional arrow color (CSS color string). Defaults to the tooltip background variable.
+    arrowColor = 'var(--foreground)',
     ...props
-}: React.ComponentProps<typeof TooltipPrimitive.Content>) {
+}: React.ComponentProps<typeof TooltipPrimitive.Content> & {
+    arrowColor?: string;
+}) {
     return (
         <TooltipPrimitive.Portal>
             <TooltipPrimitive.Content
@@ -52,7 +56,10 @@ function TooltipContent({
                 {...props}
             >
                 {children}
-                <TooltipPrimitive.Arrow className="bg-foreground fill-foreground z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px]" />
+                <TooltipPrimitive.Arrow
+                    className="z-50 size-2.5 rounded-[2px]"
+                    style={{ fill: arrowColor }}
+                />
             </TooltipPrimitive.Content>
         </TooltipPrimitive.Portal>
     );
