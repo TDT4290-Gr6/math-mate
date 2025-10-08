@@ -113,7 +113,7 @@ export default function ChatbotWindow({
                 )}
             </div>
             <div className="flex w-full p-2">
-                <div className="relative flex-1">
+                <div className="relative flex-1 mt-4">
                     <input
                         type="text"
                         value={inputValue}
