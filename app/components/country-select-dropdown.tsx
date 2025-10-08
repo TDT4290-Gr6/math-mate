@@ -25,6 +25,7 @@ import {
 } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useState } from 'react';
 
 const FormSchema = z.object({
     country: z
@@ -52,6 +53,8 @@ export function CountrySelectDropdown({
     // Watch the country field so we can enable/disable the submit button
     const selectedCountry = form.watch('country');
 
+    const [popoverOpen, setPopoverOpen] = useState(false);
+
     return (
         <Form {...form}>
             <form
@@ -63,7 +66,10 @@ export function CountrySelectDropdown({
                     name="country"
                     render={({ field }) => (
                         <FormItem className="w-60">
-                            <Popover>
+                            <Popover
+                                open={popoverOpen}
+                                onOpenChange={setPopoverOpen}
+                            >
                                 {/* Dropdown button */}
                                 <PopoverTrigger asChild>
                                     <FormControl>
@@ -96,6 +102,9 @@ export function CountrySelectDropdown({
                                                             form.setValue(
                                                                 'country',
                                                                 country.value,
+                                                            );
+                                                            setPopoverOpen(
+                                                                false,
                                                             );
                                                         }}
                                                     >
