@@ -23,7 +23,10 @@ export default function NotFoundPage() {
                         </div>
                     </div>
                     {/* stack with search icon on top of panels icon */}
-                    <div className="relative hidden flex-1 items-center lg:block">
+                    <div
+                        className="relative hidden flex-1 items-center lg:block"
+                        aria-hidden="true"
+                    >
                         {/* Base panel icon */}
                         <PanelsTopLeft
                             className="mr-8 size-36 text-[var(--primary)] opacity-20"
