@@ -73,10 +73,7 @@ export function CountrySelectDropdown({
                                 {/* Dropdown button */}
                                 <PopoverTrigger asChild>
                                     <FormControl>
-                                        <Button
-                                            variant="outline"
-                                            role="combobox"
-                                        >
+                                        <Button variant="ghost" role="combobox">
                                             {/* Default (invalid) country */}
                                             {field.value
                                                 ? countries.find(
@@ -133,10 +130,10 @@ export function CountrySelectDropdown({
                 />
                 <Button
                     type="submit"
-                    variant="default"
+                    variant="secondary"
                     // Have button appear as disabled if no country is selected
                     className={cn(
-                        'bg-accent w-60 cursor-pointer',
+                        'w-60',
                         !selectedCountry &&
                             'bg-border hover:bg-border cursor-auto',
                     )}
