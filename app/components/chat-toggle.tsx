@@ -14,9 +14,9 @@ export default function ChatToggle() {
     const [open, setOpen] = React.useState(true);
 
     React.useEffect(() => {
-    const t = setTimeout(() => setOpen(false), 4000); // auto-close help tooltip
-    return () => clearTimeout(t);
-  }, []);
+        const t = setTimeout(() => setOpen(false), 4000); // auto-close help tooltip
+        return () => clearTimeout(t);
+    }, []);
 
     const handleClick = () => {
         if (typeof window !== 'undefined') {
