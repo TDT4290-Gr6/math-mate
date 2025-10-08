@@ -23,7 +23,7 @@ interface SubjectSelectPopupProps {
  *
  * - **Save**: Close the popup and keep the modified subject selection.
  * - **Cancel / X / Click outside the card**: Restore the original selection from `"initialSubjects"` and close the popup.
- * 
+ *
  * @component
  * @param {Object} props - Component props.
  * @param {() => void} props.onClose - Callback triggered when the popup is closed.
@@ -53,14 +53,13 @@ export default function SubjectSelectPopup({
 
     useEffect(() => {
         const handleEscape = (e: KeyboardEvent) => {
-             if (e.key === 'Escape') {
-                 handleCancel();
-             }
+            if (e.key === 'Escape') {
+                handleCancel();
+            }
         };
         document.addEventListener('keydown', handleEscape);
         return () => document.removeEventListener('keydown', handleEscape);
     }, []);
-
 
     const handleSave = () => {
         onClose();
@@ -74,7 +73,7 @@ export default function SubjectSelectPopup({
     return (
         <div
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
-            onClick={handleCancel} 
+            onClick={handleCancel}
             role="dialog"
             aria-modal="true"
         >
