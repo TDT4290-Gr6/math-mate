@@ -1,7 +1,7 @@
 import { ChevronDown, SendHorizontal } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 import MessageBubble from './message-bubble';
 import { cn } from '@/lib/utils';
-import { useState } from 'react';
 
 export interface ChatMessage {
     chatID: string;
@@ -31,6 +31,7 @@ export default function ChatbotWindow({
     initialMessage,
 }: ChatbotWindowProps) {
     const [inputValue, setInputValue] = useState('');
+    const containerRef = useRef<HTMLDivElement | null>(null);
 
     const handleSendMessage = async () => {
         if (inputValue.trim() && onSendMessage && !isLoading) {
@@ -47,6 +48,13 @@ export default function ChatbotWindow({
         }
     };
 
+    useEffect(() => {
+        const el = containerRef.current;
+        if (!el) return;
+        // Scroll to bottom when adding new messages
+        el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
+    }, [chatHistory.messages.length]);
+
     return (
         <div>
             <div className="relative">
@@ -58,7 +66,19 @@ export default function ChatbotWindow({
                     />
                 )}
             </div>
-            <div className="mt-5 flex h-full max-h-90 flex-col-reverse space-y-2 space-y-reverse overflow-y-auto p-2">
+            <div
+                ref={containerRef}
+                className="mt-5 flex h-full max-h-90 flex-col space-y-2 overflow-y-auto p-2"
+            >
+                {initialMessage && (
+                    <MessageBubble
+                        key={initialMessage.chatID}
+                        message={initialMessage}
+                    />
+                )}
+                {chatHistory.messages.map((msg) => (
+                    <MessageBubble key={msg.chatID} message={msg} />
+                ))}
                 {isLoading && (
                     <div className="mb-4 flex w-full justify-start">
                         <div className="animate-pulse rounded-lg bg-[var(--loading)] px-4 py-2 text-sm">
@@ -77,15 +97,6 @@ export default function ChatbotWindow({
                             </div>
                         </div>
                     </div>
-                )}
-                {[...chatHistory.messages].reverse().map((msg) => (
-                    <MessageBubble key={msg.chatID} message={msg} />
-                ))}
-                {initialMessage && (
-                    <MessageBubble
-                        key={initialMessage.chatID}
-                        message={initialMessage}
-                    />
                 )}
             </div>
             <div className="flex w-full p-2">

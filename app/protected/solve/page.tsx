@@ -18,7 +18,8 @@ const PRIVACY_INITIAL_MESSAGE: ChatMessage = {
     content:
         "Privacy Notice: Please do not share any personal information in this chat. I'm here to help you with math problems only!",
     timestamp: new Date(),
-    className: 'bg-card border border-[var(--accent)] text-[var(--accent)]',
+    className:
+        'bg-card border border-[var(--accent)] text-[var(--accent)] mx-5',
 };
 
 // Define the Step type
@@ -100,7 +101,7 @@ export default function SolvingPage() {
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
     const [chatHistory, setChatHistory] =
         useState<ChatHistory>(mochChatHistory);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
 
     // Listen for the chat-toggle event
     React.useEffect(() => {
