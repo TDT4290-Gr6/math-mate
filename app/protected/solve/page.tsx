@@ -4,6 +4,7 @@ import ChatbotWindow, {
     ChatHistory,
     ChatMessage,
 } from '@/components/chatbot-window';
+import ProblemCard from '@/components/ui/problem-card';
 import ChatToggle from '@/components/chat-toggle';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
@@ -147,36 +148,38 @@ export default function SolvingPage() {
     };
 
     return (
-        <div>
-            <div className="h-48 w-full">
-                <Header
-                    variant="question"
-                    mathQuestion={
-                        <div className="flex h-40 w-full max-w-5xl flex-row items-center justify-center gap-4">
-                            {' '}
-                            <p>TODO fix question component</p>
-                        </div>
-                    }
-                />
-            </div>
-            <div className="relative flex h-[calc(100vh-12rem)] w-full">
+        <div className="flex min-h-screen w-full flex-col items-center">
+            <Header
+                variant="problem"
+                mathProblem={
+                    <div className="flex h-50 flex-row items-center justify-center gap-4">
+                        <ProblemCard description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc in nunc diam. Fusce accumsan tempor justo ac pellentesque. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." />
+                    </div>
+                }
+            />
+
+            <div className="relative flex h-full w-full flex-1">
                 <div
                     className={cn(
-                        'flex flex-col items-center p-4',
+                        'flex h-full flex-col items-center justify-between p-4',
                         isChatOpen ? 'w-1/2' : 'mx-auto w-3/5',
                     )}
                 >
-                    <div className="w-full flex-1">
+                    <div className="h-full w-full flex-1">
                         <Steps steps={mockSteps} currentStep={currentStep} />
                     </div>
-                    <div className="mt-4 flex w-full justify-center gap-2">
-                        <Button className="w-1/4 rounded-full">
+                    <div className="flex-end mt-4 flex w-full justify-center gap-2">
+                        <Button
+                            className="w-1/4 rounded-full"
+                            variant="default"
+                        >
                             Go to answer
                         </Button>
                         {currentStep < totalSteps && (
                             <Button
                                 onClick={() => handleNextStep()}
-                                className="bg-accent w-1/4 rounded-full"
+                                className="w-1/4 rounded-full"
+                                variant="secondary"
                             >
                                 Next step
                             </Button>
@@ -184,10 +187,10 @@ export default function SolvingPage() {
                     </div>
                 </div>
                 {isChatOpen && (
-                    <div className="bg-border absolute top-0 bottom-0 left-1/2 mt-4 w-0.5"></div>
+                    <div className="bg-border absolute top-0 bottom-0 left-1/2 w-0.5"></div>
                 )}
                 {isChatOpen ? (
-                    <div className="flex w-1/2 flex-col p-4">
+                    <div className="flex h-full w-1/2 flex-col p-4">
                         <ChatbotWindow
                             chatHistory={chatHistory}
                             onClose={() => setIsChatOpen(!isChatOpen)}
