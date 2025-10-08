@@ -8,6 +8,7 @@ import {
     CardHeader,
 } from '@/components/ui/card';
 import SubjectSelect from '@/components/ui/subject-select';
+import CountrySelect from '@/components/country-select';
 import WideLogo from '@/components/wide-logo';
 import Header from '@/components/ui/header';
 import { ChevronRight } from 'lucide-react';
@@ -21,6 +22,7 @@ export default function StartPage() {
                 className="fixed top-0 right-0 left-0 z-10"
             />
             <div className="flex min-h-screen flex-col items-center justify-center">
+                <CountrySelect />
                 <Card className="relative w-2xl p-5">
                     <CardHeader>
                         <WideLogo className="m-2 h-18 w-auto" />
@@ -46,7 +48,7 @@ export default function StartPage() {
                     </CardContent>
                     <CardFooter>
                         <Link
-                            href="/protected/dashboard" // TODO: Link to correct page when it is created
+                            href="/protected/problem"
                             className="bg-accent absolute right-24 -bottom-5 flex gap-2 rounded-full px-6 py-2 text-white hover:opacity-90"
                         >
                             Start Practicing <ChevronRight className="-mr-2" />

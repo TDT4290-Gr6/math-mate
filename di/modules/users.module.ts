@@ -1,4 +1,5 @@
 import { MockUsersRepository } from '@/infrastructure/repositories/users.repository.mock';
+import { UsersRepository } from '@/infrastructure/repositories/users.repository';
 import { createUserUseCase } from '@/application/use-cases/create-user.use-case';
 import { createModule } from '@evyweb/ioctopus';
 import { DI_SYMBOLS } from '../types';
@@ -6,15 +7,12 @@ import { DI_SYMBOLS } from '../types';
 export function usersModule() {
     const usersModule = createModule();
 
-    if (
-        process.env.NODE_ENV === 'development' ||
-        process.env.NODE_ENV === 'test'
-    ) {
+    if (process.env.NODE_ENV === 'test') {
         usersModule
             .bind(DI_SYMBOLS.IUsersRepository)
             .toClass(MockUsersRepository);
     } else {
-        throw new Error('No real users repository implemented yet.');
+        usersModule.bind(DI_SYMBOLS.IUsersRepository).toClass(UsersRepository);
     }
 
     usersModule

@@ -6,11 +6,11 @@ import SidebarMenu from './sidebarMenu';
 import { cn } from '@/lib/utils';
 
 /**
- * Header component with navigation and optional math question display.
+ * Header component with navigation and optional math problem display.
  *
  * Features:
  *   - Displays a back button (ChevronLeft) that navigates to the previous page.
- *   - Displays a math question when `variant` is 'question'.
+ *   - Displays a math problem when `variant` is 'problem'.
  *   - Hamburger menu button that opens a `SidebarMenu` overlay.
  *   - Global keyboard shortcuts:
  *       - Press "e" to open the sidebar menu
@@ -18,12 +18,12 @@ import { cn } from '@/lib/utils';
  *   - Click outside the sidebar closes it.
  *
  * Props:
- * @param variant - 'simple' | 'question' (optional, default: 'simple')
+ * @param variant - 'simple' | 'problem' (optional, default: 'simple')
  *     Determines the layout of the header.
  *     - 'simple': basic header with back button and menu
- *     - 'question': header includes a math question display
- * @param mathQuestion - ReactNode (optional)
- *     The math question content to display when `variant` is 'question'. Normally a question component.
+ *     - 'problem': header includes a math problem display
+ * @param mathProblem - ReactNode (optional)
+ *     The math problem content to display when `variant` is 'problem'. Normally a problem component.
  * @param className - string (optional)
  *    Additional CSS classes to apply to the header container.
  *
@@ -33,13 +33,13 @@ import { cn } from '@/lib/utils';
  */
 
 interface HeaderProps {
-    variant?: 'simple' | 'question';
-    mathQuestion?: React.ReactNode;
+    variant?: 'simple' | 'problem';
+    mathProblem?: React.ReactNode;
     className?: string;
 }
 export default function Header({
     variant = 'simple',
-    mathQuestion,
+    mathProblem,
     className,
 }: HeaderProps) {
     const [isOpen, setIsOpen] = useState(false);
@@ -72,7 +72,7 @@ export default function Header({
         <div
             className={cn(
                 'items-top flex w-full flex-row justify-between px-10 py-6',
-                variant === 'question' ? 'border-b' : '',
+                variant === 'problem' ? 'border-b' : '',
                 className,
             )}
         >
@@ -85,8 +85,8 @@ export default function Header({
             >
                 <ChevronLeft size={36} />
             </button>
-            {/* Math question display */}
-            {variant === 'question' && mathQuestion}
+            {/* Math problem display */}
+            {variant === 'problem' && mathProblem}
             {/* Hamburger menu */}
             <button
                 type="button"
