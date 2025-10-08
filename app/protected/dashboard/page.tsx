@@ -3,16 +3,15 @@
 import SubjectSelectPopup from '@/components/subject-select-popup';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
-import Link from 'next/link';
 import { useState } from 'react';
+import Link from 'next/link';
 
 export default function DashboardPage() {
-
     const [isPopupOpen, setIsPopupOpen] = useState(false);
 
     const openPopup = () => setIsPopupOpen(true);
     const closePopup = () => setIsPopupOpen(false);
-    
+
     return (
         <div className="flex min-h-screen flex-col items-center gap-6">
             <Header
@@ -38,8 +37,8 @@ export default function DashboardPage() {
                 Go to Method Page
             </Link>
 
-           <Button onClick={openPopup}>Show subject selection popup</Button>
-           {isPopupOpen && <SubjectSelectPopup onClose={closePopup} />}
+            <Button onClick={openPopup}>Show subject selection popup</Button>
+            {isPopupOpen && <SubjectSelectPopup onClose={closePopup} />}
         </div>
     );
 }
