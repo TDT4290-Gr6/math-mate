@@ -1,13 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
-// prisma/schema.prisma
 generator client {
     provider = "prisma-client-js"
-    output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -16,114 +8,80 @@ datasource db {
 }
 
 model User {
-    id      BigInt  @id @default(autoincrement()) @db.BigInt
-    score   Float?  @db.DoublePrecision
-    country BigInt  @db.BigInt // FK -> Country.id (required, RESTRICT on delete)
-    uuid    String? @unique @db.Text
-
-    // relations
-    countryRef Country @relation(fields: [country], references: [id], onDelete: Restrict)
-
-    // back-relations
-    events Event[]
-    solves Solves[]
-
-    @@index([country])
+    id         BigInt   @id @unique @default(autoincrement())
+    score      Float?
+    country    BigInt
+    uuid       String?  @unique
+    events     Event[]
+    solves     Solves[]
+    countryRef Country  @relation(fields: [country], references: [id], map: "User_Country_fkey")
 }
 
 model Country {
-    id   BigInt @id @default(autoincrement()) @db.BigInt
-    name String @unique @db.Text
-
-    // back-relations
+    id   BigInt @id @unique @default(autoincrement())
+    name String @unique(map: "Country_Name_key")
     User User[]
 }
 
 model Problem {
-    id       BigInt  @id @default(autoincrement()) @db.BigInt
-    problem  String  @db.Text
-    solution String  @db.Text
-    subject  String  @db.Text
-    level    Int     @db.SmallInt
-    title    String? @db.Text
-
-    // back-relations
-    Method Method[]
-    Event  Event[]
-    Solves Solves[]
+    id       BigInt   @id @unique @default(autoincrement())
+    problem  String
+    solution String
+    subject  String
+    level    Int      @db.SmallInt
+    title    String?
+    Event    Event[]
+    Method   Method[]
+    Solves   Solves[]
+    Step     Step[]
 }
 
 model Method {
-    id          BigInt @id @default(autoincrement()) @db.BigInt
-    problemId   BigInt @db.BigInt // FK -> Problem.id (required, CASCADE)
-    title       String @db.Text
-    description String @db.Text
-
-    // relations
-    problem Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
-
-    // back-relations
-    Step  Step[]
-    Event Event[]
-
-    @@index([problemId])
+    id          BigInt  @id @unique @default(autoincrement())
+    problemId   BigInt
+    title       String
+    description String
+    Event       Event[]
+    problem     Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
+    Step        Step[]
 }
 
 model Step {
-    id         BigInt @id @default(autoincrement()) @db.BigInt
-    methodId   BigInt @db.BigInt // required, CASCADE
-    //problemId  BigInt  @db.BigInt // required, CASCADE (enforce consistency at DB level)
-    stepNumber Int    @db.Integer
-    content    String @db.Text
-
-    // relations
-    method Method @relation(fields: [methodId], references: [id], onDelete: Cascade)
-    //problem Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
-
-    // back-relations
-    Event Event[]
-    //@@index([problemId])
-
-    @@index([methodId])
+    id         BigInt  @id @unique @default(autoincrement())
+    methodId   BigInt
+    problemId  BigInt
+    stepNumber Int
+    content    String
+    Event      Event[]
+    method     Method  @relation(fields: [methodId], references: [id], onDelete: Cascade, map: "step_methodId_fkey")
+    Problem    Problem @relation(fields: [problemId], references: [id], onDelete: Cascade, map: "step_problemId_fkey")
 }
 
 model Event {
-    id         BigInt   @id @default(autoincrement()) @db.BigInt
-    loggedAt   DateTime @db.Timestamptz(6)
-    sessionId  BigInt   @db.BigInt
-    actionName String   @db.Text
-    payload    String   @db.Text
-    userId     BigInt   @db.BigInt
-    problemId  BigInt?  @db.BigInt // optional, RESTRICT
-    methodId   BigInt?  @db.BigInt // optional, RESTRICT
-    stepId     BigInt?  @db.BigInt // optional, RESTRICT
-
-    // relations (all optional, RESTRICT on delete)
-    user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-    problem Problem? @relation(fields: [problemId], references: [id], onDelete: Restrict)
-    method  Method?  @relation(fields: [methodId], references: [id], onDelete: Restrict)
-    step    Step?    @relation(fields: [stepId], references: [id], onDelete: Restrict)
-
-    @@index([userId, loggedAt])
-    @@index([problemId])
-    @@index([methodId])
-    @@index([stepId])
+    id         BigInt   @id @unique @default(autoincrement())
+    loggedAt   DateTime @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamptz(6)
+    sessionId  BigInt
+    actionName String
+    payload    String
+    userId     BigInt
+    problemId  BigInt?
+    methodId   BigInt?
+    stepId     BigInt?
+    method     Method?  @relation(fields: [methodId], references: [id], onDelete: Restrict, map: "Event_method_fkey")
+    problem    Problem? @relation(fields: [problemId], references: [id], onDelete: Restrict)
+    step       Step?    @relation(fields: [stepId], references: [id], onDelete: Restrict, map: "Event_step_fkey")
+    user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Solves {
-    id                BigInt    @id @default(autoincrement()) @db.BigInt
-    userId            BigInt    @db.BigInt // CASCADE
-    problemId         BigInt    @db.BigInt // CASCADE
-    attempts          Int       @db.Integer
-    startedSolvingAt  DateTime  @db.Timestamptz(6)
-    finishedSolvingAt DateTime? @db.Timestamptz(6)
-    stepUsed          Int       @db.Integer
-    feedback          Int?      @db.Integer
-
-    // relations
-    user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-    problem Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
-
-    @@index([userId])
-    @@index([problemId])
+    id                BigInt    @id(map: "solves_pkey") @unique(map: "solves_id_key") @default(autoincrement())
+    userId            BigInt
+    problemId         BigInt
+    attempts          Int
+    startedSolvingAt  DateTime  @default(now()) @db.Timestamptz(6)
+    finishedSolvingAt DateTime? @default(now()) @db.Timestamptz(6)
+    stepsUsed         Int
+    feedback          Int?
+    problem           Problem   @relation(fields: [problemId], references: [id], onDelete: Cascade, map: "solves_problemId_fkey")
+    user              User      @relation(fields: [userId], references: [id], onDelete: Cascade, map: "solves_userId_fkey")
 }
