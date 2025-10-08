@@ -5,6 +5,13 @@ interface MessageBubbleProps {
     message: ChatMessage;
 }
 
+/**
+ * MessageBubble
+ *
+ * Displays a single chat message. Styles differ for 'user' and 'bot' senders.
+ * Accepts an optional `className` on the message to allow custom styling
+ * (e.g. privacy notice). Keeps layout simple and responsive.
+ */
 export default function MessageBubble({ message }: MessageBubbleProps) {
     const isUser = message.sender === 'user';
 

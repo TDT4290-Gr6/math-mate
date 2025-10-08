@@ -23,6 +23,19 @@ interface ChatbotWindowProps {
     initialMessage?: ChatMessage;
 }
 
+/**
+ * ChatbotWindow component
+ *
+ * Renders a chat panel showing `chatHistory` messages, an optional
+ * initial privacy message, and an input to send new messages.
+ *
+ * Props:
+ * @param chatHistory - Current chat messages shown in the panel
+ * @param onSendMessage - Optional callback invoked when user sends a message
+ * @param onClose - Optional callback to close the chat panel
+ * @param isLoading - When true, disables input and shows a loading indicator
+ * @param initialMessage - Optional single message shown when the chat opens
+ */
 export default function ChatbotWindow({
     chatHistory,
     onSendMessage,

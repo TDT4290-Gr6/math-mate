@@ -95,6 +95,13 @@ const mochChatHistory: ChatHistory = {
     ],
 };
 
+/**
+ * SolvingPage
+ *
+ * High-level page that shows a math question, step-by-step solution
+ * guidance and an optional chat helper. Manages step navigation and
+ * chat state and passes messages to the ChatbotWindow.
+ */
 export default function SolvingPage() {
     const [currentStep, setCurrentStep] = useState(1);
     const totalSteps = mockSteps.length;
