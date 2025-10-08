@@ -9,6 +9,7 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import SubjectSelect from '@/components/ui/subject-select';
+import CountrySelect from '@/components/country-select';
 import { ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -16,6 +17,7 @@ import Link from 'next/link';
 export default function StartPage() {
     return (
         <div className="flex min-h-screen items-center justify-center">
+            <CountrySelect />
             <Card className="relative w-2xl p-5">
                 <CardHeader>
                     <CardTitle>
