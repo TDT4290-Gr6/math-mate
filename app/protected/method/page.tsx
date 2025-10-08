@@ -1,10 +1,10 @@
 'use client';
 
-import QuestionCard from '@/components/ui/question-card';
 import MethodCard from '@/components/ui/methodcard';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
 import { useRouter } from 'next/navigation';
+import ProblemCard from '@/components/ui/problem-card';
 
 /**
  * The page component that displays a set of method cards to help solve
@@ -17,10 +17,10 @@ export default function MethodPage() {
     return (
         <div className="flex min-h-screen flex-col items-center gap-6">
             <Header
-                variant="question"
-                mathQuestion={
+                variant="problem"
+                mathProblem={
                     <div className="flex h-50 flex-row items-center justify-center gap-4">
-                        <QuestionCard description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc in nunc diam. Fusce accumsan tempor justo ac pellentesque. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." />
+                        <ProblemCard description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc in nunc diam. Fusce accumsan tempor justo ac pellentesque. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." />
                     </div>
                 }
             />
