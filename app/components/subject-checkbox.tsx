@@ -22,14 +22,14 @@ export default function SubjectCheckbox({
         <label
             htmlFor={subject}
             className={cn(
-                'flex cursor-pointer items-center gap-2 rounded-full bg-neutral-900 px-4 py-2 text-base text-white hover:opacity-90',
+                'flex cursor-pointer items-center gap-2 rounded-full bg-neutral-900 px-2 py-2 text-base text-white hover:opacity-90',
                 size === 'small' && 'px-2 py-1 text-sm',
             )}
         >
-            <Icon className="size-4" />
-            {subject}
+            <Icon className="ml-2 size-4" />
+            <span className="pr-2">{subject}</span>
             <Checkbox
-                className="bg-card size-4 cursor-pointer rounded-full"
+                className="bg-card size-6 cursor-pointer rounded-full"
                 id={subject}
                 checked={checked}
                 onCheckedChange={() => onToggle(subject)}
