@@ -116,9 +116,9 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                     </button>
                 </div>
 
-                {/* Previously solved questions */}
+                {/* Previously solved problems */}
                 <p className="border-b pb-1 font-semibold">
-                    Previously solved questions:
+                    Previously solved problems:
                 </p>
             </div>
             <div className="mt-4 flex flex-col gap-4 overflow-y-auto">
