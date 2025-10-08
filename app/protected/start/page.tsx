@@ -49,7 +49,7 @@ export default function StartPage() {
                 </CardContent>
                 <CardFooter>
                     <Link
-                        href="/protected/dashboard" // TODO: Link to correct page when it is created
+                        href="/protected/problem"
                         className="bg-primary hover:bg-primary/90 text-background absolute right-24 -bottom-5 flex gap-2 rounded-full px-6 py-2"
                     >
                         Start Practicing <ChevronRight className="-mr-2" />
