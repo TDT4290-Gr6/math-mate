@@ -5,7 +5,6 @@ import Title from './components/ui/title';
 import Link from 'next/link';
 
 export default function NotFoundPage() {
-
     return (
         <div className="flex min-h-screen flex-col items-center justify-center gap-6">
             <div className="flex max-w-[80%] flex-col items-center justify-center rounded-3xl bg-[var(--card)] shadow-sm lg:max-w-[50%]">
