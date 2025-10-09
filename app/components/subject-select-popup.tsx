@@ -6,6 +6,7 @@ import { useLocalStorage } from 'react-use';
 import { Button } from './ui/button';
 import { X } from 'lucide-react';
 import Title from './ui/title';
+import FocusLock from 'react-focus-lock';
 
 interface SubjectSelectPopupProps {
     onClose: () => void;
@@ -52,7 +53,7 @@ export default function SubjectSelectPopup({
     const handleSave = () => {
         const subjectsChanged =
             selectedSubjects?.length !== initialSubjects?.length ||
-            selectedSubjects?.some((s) => !initialSubjects?.includes(s));
+            selectedSubjects?.some(s => !initialSubjects?.includes(s));
         onSave(subjectsChanged);
         onClose();
     };
@@ -70,42 +71,18 @@ export default function SubjectSelectPopup({
         }
     }, []);
 
-    //Keyboard navigation and focus management
-    useEffect(() => {
-        previouslyFocused.current = document.activeElement as HTMLElement;
-        const modalEl = modalRef.current;
-        modalEl?.focus();
+   useEffect(() => {
+    if (selectedSubjects) {
+      setInitialSubjects(selectedSubjects);
+    }
 
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === 'Escape') {
-                handleCancel();
-            } else if (e.key === 'Tab' && modalEl) {
-                const focusableElements = modalEl.querySelectorAll<HTMLElement>(
-                    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-                );
-                const first = focusableElements[0];
-                const last = focusableElements[focusableElements.length - 1];
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') handleCancel();
+    };
 
-                if (e.shiftKey) {
-                    if (document.activeElement === first) {
-                        e.preventDefault();
-                        last.focus();
-                    }
-                } else {
-                    if (document.activeElement === last) {
-                        e.preventDefault();
-                        first.focus();
-                    }
-                }
-            }
-        };
-
-        document.addEventListener('keydown', handleKeyDown);
-        return () => {
-            document.removeEventListener('keydown', handleKeyDown);
-            previouslyFocused.current?.focus();
-        };
-    }, [handleCancel]);
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [selectedSubjects, handleCancel]);
 
     return (
         <div
@@ -114,47 +91,49 @@ export default function SubjectSelectPopup({
             role="dialog"
             aria-modal="true"
         >
-            <Card
-                className="relative w-2xl p-5 py-10"
-                onClick={(e) => e.stopPropagation()}
-            >
-                <CardHeader>
-                    <div className="flex flex-col">
-                        <Title title="Select Subjects" />
-                        <Button
-                            size="icon"
-                            variant="transparent"
-                            className="absolute top-3 right-3"
-                            aria-label="Close popup"
-                            onClick={handleCancel}
-                        >
-                            <X className="size-6" />
-                        </Button>
-                    </div>
-                </CardHeader>
+            <FocusLock returnFocus>
+                <Card
+                    className="relative w-2xl p-5 py-10"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <CardHeader>
+                        <div className="flex flex-col">
+                            <Title title="Select Subjects" />
+                            <Button
+                                size="icon"
+                                variant="transparent"
+                                className="absolute top-3 right-3"
+                                aria-label="Close popup"
+                                onClick={handleCancel}
+                            >
+                                <X className="size-6" />
+                            </Button>
+                        </div>
+                    </CardHeader>
 
-                <CardContent className="flex flex-col items-center gap-4">
-                    <div className="flex flex-wrap justify-center gap-2">
-                        <SubjectSelect size="large" />
-                    </div>
-                    <div className="mt-4 flex flex-row gap-4">
-                        <Button
-                            variant="default"
-                            onClick={handleCancel}
-                            className="w-32"
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            variant="secondary"
-                            onClick={handleSave}
-                            className="w-32"
-                        >
-                            Save
-                        </Button>
-                    </div>
-                </CardContent>
-            </Card>
+                    <CardContent className="flex flex-col items-center gap-4">
+                        <div className="flex flex-wrap justify-center gap-2">
+                            <SubjectSelect size="large" />
+                        </div>
+                        <div className="mt-4 flex flex-row gap-4">
+                            <Button
+                                variant="default"
+                                onClick={handleCancel}
+                                className="w-32"
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                variant="secondary"
+                                onClick={handleSave}
+                                className="w-32"
+                            >
+                                Save
+                            </Button>
+                        </div>
+                    </CardContent>
+                </Card>
+            </FocusLock>
         </div>
     );
 }
