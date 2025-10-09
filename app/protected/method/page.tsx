@@ -5,6 +5,7 @@ import MethodCard from '@/components/ui/methodcard';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
 import { useRouter } from 'next/navigation';
+import { useLogger } from '@/components/logger/LoggerProvider';
 
 /**
  * The page component that displays a set of method cards to help solve
@@ -14,6 +15,15 @@ export default function MethodPage() {
     //TODO: backend functionality for method and methodcount
     const methodCount = 3;
     const router = useRouter();
+    let logEvent: (input: { actionName: string; [k: string]: unknown }) => Promise<void> = async () => {};
+    try {
+        // hooks must be called at top-level inside component
+        const ctx = useLogger();
+        logEvent = ctx.logEvent;
+    } catch {
+        /* logger not available in SSR or before provider mount */
+    }
+
     return (
         <div className="flex min-h-screen flex-col items-center gap-6">
             <Header
@@ -24,6 +34,19 @@ export default function MethodPage() {
                     </div>
                 }
             />
+
+            <div className="pt-4">
+                {/* test logger button */}
+                <button
+                    onClick={() => {
+                        void logEvent({ actionName: 'method_page_test_click', payload: { test: true } });
+                        alert('Logged event (client)');
+                    }}
+                    className="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700"
+                >
+                    Log test event
+                </button>
+            </div>
 
             <div className="px-[15%] pt-4">
                 <p>
