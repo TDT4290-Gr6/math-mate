@@ -10,15 +10,15 @@ export const setCountryUseCase =
         countriesRepository: ICountriesRepository,
     ) =>
     async (id: number, countryId: number): Promise<void> => {
-        const country = countriesRepository.getCountryById(countryId); // ensure country exists
+        const country = await countriesRepository.getCountryById(countryId); // ensure country exists
         if (!country) {
             throw new InputParseError('Country not found');
         }
 
-        const user = userRepository.getUserById(id); // ensure user exists
+        const user = await userRepository.getUserById(id); // ensure user exists
         if (!user) {
             throw new InputParseError('User not found');
         }
 
-        userRepository.addCountryToUser(id, countryId);
+        await userRepository.addCountryToUser(id, countryId);
     };
