@@ -73,12 +73,7 @@ export class UsersRepository implements IUsersRepository {
             return null;
         }
 
-        return {
-            id: user.id,
-            uuid: user.uuid,
-            score: user.score,
-            countryId: user.countryId,
-        } as User;
+        return user as User;
     }
 
     /**
@@ -113,12 +108,7 @@ export class UsersRepository implements IUsersRepository {
             return null;
         }
 
-        return {
-            id: user.id,
-            uuid: user.uuid,
-            score: user.score,
-            countryId: user.countryId,
-        } as User;
+        return user as User;
     }
 
     /**
@@ -147,12 +137,7 @@ export class UsersRepository implements IUsersRepository {
             throw error;
         }
 
-        return {
-            id: updatedUser.id,
-            uuid: updatedUser.uuid,
-            score: updatedUser.score,
-            countryId: updatedUser.countryId,
-        } as User;
+        return updatedUser as User;
     }
 
     /**
@@ -205,11 +190,6 @@ export class UsersRepository implements IUsersRepository {
             throw error;
         }
 
-        return {
-            id: updatedUser.id,
-            uuid: updatedUser.uuid,
-            score: updatedUser.score,
-            countryId: updatedUser.countryId,
-        } as User;
+        return updatedUser as User;
     }
 }
