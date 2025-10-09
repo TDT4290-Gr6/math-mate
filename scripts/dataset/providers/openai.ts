@@ -27,11 +27,11 @@ export async function generateMethodsOpenAI(problem: Problem, prompt: string) {
         model: model,
         messages: [
             { role: 'system', content: prompt },
-            { role: 'user', content: problem.problem },
             {
-                role: 'user',
+                role: 'system',
                 content: `Subject: ${problem.subject}. Final answer: $${problem.solution}$`,
             },
+            { role: 'user', content: problem.problem },
         ],
         // Ensure the response is in JSON format and adheres to the specified schema
         response_format: {
