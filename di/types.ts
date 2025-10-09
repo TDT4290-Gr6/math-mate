@@ -6,6 +6,7 @@ import type { IUsersRepository } from '@/application/repositories/users.reposito
 import type { ICreateCountryUseCase } from '@/application/use-cases/create-country.use-case';
 import type { ISignInController } from '@/interface-adapters/controllers/signIn.controller';
 import type { IAuthenticationService } from '@/application/services/auth.service.interface';
+import { ISolvesRepository } from '@/application/repositories/solves.repository.interface';
 import type { IGetCountriesUseCase } from '@/application/use-cases/get-countries.use-case';
 import type { ISetCountryUseCase } from '@/application/use-cases/set-country.use-case';
 import type { ICreateUserUseCase } from '@/application/use-cases/create-user.use-case';
@@ -18,6 +19,7 @@ export const DI_SYMBOLS = {
     // Repositories
     ICountriesRepository: Symbol.for('ICountriesRepository'),
     IUsersRepository: Symbol.for('IUsersRepository'),
+    ISolvesRepository: Symbol.for('ISolvesRepository'),
 
     // Use Cases
     ICreateCountryUseCase: Symbol.for('ICreateCountryUseCase'),
@@ -40,6 +42,7 @@ export interface DI_RETURN_TYPES {
     // Repositories
     ICountriesRepository: ICountriesRepository;
     IUsersRepository: IUsersRepository;
+    ISolvesRepository: ISolvesRepository;
 
     // Use Cases
     ICreateCountryUseCase: ICreateCountryUseCase;
