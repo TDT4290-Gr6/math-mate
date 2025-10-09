@@ -46,6 +46,8 @@ export default function SubjectSelectPopup({
 
     const [initialSubjects, setInitialSubjects] = useState<Subject[]>([]);
     const hasCapturedInitialSubjects = useRef(false);
+    const cardRef = useRef<HTMLDivElement>(null);
+
 
     // Handle save action: close popup and notify parent of changes
     const handleSave = () => {
@@ -81,17 +83,30 @@ export default function SubjectSelectPopup({
         return () => document.removeEventListener('keydown', handleEscape);
     }, [handleCancel]);
 
+    
+    // Outside-click to cancel (avoids a11y lint on non-interactive elements)
+    useEffect(() => {
+        const onMouseDown = (e: MouseEvent) => {
+            if (cardRef.current && !cardRef.current.contains(e.target as Node)) {
+                handleCancel();
+            }
+        };
+        document.addEventListener('mousedown', onMouseDown);
+        return () => document.removeEventListener('mousedown', onMouseDown);
+    }, [handleCancel]);
+
     return (
-        <div
+       <div
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
-            onClick={handleCancel}
-            role="dialog"
-            aria-modal="true"
+            aria-hidden="true"
         >
             <FocusLock returnFocus>
                 <Card
+                    ref={cardRef}
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label="Select subjects"
                     className="relative w-2xl p-5 py-10"
-                    onClick={(e) => e.stopPropagation()}
                 >
                     <CardHeader>
                         <div className="flex flex-col">
