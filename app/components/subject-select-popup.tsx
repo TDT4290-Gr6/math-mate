@@ -3,10 +3,10 @@ import { Card, CardContent, CardHeader } from './ui/card';
 import { Subject } from 'app/constants/subjects';
 import SubjectSelect from './ui/subject-select';
 import { useLocalStorage } from 'react-use';
+import FocusLock from 'react-focus-lock';
 import { Button } from './ui/button';
 import { X } from 'lucide-react';
 import Title from './ui/title';
-import FocusLock from 'react-focus-lock';
 
 interface SubjectSelectPopupProps {
     onClose: () => void;
@@ -53,7 +53,7 @@ export default function SubjectSelectPopup({
     const handleSave = () => {
         const subjectsChanged =
             selectedSubjects?.length !== initialSubjects?.length ||
-            selectedSubjects?.some(s => !initialSubjects?.includes(s));
+            selectedSubjects?.some((s) => !initialSubjects?.includes(s));
         onSave(subjectsChanged);
         onClose();
     };
@@ -71,18 +71,18 @@ export default function SubjectSelectPopup({
         }
     }, []);
 
-   useEffect(() => {
-    if (selectedSubjects) {
-      setInitialSubjects(selectedSubjects);
-    }
+    useEffect(() => {
+        if (selectedSubjects) {
+            setInitialSubjects(selectedSubjects);
+        }
 
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') handleCancel();
-    };
+        const handleEscape = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') handleCancel();
+        };
 
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
-  }, [selectedSubjects, handleCancel]);
+        document.addEventListener('keydown', handleEscape);
+        return () => document.removeEventListener('keydown', handleEscape);
+    }, [selectedSubjects, handleCancel]);
 
     return (
         <div
