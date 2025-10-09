@@ -64,7 +64,7 @@ export async function generateMethods(
     const generateMethodsForProblem = PROVIDERS[llmProvider];
     const answer = await generateMethodsForProblem(problem, giveStepsPrompt);
     if (!answer) {
-        throw new Error('No parsed response from OpenAI');
+        throw new Error(`No parsed response from ${llmProvider}`);
     }
 
     const returnProblem = { ...problem };

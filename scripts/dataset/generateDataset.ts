@@ -46,7 +46,7 @@ async function saveProblems(problems: Problem[]) {
 
 async function main() {
     const problems = await getProblems();
-    const llmProvider = LLMProviderType.GEMINI;
+    const llmProvider = LLMProviderType.OPENAI;
 
     for (let i = 0; i < problems.length; i++) {
         const problem = problems[i];

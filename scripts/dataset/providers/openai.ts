@@ -3,14 +3,13 @@ import OpenAI from 'openai';
 import dotenv from 'dotenv';
 import z from 'zod';
 
-dotenv.config({ quiet: true });
+dotenv.config({ quiet: true, path: '.env.local' });
 
-const token = process.env['GITHUB_TOKEN'];
-const endpoint = 'https://models.github.ai/inference';
-const model = 'openai/gpt-5';
+const token = process.env['OPENAI_API_KEY'];
+const model = 'gpt-5-mini';
 
 export async function generateMethodsOpenAI(problem: Problem, prompt: string) {
-    const client = new OpenAI({ baseURL: endpoint, apiKey: token });
+    const client = new OpenAI({ apiKey: token });
 
     const response = await client.chat.completions.create({
         model: model,

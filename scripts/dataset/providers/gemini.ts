@@ -3,7 +3,7 @@ import { GoogleGenAI } from '@google/genai';
 import dotenv from 'dotenv';
 import z from 'zod';
 
-dotenv.config({ quiet: true });
+dotenv.config({ quiet: true, path: '.env.local' });
 
 const token = process.env['GEMINI_TOKEN'];
 const model = 'gemini-2.5-pro';

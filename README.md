@@ -59,11 +59,11 @@ git lfs install
 git clone git@hf.co:datasets/HuggingFaceH4/MATH-500
 ```
 
-To use Gemini or OpenAI, you need to set the respective API keys in a `.env` file in the root of the project. You can use the `.env.example` file as a template.
+To use Gemini or OpenAI, you need to set the respective API keys in a `.env.local` file in the root of the project. You can use the `.env.example` file as a template.
 
 ### OpenAI API key
 
-The script uses OpenAI models via GitHub's API. You will have to create a personal access token (PAT) with the `read:models` scope. You can create a PAT with the correct permissions in [GitHub's Developer Settings](https://github.com/settings/personal-access-tokens/new?description=Used+to+call+GitHub+Models+APIs+to+easily+run+LLMs%3A+https%3A%2F%2Fdocs.github.com%2Fgithub-models%2Fquickstart%23step-2-make-an-api-call&name=GitHub+Models+token&user_models=read).
+You can get a OpenAI API key by creating a new API key on the [OpenAI platform](https://platform.openai.com/account/api-keys).
 
 ### Gemini API key
 
