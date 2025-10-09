@@ -16,12 +16,9 @@ export class SolvesRepository implements ISolvesRepository {
             });
             return solve as Solve | null;
         } catch (error) {
-            if (error instanceof Prisma.PrismaClientKnownRequestError) {
-                throw new DatabaseOperationError('Failed to get solve by ID', {
-                    cause: error,
-                });
-            }
-            throw error;
+            throw new DatabaseOperationError('Failed to get solve by ID', {
+                cause: error,
+            });
         }
     }
     async getByUserId(userId: number): Promise<Solve[]> {
@@ -31,15 +28,12 @@ export class SolvesRepository implements ISolvesRepository {
             });
             return solves as Solve[];
         } catch (error) {
-            if (error instanceof Prisma.PrismaClientKnownRequestError) {
-                throw new DatabaseOperationError(
-                    'Failed to get solves by user ID',
-                    {
-                        cause: error,
-                    },
-                );
-            }
-            throw error;
+            throw new DatabaseOperationError(
+                'Failed to get solves by user ID',
+                {
+                    cause: error,
+                },
+            );
         }
     }
     async getByProblemId(problemId: number): Promise<Solve[]> {
@@ -60,7 +54,7 @@ export class SolvesRepository implements ISolvesRepository {
             throw error;
         }
     }
-    async createSolve(solve: Partial<SolveInsert>): Promise<Solve> {
+    async createSolve(solve: SolveInsert): Promise<Solve> {
         try {
             // check if a solve with the same userId and problemId already exists
             const existingSolve = await prisma.solves.findMany({
@@ -80,12 +74,9 @@ export class SolvesRepository implements ISolvesRepository {
             });
             return newSolve as Solve;
         } catch (error) {
-            if (error instanceof Prisma.PrismaClientKnownRequestError) {
-                throw new DatabaseOperationError('Failed to create solve', {
-                    cause: error,
-                });
-            }
-            throw error;
+            throw new DatabaseOperationError('Failed to create solve', {
+                cause: error,
+            });
         }
     }
     async updateSolve(id: number, solve: Partial<SolveInsert>): Promise<Solve> {
@@ -96,12 +87,9 @@ export class SolvesRepository implements ISolvesRepository {
             });
             return updatedSolve as Solve;
         } catch (error) {
-            if (error instanceof Prisma.PrismaClientKnownRequestError) {
-                throw new DatabaseOperationError('Failed to update solve', {
-                    cause: error,
-                });
-            }
-            throw error;
+            throw new DatabaseOperationError('Failed to update solve', {
+                cause: error,
+            });
         }
     }
     async deleteSolve(id: number): Promise<Solve> {
@@ -111,12 +99,9 @@ export class SolvesRepository implements ISolvesRepository {
             });
             return deletedSolve as Solve;
         } catch (error) {
-            if (error instanceof Prisma.PrismaClientKnownRequestError) {
-                throw new DatabaseOperationError('Failed to delete solve', {
-                    cause: error,
-                });
-            }
-            throw error;
+            throw new DatabaseOperationError('Failed to delete solve', {
+                cause: error,
+            });
         }
     }
 }
