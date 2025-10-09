@@ -15,10 +15,10 @@ export async function generateMethodsOpenAI(problem: Problem, prompt: string) {
         model: model,
         messages: [
             { role: 'system', content: prompt },
-            { role: 'user', content: problem.description },
+            { role: 'user', content: problem.problem },
             {
                 role: 'user',
-                content: `Subject: ${problem.topic}. Final answer: $${problem.solution}$`,
+                content: `Subject: ${problem.subject}. Final answer: $${problem.solution}$`,
             },
         ],
         response_format: {

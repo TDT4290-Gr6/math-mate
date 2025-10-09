@@ -15,7 +15,7 @@ export async function generateMethodsGemini(problem: Problem, prompt: string) {
         model: model,
         contents: [
             prompt,
-            `Subject: ${problem.topic}. Final answer: $${problem.solution}$. Problem: ${problem.description}`,
+            `Subject: ${problem.subject}. Final answer: $${problem.solution}$. Problem: ${problem.problem}`,
         ],
         config: {
             responseMimeType: 'application/json',

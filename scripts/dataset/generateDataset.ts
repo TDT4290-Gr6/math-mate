@@ -17,10 +17,9 @@ function datasetToProblems(dataset: DatasetEntry[]): Problem[] {
     return dataset.map((entry) => ({
         title: `Problem ${entry.unique_id}`,
         solution: entry.answer,
-        difficulty: entry.level,
-        description: entry.problem,
-        problemID: entry.unique_id,
-        topic: entry.subject,
+        level: entry.level,
+        problem: entry.problem,
+        subject: entry.subject,
         methods: [],
     }));
 }

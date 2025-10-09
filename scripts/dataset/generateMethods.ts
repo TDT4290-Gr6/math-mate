@@ -1,13 +1,6 @@
-import {
-    Method,
-    MethodSchema,
-    Problem,
-    ProblemMethodsGenerator,
-    LLMProviderType,
-} from './types';
+import { Problem, ProblemMethodsGenerator, LLMProviderType } from './types';
 import { generateMethodsOpenAI } from './providers/openai';
 import { generateMethodsGemini } from './providers/gemini';
-import { z } from 'zod';
 
 const PROVIDERS: Record<LLMProviderType, ProblemMethodsGenerator> = {
     [LLMProviderType.OPENAI]: generateMethodsOpenAI,
@@ -38,24 +31,10 @@ The three methods should represent different approaches to solving the same prob
 - Different levels of complexity or abstraction
 - Different problem-solving strategies`;
 
-function parseMethods(response: z.infer<typeof MethodSchema>[]) {
-    const methods: Method[] = response.map((item, index: number) => ({
-        methodID: `method_${index + 1}`,
-        title: item.title,
-        description: item.description,
-        steps: item.steps.map((step: string, index: number) => ({
-            stepID: `step_${index + 1}`,
-            content: step,
-        })),
-    }));
-
-    return methods;
-}
-
 export async function generateMethods(
     problem: Problem,
     llmProvider: LLMProviderType,
-): Promise<Problem> {
+) {
     if (problem.methods.length !== 0) {
         // Methods already exist, skip generation
         return problem;
@@ -67,11 +46,5 @@ export async function generateMethods(
         throw new Error(`No parsed response from ${llmProvider}`);
     }
 
-    const returnProblem = { ...problem };
-
-    const methods = parseMethods(answer.methods);
-    returnProblem.methods = methods;
-    returnProblem.title = answer.title;
-
-    return returnProblem;
+    return answer;
 }

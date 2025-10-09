@@ -12,23 +12,16 @@ export interface DatasetEntry {
 export interface Problem {
     title: string;
     solution: string;
-    difficulty: number;
-    description: string;
-    problemID: string;
-    topic: string;
+    level: number;
+    problem: string;
+    subject: string;
     methods: Method[];
 }
 
 export interface Method {
-    methodID: string;
     title: string;
     description: string;
-    steps: Step[];
-}
-
-export interface Step {
-    stepID: string;
-    content: string;
+    steps: string[];
 }
 
 export const MethodSchema = z.object({
