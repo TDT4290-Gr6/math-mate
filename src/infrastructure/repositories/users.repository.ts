@@ -39,8 +39,8 @@ export class UsersRepository implements IUsersRepository {
 
         return {
             id: Number(createdUser.id),
-            uuid: createdUser.uuid ?? '',
-            score: createdUser.score ?? 0,
+            uuid: createdUser.uuid,
+            score: createdUser.score,
             country: Number(createdUser.country),
         } as User;
     }
@@ -79,8 +79,8 @@ export class UsersRepository implements IUsersRepository {
 
         return {
             id: Number(user.id),
-            uuid: user.uuid ?? '',
-            score: user.score ?? 0,
+            uuid: user.uuid,
+            score: user.score,
             country: Number(user.country),
         } as User;
     }
@@ -119,8 +119,8 @@ export class UsersRepository implements IUsersRepository {
 
         return {
             id: Number(user.id),
-            uuid: user.uuid ?? '',
-            score: user.score ?? 0,
+            uuid: user.uuid,
+            score: user.score,
             country: Number(user.country),
         } as User;
     }
@@ -153,8 +153,8 @@ export class UsersRepository implements IUsersRepository {
 
         return {
             id: Number(updatedUser.id),
-            uuid: updatedUser.uuid ?? '',
-            score: updatedUser.score ?? 0,
+            uuid: updatedUser.uuid,
+            score: updatedUser.score,
             country: Number(updatedUser.country),
         } as User;
     }
