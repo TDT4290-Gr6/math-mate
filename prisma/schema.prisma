@@ -9,7 +9,7 @@ datasource db {
 
 model User {
     id        Int      @id @unique @default(autoincrement())
-    score     Float?
+    score     Float    @default(0)
     uuid      String   @unique
     countryId Int?
     events    Event[]

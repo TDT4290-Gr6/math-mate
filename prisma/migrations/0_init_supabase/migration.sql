@@ -1,7 +1,7 @@
 -- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
-    "score" DOUBLE PRECISION,
+    "score" DOUBLE PRECISION NOT NULL DEFAULT 0,
     "uuid" TEXT NOT NULL,
     "countryId" INTEGER,
 
