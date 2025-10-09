@@ -100,4 +100,21 @@ export class MockUsersRepository implements IUsersRepository {
         }
         this._users.splice(index, 1);
     }
+
+    /**
+     * Associates a country with a user by setting the user's `countryId`.
+     *
+     * @param id - The unique identifier of the user to update.
+     * @param countryId - The unique identifier of the country to associate with the user.
+     * @returns A promise that resolves to the updated `User` object.
+     * @throws {DatabaseOperationError} If a user with the specified `id` is not found.
+     */
+    addCountryToUser(id: number, countryId: number): Promise<User> {
+        const user = this._users.find((u) => u.id === id);
+        if (!user) {
+            throw new DatabaseOperationError(`User with id ${id} not found.`);
+        }
+        user.countryId = countryId;
+        return Promise.resolve(user);
+    }
 }

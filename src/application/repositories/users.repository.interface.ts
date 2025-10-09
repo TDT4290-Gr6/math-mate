@@ -6,4 +6,5 @@ export interface IUsersRepository {
     getUserByUuid(uuid: string): Promise<User | null>;
     updateUserScore(id: number, score: number): Promise<User>;
     deleteUserById(id: number): Promise<void>;
+    addCountryToUser(id: number, countryId: number): Promise<User>;
 }
