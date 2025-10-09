@@ -4,7 +4,7 @@ import { z } from 'zod';
 export const userSchema = z.object({
     uuid: z.string(),
     id: z.int().min(1),
-    score: z.float64().min(0).max(1).default(0).optional(),
+    score: z.float64().min(0).max(1).default(0),
     countryId: countrySchema.shape.id.optional(),
 });
 
