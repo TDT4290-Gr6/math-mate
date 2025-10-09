@@ -1,6 +1,7 @@
-import { access, constants, open as openPromise } from 'fs/promises';
 import { Problem, LLMProviderType, DatasetEntry } from './types';
 import { generateMethods } from './generateMethods';
+import { open as openPromise } from 'fs/promises';
+import { prisma } from '@/lib/prisma';
 
 async function loadDataset(filePath: string): Promise<DatasetEntry[]> {
     const dataset: DatasetEntry[] = [];
@@ -25,39 +26,60 @@ function datasetToProblems(dataset: DatasetEntry[]): Problem[] {
 }
 
 async function getProblems(): Promise<Problem[]> {
-    try {
-        await access('problems.json', constants.F_OK);
-        const file = await openPromise('problems.json', 'r');
-        const data = await file.readFile('utf-8');
-        file.close();
-        return JSON.parse(data);
-    } catch {
-        const dataset = await loadDataset('MATH-500/test.jsonl');
-        return datasetToProblems(dataset);
-    }
-}
-
-async function saveProblems(problems: Problem[]) {
-    const file = await openPromise('problems.json', 'w');
-    await file.writeFile(JSON.stringify(problems, null, 4), 'utf-8');
-    file.close();
+    const dataset = await loadDataset('MATH-500/test.jsonl');
+    return datasetToProblems(dataset);
 }
 
 async function main() {
     const problems = await getProblems();
-    const llmProvider = LLMProviderType.OPENAI;
+    const llmProvider = LLMProviderType.GEMINI;
 
     for (let i = 0; i < problems.length; i++) {
         const problem = problems[i];
-        console.log(`Generating methods for problem ID: ${problem.problemID}`);
+        console.log(`Generating title and methods for problem number: ${i + 1}`);
 
-        const updatedProblem = await generateMethods(problem, llmProvider);
-        problems[i] = updatedProblem;
+        // Fetch and see if it already exists in the database
+        const existingProblem = await prisma.problem.findUnique({
+            where: { problem: problem.problem },
+        });
 
-        await saveProblems(problems);
+        if (existingProblem !== null) {
+            console.log(
+                `Problem already exists in database, skipping problem number: ${i + 1}`,
+            );
+            continue;
+        }
+
+        const generated = await generateMethods(problem, llmProvider);
+
         console.log(
-            `Done generating methods for problem ID: ${problem.problemID}`,
+            `Done generating methods for problem number: ${i + 1}. Saving to database...`,
         );
+
+        const response = await prisma.problem.create({
+            data: {
+                problem: problem.problem,
+                solution: problem.solution,
+                subject: problem.subject,
+                level: problem.level,
+                title: generated.title,
+                Method: {
+                    create: generated.methods.map((method) => ({
+                        title: method.title,
+                        description: method.description,
+                        Step: {
+                            create: method.steps.map((step, index) => ({
+                                stepNumber: index + 1,
+                                content: step,
+                            })),
+                        },
+                    })),
+                },
+            },
+        });
+
+        console.dir(response, { depth: null });
+        console.log(`Done saving problem number: ${i + 1} to database.`);
     }
 }
 

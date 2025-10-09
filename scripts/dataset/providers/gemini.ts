@@ -6,7 +6,7 @@ import z from 'zod';
 dotenv.config({ quiet: true, path: '.env.local' });
 
 const token = process.env['GEMINI_TOKEN'];
-const model = 'gemini-2.5-pro';
+const model = 'gemini-2.5-flash';
 
 export async function generateMethodsGemini(problem: Problem, prompt: string) {
     const client = new GoogleGenAI({ apiKey: token });
