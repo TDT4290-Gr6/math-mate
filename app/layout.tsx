@@ -1,8 +1,8 @@
+import { LoggerProvider } from './components/logger/LoggerProvider';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
 import type { Metadata } from 'next';
 import './globals.css';
-import { LoggerProvider } from './components/logger/LoggerProvider';
 
 const geistSans = Geist({
     variable: '--font-geist-sans',
@@ -36,9 +36,7 @@ export default function RootLayout({
                     disableTransitionOnChange
                     enableColorScheme
                 >
-                    <LoggerProvider>
-                        {children}
-                    </LoggerProvider>
+                    <LoggerProvider>{children}</LoggerProvider>
                 </ThemeProvider>
             </body>
         </html>

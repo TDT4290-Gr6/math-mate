@@ -1,6 +1,12 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useRef, useCallback } from 'react';
+import React, {
+    createContext,
+    useContext,
+    useEffect,
+    useRef,
+    useCallback,
+} from 'react';
 import { usePathname } from 'next/navigation';
 
 type LogPayload = Record<string, unknown>;
@@ -16,7 +22,9 @@ export type LogEventInput = {
 };
 
 type LoggerContextValue = {
-    logEvent: (input: Partial<LogEventInput> & { actionName: string }) => Promise<void>;
+    logEvent: (
+        input: Partial<LogEventInput> & { actionName: string },
+    ) => Promise<void>;
     sessionId: string;
 };
 
@@ -33,7 +41,10 @@ export function LoggerProvider({ children }: { children: React.ReactNode }) {
 
     if (!sessionIdRef.current) {
         try {
-            const existing = typeof localStorage !== 'undefined' ? localStorage.getItem('mm:sessionId') : null;
+            const existing =
+                typeof localStorage !== 'undefined'
+                    ? localStorage.getItem('mm:sessionId')
+                    : null;
             if (existing) sessionIdRef.current = existing;
             else {
                 const s = makeSessionId();
@@ -49,29 +60,35 @@ export function LoggerProvider({ children }: { children: React.ReactNode }) {
 
     const sessionId = sessionIdRef.current;
 
-    const logEvent = useCallback(async (input: Partial<LogEventInput> & { actionName: string }) => {
-        const body = {
-            // default to 1 for quick testing (Zod requires userId >= 1)
-            userId: 4,
-            sessionId,
-            actionName: input.actionName,
-            loggedAt: new Date().toISOString(),
-            problemId: input.problemId,
-            methodId: input.methodId,
-            stepId: input.stepId,
-            payload: typeof input.payload === 'string' ? input.payload : JSON.stringify(input.payload ?? {}),
-        };
+    const logEvent = useCallback(
+        async (input: Partial<LogEventInput> & { actionName: string }) => {
+            const body = {
+                // default to 1 for quick testing (Zod requires userId >= 1)
+                userId: 4,
+                sessionId,
+                actionName: input.actionName,
+                loggedAt: new Date().toISOString(),
+                problemId: input.problemId,
+                methodId: input.methodId,
+                stepId: input.stepId,
+                payload:
+                    typeof input.payload === 'string'
+                        ? input.payload
+                        : JSON.stringify(input.payload ?? {}),
+            };
 
-        try {
-            await fetch('/api/events', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body),
-            });
-        } catch (err) {
-            console.warn('logEvent failed', err);
-        }
-    }, [sessionId]);
+            try {
+                await fetch('/api/events', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body),
+                });
+            } catch (err) {
+                console.warn('logEvent failed', err);
+            }
+        },
+        [sessionId],
+    );
 
     const lastPathRef = useRef<string | null>(null);
     useEffect(() => {
@@ -81,7 +98,11 @@ export function LoggerProvider({ children }: { children: React.ReactNode }) {
         void logEvent({ actionName: 'page_view', payload: { path: pathname } });
     }, [pathname, logEvent]);
 
-    return <LoggerContext.Provider value={{ logEvent, sessionId }}>{children}</LoggerContext.Provider>;
+    return (
+        <LoggerContext.Provider value={{ logEvent, sessionId }}>
+            {children}
+        </LoggerContext.Provider>
+    );
 }
 
 export function useLogger() {
