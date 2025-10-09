@@ -1,10 +1,12 @@
 import type { ICreateCountryController } from '@/interface-adapters/controllers/create-country.controller';
 import type { ICountriesRepository } from '@/application/repositories/countries.repository.interface';
+import { IGetCountriesController } from '@/interface-adapters/controllers/get-countries.controller';
 import { ISetCountryController } from '@/interface-adapters/controllers/set-country.controller';
 import type { ICreateCountryUseCase } from '@/application/use-cases/create-country.use-case';
 import type { IAuthenticationService } from '@/application/services/auth.service.interface';
 import { IUsersRepository } from '@/application/repositories/users.repository.interface';
 import { ISignInController } from '@/interface-adapters/controllers/signIn.controller';
+import { IGetCountriesUseCase } from '@/application/use-cases/get-countries.use-case';
 import { ISetCountryUseCase } from '@/application/use-cases/set-country.use-case';
 import { ICreateUserUseCase } from '@/application/use-cases/create-user.use-case';
 import { ISignInUseCase } from '@/application/use-cases/sign-in.use-case';
@@ -19,12 +21,14 @@ export const DI_SYMBOLS = {
 
     // Use Cases
     ICreateCountryUseCase: Symbol.for('ICreateCountryUseCase'),
+    IGetCountriesUseCase: Symbol.for('IGetCountriesUseCase'),
     ICreateUserUseCase: Symbol.for('ICreateUserUseCase'),
     ISignInUseCase: Symbol.for('ISignInUseCase'),
     ISetCountryUseCase: Symbol.for('ISetCountryUseCase'),
 
     // Controllers
     ICreateCountryController: Symbol.for('ICreateCountryController'),
+    IGetCountriesController: Symbol.for('IGetCountriesController'),
     ISignInController: Symbol.for('ISignInController'),
     ISetCountryController: Symbol.for('ISetCountryController'),
 };
@@ -39,12 +43,14 @@ export interface Registry {
 
     // Use Cases
     [DI_SYMBOLS.ICreateCountryUseCase]: ICreateCountryUseCase;
+    [DI_SYMBOLS.IGetCountriesUseCase]: IGetCountriesUseCase;
     [DI_SYMBOLS.ICreateUserUseCase]: ICreateUserUseCase;
     [DI_SYMBOLS.ISignInUseCase]: ISignInUseCase;
     [DI_SYMBOLS.ISetCountryUseCase]: ISetCountryUseCase;
 
     // Controllers
     [DI_SYMBOLS.ICreateCountryController]: ICreateCountryController;
+    [DI_SYMBOLS.IGetCountriesController]: IGetCountriesController;
     [DI_SYMBOLS.ISignInController]: ISignInController;
     [DI_SYMBOLS.ISetCountryController]: ISetCountryController;
 }
