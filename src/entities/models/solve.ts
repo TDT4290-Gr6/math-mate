@@ -13,7 +13,7 @@ export const solvesSchema = z.object({
     feedback: z.int().min(1).max(5).optional(),
 });
 
-export type Solves = z.infer<typeof solvesSchema>;
+export type Solve = z.infer<typeof solvesSchema>;
 
 export const insertSolvesSchema = solvesSchema.pick({
     userId: true,
@@ -25,4 +25,4 @@ export const insertSolvesSchema = solvesSchema.pick({
     feedback: true,
 });
 
-export type SolvesInsert = z.infer<typeof insertSolvesSchema>;
+export type SolveInsert = z.infer<typeof insertSolvesSchema>;
