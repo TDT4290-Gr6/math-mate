@@ -1,10 +1,5 @@
 'use client';
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Check, ChevronsUpDown } from 'lucide-react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-
 import {
     Form,
     FormControl,
@@ -23,9 +18,14 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Check, ChevronsUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { getCountries } from '../actions';
 import { cn } from '@/lib/utils';
-import { useState } from 'react';
+import { z } from 'zod';
 
 const FormSchema = z.object({
     country: z
@@ -40,11 +40,16 @@ interface CountrySelectDropdownProps {
 export function CountrySelectDropdown({
     onSubmit,
 }: CountrySelectDropdownProps) {
-    // TODO: Get countries from backend
-    const countries = [
-        { label: 'Norway', value: '1' },
-        { label: 'India', value: '2' },
-    ] as const;
+    const [countries, setCountries] = useState<
+        Awaited<ReturnType<typeof getCountries>>
+    >([]);
+
+    useEffect(() => {
+        (async () => {
+            const countries = await getCountries();
+            setCountries(countries);
+        })();
+    }, []);
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -78,9 +83,9 @@ export function CountrySelectDropdown({
                                             {field.value
                                                 ? countries.find(
                                                       (country) =>
-                                                          country.value ===
+                                                          country.name ===
                                                           field.value,
-                                                  )?.label
+                                                  )?.name
                                                 : 'Select country'}
                                             <ChevronsUpDown className="opacity-50" />
                                         </Button>
@@ -93,25 +98,25 @@ export function CountrySelectDropdown({
                                             <CommandGroup>
                                                 {countries.map((country) => (
                                                     <CommandItem
-                                                        value={country.label}
-                                                        key={country.value}
+                                                        value={country.name}
+                                                        key={country.id}
                                                         onSelect={() => {
                                                             form.setValue(
                                                                 'country',
-                                                                country.value,
+                                                                country.name,
                                                             );
                                                             setPopoverOpen(
                                                                 false,
                                                             );
                                                         }}
                                                     >
-                                                        {country.label}
+                                                        {country.name}
                                                         {/* Show checkmark for selected item */}
                                                         <Check
                                                             className={cn(
                                                                 'ml-auto',
-                                                                country.value ===
-                                                                    field.value
+                                                                country.name ===
+                                                                    field.name
                                                                     ? 'opacity-100'
                                                                     : 'opacity-0',
                                                             )}
