@@ -48,7 +48,9 @@ export default function SubjectSelectPopup({ onClose, onSave }: SubjectSelectPop
 
     // Handle save action: close popup and notify parent of changes
     const handleSave = () => {
-        const subjectsChanged = JSON.stringify(selectedSubjects) !== JSON.stringify(initialSubjects);
+        const subjectsChanged =
+            selectedSubjects?.length !== initialSubjects?.length ||
+            selectedSubjects?.some(s => !initialSubjects?.includes(s));
         onSave(subjectsChanged);
         onClose();
     };
