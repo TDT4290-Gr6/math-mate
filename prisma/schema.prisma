@@ -8,24 +8,24 @@ datasource db {
 }
 
 model User {
-    id         BigInt   @id @unique @default(autoincrement())
-    score      Float?
-    country    BigInt
-    uuid       String?  @unique
-    events     Event[]
-    solves     Solves[]
-    countryRef Country  @relation(fields: [country], references: [id], map: "User_Country_fkey")
+    id        Int      @id @unique @default(autoincrement())
+    score     Float?
+    uuid      String   @unique
+    countryId Int?
+    events    Event[]
+    solves    Solves[]
+    Country   Country? @relation(fields: [countryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model Country {
-    id   BigInt @id @unique @default(autoincrement())
+    id   Int    @id @unique @default(autoincrement())
     name String @unique(map: "Country_Name_key")
     User User[]
 }
 
 model Problem {
-    id       BigInt   @id @unique @default(autoincrement())
-    problem  String
+    id       Int      @id @unique @default(autoincrement())
+    problem  String   @unique
     solution String
     subject  String
     level    Int      @db.SmallInt
@@ -36,8 +36,8 @@ model Problem {
 }
 
 model Method {
-    id          BigInt  @id @unique @default(autoincrement())
-    problemId   BigInt
+    id          Int     @id @unique @default(autoincrement())
+    problemId   Int
     title       String
     description String
     Event       Event[]
@@ -46,8 +46,8 @@ model Method {
 }
 
 model Step {
-    id         BigInt  @id @unique @default(autoincrement())
-    methodId   BigInt
+    id         Int     @id @unique @default(autoincrement())
+    methodId   Int
     stepNumber Int
     content    String
     Event      Event[]
@@ -55,15 +55,15 @@ model Step {
 }
 
 model Event {
-    id         BigInt   @id @unique @default(autoincrement())
+    id         Int      @id @unique @default(autoincrement())
     loggedAt   DateTime @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamptz(6)
-    sessionId  BigInt
+    sessionId  Int
     actionName String
     payload    String
-    userId     BigInt
-    problemId  BigInt?
-    methodId   BigInt?
-    stepId     BigInt?
+    userId     Int
+    problemId  Int?
+    methodId   Int?
+    stepId     Int?
     method     Method?  @relation(fields: [methodId], references: [id], onDelete: Restrict, map: "Event_method_fkey")
     problem    Problem? @relation(fields: [problemId], references: [id], onDelete: Restrict)
     step       Step?    @relation(fields: [stepId], references: [id], onDelete: Restrict, map: "Event_step_fkey")
@@ -71,9 +71,9 @@ model Event {
 }
 
 model Solves {
-    id                BigInt    @id(map: "solves_pkey") @unique(map: "solves_id_key") @default(autoincrement())
-    userId            BigInt
-    problemId         BigInt
+    id                Int       @id(map: "solves_pkey") @unique(map: "solves_id_key") @default(autoincrement())
+    userId            Int
+    problemId         Int
     attempts          Int
     startedSolvingAt  DateTime  @default(now()) @db.Timestamptz(6)
     finishedSolvingAt DateTime? @db.Timestamptz(6)
