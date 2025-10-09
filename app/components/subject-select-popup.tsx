@@ -52,7 +52,7 @@ export default function SubjectSelectPopup({
     const handleSave = () => {
         const subjectsChanged =
             selectedSubjects?.length !== initialSubjects?.length ||
-            selectedSubjects?.some(s => !initialSubjects?.includes(s));
+            selectedSubjects?.some((s) => !initialSubjects?.includes(s));
         onSave(subjectsChanged);
         onClose();
     };
