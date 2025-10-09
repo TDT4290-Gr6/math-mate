@@ -45,9 +45,7 @@ export default function SubjectSelectPopup({
     );
 
     const [initialSubjects, setInitialSubjects] = useState<Subject[]>([]);
-
-    const modalRef = useRef<HTMLDivElement>(null);
-    const previouslyFocused = useRef<HTMLElement | null>(null);
+    const hasCapturedInitialSubjects = useRef(false);
 
     // Handle save action: close popup and notify parent of changes
     const handleSave = () => {
@@ -64,25 +62,24 @@ export default function SubjectSelectPopup({
         onClose();
     }, [initialSubjects, setSelectedSubjects, onClose]);
 
-    // Save initial subjects when popup opens
     useEffect(() => {
-        if (selectedSubjects) {
+        if (
+            !hasCapturedInitialSubjects.current &&
+            selectedSubjects !== undefined
+        ) {
             setInitialSubjects(selectedSubjects);
+            hasCapturedInitialSubjects.current = true;
         }
-    }, []);
+    }, [selectedSubjects]);
 
     useEffect(() => {
-        if (selectedSubjects) {
-            setInitialSubjects(selectedSubjects);
-        }
-
         const handleEscape = (e: KeyboardEvent) => {
             if (e.key === 'Escape') handleCancel();
         };
 
         document.addEventListener('keydown', handleEscape);
         return () => document.removeEventListener('keydown', handleEscape);
-    }, [selectedSubjects, handleCancel]);
+    }, [handleCancel]);
 
     return (
         <div
