@@ -1,4 +1,5 @@
 import { IUsersRepository } from '@/application/repositories/users.repository.interface';
+import { DatabaseOperationError } from '@/entities/errors/common';
 import { UserInsert, User } from '@/entities/models/user';
 
 export class MockUsersRepository implements IUsersRepository {
@@ -19,7 +20,7 @@ export class MockUsersRepository implements IUsersRepository {
     async updateUserScore(id: number, score: number): Promise<User> {
         const user = this._users.find((u) => u.id === id);
         if (!user) {
-            throw new Error(`User with id ${id} not found.`);
+            throw new DatabaseOperationError(`User with id ${id} not found.`);
         }
         user.score = score;
         return user;
@@ -28,7 +29,7 @@ export class MockUsersRepository implements IUsersRepository {
     async deleteUserById(id: number): Promise<void> {
         const index = this._users.findIndex((u) => u.id === id);
         if (index === -1) {
-            throw new Error(`User with id ${id} not found.`);
+            throw new DatabaseOperationError(`User with id ${id} not found.`);
         }
         this._users.splice(index, 1);
     }

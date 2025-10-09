@@ -14,7 +14,8 @@ export class UsersRepository implements IUsersRepository {
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
                 throw new DatabaseOperationError(
-                    `Failed to create user in the database. Database error: ${error.message}`,
+                    'Failed to create user in the database.',
+                    { cause: error },
                 );
             }
             throw error;
@@ -37,7 +38,8 @@ export class UsersRepository implements IUsersRepository {
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
                 throw new DatabaseOperationError(
-                    `Failed to retrieve user from the database. Database error: ${error.message}`,
+                    'Failed to retrieve user from the database.',
+                    { cause: error },
                 );
             }
             throw error;
@@ -63,7 +65,8 @@ export class UsersRepository implements IUsersRepository {
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
                 throw new DatabaseOperationError(
-                    `Failed to retrieve user from the database. Database error: ${error.message}`,
+                    'Failed to retrieve user from the database.',
+                    { cause: error },
                 );
             }
             throw error;
@@ -91,7 +94,8 @@ export class UsersRepository implements IUsersRepository {
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
                 throw new DatabaseOperationError(
-                    `Failed to update user score in the database. Database error: ${error.message}`,
+                    'Failed to update user score in the database.',
+                    { cause: error },
                 );
             }
             throw error;
@@ -113,7 +117,8 @@ export class UsersRepository implements IUsersRepository {
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
                 throw new DatabaseOperationError(
-                    `Failed to delete user from the database. Database error: ${error.message}`,
+                    'Failed to delete user from the database.',
+                    { cause: error },
                 );
             }
             throw error;
