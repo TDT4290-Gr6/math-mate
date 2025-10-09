@@ -38,10 +38,10 @@ export class UsersRepository implements IUsersRepository {
         }
 
         return {
-            id: Number(createdUser.id),
+            id: createdUser.id,
             uuid: createdUser.uuid,
             score: createdUser.score,
-            country: Number(createdUser.country),
+            countryId: createdUser.countryId,
         } as User;
     }
 
@@ -78,10 +78,10 @@ export class UsersRepository implements IUsersRepository {
         }
 
         return {
-            id: Number(user.id),
+            id: user.id,
             uuid: user.uuid,
             score: user.score,
-            country: Number(user.country),
+            countryId: user.countryId,
         } as User;
     }
 
@@ -118,10 +118,10 @@ export class UsersRepository implements IUsersRepository {
         }
 
         return {
-            id: Number(user.id),
+            id: user.id,
             uuid: user.uuid,
             score: user.score,
-            country: Number(user.country),
+            countryId: user.countryId,
         } as User;
     }
 
@@ -152,10 +152,10 @@ export class UsersRepository implements IUsersRepository {
         }
 
         return {
-            id: Number(updatedUser.id),
+            id: updatedUser.id,
             uuid: updatedUser.uuid,
             score: updatedUser.score,
-            country: Number(updatedUser.country),
+            countryId: updatedUser.countryId,
         } as User;
     }
 
