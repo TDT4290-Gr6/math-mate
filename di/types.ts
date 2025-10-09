@@ -2,11 +2,11 @@ import type { ICreateCountryController } from '@/interface-adapters/controllers/
 import type { IGetCountriesController } from '@/interface-adapters/controllers/get-countries.controller';
 import type { ICountriesRepository } from '@/application/repositories/countries.repository.interface';
 import type { ISetCountryController } from '@/interface-adapters/controllers/set-country.controller';
+import type { ISolvesRepository } from '@/application/repositories/solves.repository.interface';
 import type { IUsersRepository } from '@/application/repositories/users.repository.interface';
 import type { ICreateCountryUseCase } from '@/application/use-cases/create-country.use-case';
 import type { ISignInController } from '@/interface-adapters/controllers/signIn.controller';
 import type { IAuthenticationService } from '@/application/services/auth.service.interface';
-import { ISolvesRepository } from '@/application/repositories/solves.repository.interface';
 import type { IGetCountriesUseCase } from '@/application/use-cases/get-countries.use-case';
 import type { ISetCountryUseCase } from '@/application/use-cases/set-country.use-case';
 import type { ICreateUserUseCase } from '@/application/use-cases/create-user.use-case';
