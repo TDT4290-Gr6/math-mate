@@ -1,11 +1,11 @@
 'use client';
 
+import SubjectSelectPopup from '@/components/subject-select-popup';
 import ProblemCard from '@/components/ui/problem-card';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
 import { useState } from 'react';
 import Link from 'next/link';
-import SubjectSelectPopup from '@/components/subject-select-popup';
 
 /**
  * TODO: update docs when api is ready
@@ -65,14 +65,15 @@ export default function ProblemPage() {
                 <ProblemCard description={description} variant="withButtons" />
             </div>
             <div className="mt-10 flex flex-col justify-center gap-8">
-                <button 
+                <button
                     className="text-opacity-20 cursor-pointer text-sm underline underline-offset-4 opacity-70 hover:opacity-90"
-                    onClick={openSubjectSelect}>
+                    onClick={openSubjectSelect}
+                >
                     Change subjects?
                 </button>
                 {isSubjectSelectOpen && (
-                    <SubjectSelectPopup 
-                        onClose={closeSubjectSelect} 
+                    <SubjectSelectPopup
+                        onClose={closeSubjectSelect}
                         onSave={(subjectsChanged) => {
                             if (subjectsChanged) {
                                 fetchNewProblems();
