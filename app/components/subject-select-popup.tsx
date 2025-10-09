@@ -48,7 +48,6 @@ export default function SubjectSelectPopup({
     const hasCapturedInitialSubjects = useRef(false);
     const cardRef = useRef<HTMLDivElement>(null);
 
-
     // Handle save action: close popup and notify parent of changes
     const handleSave = () => {
         const subjectsChanged =
@@ -83,11 +82,13 @@ export default function SubjectSelectPopup({
         return () => document.removeEventListener('keydown', handleEscape);
     }, [handleCancel]);
 
-    
     // Outside-click to cancel (avoids a11y lint on non-interactive elements)
     useEffect(() => {
         const onMouseDown = (e: MouseEvent) => {
-            if (cardRef.current && !cardRef.current.contains(e.target as Node)) {
+            if (
+                cardRef.current &&
+                !cardRef.current.contains(e.target as Node)
+            ) {
                 handleCancel();
             }
         };
@@ -96,7 +97,7 @@ export default function SubjectSelectPopup({
     }, [handleCancel]);
 
     return (
-       <div
+        <div
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
             aria-hidden="true"
         >
