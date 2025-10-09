@@ -2,6 +2,7 @@ import { useRef, useEffect, useState } from 'react';
 
 type TitleProps = {
     title: string;
+    size?: number;
 };
 
 /**
@@ -11,24 +12,29 @@ type TitleProps = {
  *
  * @param {TitleProps} props - The props for the component.
  * @param {string} props.title - The text to display as the title.
+ * @param {number} [props.size] - The font size of the title in pixels.
  * @returns {JSX.Element} A title with a dynamically sized underline.
  */
-export default function Title({ title }: TitleProps) {
+export default function Title({ title, size }: TitleProps) {
     const titleRef = useRef<HTMLHeadingElement>(null);
     const [underlineWidth, setUnderlineWidth] = useState(0);
 
-    /**
-     * Effect to update the underline width whenever the title changes.
-     */
+    // Default to 24px if size not provided
+    const fontSize = size ?? 24;
+
     useEffect(() => {
         if (titleRef.current) {
             setUnderlineWidth(titleRef.current.offsetWidth);
         }
-    }, [title]);
+    }, [title, fontSize]);
 
     return (
         <div className="flex flex-col items-start pb-4">
-            <h2 ref={titleRef} className="text-xl font-semibold">
+            <h2
+                ref={titleRef}
+                style={{ fontSize: `${fontSize}px` }}
+                className="text-xl font-semibold"
+            >
                 {title}
             </h2>
             <div

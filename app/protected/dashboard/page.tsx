@@ -15,11 +15,11 @@ export default function DashboardPage() {
     return (
         <div className="flex min-h-screen flex-col items-center gap-6">
             <Header
-                variant="question"
-                mathQuestion={
+                variant="problem"
+                mathProblem={
                     <div className="flex h-52 w-[60%] items-center justify-center bg-[var(--card)]">
                         {' '}
-                        <h1>TODO: add math question component here</h1>
+                        <h1>TODO: add math problem component here</h1>
                     </div>
                 }
             />
