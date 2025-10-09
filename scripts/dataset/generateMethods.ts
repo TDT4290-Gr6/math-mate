@@ -31,6 +31,17 @@ The three methods should represent different approaches to solving the same prob
 - Different levels of complexity or abstraction
 - Different problem-solving strategies`;
 
+/**
+ * Generates solution methods for a given math problem using the specified LLM provider.
+ *
+ * If the problem already contains methods, generation is skipped and the original problem is returned.
+ * Otherwise, it invokes the appropriate provider to generate methods based on the problem and a prompt.
+ *
+ * @param problem - The math problem for which to generate solution methods.
+ * @param llmProvider - The LLM provider to use for generating methods.
+ * @returns A promise that resolves to the problem with generated methods.
+ * @throws If no response is parsed from the LLM provider.
+ */
 export async function generateMethods(
     problem: Problem,
     llmProvider: LLMProviderType,
@@ -40,7 +51,10 @@ export async function generateMethods(
         return problem;
     }
 
+    // Select the appropriate method generator based on the LLM provider
     const generateMethodsForProblem = PROVIDERS[llmProvider];
+
+    // Generate methods using the selected provider
     const answer = await generateMethodsForProblem(problem, giveStepsPrompt);
     if (!answer) {
         throw new Error(`No parsed response from ${llmProvider}`);
