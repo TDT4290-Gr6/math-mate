@@ -7,13 +7,13 @@ import { z } from 'zod';
 export const eventSchema = z.object({
     id: z.int(),
     userId: userSchema.shape.id,
-    sessionId: z.string(),
+    sessionId: z.number().int(),
     actionName: z.string().min(1).max(100),
     loggedAt: z.date(),
     problemId: problemSchema.shape.id.optional(),
     methodId: methodSchema.shape.id.optional(),
     stepId: stepSchema.shape.id.optional(),
-    payload: z.string().optional(),
+    payload: z.string(),
 });
 
 export type Event = z.infer<typeof eventSchema>;

@@ -4,13 +4,13 @@ import { z } from 'zod';
 
 const LogEventDTO = z.object({
     userId: z.number().int(),
-    sessionId: z.string(),
+    sessionId: z.number().int(),
     actionName: z.string().min(1).max(100),
     problemId: z.number().int().optional(),
     methodId: z.number().int().optional(),
     stepId: z.number().int().optional(),
     loggedAt: z.coerce.date().optional(),
-    payload: z.union([z.string(), z.any()]).optional(),
+    payload: z.string().optional(),
 });
 
 export type ICreateEventController = ReturnType<typeof createEventController>;
@@ -26,7 +26,7 @@ export const createEventController =
 
         // Sørg for at payload er string som forventet
         const payloadString =
-            typeof data.payload === 'string' || data.payload === undefined
+            typeof data.payload === 'string'
                 ? data.payload
                 : JSON.stringify(data.payload);
 
