@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
 import { useState } from 'react';
 import Link from 'next/link';
+import SubjectSelectPopup from '@/components/subject-select-popup';
 
 /**
  * TODO: update docs when api is ready
@@ -19,6 +20,16 @@ export default function ProblemPage() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [offset, setOffset] = useState(0);
     const [hasMore, setHasMore] = useState(true);
+
+    const [isSubjectSelectOpen, setIsSubjectSelectOpen] = useState(false);
+
+    const openSubjectSelect = () => setIsSubjectSelectOpen(true);
+    const closeSubjectSelect = () => setIsSubjectSelectOpen(false);
+
+    const fetchNewProblems = () => {
+        // TODO: Implement fetching logic
+        console.log('Fetching new problems based on selected subjects...');
+    };
 
     // TODO: Fetching problems
     // GET /api/problems?subjects=algebra,geometry&offset=0&limit=5
@@ -54,9 +65,21 @@ export default function ProblemPage() {
                 <ProblemCard description={description} variant="withButtons" />
             </div>
             <div className="mt-10 flex flex-col justify-center gap-8">
-                <button className="text-opacity-20 cursor-pointer text-sm underline underline-offset-4 opacity-70 hover:opacity-90">
+                <button 
+                    className="text-opacity-20 cursor-pointer text-sm underline underline-offset-4 opacity-70 hover:opacity-90"
+                    onClick={openSubjectSelect}>
                     Change subjects?
                 </button>
+                {isSubjectSelectOpen && (
+                    <SubjectSelectPopup 
+                        onClose={closeSubjectSelect} 
+                        onSave={(subjectsChanged) => {
+                            if (subjectsChanged) {
+                                fetchNewProblems();
+                            }
+                        }}
+                    />
+                )}
                 <Button variant="secondary">
                     <Link href="/protected/method">Get started solving</Link>
                 </Button>
