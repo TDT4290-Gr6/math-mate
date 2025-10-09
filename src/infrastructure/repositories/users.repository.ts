@@ -21,6 +21,7 @@ export class UsersRepository implements IUsersRepository {
      * @throws {DatabaseOperationError} If the user creation fails due to a known Prisma client error.
      * @throws {Error} If an unknown error occurs during user creation.
      */
+
     async createUser(user: UserInsert): Promise<User> {
         let createdUser;
         try {
@@ -37,12 +38,7 @@ export class UsersRepository implements IUsersRepository {
             throw error;
         }
 
-        return {
-            id: createdUser.id,
-            uuid: createdUser.uuid,
-            score: createdUser.score,
-            countryId: createdUser.countryId,
-        } as User;
+        return createdUser as User;
     }
 
     /**
@@ -181,5 +177,39 @@ export class UsersRepository implements IUsersRepository {
             }
             throw error;
         }
+    }
+
+    /**
+     * Adds or updates the countryId for a user in the database.
+     *
+     * @param id - The unique numeric identifier of the user.
+     * @param countryId - The country ID to associate with the user.
+     * @returns A promise that resolves to the updated User object.
+     * @throws {DatabaseOperationError} If the update operation fails due to a known Prisma client error.
+     * @throws {Error} If an unexpected error occurs during the update operation.
+     */
+    async addCountryToUser(id: number, countryId: number): Promise<User> {
+        let updatedUser;
+        try {
+            updatedUser = await prisma.user.update({
+                where: { id: id },
+                data: { countryId: countryId },
+            });
+        } catch (error) {
+            if (error instanceof Prisma.PrismaClientKnownRequestError) {
+                throw new DatabaseOperationError(
+                    'Failed to add country to user in the database.',
+                    { cause: error },
+                );
+            }
+            throw error;
+        }
+
+        return {
+            id: updatedUser.id,
+            uuid: updatedUser.uuid,
+            score: updatedUser.score,
+            countryId: updatedUser.countryId,
+        } as User;
     }
 }
