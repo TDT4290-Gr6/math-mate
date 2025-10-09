@@ -1,11 +1,11 @@
 'use client';
 
+import { useLogger } from '@/components/logger/LoggerProvider';
 import ProblemCard from '@/components/ui/problem-card';
 import MethodCard from '@/components/ui/methodcard';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
 import { useRouter } from 'next/navigation';
-import { useLogger } from '@/components/logger/LoggerProvider';
 
 /**
  * The page component that displays a set of method cards to help solve
@@ -15,7 +15,10 @@ export default function MethodPage() {
     //TODO: backend functionality for method and methodcount
     const methodCount = 3;
     const router = useRouter();
-    let logEvent: (input: { actionName: string; [k: string]: unknown }) => Promise<void> = async () => {};
+    let logEvent: (input: {
+        actionName: string;
+        [k: string]: unknown;
+    }) => Promise<void> = async () => {};
     try {
         // hooks must be called at top-level inside component
         const ctx = useLogger();
@@ -39,7 +42,10 @@ export default function MethodPage() {
                 {/* test logger button */}
                 <button
                     onClick={() => {
-                        void logEvent({ actionName: 'method_page_test_click', payload: { test: true } });
+                        void logEvent({
+                            actionName: 'method_page_test_click',
+                            payload: { test: true },
+                        });
                         alert('Logged event (client)');
                     }}
                     className="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700"
