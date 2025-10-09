@@ -1,4 +1,7 @@
-import type { IEventsRepository, InsertEvent } from '@/application/repositories/events.repository.interface';
+import type {
+    IEventsRepository,
+    InsertEvent,
+} from '@/application/repositories/events.repository.interface';
 import type { Event } from '@/entities/models/event';
 import { prisma } from '@/lib/prisma';
 
@@ -23,7 +26,9 @@ export class EventsRepository implements IEventsRepository {
             sessionId: String(created.sessionId),
             actionName: created.actionName,
             loggedAt: new Date(created.loggedAt),
-            problemId: created.problemId ? Number(created.problemId) : undefined,
+            problemId: created.problemId
+                ? Number(created.problemId)
+                : undefined,
             methodId: created.methodId ? Number(created.methodId) : undefined,
             stepId: created.stepId ? Number(created.stepId) : undefined,
             payload: created.payload ?? undefined,

@@ -1,12 +1,12 @@
 import type { ICreateCountryController } from '@/interface-adapters/controllers/create-country.controller';
-import type { ICountriesRepository } from '@/application/repositories/countries.repository.interface';
 import type { ICreateEventController } from '@/interface-adapters/controllers/create-event.controller';
-import type { ILogEventUseCase } from '@/application/use-cases/log-event.use-case';
+import type { ICountriesRepository } from '@/application/repositories/countries.repository.interface';
 import type { IEventsRepository } from '@/application/repositories/events.repository.interface';
 import type { ICreateCountryUseCase } from '@/application/use-cases/create-country.use-case';
 import type { IAuthenticationService } from '@/application/services/auth.service.interface';
 import { IUsersRepository } from '@/application/repositories/users.repository.interface';
 import { ISignInController } from '@/interface-adapters/controllers/signIn.controller';
+import type { ILogEventUseCase } from '@/application/use-cases/log-event.use-case';
 import { ICreateUserUseCase } from '@/application/use-cases/create-user.use-case';
 
 export const DI_SYMBOLS = {
