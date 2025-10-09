@@ -5,6 +5,7 @@ import type { IAuthenticationService } from '@/application/services/auth.service
 import { IUsersRepository } from '@/application/repositories/users.repository.interface';
 import { ISignInController } from '@/interface-adapters/controllers/signIn.controller';
 import { ICreateUserUseCase } from '@/application/use-cases/create-user.use-case';
+import { ISignInUseCase } from '@/application/use-cases/sign-in.use-case';
 
 export const DI_SYMBOLS = {
     // Services
@@ -17,6 +18,7 @@ export const DI_SYMBOLS = {
     // Use Cases
     ICreateCountryUseCase: Symbol.for('ICreateCountryUseCase'),
     ICreateUserUseCase: Symbol.for('ICreateUserUseCase'),
+    ISignInUseCase: Symbol.for('ISignInUseCase'),
 
     // Controllers
     ICreateCountryController: Symbol.for('ICreateCountryController'),
@@ -34,6 +36,7 @@ export interface Registry {
     // Use Cases
     [DI_SYMBOLS.ICreateCountryUseCase]: ICreateCountryUseCase;
     [DI_SYMBOLS.ICreateUserUseCase]: ICreateUserUseCase;
+    [DI_SYMBOLS.ISignInUseCase]: ISignInUseCase;
 
     // Controllers
     [DI_SYMBOLS.ICreateCountryController]: ICreateCountryController;
