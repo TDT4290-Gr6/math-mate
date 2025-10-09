@@ -18,4 +18,9 @@ export class MockCountriesRepository implements ICountriesRepository {
     async getAllCountries(): Promise<Country[]> {
         return this._countries;
     }
+
+    async getCountryById(id: number): Promise<Country | null> {
+        const country = this._countries.find((c) => c.id === id);
+        return country || null;
+    }
 }
