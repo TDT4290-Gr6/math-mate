@@ -68,13 +68,11 @@ async function getProblems(): Promise<Problem[]> {
  */
 async function main() {
     const problems = await getProblems();
-    const llmProvider = LLMProviderType.GEMINI;
+    const llmProvider = LLMProviderType.OPENAI;
 
     for (let i = 0; i < problems.length; i++) {
         const problem = problems[i];
-        console.log(
-            `Generating title and methods for problem number: ${i + 1}`,
-        );
+        console.log(`Generating title and methods for problem number ${i + 1}`);
 
         // Fetch and see if it already exists in the database
         const existingProblem = await prisma.problem.findUnique({
@@ -83,7 +81,7 @@ async function main() {
 
         if (existingProblem !== null) {
             console.log(
-                `Problem already exists in database, skipping problem number: ${i + 1}`,
+                `Problem already exists in database, skipping problem number ${i + 1}`,
             );
             continue;
         }
@@ -91,12 +89,12 @@ async function main() {
         const generated = await generateMethods(problem, llmProvider);
 
         console.log(
-            `Done generating methods for problem number: ${i + 1}. Saving to database...`,
+            `Done generating methods for problem number ${i + 1}. Saving to database...`,
         );
 
         // Save to database
         // Prisma/supabase handles nested creates with references
-        const response = await prisma.problem.create({
+        await prisma.problem.create({
             data: {
                 problem: problem.problem,
                 solution: problem.solution,
@@ -118,8 +116,7 @@ async function main() {
             },
         });
 
-        console.dir(response, { depth: null });
-        console.log(`Done saving problem number: ${i + 1} to database.`);
+        console.log(`Done saving problem number ${i + 1} to database.`);
     }
 }
 

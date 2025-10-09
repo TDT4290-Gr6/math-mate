@@ -59,12 +59,12 @@ git lfs install
 git clone git@hf.co:datasets/HuggingFaceH4/MATH-500
 ```
 
-To use Gemini or OpenAI, you need to set the respective API keys in a `.env.local` file in the root of the project. You can use the `.env.example` file as a template.
+To use Gemini or OpenAI, you need to set the respective API keys in a `.env.local` file in the root of the project.
 
 ### OpenAI API key
 
-You can get a OpenAI API key by creating a new API key on the [OpenAI platform](https://platform.openai.com/account/api-keys).
+You can get a OpenAI API key by creating a new API key on the [OpenAI platform](https://platform.openai.com/account/api-keys). Environment variable name: `OPENAI_API_KEY`.
 
 ### Gemini API key
 
-You can get a Gemini API key by creating a new project in the [Gemini AI Studio](https://aistudio.google.com/api-keys).
+You can get a Gemini API key by creating a new project in the [Gemini AI Studio](https://aistudio.google.com/api-keys). Environment variable name: `GEMINI_TOKEN`.
