@@ -26,7 +26,7 @@ export class EventsRepository implements IEventsRepository {
             sessionId: created.sessionId,
             actionName: created.actionName,
             loggedAt: created.loggedAt,
-            problemId:  created.problemId ?? undefined,
+            problemId: created.problemId ?? undefined,
             methodId: created.methodId ?? undefined,
             stepId: created.stepId ?? undefined,
             payload: created.payload ?? undefined,
