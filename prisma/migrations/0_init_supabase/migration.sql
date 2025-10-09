@@ -1,16 +1,16 @@
 -- CreateTable
 CREATE TABLE "User" (
-    "id" BIGSERIAL NOT NULL,
+    "id" SERIAL NOT NULL,
     "score" DOUBLE PRECISION,
-    "country" BIGINT NOT NULL,
-    "uuid" TEXT,
+    "uuid" TEXT NOT NULL,
+    "countryId" INTEGER,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Country" (
-    "id" BIGSERIAL NOT NULL,
+    "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
 
     CONSTRAINT "Country_pkey" PRIMARY KEY ("id")
@@ -18,7 +18,7 @@ CREATE TABLE "Country" (
 
 -- CreateTable
 CREATE TABLE "Problem" (
-    "id" BIGSERIAL NOT NULL,
+    "id" SERIAL NOT NULL,
     "problem" TEXT NOT NULL,
     "solution" TEXT NOT NULL,
     "subject" TEXT NOT NULL,
@@ -30,8 +30,8 @@ CREATE TABLE "Problem" (
 
 -- CreateTable
 CREATE TABLE "Method" (
-    "id" BIGSERIAL NOT NULL,
-    "problemId" BIGINT NOT NULL,
+    "id" SERIAL NOT NULL,
+    "problemId" INTEGER NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT NOT NULL,
 
@@ -40,8 +40,8 @@ CREATE TABLE "Method" (
 
 -- CreateTable
 CREATE TABLE "Step" (
-    "id" BIGSERIAL NOT NULL,
-    "methodId" BIGINT NOT NULL,
+    "id" SERIAL NOT NULL,
+    "methodId" INTEGER NOT NULL,
     "stepNumber" INTEGER NOT NULL,
     "content" TEXT NOT NULL,
 
@@ -50,24 +50,24 @@ CREATE TABLE "Step" (
 
 -- CreateTable
 CREATE TABLE "Event" (
-    "id" BIGSERIAL NOT NULL,
+    "id" SERIAL NOT NULL,
     "loggedAt" TIMESTAMPTZ(6) NOT NULL DEFAULT (now() AT TIME ZONE 'utc'::text),
-    "sessionId" BIGINT NOT NULL,
+    "sessionId" INTEGER NOT NULL,
     "actionName" TEXT NOT NULL,
     "payload" TEXT NOT NULL,
-    "userId" BIGINT NOT NULL,
-    "problemId" BIGINT,
-    "methodId" BIGINT,
-    "stepId" BIGINT,
+    "userId" INTEGER NOT NULL,
+    "problemId" INTEGER,
+    "methodId" INTEGER,
+    "stepId" INTEGER,
 
     CONSTRAINT "Event_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Solves" (
-    "id" BIGSERIAL NOT NULL,
-    "userId" BIGINT NOT NULL,
-    "problemId" BIGINT NOT NULL,
+    "id" SERIAL NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "problemId" INTEGER NOT NULL,
     "attempts" INTEGER NOT NULL,
     "startedSolvingAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "finishedSolvingAt" TIMESTAMPTZ(6),
@@ -93,6 +93,9 @@ CREATE UNIQUE INDEX "Country_Name_key" ON "Country"("name");
 CREATE UNIQUE INDEX "Problem_id_key" ON "Problem"("id");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Problem_problem_key" ON "Problem"("problem");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Method_id_key" ON "Method"("id");
 
 -- CreateIndex
@@ -105,7 +108,7 @@ CREATE UNIQUE INDEX "Event_id_key" ON "Event"("id");
 CREATE UNIQUE INDEX "solves_id_key" ON "Solves"("id");
 
 -- AddForeignKey
-ALTER TABLE "User" ADD CONSTRAINT "User_Country_fkey" FOREIGN KEY ("country") REFERENCES "Country"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "User" ADD CONSTRAINT "User_countryId_fkey" FOREIGN KEY ("countryId") REFERENCES "Country"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
 ALTER TABLE "Method" ADD CONSTRAINT "Method_problemId_fkey" FOREIGN KEY ("problemId") REFERENCES "Problem"("id") ON DELETE CASCADE ON UPDATE CASCADE;
