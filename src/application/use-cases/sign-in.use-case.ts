@@ -14,5 +14,5 @@ export const signInUseCase =
             return existingUser;
         }
 
-        return await userRepository.createUser({ uuid, country: 1 });
+        return await userRepository.createUser({ uuid });
     };
