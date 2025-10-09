@@ -1,8 +1,6 @@
-import { ISignInController } from '@/interface-adapters/controllers/signIn.controller';
 import GithubProvider from 'next-auth/providers/github';
 import NextAuth, { NextAuthOptions } from 'next-auth';
-import { container } from '@/di/container';
-import { DI_SYMBOLS } from '@/di/types';
+import { getInjection } from '@/di/container';
 
 if (!process.env.NEXT_AUTH_GITHUB_ID || !process.env.NEXT_AUTH_GITHUB_SECRET) {
     throw new Error(
@@ -23,9 +21,7 @@ export const authOptions: NextAuthOptions = {
     },
     callbacks: {
         async signIn({ user }) {
-            const signInController = container.get<ISignInController>(
-                DI_SYMBOLS.ISignInController,
-            );
+            const signInController = getInjection('ISignInController');
 
             try {
                 await signInController({
