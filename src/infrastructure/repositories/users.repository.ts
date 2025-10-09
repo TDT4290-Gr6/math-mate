@@ -62,7 +62,7 @@ export class UsersRepository implements IUsersRepository {
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
                 throw new DatabaseOperationError(
-                    'Failed to retrieve user from the database.',
+                    'Failed to retrieve user by ID from the database.',
                     { cause: error },
                 );
             }
@@ -97,7 +97,7 @@ export class UsersRepository implements IUsersRepository {
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
                 throw new DatabaseOperationError(
-                    'Failed to retrieve user from the database.',
+                    'Failed to retrieve user by UUID from the database.',
                     { cause: error },
                 );
             }
