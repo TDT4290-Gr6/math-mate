@@ -19,7 +19,9 @@ export function eventsModule() {
     }
 
     // Use case (factory)
-    events.bind(DI_SYMBOLS.ILogEventUseCase).toHigherOrderFunction(LogEventUseCase, [DI_SYMBOLS.IEventsRepository]);
+    events
+        .bind(DI_SYMBOLS.ILogEventUseCase)
+        .toHigherOrderFunction(LogEventUseCase, [DI_SYMBOLS.IEventsRepository]);
 
     // Controller (higher-order function factory)
     events

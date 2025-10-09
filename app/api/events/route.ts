@@ -1,26 +1,43 @@
-import { NextResponse } from 'next/server';
 import { container } from '@/di/container';
+import { NextResponse } from 'next/server';
 import { DI_SYMBOLS } from '@/di/types';
 
 export async function POST(request: Request) {
     const body = await request.json().catch(() => null);
 
     try {
-        const createEventController = container.get(DI_SYMBOLS.ICreateEventController);
+        const createEventController = container.get(
+            DI_SYMBOLS.ICreateEventController,
+        );
 
         let result: { body: unknown; status: number };
 
         // Controller may be a function (HOF) or an object with a .handle method depending on DI wiring
         if (typeof createEventController === 'function') {
             const controllerResult = await createEventController(body);
-            if (controllerResult && typeof controllerResult === 'object' && 'body' in controllerResult && 'status' in controllerResult) {
+            if (
+                controllerResult &&
+                typeof controllerResult === 'object' &&
+                'body' in controllerResult &&
+                'status' in controllerResult
+            ) {
                 result = controllerResult;
             } else {
                 result = { body: controllerResult, status: 200 };
             }
-        } else if (createEventController && typeof (createEventController as any).handle === 'function') {
-            const controllerResult = await (createEventController as any).handle(body);
-            if (controllerResult && typeof controllerResult === 'object' && 'body' in controllerResult && 'status' in controllerResult) {
+        } else if (
+            createEventController &&
+            typeof (createEventController as any).handle === 'function'
+        ) {
+            const controllerResult = await (
+                createEventController as any
+            ).handle(body);
+            if (
+                controllerResult &&
+                typeof controllerResult === 'object' &&
+                'body' in controllerResult &&
+                'status' in controllerResult
+            ) {
                 result = controllerResult;
             } else {
                 result = { body: controllerResult, status: 200 };
