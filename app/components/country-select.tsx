@@ -8,6 +8,7 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog';
 import { CountrySelectDropdown } from './country-select-dropdown';
+import { setCountry } from 'app/actions';
 import { useState } from 'react';
 import Title from './ui/title';
 
@@ -15,10 +16,13 @@ export default function CountrySelect() {
     const countryIsSelected = false; // TODO: Check with backend if country has been selected
     const [open, setOpen] = useState(!countryIsSelected);
 
-    function handleSubmit(country: string) {
-        // TODO: Tell backend what country the user selected
-        console.log(country);
-        setOpen(false);
+    async function handleSubmit(countryId: number) {
+        const userId = 14; // TODO: getCurrentUserId();
+        const result = await setCountry(userId, countryId);
+        if (result) {
+            setOpen(false);
+            return;
+        }
     }
 
     return (

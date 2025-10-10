@@ -28,13 +28,11 @@ import { cn } from '@/lib/utils';
 import { z } from 'zod';
 
 const FormSchema = z.object({
-    country: z
-        .string({ error: 'You are required to select a country.' })
-        .min(1, 'You are required to select a country.'),
+    countryId: z.int({ error: 'You are required to select a country.' }),
 });
 
 interface CountrySelectDropdownProps {
-    onSubmit: (country: string) => void;
+    onSubmit: (countryId: number) => void;
 }
 
 export function CountrySelectDropdown({
@@ -56,19 +54,19 @@ export function CountrySelectDropdown({
     });
 
     // Watch the country field so we can enable/disable the submit button
-    const selectedCountry = form.watch('country');
+    const selectedCountry = form.watch('countryId');
 
     const [popoverOpen, setPopoverOpen] = useState(false);
 
     return (
         <Form {...form}>
             <form
-                onSubmit={form.handleSubmit((data) => onSubmit(data.country))}
+                onSubmit={form.handleSubmit((data) => onSubmit(data.countryId))}
                 className="flex w-full flex-col items-center justify-center gap-4"
             >
                 <FormField
                     control={form.control}
-                    name="country"
+                    name="countryId"
                     render={({ field }) => (
                         <FormItem className="w-60">
                             <Popover
@@ -83,7 +81,7 @@ export function CountrySelectDropdown({
                                             {field.value
                                                 ? countries.find(
                                                       (country) =>
-                                                          country.name ===
+                                                          country.id ===
                                                           field.value,
                                                   )?.name
                                                 : 'Select country'}
@@ -102,8 +100,8 @@ export function CountrySelectDropdown({
                                                         key={country.id}
                                                         onSelect={() => {
                                                             form.setValue(
-                                                                'country',
-                                                                country.name,
+                                                                'countryId',
+                                                                country.id,
                                                             );
                                                             setPopoverOpen(
                                                                 false,
@@ -115,8 +113,8 @@ export function CountrySelectDropdown({
                                                         <Check
                                                             className={cn(
                                                                 'ml-auto',
-                                                                country.name ===
-                                                                    field.name
+                                                                country.id ===
+                                                                    field.value
                                                                     ? 'opacity-100'
                                                                     : 'opacity-0',
                                                             )}
