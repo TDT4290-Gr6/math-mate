@@ -151,7 +151,11 @@ export default function SolvingPage() {
 
     return (
         <div className="flex min-h-screen w-full flex-col items-center">
-            <AnswerPopup isOpen={isAnswerPopupOpen} answer={"final answer"} onClose={() => setIsAnswerPopupOpen(false)} />
+            <AnswerPopup
+                isOpen={isAnswerPopupOpen}
+                answer={'final answer'}
+                onClose={() => setIsAnswerPopupOpen(false)}
+            />
             <Header
                 variant="problem"
                 mathProblem={
@@ -172,7 +176,7 @@ export default function SolvingPage() {
                     </div>
                     <div className="flex-end mt-4 flex w-full justify-center gap-2">
                         <Button
-                            onClick={() =>setIsAnswerPopupOpen(true)}
+                            onClick={() => setIsAnswerPopupOpen(true)}
                             className="w-1/4 rounded-full"
                             variant="default"
                         >
