@@ -19,11 +19,11 @@ import {
     PopoverTrigger,
 } from '@/components/ui/popover';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { getCountries, setCountry } from '../actions';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { getCountries } from '../actions';
 import { cn } from '@/lib/utils';
 import { z } from 'zod';
 
@@ -32,26 +32,14 @@ const FormSchema = z.object({
 });
 
 interface CountrySelectDropdownProps {
-    onSubmit: (countryId: number) => void;
-    setError: (error: string | null) => void;
+    setOpen: (open: boolean) => void;
 }
 
-export function CountrySelectDropdown({
-    onSubmit,
-    setError,
-}: CountrySelectDropdownProps) {
+export function CountrySelectDropdown({ setOpen }: CountrySelectDropdownProps) {
+    const [popoverOpen, setPopoverOpen] = useState(false);
     const [countries, setCountries] = useState<
         Awaited<ReturnType<typeof getCountries>>
     >([]);
-
-    useEffect(() => {
-        getCountries()
-            .then((countries) => setCountries(countries))
-            .catch((error) => {
-                setError('Failed to load countries. Please try again later.');
-                console.error('Error fetching countries:', error);
-            });
-    }, [setError]);
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -60,12 +48,37 @@ export function CountrySelectDropdown({
     // Watch the country field so we can enable/disable the submit button
     const selectedCountry = form.watch('countryId');
 
-    const [popoverOpen, setPopoverOpen] = useState(false);
+    useEffect(() => {
+        getCountries()
+            .then((countries) => setCountries(countries))
+            .catch(() => {
+                form.setError('countryId', {
+                    type: 'manual',
+                    message:
+                        'Failed to load countries. Please try again later.',
+                });
+            });
+    }, [form]);
+
+    function handleSubmit(countryId: number) {
+        setCountry(countryId)
+            .then((result) => {
+                if (result.success) setOpen(false);
+            })
+            .catch(() => {
+                form.setError('countryId', {
+                    type: 'manual',
+                    message: 'Failed to set country. Please try again later.',
+                });
+            });
+    }
 
     return (
         <Form {...form}>
             <form
-                onSubmit={form.handleSubmit((data) => onSubmit(data.countryId))}
+                onSubmit={form.handleSubmit((data) =>
+                    handleSubmit(data.countryId),
+                )}
                 className="flex w-full flex-col items-center justify-center gap-4"
             >
                 <FormField
