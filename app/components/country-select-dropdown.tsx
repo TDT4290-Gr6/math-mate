@@ -33,10 +33,12 @@ const FormSchema = z.object({
 
 interface CountrySelectDropdownProps {
     onSubmit: (countryId: number) => void;
+    setError: (error: string | null) => void;
 }
 
 export function CountrySelectDropdown({
     onSubmit,
+    setError,
 }: CountrySelectDropdownProps) {
     const [countries, setCountries] = useState<
         Awaited<ReturnType<typeof getCountries>>
@@ -44,10 +46,15 @@ export function CountrySelectDropdown({
 
     useEffect(() => {
         (async () => {
-            const countries = await getCountries();
-            setCountries(countries);
+            try {
+                const countries = await getCountries();
+                setCountries(countries);
+            } catch (error) {
+                setError('Failed to load countries. Please try again later.');
+                console.error('Error fetching countries:', error);
+            }
         })();
-    }, []);
+    }, [setError]);
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
