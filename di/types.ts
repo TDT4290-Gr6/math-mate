@@ -2,7 +2,9 @@ import type { ICreateCountryController } from '@/interface-adapters/controllers/
 import type { IGetCountriesController } from '@/interface-adapters/controllers/get-countries.controller';
 import type { ICountriesRepository } from '@/application/repositories/countries.repository.interface';
 import type { ISetCountryController } from '@/interface-adapters/controllers/set-country.controller';
+import { IGetProblemsController } from '@/interface-adapters/controllers/get-problems.controller';
 import type { ISolvesRepository } from '@/application/repositories/solves.repository.interface';
+import { IProblemsRepository } from '@/application/repositories/problems.repository.interface';
 import type { IUsersRepository } from '@/application/repositories/users.repository.interface';
 import type { ICreateCountryUseCase } from '@/application/use-cases/create-country.use-case';
 import type { ISignInController } from '@/interface-adapters/controllers/signIn.controller';
@@ -10,10 +12,8 @@ import type { IAuthenticationService } from '@/application/services/auth.service
 import type { IGetCountriesUseCase } from '@/application/use-cases/get-countries.use-case';
 import type { ISetCountryUseCase } from '@/application/use-cases/set-country.use-case';
 import type { ICreateUserUseCase } from '@/application/use-cases/create-user.use-case';
-import type { ISignInUseCase } from '@/application/use-cases/sign-in.use-case';
-import { IProblemsRepository } from '@/application/repositories/problems.repository.interface';
 import { IGetProblemsUseCase } from '@/application/use-cases/get-problems.use-case';
-import { IGetProblemsController } from '@/interface-adapters/controllers/get-problems.controller';
+import type { ISignInUseCase } from '@/application/use-cases/sign-in.use-case';
 
 export const DI_SYMBOLS = {
     // Services
@@ -38,7 +38,7 @@ export const DI_SYMBOLS = {
     IGetCountriesController: Symbol.for('IGetCountriesController'),
     ISignInController: Symbol.for('ISignInController'),
     ISetCountryController: Symbol.for('ISetCountryController'),
-    IGetProblemsController: Symbol.for('IGetProblemsController')
+    IGetProblemsController: Symbol.for('IGetProblemsController'),
 };
 
 export interface DI_RETURN_TYPES {
