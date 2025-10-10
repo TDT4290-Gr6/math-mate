@@ -6,10 +6,6 @@ declare module 'next-auth' {
             id: string;
         };
     }
-
-    interface Token {
-        userId?: string;
-    }
 }
 
 declare module 'next-auth/jwt' {
