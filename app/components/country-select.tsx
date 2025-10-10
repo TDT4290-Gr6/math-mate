@@ -8,22 +8,36 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog';
 import { CountrySelectDropdown } from './country-select-dropdown';
-import { setCountry } from 'app/actions';
-import { useState } from 'react';
+import { getCountry, setCountry } from 'app/actions';
+import { useEffect, useState } from 'react';
 import Title from './ui/title';
 
 export default function CountrySelect() {
-    const countryIsSelected = false; // TODO: Check with backend if country has been selected
-    const [open, setOpen] = useState(!countryIsSelected);
+    const [userId, setUserId] = useState<number | null>(null);
+    const [open, setOpen] = useState(false);
 
     async function handleSubmit(countryId: number) {
-        const userId = 14; // TODO: getCurrentUserId();
+        if (userId === null) return;
         const result = await setCountry(userId, countryId);
         if (result) {
             setOpen(false);
             return;
         }
     }
+
+    useEffect(() => {
+        if (userId === null) return;
+        getCountry(userId).then((countryId) => {
+            if (!countryId) {
+                setOpen(true);
+            }
+        });
+    }, [userId]);
+
+    useEffect(() => {
+        const userId = 19; // TODO: getCurrentUserId();
+        setUserId(userId);
+    }, []);
 
     return (
         <Dialog open={open}>
