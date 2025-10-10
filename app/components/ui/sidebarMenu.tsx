@@ -68,8 +68,7 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                     {/* Close button */}
                     <Button
                         size="icon"
-                        variant="ghost"
-                        className="cursor-pointer"
+                        variant="transparent"
                         aria-label="Close sidebar"
                         onClick={onClose}
                     >
