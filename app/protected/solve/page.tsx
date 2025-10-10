@@ -5,6 +5,7 @@ import ChatbotWindow, {
     ChatMessage,
 } from '@/components/chatbot-window';
 import ProblemCard from '@/components/ui/problem-card';
+import AnswerPopup from '@/components/answer-popup';
 import ChatToggle from '@/components/chat-toggle';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
@@ -110,6 +111,7 @@ export default function SolvingPage() {
     const [chatHistory, setChatHistory] =
         useState<ChatHistory>(mockChatHistory);
     const [isLoading, setIsLoading] = useState(false);
+    const [isAnswerPopupOpen, setIsAnswerPopupOpen] = useState(false);
 
     // Listen for the chat-toggle event
     React.useEffect(() => {
@@ -149,6 +151,11 @@ export default function SolvingPage() {
 
     return (
         <div className="flex min-h-screen w-full flex-col items-center">
+            <AnswerPopup
+                isOpen={isAnswerPopupOpen}
+                answer={'final answer'}
+                onClose={() => setIsAnswerPopupOpen(false)}
+            />
             <Header
                 variant="problem"
                 mathProblem={
@@ -157,7 +164,6 @@ export default function SolvingPage() {
                     </div>
                 }
             />
-
             <div className="relative flex h-full w-full flex-1">
                 <div
                     className={cn(
@@ -170,7 +176,7 @@ export default function SolvingPage() {
                     </div>
                     <div className="flex-end mt-4 flex w-full justify-center gap-2">
                         <Button
-                            onClick={() => alert('Go to answer button clicked')}
+                            onClick={() => setIsAnswerPopupOpen(true)}
                             className="w-1/4 rounded-full"
                             variant="default"
                         >
