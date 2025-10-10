@@ -36,7 +36,7 @@ export const authOptions: NextAuthOptions = {
         },
         async session({ session, token }) {
             // if we stored a userId on the token during signIn, copy it into the session
-            if (token?.userId) {
+            if (token?.userId && session.user) {
                 session.user = { id: token.userId };
             }
             console.log('session callback', { session });
@@ -45,7 +45,7 @@ export const authOptions: NextAuthOptions = {
         },
         async jwt({ token, user }) {
             // when the user object exists (on initial sign in), persist their id to the token
-            if (user?.id) token.userId = String(user.id);
+            if (user?.id) token.userId = user.id;
             return token;
         },
     },
