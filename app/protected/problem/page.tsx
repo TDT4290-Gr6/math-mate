@@ -4,65 +4,125 @@ import SubjectSelectPopup from '@/components/subject-select-popup';
 import ProblemCard from '@/components/ui/problem-card';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { getProblems } from 'app/actions';
 import Link from 'next/link';
 
-/**
- * TODO: update docs when api is ready
- *
- * A page component that displays problems and navigation controls.
- *
- * @component
- * @returns {JSX.Element} The rendered ProblemPage component.
- */
 export default function ProblemPage() {
-    const [problems, setProblems] = useState([]);
+    const [problems, setProblems] = useState<
+        Awaited<ReturnType<typeof getProblems>>
+    >([]);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [offset, setOffset] = useState(0);
     const [hasMore, setHasMore] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
+    const [subjects, setSubjects] = useState([]);
 
     const [isSubjectSelectOpen, setIsSubjectSelectOpen] = useState(false);
 
     const openSubjectSelect = () => setIsSubjectSelectOpen(true);
     const closeSubjectSelect = () => setIsSubjectSelectOpen(false);
+    const LIMIT = 5;
 
-    const fetchNewProblems = () => {
-        // TODO: Implement fetching logic
-        console.log('Fetching new problems based on selected subjects...');
+    // Initial fetch
+    useEffect(() => {
+        const savedSubjects = localStorage.getItem('selectedSubjects');
+        const parsedSubjects = savedSubjects ? JSON.parse(savedSubjects) : [];
+        setSubjects(parsedSubjects);
+        fetchProblems(parsedSubjects);
+    }, []);
+
+    const fetchProblems = async (subjects: string[]) => {
+        if (isLoading || !hasMore) return;
+
+        setIsLoading(true);
+        try {
+            const newProblems = await getProblems(
+                problems.length,
+                LIMIT,
+                subjects,
+            );
+
+            if (newProblems.length < LIMIT) {
+                setHasMore(false);
+            }
+
+            setProblems((prev) => [...prev, ...newProblems]);
+        } catch (error) {
+            console.error('Failed to fetch problems:', error);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
-    // TODO: Fetching problems
-    // GET /api/problems?subjects=algebra,geometry&offset=0&limit=5
-    //   useEffect(() => {
-    //   fetchProblems(offset);
-    // }, []);
+    const handleNext = async () => {
+        const nextIndex = currentIndex + 1;
 
-    // const handleNext = () => {
-    //   const nextIndex = currentIndex + 1;
-    //   if (nextIndex >= problems.length && hasMore) {
-    //     // No more local problems — fetch more
-    //     const newOffset = offset + 5;
-    //     setOffset(newOffset);
-    //     fetchProblems(newOffset);
-    //   }
-    //   setCurrentIndex(nextIndex);
-    // };
+        // If we are trying to go beyond what we have loaded, fetch first
+        if (nextIndex >= problems.length) {
+            if (hasMore && !isLoading) {
+                await fetchProblems(subjects);
+                setCurrentIndex(nextIndex);
+            }
+            // If no more problems to fetch, do nothing (can't go forward)
+        } else {
+            // If we already have this problem loaded, just move to it
+            setCurrentIndex(nextIndex);
+        }
+    };
 
-    // const handlePrevious = () => {
-    //   if (currentIndex > 0) setCurrentIndex(currentIndex - 1);
-    // };
-    //const currentProblem = problems[currentIndex];
+    const handlePrevious = () => {
+        if (currentIndex > 0) {
+            setCurrentIndex(currentIndex - 1);
+        }
+    };
 
-    //Just for mocking, will be removed when api are made
-    const [description, setDescription] = useState(
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc in nunc diam. Fusce accumsan tempor justo ac pellentesque. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. .',
-    );
+    const currentProblem = problems[currentIndex];
+
+    const fetchNewProblems = () => {
+      console.log("hei")
+       
+        // // Reset all state
+        // setProblems([]);
+        // setCurrentIndex(0);
+        // setHasMore(true);
+
+        // // Update subjects
+        // const savedSubjects = localStorage.getItem('selectedSubjects');
+        // const newSubjects = savedSubjects ? JSON.parse(savedSubjects) : [];
+        // setSubjects(newSubjects);
+
+        // // Fetch fresh problems with new subjects
+        // setIsLoading(true);
+        // try {
+        //     const freshProblems = await getProblems(0, LIMIT, newSubjects);
+
+        //     if (freshProblems.length < LIMIT) {
+        //         setHasMore(false);
+        //     }
+
+        //     setProblems(freshProblems);
+        // } catch (error) {
+        //     console.error('Failed to fetch problems:', error);
+        // } finally {
+        //     setIsLoading(false);
+        // }
+    };
 
     return (
         <div className="flex min-h-screen flex-col items-center bg-[var(--background)] text-[var(--foreground)]">
             <Header />
             <div className="mt-20">
-                <ProblemCard description={description} variant="withButtons" />
+                <ProblemCard
+                    description={
+                        currentProblem?.problem ??
+                        (isLoading
+                            ? 'Loading problems...'
+                            : 'No problems available')
+                    }
+                    variant="withButtons"
+                    onNext={handleNext}
+                    onPrevious={handlePrevious}
+                />
             </div>
             <div className="mt-10 flex flex-col justify-center gap-8">
                 <button
