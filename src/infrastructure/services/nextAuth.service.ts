@@ -5,9 +5,8 @@ import { getServerSession } from 'next-auth';
 export class NextAuthService implements IAuthenticationService {
     async getCurrentUserId(): Promise<string | null> {
         const session = await getServerSession(authOptions);
-        if (session && session.user) {
-            const userId = session.user.id as string;
-            return userId;
+        if (session?.user?.id) {
+            return session.user.id as string;
         }
         return null;
     }
