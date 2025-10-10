@@ -2,7 +2,7 @@ import { problemSchema } from './problem';
 import { userSchema } from './user';
 import { z } from 'zod';
 
-export const solvesSchema = z.object({
+export const solveSchema = z.object({
     id: z.int(),
     userId: userSchema.shape.id,
     problemId: problemSchema.shape.id,
@@ -13,9 +13,9 @@ export const solvesSchema = z.object({
     feedback: z.int().min(1).max(5).optional(),
 });
 
-export type Solve = z.infer<typeof solvesSchema>;
+export type Solve = z.infer<typeof solveSchema>;
 
-export const insertSolvesSchema = solvesSchema.pick({
+export const insertSolveSchema = solveSchema.pick({
     userId: true,
     problemId: true,
     attempts: true,
@@ -25,4 +25,4 @@ export const insertSolvesSchema = solvesSchema.pick({
     feedback: true,
 });
 
-export type SolveInsert = z.infer<typeof insertSolvesSchema>;
+export type SolveInsert = z.infer<typeof insertSolveSchema>;

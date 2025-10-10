@@ -1,9 +1,5 @@
-import {
-    insertSolvesSchema,
-    Solve,
-    SolveInsert,
-} from '@/entities/models/solve';
 import { ISolvesRepository } from '@/application/repositories/solves.repository.interface';
+import { insertSolveSchema, Solve, SolveInsert } from '@/entities/models/solve';
 import { DatabaseOperationError } from '@/entities/errors/common';
 import { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
@@ -64,7 +60,7 @@ export class SolvesRepository implements ISolvesRepository {
                 },
             });
             const attempts = existingSolve.length + 1;
-            const parsedSolve = insertSolvesSchema.parse({
+            const parsedSolve = insertSolveSchema.parse({
                 ...solve,
                 attempts,
             });
