@@ -79,8 +79,8 @@ export default function ProblemPage() {
     const currentProblem = problems[currentIndex];
 
     const fetchNewProblems = () => {
-      console.log("hei")
-       
+        console.log('hei');
+
         // // Reset all state
         // setProblems([]);
         // setCurrentIndex(0);

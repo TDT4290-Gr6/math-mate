@@ -3,9 +3,8 @@ import { Problem } from '@/entities/models/problem';
 import { prisma } from '@/lib/prisma';
 
 export class ProblemsRepository implements IProblemsRepository {
-
     async getProblems(
-      //TODO: also filter out problems that the user already has solved
+        //TODO: also filter out problems that the user already has solved
         offset: number,
         limit: number,
         subjects?: string[],
@@ -13,9 +12,7 @@ export class ProblemsRepository implements IProblemsRepository {
         const prismaProblems = await prisma.problem.findMany({
             skip: offset,
             take: limit,
-            where: subjects?.length
-                ? { subject: { in: subjects } }
-                : undefined,
+            where: subjects?.length ? { subject: { in: subjects } } : undefined,
             include: {
                 Method: {
                     include: { Step: true },
