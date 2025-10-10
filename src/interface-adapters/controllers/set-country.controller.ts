@@ -5,7 +5,7 @@ import { InputParseError } from '@/entities/errors/common';
 import { z } from 'zod';
 export type ISetCountryController = ReturnType<typeof setCountryController>;
 
-const inputSchema = z.object({ id: z.int(), countryId: z.int() });
+const inputSchema = z.object({ countryId: z.int() });
 
 export const setCountryController =
     (
@@ -14,9 +14,11 @@ export const setCountryController =
     ) =>
     async (input: z.infer<typeof inputSchema>) => {
         const isAuthenticated = await authenticationService.isAuthenticated();
-        if (!isAuthenticated) {
+        if (!isAuthenticated)
             throw new UnauthenticatedError('User must be logged in.');
-        }
+
+        const id = await authenticationService.getCurrentUserId();
+        if (!id) throw new UnauthenticatedError('User must be logged in.');
 
         // validate input
         const result = inputSchema.safeParse(input);
@@ -26,7 +28,7 @@ export const setCountryController =
             throw new InputParseError('Invalid input', { cause: result.error });
         }
 
-        const { id, countryId } = result.data;
+        const { countryId } = result.data;
 
         // call use case
         await setCountryUseCase(id, countryId);

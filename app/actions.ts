@@ -12,23 +12,23 @@ export async function getCountries() {
     }
 }
 
-export async function getCountry(userId: number) {
+export async function getCountry() {
     try {
         const getUserController = getInjection('IGetUserController');
-        const user = await getUserController({ id: userId });
+        const user = await getUserController();
         return user.countryId;
     } catch (error) {
-        console.error('Failed to get country for user:', userId, error);
+        console.error('Failed to get country for current user:', error);
         throw error;
     }
 }
 
-export async function setCountry(userId: number, countryId: number) {
+export async function setCountry(countryId: number) {
     try {
         const setCountryController = getInjection('ISetCountryController');
-        return await setCountryController({ id: userId, countryId });
+        return await setCountryController({ countryId });
     } catch (error) {
-        console.error('Failed to set country:', error);
+        console.error('Failed to set country for current user:', error);
         throw error;
     }
 }

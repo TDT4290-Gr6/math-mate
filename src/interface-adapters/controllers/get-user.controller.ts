@@ -3,35 +3,24 @@ import { IGetUserUseCase } from '@/application/use-cases/get-user.use-case';
 import { UnauthenticatedError } from '@/entities/errors/auth';
 import { userPresenter } from '../presenters/user.presenter';
 import { InputParseError } from '@/entities/errors/common';
-import { z } from 'zod';
 
 export type IGetUserController = ReturnType<typeof getUserController>;
-
-const inputSchema = z.object({ id: z.int() });
 
 export const getUserController =
     (
         getUserUseCase: IGetUserUseCase,
         authenticationService: IAuthenticationService,
     ) =>
-    async (input: z.infer<typeof inputSchema>) => {
+    async () => {
         const isAuthenticated = await authenticationService.isAuthenticated();
-        if (!isAuthenticated) {
+        if (!isAuthenticated)
             throw new UnauthenticatedError('User must be logged in.');
-        }
 
-        const result = inputSchema.safeParse(input);
+        const userId = await authenticationService.getCurrentUserId();
+        if (!userId) throw new UnauthenticatedError('User must be logged in.');
 
-        if (!result.success) {
-            // handle validation errors
-            throw new InputParseError('Invalid input', { cause: result.error });
-        }
-
-        const { id } = result.data;
-        const user = await getUserUseCase(id);
-        if (!user) {
-            throw new InputParseError('User not found');
-        }
+        const user = await getUserUseCase(userId);
+        if (!user) throw new InputParseError('User not found');
 
         return userPresenter(user);
     };
