@@ -1,20 +1,22 @@
-import { createModule } from "@evyweb/ioctopus";
-import { DI_SYMBOLS } from "../types";
-import { ProblemsRepository } from "@/infrastructure/repositories/problems.repository";
-import { getProblemsUseCase } from "@/application/use-cases/get-problems.use-case";
-import { MockProblemsRepository } from "@/infrastructure/repositories/problems.repository.mock";
-import { getProblemsController } from "@/interface-adapters/controllers/get-problems.controller";
+import { getProblemsController } from '@/interface-adapters/controllers/get-problems.controller';
+import { MockProblemsRepository } from '@/infrastructure/repositories/problems.repository.mock';
+import { ProblemsRepository } from '@/infrastructure/repositories/problems.repository';
+import { getProblemsUseCase } from '@/application/use-cases/get-problems.use-case';
+import { createModule } from '@evyweb/ioctopus';
+import { DI_SYMBOLS } from '../types';
 
 export function problemsModule() {
     const problemsModule = createModule();
-    
+
     // Repository binding
     if (process.env.NODE_ENV === 'test') {
         problemsModule
             .bind(DI_SYMBOLS.IProblemsRepository)
             .toClass(MockProblemsRepository);
     } else {
-        problemsModule.bind(DI_SYMBOLS.IProblemsRepository).toClass(ProblemsRepository);
+        problemsModule
+            .bind(DI_SYMBOLS.IProblemsRepository)
+            .toClass(ProblemsRepository);
     }
 
     // Use Case binding
@@ -26,10 +28,10 @@ export function problemsModule() {
 
     // Controller binding
     problemsModule
-    .bind(DI_SYMBOLS.IGetProblemsController)
-    .toHigherOrderFunction(getProblemsController, [
-      DI_SYMBOLS.IGetProblemsUseCase,
-    ]);
+        .bind(DI_SYMBOLS.IGetProblemsController)
+        .toHigherOrderFunction(getProblemsController, [
+            DI_SYMBOLS.IGetProblemsUseCase,
+        ]);
 
     return problemsModule;
 }
