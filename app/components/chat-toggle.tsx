@@ -1,11 +1,6 @@
 'use client';
 
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from './ui/tooltip';
+import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import { Button } from '@/components/ui/button';
 import { Sparkles } from 'lucide-react';
 import React from 'react';
