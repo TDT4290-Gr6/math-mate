@@ -16,14 +16,15 @@ export default function CountrySelect() {
     const [open, setOpen] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    async function handleSubmit(countryId: number) {
-        try {
-            const result = await setCountry(countryId);
-            if (result.success) setOpen(false);
-        } catch (error) {
-            console.error('Failed to set country:', error);
-            setError('Failed to set country. Please try again later.');
-        }
+    function handleSubmit(countryId: number) {
+        setCountry(countryId)
+            .then((result) => {
+                if (result.success) setOpen(false);
+            })
+            .catch((error) => {
+                console.error('Failed to set country:', error);
+                setError('Failed to set country. Please try again later.');
+            });
     }
 
     useEffect(() => {

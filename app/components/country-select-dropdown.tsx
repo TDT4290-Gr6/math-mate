@@ -45,15 +45,12 @@ export function CountrySelectDropdown({
     >([]);
 
     useEffect(() => {
-        (async () => {
-            try {
-                const countries = await getCountries();
-                setCountries(countries);
-            } catch (error) {
+        getCountries()
+            .then((countries) => setCountries(countries))
+            .catch((error) => {
                 setError('Failed to load countries. Please try again later.');
                 console.error('Error fetching countries:', error);
-            }
-        })();
+            });
     }, [setError]);
 
     const form = useForm<z.infer<typeof FormSchema>>({
