@@ -25,36 +25,34 @@ export default function ChatToggle() {
     };
 
     return (
-        
-            <Tooltip open={open} onOpenChange={setOpen}>
-                <TooltipTrigger asChild className="bg-[var(--chatbot)]">
-                    <Button
-                        aria-label="Open chat"
-                        onClick={handleClick}
-                        className="hover:bg-card fixed right-6 bottom-6 h-12 w-12 rounded-full bg-[var(--chatbot)] shadow-lg transition-shadow hover:shadow-xl"
-                    >
-                        <Sparkles className="text-[var(--foreground)]" />
-                    </Button>
-                </TooltipTrigger>
-
-                <TooltipContent
-                    side="top"
-                    sideOffset={10}
-                    arrowColor="var(--chatbot)"
-                    className="relative w-58 rounded-xl bg-[var(--chatbot)] p-3 text-[var(--foreground)] shadow-lg"
+        <Tooltip open={open} onOpenChange={setOpen}>
+            <TooltipTrigger asChild className="bg-[var(--chatbot)]">
+                <Button
+                    aria-label="Open chat"
+                    onClick={handleClick}
+                    className="hover:bg-card fixed right-6 bottom-6 h-12 w-12 rounded-full bg-[var(--chatbot)] shadow-lg transition-shadow hover:shadow-xl"
                 >
-                    <div className="text-sm">
-                        <h3 className="mb-1 font-bold">
-                            Need help with the math problem?
-                        </h3>
-                        <p>
-                            Press me to open a chat to ask questions about the
-                            math problem or one of the steps.
-                        </p>
-                    </div>
-                </TooltipContent>
-            </Tooltip>
-       
+                    <Sparkles className="text-[var(--foreground)]" />
+                </Button>
+            </TooltipTrigger>
+
+            <TooltipContent
+                side="top"
+                sideOffset={10}
+                arrowColor="var(--chatbot)"
+                className="relative w-58 rounded-xl bg-[var(--chatbot)] p-3 text-[var(--foreground)] shadow-lg"
+            >
+                <div className="text-sm">
+                    <h3 className="mb-1 font-bold">
+                        Need help with the math problem?
+                    </h3>
+                    <p>
+                        Press me to open a chat to ask questions about the math
+                        problem or one of the steps.
+                    </p>
+                </div>
+            </TooltipContent>
+        </Tooltip>
     );
 }
 // ...existing code...
