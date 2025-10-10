@@ -11,6 +11,15 @@ import { Button } from './ui/button';
 import { cn } from '@/lib/utils';
 import Title from './ui/title';
 
+/**
+ * Props for the AnswerPopup component.
+ *
+ * @param isOpen: Controls whether the dialog is visible. The parent typically
+ *         manages this boolean so it can open/close the popup.
+ * @param answer: The answer text to reveal inside the popup.
+ * @param onClose: Optional callback invoked when the dialog is requested to close
+ *          (either by user action or when the component finishes its flow).
+ */
 interface AnswerPopupProps {
     isOpen: boolean;
     answer: string;
@@ -24,12 +33,28 @@ export default function AnswerPopup({
     answer,
     onClose,
 }: AnswerPopupProps) {
-    const router = useRouter();
+    /*
+    Flow (step states):
+         - 'reveal': initial state when the popup opens. Shows a single click-to-reveal field.
+             Clicking it advances to 'confirm'. This is a one-way action (not a toggle).
+         - 'confirm': shows the revealed answer and asks the user whether their solution
+             matched (Yes / No). Selecting either sets `wasCorrect` and moves to 'difficulty'.
+         - 'difficulty': user rates how hard the problem was (1..4). The UI highlights
+         ratings cumulatively (buttons 1..N). Once a rating is chosen, the footer
+             shows 'Try again' and 'Next question' actions; selecting one finishes the flow.
+         - 'done': final state after an action; the popup is closed and `onClose` is called.
+
+         Notes:
+         - The component resets to 'reveal' whenever `isOpen` becomes true.
+         - All state transitions are handled locally; the parent controls visibility
+             through `isOpen`/`onClose` so it can reopen the dialog later.
+             */
     const [step, setStep] = useState<Step>('reveal');
     const [selectedDifficulty, setSelectedDifficulty] = useState<number | null>(
         null,
     );
     const [wasCorrect, setWasCorrect] = useState(false);
+    const router = useRouter();
 
     useEffect(() => {
         if (isOpen) {
@@ -53,7 +78,7 @@ export default function AnswerPopup({
     }
 
     function handleFinalAction(action: 'next' | 'retry') {
-        // TO-DO: handle difficulty rating answer
+        // TO-DO: handle difficulty rating answer and decide if a user can re-evaluata a problem
         console.log({ wasCorrect, selectedDifficulty, action });
         setStep('done');
         if (action === 'next') {
@@ -87,10 +112,7 @@ export default function AnswerPopup({
                                         tabIndex={0}
                                         onClick={handleReveal}
                                         onKeyDown={(e) => {
-                                            if (
-                                                e.key === 'Enter' ||
-                                                e.key === ' '
-                                            ) {
+                                            if (e.key === 'Enter' || e.key === ' ') {
                                                 e.preventDefault();
                                                 handleReveal();
                                             }
@@ -156,7 +178,6 @@ export default function AnswerPopup({
                                                 );
                                             })}
                                         </div>
-
                                         <div className="mb-4 flex flex-row place-content-between px-4 pt-1 text-sm">
                                             <div>Easy</div>
                                             <div>Medium</div>
