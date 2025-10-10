@@ -1,10 +1,19 @@
 import type { IAuthenticationService } from '@/application/services/auth.service.interface';
+
 export class MockAuthenticationService implements IAuthenticationService {
-    async getCurrentUserId(): Promise<string | null> {
-        return 'mock-user-id';
+    private userId: number | null = 1;
+    private authenticated: boolean = true;
+
+    constructor(authenticated: boolean = true, userId: number | null = 1) {
+        this.authenticated = authenticated;
+        this.userId = userId;
     }
+
+    async getCurrentUserId(): Promise<number | null> {
+        return this.userId;
+    }
+
     async isAuthenticated(): Promise<boolean> {
-        // Simulate session validation
-        return true;
+        return this.authenticated;
     }
 }
