@@ -53,16 +53,15 @@ export class SolvesRepository implements ISolvesRepository {
     async createSolve(solve: SolveInsert): Promise<Solve> {
         try {
             // check if a solve with the same userId and problemId already exists
-            const existingSolve = await prisma.solves.findMany({
+            const attemptsUsed = await prisma.solves.count({
                 where: {
                     userId: solve.userId,
                     problemId: solve.problemId,
                 },
             });
-            const attempts = existingSolve.length + 1;
             const parsedSolve = insertSolveSchema.parse({
                 ...solve,
-                attempts,
+                attempts: attemptsUsed + 1,
             });
 
             const newSolve = await prisma.solves.create({
