@@ -4,11 +4,12 @@ import {
     DialogDescription,
     DialogHeader,
     DialogTitle,
-} from "./ui/dialog";
-import { useState, useEffect } from "react";
-import { Button } from "./ui/button";
-import Title from "./ui/title";
-import { cn } from "@/lib/utils";
+} from './ui/dialog';
+import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { Button } from './ui/button';
+import { cn } from '@/lib/utils';
+import Title from './ui/title';
 
 interface AnswerPopupProps {
     isOpen: boolean;
@@ -16,14 +17,15 @@ interface AnswerPopupProps {
     onClose?: () => void;
 }
 
-type Step = "reveal" | "confirm" | "difficulty" | "done";
+type Step = 'reveal' | 'confirm' | 'difficulty' | 'done';
 
 export default function AnswerPopup({
     isOpen,
     answer,
     onClose,
 }: AnswerPopupProps) {
-    const [step, setStep] = useState<Step>("reveal");
+    const router = useRouter();
+    const [step, setStep] = useState<Step>('reveal');
     const [selectedDifficulty, setSelectedDifficulty] = useState<number | null>(
         null,
     );
@@ -31,29 +33,32 @@ export default function AnswerPopup({
 
     useEffect(() => {
         if (isOpen) {
-            setStep("reveal");
+            setStep('reveal');
             setSelectedDifficulty(null);
             setWasCorrect(false);
         }
     }, [isOpen]);
 
     function handleReveal() {
-        if (step === "reveal") setStep("confirm");
+        if (step === 'reveal') setStep('confirm');
     }
 
     function handleConfirm(correct: boolean) {
         setWasCorrect(correct);
-        setStep("difficulty");
+        setStep('difficulty');
     }
 
     function handleSelectDifficulty(level: number) {
         setSelectedDifficulty(level);
     }
 
-    function handleFinalAction(action: "next" | "retry") {
+    function handleFinalAction(action: 'next' | 'retry') {
         // TO-DO: handle difficulty rating answer
         console.log({ wasCorrect, selectedDifficulty, action });
-        setStep("done");
+        setStep('done');
+        if (action === 'next') {
+            router.push('/protected/problem');
+        }
         onClose?.();
     }
 
@@ -67,45 +72,102 @@ export default function AnswerPopup({
             <DialogContent
                 onInteractOutside={(event) => event.preventDefault()} // prevent click outside
                 onEscapeKeyDown={(event) => event.preventDefault()} // prevent escape key
-                className="p-8"
+                className="px-8 pt-8 pb-4"
             >
                 <DialogHeader>
                     <DialogTitle>
                         <Title title="Here's the answer:" />
                     </DialogTitle>
-                    <DialogDescription>
-                        <div className="flex h-36 flex-col items-center justify-between">
-                            {step === "reveal" && (
-                                <div
-                                    role="button"
-                                    tabIndex={0}
-                                    onClick={handleReveal}
-                                    onKeyDown={(e) => {
-                                        if (
-                                            e.key === "Enter" ||
-                                            e.key === " "
-                                        ) {
-                                            e.preventDefault();
-                                            handleReveal();
-                                        }
-                                    }}
-                                    className="mt-7 w-3/4 max-w-sm cursor-pointer rounded-md border bg-white px-4 py-3 text-center text-gray-400 hover:ring-1 hover:ring-gray-200"
-                                    aria-label="Reveal answer"
-                                >
-                                    Click to reveal answer
-                                </div>
-                            )}
-                            {step === "confirm" && (
-                                <div className="w-3/4 max-w-sm text-center">
-                                    <p>
-                                        Compare it with your work to see how
-                                        close you got.
-                                    </p>
-                                    <div className="my-3 rounded-md border bg-gray-50 px-4 py-3 text-gray-900">
-                                        {answer}
+                    <DialogDescription asChild>
+                        <div className="flex h-40 w-full flex-col items-center justify-between">
+                            <div className="flex w-3/4 max-w-sm flex-1 items-center justify-center">
+                                {step === 'reveal' && (
+                                    <div
+                                        role="button"
+                                        tabIndex={0}
+                                        onClick={handleReveal}
+                                        onKeyDown={(e) => {
+                                            if (
+                                                e.key === 'Enter' ||
+                                                e.key === ' '
+                                            ) {
+                                                e.preventDefault();
+                                                handleReveal();
+                                            }
+                                        }}
+                                        className="w-full cursor-pointer rounded-md border bg-white px-4 py-3 text-center text-gray-400 hover:ring-1 hover:ring-gray-200"
+                                        aria-label="Reveal answer"
+                                    >
+                                        Click to reveal answer
                                     </div>
-                                    <p>Did you arrive at the correct answer?</p>
-                                    <div className="mt-2 flex justify-center gap-4">
+                                )}
+
+                                {step === 'confirm' && (
+                                    <div className="w-full text-center">
+                                        <div className="mb-2">
+                                            Compare it with your work to see how
+                                            close you got.
+                                        </div>
+                                        <div className="my-3 rounded-md border bg-gray-50 px-4 py-3 text-gray-900">
+                                            {answer}
+                                        </div>
+                                        <div>
+                                            Did you arrive at the correct
+                                            answer?
+                                        </div>
+                                    </div>
+                                )}
+
+                                {step === 'difficulty' && (
+                                    <div className="w-full text-center">
+                                        <div className="mb-2 text-sm">
+                                            How difficult was this question?
+                                        </div>
+
+                                        <div className="flex items-center justify-between gap-2">
+                                            {[1, 2, 3, 4, 5].map((n) => {
+                                                const isActive =
+                                                    selectedDifficulty !==
+                                                        null &&
+                                                    n <= selectedDifficulty;
+                                                return (
+                                                    <Button
+                                                        key={n}
+                                                        onClick={() =>
+                                                            handleSelectDifficulty(
+                                                                n,
+                                                            )
+                                                        }
+                                                        className={cn(
+                                                            'flex-1 rounded-none px-3 py-2',
+                                                            isActive
+                                                                ? 'bg-accent text-white'
+                                                                : 'bg-white text-gray-700',
+                                                            n === 1 &&
+                                                                'rounded-l-full',
+                                                            n === 5 &&
+                                                                'rounded-r-full',
+                                                        )}
+                                                        aria-pressed={isActive}
+                                                        aria-label={`Rate difficulty ${n}`}
+                                                    >
+                                                        {n}
+                                                    </Button>
+                                                );
+                                            })}
+                                        </div>
+
+                                        <div className="mb-4 flex flex-row place-content-between px-4 pt-1 text-sm">
+                                            <div>Easy</div>
+                                            <div>Medium</div>
+                                            <div>Hard</div>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                            <div className="flex h-12 w-3/4 max-w-sm items-center justify-center">
+                                {step === 'confirm' && (
+                                    <div className="flex gap-4">
                                         <Button
                                             className="w-32"
                                             variant="secondary"
@@ -120,45 +182,10 @@ export default function AnswerPopup({
                                             Yes
                                         </Button>
                                     </div>
-                                </div>
-                            )}
-                            {step === "difficulty" && (
-                                <div className="w-3/4 max-w-sm text-center">
-                                    <p className="mb-2">
-                                        How difficult was this question?
-                                    </p>
-                                    <div className="flex items-center justify-between gap-1 px-4 py-3">
-                                        {[1, 2, 3, 4, 5].map((n) => {
-                                            const isActive =
-                                                selectedDifficulty !== null &&
-                                                n <= selectedDifficulty;
-                                            return (
-                                                <Button
-                                                    key={n}
-                                                    onClick={() => handleSelectDifficulty(n)}
-                                                    className={cn(
-                                                        "flex-1 h-8 focus:outline-none",
-                                                        isActive
-                                                            ? "bg-accent"
-                                                            : "bg-card",
-                                                        n === 1 &&
-                                                            "rounded-l-full",
-                                                        n === 5 &&
-                                                            "rounded-r-full",
-                                                        n !== 1 &&
-                                                            n !== 5 &&
-                                                            "rounded-none",
-                                                    )}
-                                                    aria-pressed={isActive}
-                                                    aria-label={`Rate difficulty ${n}`}
-                                                >
-                                                    {n}
-                                                </Button>
-                                            );
-                                        })}
-                                    </div>
-                                    <p>Good job! Let&apos;s do another one!</p>
-                                    <div className="mt-2 flex justify-center gap-4">
+                                )}
+
+                                {step === 'difficulty' && (
+                                    <div className="flex gap-4">
                                         <Button
                                             variant="secondary"
                                             className="w-32"
@@ -166,7 +193,7 @@ export default function AnswerPopup({
                                                 selectedDifficulty === null
                                             }
                                             onClick={() =>
-                                                handleFinalAction("retry")
+                                                handleFinalAction('retry')
                                             }
                                         >
                                             Try again
@@ -177,14 +204,17 @@ export default function AnswerPopup({
                                                 selectedDifficulty === null
                                             }
                                             onClick={() =>
-                                                handleFinalAction("next")
+                                                handleFinalAction('next')
                                             }
                                         >
                                             Next question
                                         </Button>
                                     </div>
-                                </div>
-                            )}
+                                )}
+                                {step === 'reveal' && (
+                                    <div className="w-full" />
+                                )}
+                            </div>
                         </div>
                     </DialogDescription>
                 </DialogHeader>
