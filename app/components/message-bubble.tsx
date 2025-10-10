@@ -27,7 +27,7 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
                     'rounded-lg px-4 py-2 text-sm break-words',
                     isUser
                         ? 'max-w-[70%] rounded-br-sm bg-[var(--chatbot)]'
-                        : '',
+                        : 'bg-background',
                     message.className, // Apply custom styling if provided
                 )}
             >

@@ -56,14 +56,14 @@ const mockSteps: Step[] = [
     },
 ];
 
-const mochChatHistory: ChatHistory = {
+const mockChatHistory: ChatHistory = {
     messages: [
         {
             chatID: '1',
             sender: 'bot',
             timestamp: new Date(),
             content:
-                'Lorem isum dolor sit amet,consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+                'Lorem ipsum dolor sit amet,consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
         },
         {
             chatID: '2',
@@ -108,7 +108,7 @@ export default function SolvingPage() {
     const totalSteps = mockSteps.length;
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
     const [chatHistory, setChatHistory] =
-        useState<ChatHistory>(mochChatHistory);
+        useState<ChatHistory>(mockChatHistory);
     const [isLoading, setIsLoading] = useState(false);
 
     // Listen for the chat-toggle event
@@ -170,6 +170,7 @@ export default function SolvingPage() {
                     </div>
                     <div className="flex-end mt-4 flex w-full justify-center gap-2">
                         <Button
+                            onClick={() => alert("Go to answer button clicked")}
                             className="w-1/4 rounded-full"
                             variant="default"
                         >

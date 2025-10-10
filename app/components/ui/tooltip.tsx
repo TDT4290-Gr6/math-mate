@@ -38,7 +38,7 @@ function TooltipContent({
     className,
     sideOffset = 0,
     children,
-    // Optional arrow color (CSS color string). Defaults to the tooltip background variable.
+    // Optional arrow color (CSS color string). Defaults to the foreground color.
     arrowColor = 'var(--foreground)',
     ...props
 }: React.ComponentProps<typeof TooltipPrimitive.Content> & {

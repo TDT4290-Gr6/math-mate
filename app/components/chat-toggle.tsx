@@ -25,10 +25,11 @@ export default function ChatToggle() {
     };
 
     return (
-        <TooltipProvider>
+        
             <Tooltip open={open} onOpenChange={setOpen}>
                 <TooltipTrigger asChild className="bg-[var(--chatbot)]">
                     <Button
+                        aria-label="Open chat"
                         onClick={handleClick}
                         className="hover:bg-card fixed right-6 bottom-6 h-12 w-12 rounded-full bg-[var(--chatbot)] shadow-lg transition-shadow hover:shadow-xl"
                     >
@@ -53,7 +54,7 @@ export default function ChatToggle() {
                     </div>
                 </TooltipContent>
             </Tooltip>
-        </TooltipProvider>
+       
     );
 }
 // ...existing code...
