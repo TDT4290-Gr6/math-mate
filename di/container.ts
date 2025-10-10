@@ -4,6 +4,7 @@ import { solvesModule } from './modules/solves.module';
 import { usersModule } from './modules/users.module';
 import { authModule } from './modules/auth.module';
 import { createContainer } from '@evyweb/ioctopus';
+import { problemsModule } from './modules/problems.module';
 
 const container = createContainer();
 
@@ -11,6 +12,7 @@ container.load(Symbol('countriesModule'), countriesModule());
 container.load(Symbol('usersModule'), usersModule());
 container.load(Symbol('authModule'), authModule());
 container.load(Symbol('solvesModule'), solvesModule());
+container.load(Symbol('problemsModule'), problemsModule())
 
 export function getInjection<K extends keyof typeof DI_SYMBOLS>(
     symbol: K,

@@ -11,6 +11,9 @@ import type { IGetCountriesUseCase } from '@/application/use-cases/get-countries
 import type { ISetCountryUseCase } from '@/application/use-cases/set-country.use-case';
 import type { ICreateUserUseCase } from '@/application/use-cases/create-user.use-case';
 import type { ISignInUseCase } from '@/application/use-cases/sign-in.use-case';
+import { IProblemsRepository } from '@/application/repositories/problems.repository.interface';
+import { IGetProblemsUseCase } from '@/application/use-cases/get-problems.use-case';
+import { IGetProblemsController } from '@/interface-adapters/controllers/get-problems.controller';
 
 export const DI_SYMBOLS = {
     // Services
@@ -20,6 +23,7 @@ export const DI_SYMBOLS = {
     ICountriesRepository: Symbol.for('ICountriesRepository'),
     IUsersRepository: Symbol.for('IUsersRepository'),
     ISolvesRepository: Symbol.for('ISolvesRepository'),
+    IProblemsRepository: Symbol.for('IProblemsRepository'),
 
     // Use Cases
     ICreateCountryUseCase: Symbol.for('ICreateCountryUseCase'),
@@ -27,12 +31,14 @@ export const DI_SYMBOLS = {
     ICreateUserUseCase: Symbol.for('ICreateUserUseCase'),
     ISignInUseCase: Symbol.for('ISignInUseCase'),
     ISetCountryUseCase: Symbol.for('ISetCountryUseCase'),
+    IGetProblemsUseCase: Symbol.for('IGetProblemsUsecase'),
 
     // Controllers
     ICreateCountryController: Symbol.for('ICreateCountryController'),
     IGetCountriesController: Symbol.for('IGetCountriesController'),
     ISignInController: Symbol.for('ISignInController'),
     ISetCountryController: Symbol.for('ISetCountryController'),
+    IGetProblemsController: Symbol.for('IGetProblemsController')
 };
 
 export interface DI_RETURN_TYPES {
@@ -43,6 +49,7 @@ export interface DI_RETURN_TYPES {
     ICountriesRepository: ICountriesRepository;
     IUsersRepository: IUsersRepository;
     ISolvesRepository: ISolvesRepository;
+    IProblemsRepository: IProblemsRepository;
 
     // Use Cases
     ICreateCountryUseCase: ICreateCountryUseCase;
@@ -50,10 +57,12 @@ export interface DI_RETURN_TYPES {
     ICreateUserUseCase: ICreateUserUseCase;
     ISignInUseCase: ISignInUseCase;
     ISetCountryUseCase: ISetCountryUseCase;
+    IGetProblemsUseCase: IGetProblemsUseCase;
 
     // Controllers
     ICreateCountryController: ICreateCountryController;
     IGetCountriesController: IGetCountriesController;
     ISignInController: ISignInController;
     ISetCountryController: ISetCountryController;
+    IGetProblemsController: IGetProblemsController;
 }
