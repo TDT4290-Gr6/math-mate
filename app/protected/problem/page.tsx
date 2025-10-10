@@ -1,5 +1,6 @@
 'use client';
 
+import SubjectSelectPopup from '@/components/subject-select-popup';
 import ProblemCard from '@/components/ui/problem-card';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
@@ -15,24 +16,34 @@ import Link from 'next/link';
  * @returns {JSX.Element} The rendered ProblemPage component.
  */
 export default function ProblemPage() {
-    const [questions, setQuestions] = useState([]);
+    const [problems, setProblems] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [offset, setOffset] = useState(0);
     const [hasMore, setHasMore] = useState(true);
 
-    // TODO: Fetcing questions
-    // GET /api/questions?subjects=algebra,geometry&offset=0&limit=5
+    const [isSubjectSelectOpen, setIsSubjectSelectOpen] = useState(false);
+
+    const openSubjectSelect = () => setIsSubjectSelectOpen(true);
+    const closeSubjectSelect = () => setIsSubjectSelectOpen(false);
+
+    const fetchNewProblems = () => {
+        // TODO: Implement fetching logic
+        console.log('Fetching new problems based on selected subjects...');
+    };
+
+    // TODO: Fetching problems
+    // GET /api/problems?subjects=algebra,geometry&offset=0&limit=5
     //   useEffect(() => {
-    //   fetchQuestions(offset);
+    //   fetchProblems(offset);
     // }, []);
 
     // const handleNext = () => {
     //   const nextIndex = currentIndex + 1;
-    //   if (nextIndex >= questions.length && hasMore) {
-    //     // No more local questions — fetch more
+    //   if (nextIndex >= problems.length && hasMore) {
+    //     // No more local problems — fetch more
     //     const newOffset = offset + 5;
     //     setOffset(newOffset);
-    //     fetchQuestions(newOffset);
+    //     fetchProblems(newOffset);
     //   }
     //   setCurrentIndex(nextIndex);
     // };
@@ -40,7 +51,7 @@ export default function ProblemPage() {
     // const handlePrevious = () => {
     //   if (currentIndex > 0) setCurrentIndex(currentIndex - 1);
     // };
-    //const currentQuestion = questions[currentIndex];
+    //const currentProblem = problems[currentIndex];
 
     //Just for mocking, will be removed when api are made
     const [description, setDescription] = useState(
@@ -54,9 +65,22 @@ export default function ProblemPage() {
                 <ProblemCard description={description} variant="withButtons" />
             </div>
             <div className="mt-10 flex flex-col justify-center gap-8">
-                <button className="text-opacity-20 cursor-pointer text-sm underline underline-offset-4 opacity-70 hover:opacity-90">
+                <button
+                    className="text-opacity-20 cursor-pointer text-sm underline underline-offset-4 opacity-70 hover:opacity-90"
+                    onClick={openSubjectSelect}
+                >
                     Change subjects?
                 </button>
+                {isSubjectSelectOpen && (
+                    <SubjectSelectPopup
+                        onClose={closeSubjectSelect}
+                        onSave={(subjectsChanged) => {
+                            if (subjectsChanged) {
+                                fetchNewProblems();
+                            }
+                        }}
+                    />
+                )}
                 <Button variant="secondary">
                     <Link href="/protected/method">Get started solving</Link>
                 </Button>

@@ -3,7 +3,7 @@ module.exports = {
         collect: {
             url: ['http://localhost:3000' /* Add other pages to test */],
             startServerCommand: 'npm start',
-            startServerReadyPattern: 'ready on',
+            startServerReadyPattern: 'ready in',
             startServerReadyTimeout: 30000,
         },
         assert: {

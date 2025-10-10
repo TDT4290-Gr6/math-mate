@@ -6,56 +6,61 @@ import {
     CardDescription,
     CardFooter,
     CardHeader,
-    CardTitle,
 } from '@/components/ui/card';
 import SubjectSelect from '@/components/ui/subject-select';
 import CountrySelect from '@/components/country-select';
+import { Button } from '@/components/ui/button';
+import WideLogo from '@/components/wide-logo';
+import Header from '@/components/ui/header';
 import { ChevronRight } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
 
 export default function StartPage() {
     return (
-        <div className="flex min-h-screen items-center justify-center">
-            <CountrySelect />
-            <Card className="relative w-2xl p-5">
-                <CardHeader>
-                    <CardTitle>
-                        <Image
-                            src="/wide-logo-light.svg" // TODO: dynamically switch between light and dark mode logos
-                            alt="MathMate"
-                            width={(313 * 2) / 3}
-                            height={(110 * 2) / 3}
-                            className="m-2"
-                        />
-                    </CardTitle>
-                    <CardDescription className="relative">
-                        This website is made to help students learn math in a
-                        simple and supportive way. You can explore step-by-step
-                        solutions to math problems, so you not only see the
-                        answer but also understand how to get there.
-                        <div className="bg-primary absolute top-0 -left-15 h-full w-8 rounded-sm"></div>
-                    </CardDescription>
-                </CardHeader>
-                <CardContent className="flex flex-col items-center gap-4">
-                    <p>
-                        Choose which categories of math you want to work with:
-                    </p>
-                    <div className="flex flex-wrap justify-center gap-2">
-                        <SubjectSelect size="large" />
-                    </div>
-                    Ready? Then press {'"Start Practicing"'} and get your first
-                    math question.
-                </CardContent>
-                <CardFooter>
-                    <Link
-                        href="/protected/problem"
-                        className="bg-primary hover:bg-primary/90 text-background absolute right-24 -bottom-5 flex gap-2 rounded-full px-6 py-2"
-                    >
-                        Start Practicing <ChevronRight className="-mr-2" />
-                    </Link>
-                </CardFooter>
-            </Card>
-        </div>
+        <>
+            <Header
+                variant="simple"
+                className="fixed top-0 right-0 left-0 z-10"
+            />
+            <div className="flex min-h-screen flex-col items-center justify-center">
+                <CountrySelect />
+                <Card className="relative w-2xl p-5">
+                    <CardHeader>
+                        <WideLogo className="m-2 h-18 w-auto" />
+                        <CardDescription className="text-foreground relative text-base">
+                            This website is made to help students learn math in
+                            a simple and supportive way. You can explore
+                            step-by-step solutions to math problems, so you not
+                            only see the answer but also understand how to get
+                            there.
+                            <div className="bg-accent absolute top-0 -left-15 h-full w-8 rounded-sm"></div>
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex flex-col items-center gap-4">
+                        <p>
+                            Choose which categories of math you want to work
+                            with:
+                        </p>
+                        <div className="flex flex-wrap justify-center gap-2">
+                            <SubjectSelect size="large" />
+                        </div>
+                        Ready? Then press {'"Start Practicing"'} and get your
+                        first math problem.
+                    </CardContent>
+                    <CardFooter>
+                        <Button
+                            asChild
+                            variant="secondary"
+                            className="absolute right-24 -bottom-4 gap-2"
+                        >
+                            <Link href="/protected/problem">
+                                Start Practicing{' '}
+                                <ChevronRight className="-mr-1" />
+                            </Link>
+                        </Button>
+                    </CardFooter>
+                </Card>
+            </div>
+        </>
     );
 }
