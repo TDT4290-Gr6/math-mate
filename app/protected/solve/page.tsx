@@ -170,7 +170,7 @@ export default function SolvingPage() {
                     </div>
                     <div className="flex-end mt-4 flex w-full justify-center gap-2">
                         <Button
-                            onClick={() => alert("Go to answer button clicked")}
+                            onClick={() => alert('Go to answer button clicked')}
                             className="w-1/4 rounded-full"
                             variant="default"
                         >
