@@ -3,3 +3,9 @@ export class InputParseError extends Error {
         super(message, options);
     }
 }
+
+export class DatabaseOperationError extends Error {
+    constructor(message: string, options?: ErrorOptions) {
+        super(message, options);
+    }
+}

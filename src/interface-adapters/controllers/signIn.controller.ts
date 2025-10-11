@@ -1,4 +1,4 @@
-import { ICreateUserUseCase } from '@/application/use-cases/create-user.use-case';
+import { ISignInUseCase } from '@/application/use-cases/sign-in.use-case';
 import { InputParseError } from '@/entities/errors/common';
 import { z } from 'zod';
 
@@ -9,7 +9,7 @@ const inputSchema = z.object({
 export type ISignInController = ReturnType<typeof signInController>;
 
 export const signInController =
-    (createUserUseCase: ICreateUserUseCase) =>
+    (signInUseCase: ISignInUseCase) =>
     async (input: z.infer<typeof inputSchema>) => {
         // SignInController only syncs the user with the database, session handling is done by the authentication service
         // check authentication
@@ -24,7 +24,7 @@ export const signInController =
 
         // call use case
         const { uuid } = result.data;
-        const user = await createUserUseCase(uuid);
+        const user = await signInUseCase(uuid);
 
         return { userId: user.id };
     };

@@ -1,8 +1,6 @@
-import { ISignInController } from '@/interface-adapters/controllers/signIn.controller';
 import GithubProvider from 'next-auth/providers/github';
 import NextAuth, { NextAuthOptions } from 'next-auth';
-import { container } from '@/di/container';
-import { DI_SYMBOLS } from '@/di/types';
+import { getInjection } from '@/di/container';
 
 if (!process.env.NEXT_AUTH_GITHUB_ID || !process.env.NEXT_AUTH_GITHUB_SECRET) {
     throw new Error(
@@ -23,19 +21,32 @@ export const authOptions: NextAuthOptions = {
     },
     callbacks: {
         async signIn({ user }) {
-            const signInController = container.get<ISignInController>(
-                DI_SYMBOLS.ISignInController,
-            );
+            const signInController = getInjection('ISignInController');
 
             try {
-                await signInController({
+                const { userId } = await signInController({
                     uuid: user.id + '',
                 });
+                user.id = '' + userId;
             } catch (error) {
                 console.error('[nextauth] signIn error', error);
                 return false;
             }
             return true;
+        },
+        async session({ session, token }) {
+            // if we stored a userId on the token during signIn, copy it into the session
+            if (token?.userId && session.user) {
+                session.user = { id: token.userId };
+            }
+            console.log('session callback', { session });
+
+            return session;
+        },
+        async jwt({ token, user }) {
+            // when the user object exists (on initial sign in), persist their id to the token
+            if (user?.id) token.userId = user.id;
+            return token;
         },
     },
 };
