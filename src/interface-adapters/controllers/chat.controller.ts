@@ -2,7 +2,6 @@ import { ISendChatMessageUseCase } from '@/application/use-cases/send-chat-messa
 import { IAuthenticationService } from '@/application/services/auth.service.interface';
 import { UnauthenticatedError } from '@/entities/errors/auth';
 
-
 /**
  * The type alias representing the structure of the SendChatMessageController factory.
  * It infers the return type of the `sendChatMessageController` function, ensuring
@@ -11,7 +10,6 @@ import { UnauthenticatedError } from '@/entities/errors/auth';
 export type ISendChatMessageController = ReturnType<
     typeof sendChatMessageController
 >;
-
 
 /**
  * Factory function that creates a controller responsible for handling chat message requests.

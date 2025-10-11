@@ -2,7 +2,6 @@
 
 import { getInjection } from '@/di/container';
 
-
 /**
  * Sends a user message to the chat controller and returns the AI assistant's response.
  *
