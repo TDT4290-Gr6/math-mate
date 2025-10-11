@@ -1,13 +1,13 @@
 import type { ICreateCountryController } from '@/interface-adapters/controllers/create-country.controller';
 import type { ICountriesRepository } from '@/application/repositories/countries.repository.interface';
+import { ISendChatMessageController } from '@/interface-adapters/controllers/chat.controller';
+import { ISendChatMessageUseCase } from '@/application/use-cases/send-chat-message.use-case';
 import type { ICreateCountryUseCase } from '@/application/use-cases/create-country.use-case';
 import type { IAuthenticationService } from '@/application/services/auth.service.interface';
 import { IUsersRepository } from '@/application/repositories/users.repository.interface';
 import { ISignInController } from '@/interface-adapters/controllers/signIn.controller';
 import { ICreateUserUseCase } from '@/application/use-cases/create-user.use-case';
-import { ISendChatMessageUseCase } from '@/application/use-cases/send-chat-message.use-case';
 import { IChatService } from '@/application/services/chat.service.interface';
-import { ISendChatMessageController } from '@/interface-adapters/controllers/chat.controller';
 
 export const DI_SYMBOLS = {
     // Services

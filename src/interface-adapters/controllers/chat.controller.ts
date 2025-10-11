@@ -10,12 +10,11 @@ export const sendChatMessageController = (
     authService: IAuthenticationService,
     sendChatUseCase: ISendChatMessageUseCase,
 ) => {
-
     return async (message: string): Promise<string> => {
         const isAuthenticated = await authService.isAuthenticated();
-            if (!isAuthenticated) {
-                throw new UnauthenticatedError('User must be logged in.');
-            }
+        if (!isAuthenticated) {
+            throw new UnauthenticatedError('User must be logged in.');
+        }
         // Input validation
         if (typeof message !== 'string' || message.trim().length === 0) {
             throw new Error('The message is not valid');

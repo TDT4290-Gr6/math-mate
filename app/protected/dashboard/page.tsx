@@ -1,12 +1,10 @@
 'use client';
 
+import { sendMessageAction } from './actions';
 import Header from '@/components/ui/header';
 import Link from 'next/link';
 import React from 'react';
-import { sendMessageAction } from './actions';
 export default function DashboardPage() {
-
-
     const [messages, setMessages] = React.useState<
         { role: 'user' | 'assistant'; content: string }[]
     >([]);
@@ -22,12 +20,18 @@ export default function DashboardPage() {
 
         try {
             const reply = await sendMessageAction(input);
-            setMessages((prev) => [...prev, { role: 'assistant', content: reply }]);
+            setMessages((prev) => [
+                ...prev,
+                { role: 'assistant', content: reply },
+            ]);
         } catch (err) {
             console.error(err);
             setMessages((prev) => [
-            ...prev,
-            { role: 'assistant', content: 'Error: Unable to get response.' },
+                ...prev,
+                {
+                    role: 'assistant',
+                    content: 'Error: Unable to get response.',
+                },
             ]);
         } finally {
             setIsSending(false);
