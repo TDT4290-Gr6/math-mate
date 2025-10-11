@@ -8,17 +8,26 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog';
 import { CountrySelectDropdown } from './country-select-dropdown';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { getCountry } from '@/actions';
 import Title from './ui/title';
 
 export default function CountrySelect() {
-    const countryIsSelected = false; // TODO: Check with backend if country has been selected
-    const [open, setOpen] = useState(!countryIsSelected);
+    const [open, setOpen] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
-    function handleSubmit(country: string) {
-        // TODO: Tell backend what country the user selected
-        console.log(country);
-        setOpen(false);
+    useEffect(() => {
+        getCountry()
+            .then((countryId) => {
+                if (!countryId) setOpen(true);
+            })
+            .catch(() =>
+                setError('Failed to get country. Please try again later.'),
+            );
+    }, []);
+
+    if (error) {
+        return <p className="text-red-500">{error}</p>;
     }
 
     return (
@@ -38,7 +47,7 @@ export default function CountrySelect() {
                         what is your country of residence:
                     </DialogDescription>
                 </DialogHeader>
-                <CountrySelectDropdown onSubmit={handleSubmit} />
+                <CountrySelectDropdown setOpen={setOpen} />
             </DialogContent>
         </Dialog>
     );
