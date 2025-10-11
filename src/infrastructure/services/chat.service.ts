@@ -16,7 +16,6 @@ export class ChatService implements IChatService {
         const openAIMessages = messages.map((m) => ({
             role: m.role,
             content: m.content,
-
         }));
 
         const response = await this.openai.chat.completions.create({

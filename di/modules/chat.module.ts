@@ -1,10 +1,10 @@
-import { sendChatMessageUseCase } from '@/application/use-cases/send-chat-message.use-case';
 import { sendChatMessageController } from '@/interface-adapters/controllers/chat.controller';
-import { ChatService } from '@/infrastructure/services/chat.service';
-import { DI_SYMBOLS } from '@/di/types';
+import { sendChatMessageUseCase } from '@/application/use-cases/send-chat-message.use-case';
 import { IAuthenticationService } from '@/application/services/auth.service.interface';
+import { ChatService } from '@/infrastructure/services/chat.service';
 import { createModule } from '@evyweb/ioctopus';
 import { getInjection } from '../container';
+import { DI_SYMBOLS } from '@/di/types';
 
 export const chatModule = () => {
     const module = createModule();

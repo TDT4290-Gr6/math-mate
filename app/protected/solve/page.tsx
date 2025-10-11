@@ -7,11 +7,11 @@ import ChatbotWindow, {
 import ProblemCard from '@/components/ui/problem-card';
 import ChatToggle from '@/components/chat-toggle';
 import { Button } from '@/components/ui/button';
+import { sendMessageAction } from './actions';
 import Header from '@/components/ui/header';
 import React, { useState } from 'react';
 import Steps from '@/components/steps';
 import { cn } from '@/lib/utils';
-import { sendMessageAction } from './actions';
 
 // Privacy notice for chat
 const PRIVACY_INITIAL_MESSAGE: ChatMessage = {
@@ -57,7 +57,6 @@ const mockSteps: Step[] = [
     },
 ];
 
-
 /**
  * SolvingPage
  *
@@ -74,7 +73,6 @@ export default function SolvingPage() {
     });
     const [isLoading, setIsLoading] = useState(false);
     const [input, setInput] = React.useState('');
-
 
     // Listen for the chat-toggle event
     React.useEffect(() => {
