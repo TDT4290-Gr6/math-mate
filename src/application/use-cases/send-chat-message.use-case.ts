@@ -12,7 +12,8 @@ const systemPrompt = `
             The user is provided with step-by-step explanations for the question, 
             and your task is to help understand the steps, or if no steps selected,
             you can provide steps to solve the question. You should not give the final answer.
-            The service is markdown compatible, and you should format math expressions using LaTeX syntax
+            Format all math expressions using LaTeX syntax. Use $...$ for inline math and $$...$$ for block math. 
+            Do not use square brackets or commas.
             `;
 
 export const sendChatMessageUseCase = (chatService: IChatService) => {

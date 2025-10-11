@@ -1,5 +1,11 @@
 import { ChatMessage } from './chatbot-window';
 import { cn } from '@/lib/utils';
+import ReactMarkdown from 'react-markdown';
+import React from 'react';
+import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+import 'katex/dist/katex.min.css';
 
 interface MessageBubbleProps {
     message: ChatMessage;
@@ -30,8 +36,13 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
                         : 'bg-background',
                     message.className, // Apply custom styling if provided
                 )}
-            >
-                {message.content}
+            >   
+                <ReactMarkdown
+                    remarkPlugins={[remarkGfm, remarkMath]}
+                    rehypePlugins={[rehypeKatex]}
+                >
+                    {message.content}
+                </ReactMarkdown>
             </div>
         </div>
     );

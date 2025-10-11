@@ -46,7 +46,7 @@ export const DI_SYMBOLS = {
 export interface DI_RETURN_TYPES {
     // Services
     IAuthenticationService: IAuthenticationService;
-    [DI_SYMBOLS.IChatService]: IChatService;
+    IChatService: IChatService;
 
     // Repositories
     ICountriesRepository: ICountriesRepository;
@@ -59,12 +59,12 @@ export interface DI_RETURN_TYPES {
     ICreateUserUseCase: ICreateUserUseCase;
     ISignInUseCase: ISignInUseCase;
     ISetCountryUseCase: ISetCountryUseCase;
-    [DI_SYMBOLS.ISendChatMessageUseCase]: ISendChatMessageUseCase;
+    ISendChatMessageUseCase: ISendChatMessageUseCase;
 
     // Controllers
     ICreateCountryController: ICreateCountryController;
     IGetCountriesController: IGetCountriesController;
     ISignInController: ISignInController;
     ISetCountryController: ISetCountryController;
-    [DI_SYMBOLS.ISendChatMessageController]: ISendChatMessageController;
+    ISendChatMessageController: ISendChatMessageController;
 }

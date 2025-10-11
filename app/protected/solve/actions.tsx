@@ -1,14 +1,10 @@
 'use server';
 
-import { ISendChatMessageController } from '@/interface-adapters/controllers/chat.controller';
-import { container } from '@/di/container';
-import { DI_SYMBOLS } from '@/di/types';
+import { getInjection } from '@/di/container';
 
 export async function sendMessageAction(message: string): Promise<string> {
     try {
-        const chatController = container.get<ISendChatMessageController>(
-            DI_SYMBOLS.ISendChatMessageController,
-        );
+        const chatController = getInjection('ISendChatMessageController');
 
         const reply = await chatController(message);
         return reply;
