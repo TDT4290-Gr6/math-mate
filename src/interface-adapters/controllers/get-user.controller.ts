@@ -17,7 +17,8 @@ export const getUserController =
             throw new UnauthenticatedError('User must be logged in.');
 
         const userId = await authenticationService.getCurrentUserId();
-        if (userId == null) throw new UnauthenticatedError('User id is not set.');
+        if (userId == null)
+            throw new UnauthenticatedError('User id is not set.');
 
         const user = await getUserUseCase(userId);
         if (!user) throw new InputParseError('User not found');
