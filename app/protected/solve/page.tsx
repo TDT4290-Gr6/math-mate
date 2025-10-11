@@ -88,6 +88,12 @@ export default function SolvingPage() {
         }
     };
 
+    /**
+     * Handles sending a message from the user to the chat service and updating the chat UI.
+     * It handle the loading state and appends both user and assistant messages to the chat history.
+     *
+     * @param {string} message - The content of the message to send.
+     */
     const handleSendMessage = async (message: string) => {
         const userMessage: ChatMessage = {
             chatID: `user-${Date.now()}`,
