@@ -7,6 +7,7 @@ import ChatbotWindow, {
 import ProblemCard from '@/components/ui/problem-card';
 import ChatToggle from '@/components/chat-toggle';
 import { Button } from '@/components/ui/button';
+import { sendMessageAction } from './actions';
 import Header from '@/components/ui/header';
 import React, { useState } from 'react';
 import Steps from '@/components/steps';
@@ -15,7 +16,7 @@ import { cn } from '@/lib/utils';
 // Privacy notice for chat
 const PRIVACY_INITIAL_MESSAGE: ChatMessage = {
     chatID: 'privacy-notice',
-    sender: 'bot',
+    sender: 'assistant',
     content:
         "Privacy Notice: Please do not share any personal information in this chat. I'm here to help you with math problems only!",
     timestamp: new Date(),
@@ -56,46 +57,6 @@ const mockSteps: Step[] = [
     },
 ];
 
-const mockChatHistory: ChatHistory = {
-    messages: [
-        {
-            chatID: '1',
-            sender: 'bot',
-            timestamp: new Date(),
-            content:
-                'Lorem ipsum dolor sit amet,consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-        },
-        {
-            chatID: '2',
-            sender: 'user',
-            timestamp: new Date(),
-            content:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-        },
-        {
-            chatID: '3',
-            sender: 'bot',
-            timestamp: new Date(),
-            content:
-                'Lorem ipsum dolor sit amet,consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-        },
-        {
-            chatID: '4',
-            sender: 'user',
-            timestamp: new Date(),
-            content:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-        },
-        {
-            chatID: '5',
-            sender: 'bot',
-            timestamp: new Date(),
-            content:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-        },
-    ],
-};
-
 /**
  * SolvingPage
  *
@@ -107,9 +68,11 @@ export default function SolvingPage() {
     const [currentStep, setCurrentStep] = useState(1);
     const totalSteps = mockSteps.length;
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
-    const [chatHistory, setChatHistory] =
-        useState<ChatHistory>(mockChatHistory);
+    const [chatHistory, setChatHistory] = React.useState<ChatHistory>({
+        messages: [],
+    });
     const [isLoading, setIsLoading] = useState(false);
+    const [input, setInput] = React.useState('');
 
     // Listen for the chat-toggle event
     React.useEffect(() => {
@@ -125,6 +88,12 @@ export default function SolvingPage() {
         }
     };
 
+    /**
+     * Handles sending a message from the user to the chat service and updating the chat UI.
+     * It handle the loading state and appends both user and assistant messages to the chat history.
+     *
+     * @param {string} message - The content of the message to send.
+     */
     const handleSendMessage = async (message: string) => {
         const userMessage: ChatMessage = {
             chatID: `user-${Date.now()}`,
@@ -132,14 +101,23 @@ export default function SolvingPage() {
             content: message,
             timestamp: new Date(),
         };
-
         setChatHistory((prev) => ({
             messages: [...prev.messages, userMessage],
         }));
+        setInput('');
 
         setIsLoading(true);
         try {
-            /* TO-DO: implement API call to get reponse for chatbot */
+            const reply = await sendMessageAction(message);
+            const assistantMessage: ChatMessage = {
+                chatID: `assistant-${Date.now()}`,
+                sender: 'assistant',
+                content: reply,
+                timestamp: new Date(),
+            };
+            setChatHistory((prev) => ({
+                messages: [...prev.messages, assistantMessage],
+            }));
         } catch (error) {
             console.log(error);
         } finally {

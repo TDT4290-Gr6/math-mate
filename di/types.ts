@@ -5,6 +5,8 @@ import type { ISetCountryController } from '@/interface-adapters/controllers/set
 import type { ISolvesRepository } from '@/application/repositories/solves.repository.interface';
 import type { IGetUserController } from '@/interface-adapters/controllers/get-user.controller';
 import type { IUsersRepository } from '@/application/repositories/users.repository.interface';
+import { ISendChatMessageController } from '@/interface-adapters/controllers/chat.controller';
+import { ISendChatMessageUseCase } from '@/application/use-cases/send-chat-message.use-case';
 import type { ICreateCountryUseCase } from '@/application/use-cases/create-country.use-case';
 import type { ISignInController } from '@/interface-adapters/controllers/signIn.controller';
 import type { IAuthenticationService } from '@/application/services/auth.service.interface';
@@ -13,6 +15,7 @@ import type { ISetCountryUseCase } from '@/application/use-cases/set-country.use
 import type { ICreateUserUseCase } from '@/application/use-cases/create-user.use-case';
 import type { IGetUserUseCase } from '@/application/use-cases/get-user.use-case';
 import type { ISignInUseCase } from '@/application/use-cases/sign-in.use-case';
+import { IChatService } from '@/application/services/chat.service.interface';
 
 export const DI_SYMBOLS = {
     // Services
@@ -29,6 +32,7 @@ export const DI_SYMBOLS = {
     ICreateUserUseCase: Symbol.for('ICreateUserUseCase'),
     ISignInUseCase: Symbol.for('ISignInUseCase'),
     ISetCountryUseCase: Symbol.for('ISetCountryUseCase'),
+    ISendChatMessageUseCase: Symbol.for('ISendChatMessageUseCase'),
     IGetUserUseCase: Symbol.for('IGetUserUseCase'),
 
     // Controllers
@@ -36,12 +40,17 @@ export const DI_SYMBOLS = {
     IGetCountriesController: Symbol.for('IGetCountriesController'),
     ISignInController: Symbol.for('ISignInController'),
     ISetCountryController: Symbol.for('ISetCountryController'),
+    ISendChatMessageController: Symbol.for('ISendChatMessageController'),
+
+    // Services
+    IChatService: Symbol.for('IChatService'),
     IGetUserController: Symbol.for('IGetUserController'),
 };
 
 export interface DI_RETURN_TYPES {
     // Services
     IAuthenticationService: IAuthenticationService;
+    IChatService: IChatService;
 
     // Repositories
     ICountriesRepository: ICountriesRepository;
@@ -54,6 +63,7 @@ export interface DI_RETURN_TYPES {
     ICreateUserUseCase: ICreateUserUseCase;
     ISignInUseCase: ISignInUseCase;
     ISetCountryUseCase: ISetCountryUseCase;
+    ISendChatMessageUseCase: ISendChatMessageUseCase;
     IGetUserUseCase: IGetUserUseCase;
 
     // Controllers
@@ -61,5 +71,6 @@ export interface DI_RETURN_TYPES {
     IGetCountriesController: IGetCountriesController;
     ISignInController: ISignInController;
     ISetCountryController: ISetCountryController;
+    ISendChatMessageController: ISendChatMessageController;
     IGetUserController: IGetUserController;
 }

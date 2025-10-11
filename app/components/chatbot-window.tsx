@@ -5,13 +5,14 @@ import { cn } from '@/lib/utils';
 
 export interface ChatMessage {
     chatID: string;
-    sender: 'user' | 'bot';
+    sender: 'user' | 'assistant';
     content: string;
     timestamp: Date;
     className?: string;
 }
 
 export interface ChatHistory {
+    role: 'user' | 'assistant';
     messages: Array<ChatMessage>;
 }
 
