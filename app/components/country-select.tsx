@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/dialog';
 import { CountrySelectDropdown } from './country-select-dropdown';
 import { useEffect, useState } from 'react';
-import { getCountry } from 'app/actions';
+import { getCountry } from '@/actions';
 import Title from './ui/title';
 
 export default function CountrySelect() {

@@ -18,7 +18,7 @@ export const setCountryController =
             throw new UnauthenticatedError('User must be logged in.');
 
         const id = await authenticationService.getCurrentUserId();
-        if (!id) throw new UnauthenticatedError('User must be logged in.');
+        if (!id) throw new UnauthenticatedError('User id is not set.');
 
         // validate input
         const result = inputSchema.safeParse(input);

@@ -19,8 +19,8 @@ import {
     PopoverTrigger,
 } from '@/components/ui/popover';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { getCountries, setCountry } from '../actions';
 import { Check, ChevronsUpDown } from 'lucide-react';
+import { getCountries, setCountry } from '@/actions';
 import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
