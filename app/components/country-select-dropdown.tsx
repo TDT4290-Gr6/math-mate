@@ -49,6 +49,10 @@ export function CountrySelectDropdown({ setOpen }: CountrySelectDropdownProps) {
     const selectedCountry = form.watch('countryId');
 
     useEffect(() => {
+        if (selectedCountry) form.clearErrors('countryId');
+    }, [selectedCountry, form]);
+
+    useEffect(() => {
         getCountries()
             .then((countries) => setCountries(countries))
             .catch(() => {
@@ -151,6 +155,7 @@ export function CountrySelectDropdown({ setOpen }: CountrySelectDropdownProps) {
                 <Button
                     type="submit"
                     variant="secondary"
+                    aria-disabled={!selectedCountry}
                     // Have button appear as disabled if no country is selected
                     className={cn(
                         'w-60',
