@@ -5,6 +5,9 @@ import type { IAuthenticationService } from '@/application/services/auth.service
 import { IUsersRepository } from '@/application/repositories/users.repository.interface';
 import { ISignInController } from '@/interface-adapters/controllers/signIn.controller';
 import { ICreateUserUseCase } from '@/application/use-cases/create-user.use-case';
+import { ISendChatMessageUseCase } from '@/application/use-cases/send-chat-message.use-case';
+import { IChatService } from '@/application/services/chat.service.interface';
+import { ISendChatMessageController } from '@/interface-adapters/controllers/chat.controller';
 
 export const DI_SYMBOLS = {
     // Services
@@ -17,15 +20,21 @@ export const DI_SYMBOLS = {
     // Use Cases
     ICreateCountryUseCase: Symbol.for('ICreateCountryUseCase'),
     ICreateUserUseCase: Symbol.for('ICreateUserUseCase'),
+    ISendChatMessageUseCase: Symbol.for('ISendChatMessageUseCase'),
 
     // Controllers
     ICreateCountryController: Symbol.for('ICreateCountryController'),
     ISignInController: Symbol.for('ISignInController'),
+    ISendChatMessageController: Symbol.for('ISendChatMessageController'),
+
+    // Services
+    IChatService: Symbol.for('IChatService'),
 };
 
 export interface Registry {
     // Services
     [DI_SYMBOLS.IAuthenticationService]: IAuthenticationService;
+    [DI_SYMBOLS.IChatService]: IChatService;
 
     // Repositories
     [DI_SYMBOLS.ICountriesRepository]: ICountriesRepository;
@@ -34,8 +43,10 @@ export interface Registry {
     // Use Cases
     [DI_SYMBOLS.ICreateCountryUseCase]: ICreateCountryUseCase;
     [DI_SYMBOLS.ICreateUserUseCase]: ICreateUserUseCase;
+    [DI_SYMBOLS.ISendChatMessageUseCase]: ISendChatMessageUseCase;
 
     // Controllers
     [DI_SYMBOLS.ICreateCountryController]: ICreateCountryController;
     [DI_SYMBOLS.ISignInController]: ISignInController;
+    [DI_SYMBOLS.ISendChatMessageController]: ISendChatMessageController;
 }

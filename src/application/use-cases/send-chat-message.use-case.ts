@@ -15,13 +15,10 @@ const systemPrompt = `
             The service is markdown compatible, and you should format math expressions using LaTeX syntax
             `;
 
-export const sendChatMessageUseCase = (chatService?: IChatService) => {
+export const sendChatMessageUseCase = (chatService: IChatService) => {
     const conversation: ChatMessage[] = [
         { role: 'system', content: systemPrompt },
     ];
-    const service =
-        chatService ??
-        new (require('@/infrastructure/services/chat.service').ChatService)();
 
     return async (message: string) => {
         conversation.push({ role: 'user', content: message });
@@ -37,7 +34,7 @@ export const sendChatMessageUseCase = (chatService?: IChatService) => {
         }
 
         // Call chat service to get response
-        const botReply = await service.sendMessage(conversation);
+        const botReply = await chatService.sendMessage(conversation);
         conversation.push({ role: 'assistant', content: botReply });
         return botReply;
     };

@@ -1,12 +1,12 @@
 'use client';
 
-import { sendChatMessageController } from '@/interface-adapters/controllers/chat.controller';
 import Header from '@/components/ui/header';
 import Link from 'next/link';
 import React from 'react';
-import { set } from 'zod';
-
+import { sendMessageAction } from './actions';
 export default function DashboardPage() {
+
+
     const [messages, setMessages] = React.useState<
         { role: 'user' | 'assistant'; content: string }[]
     >([]);
@@ -21,25 +21,13 @@ export default function DashboardPage() {
         setInput('');
 
         try {
-            const res = await fetch('/api/chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: input }),
-            });
-
-            const data = await res.json();
-            setMessages((prev) => [
-                ...prev,
-                { role: 'assistant', content: data.reply },
-            ]);
+            const reply = await sendMessageAction(input);
+            setMessages((prev) => [...prev, { role: 'assistant', content: reply }]);
         } catch (err) {
             console.error(err);
             setMessages((prev) => [
-                ...prev,
-                {
-                    role: 'assistant',
-                    content: 'Error: Unable to get response.',
-                },
+            ...prev,
+            { role: 'assistant', content: 'Error: Unable to get response.' },
             ]);
         } finally {
             setIsSending(false);

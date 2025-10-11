@@ -1,5 +1,6 @@
-import { sendChatMessageUseCase } from '@/application/use-cases/send-chat-message.use-case';
+import { ISendChatMessageUseCase } from '@/application/use-cases/send-chat-message.use-case';
 import { IAuthenticationService } from '@/application/services/auth.service.interface';
+import { UnauthenticatedError } from '@/entities/errors/auth';
 
 export type ISendChatMessageController = ReturnType<
     typeof sendChatMessageController
@@ -7,16 +8,17 @@ export type ISendChatMessageController = ReturnType<
 
 export const sendChatMessageController = (
     authService: IAuthenticationService,
+    sendChatUseCase: ISendChatMessageUseCase,
 ) => {
-    const sendChat = sendChatMessageUseCase();
 
     return async (message: string): Promise<string> => {
-        if (!authService.isAuthenticated()) {
-            throw new Error('User not authenticated');
-        }
+        const isAuthenticated = await authService.isAuthenticated();
+            if (!isAuthenticated) {
+                throw new UnauthenticatedError('User must be logged in.');
+            }
         // Input validation
         if (typeof message !== 'string' || message.trim().length === 0) {
-            throw new Error('Invalid message');
+            throw new Error('The message is not valid');
         }
         if (message.length > 1000) {
             throw new Error(
@@ -24,6 +26,6 @@ export const sendChatMessageController = (
             );
         }
 
-        return sendChat(message);
+        return sendChatUseCase(message);
     };
 };
