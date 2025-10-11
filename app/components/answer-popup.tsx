@@ -104,48 +104,52 @@ export default function AnswerPopup({
                         <Title title="Here's the answer:" />
                     </DialogTitle>
                     <DialogDescription asChild>
-                        <div className="flex h-40 w-full flex-col items-center justify-between">
-                            <div className="flex w-3/4 max-w-sm flex-1 items-center justify-center">
+                        <div className="flex h-40 w-full flex-col items-center justify-start">
+                            <div className="flex w-3/4 max-w-sm flex-1">
                                 {step === 'reveal' && (
-                                    <div
-                                        role="button"
-                                        tabIndex={0}
-                                        onClick={handleReveal}
-                                        onKeyDown={(e) => {
-                                            if (e.key === 'Enter' || e.key === ' ') {
-                                                e.preventDefault();
-                                                handleReveal();
-                                            }
-                                        }}
-                                        className="w-full cursor-pointer rounded-md border bg-white px-4 py-3 text-center text-gray-400 hover:ring-1 hover:ring-gray-200"
-                                        aria-label="Reveal answer"
-                                    >
-                                        Click to reveal answer
+                                    <div className="w-full text-center">
+                                        <p className="text-[var(--foreground)]">
+                                            Press the square below to see the
+                                            solution
+                                        </p>
+                                        <Button
+                                            tabIndex={0}
+                                            onClick={handleReveal}
+                                            onKeyDown={(e) => {
+                                                if (
+                                                    e.key === 'Enter' ||
+                                                    e.key === ' '
+                                                ) {
+                                                    e.preventDefault();
+                                                    handleReveal();
+                                                }
+                                            }}
+                                            className="my-3 h-12 w-full rounded-md bg-[var(--answer-card)] py-3 text-[var(--secondary-foreground)]"
+                                        >
+                                            Click to reveal answer
+                                        </Button>
                                     </div>
                                 )}
-
                                 {step === 'confirm' && (
-                                    <div className="w-full text-center">
-                                        <div className="mb-2">
+                                    <div className="w-full justify-start text-center">
+                                        <p className="text-[var(--foreground)]">
                                             Compare it with your work to see how
                                             close you got.
-                                        </div>
-                                        <div className="my-3 rounded-md border bg-gray-50 px-4 py-3 text-gray-900">
+                                        </p>
+                                        <div className="my-3 h-12 rounded-md bg-[var(--answer-card-secondary)] px-4 py-3 text-[var(--secondary-foreground)]">
                                             {answer}
                                         </div>
-                                        <div>
+                                        <p className="text-[var(--foreground)]">
                                             Did you arrive at the correct
                                             answer?
-                                        </div>
+                                        </p>
                                     </div>
                                 )}
-
                                 {step === 'difficulty' && (
                                     <div className="w-full text-center">
-                                        <div className="mb-2 text-sm">
+                                        <p className="mb-2 text-sm text-[var(--foreground)]">
                                             How difficult was this question?
-                                        </div>
-
+                                        </p>
                                         <div className="flex items-center justify-between gap-2">
                                             {[1, 2, 3, 4, 5].map((n) => {
                                                 const isActive =
@@ -160,11 +164,13 @@ export default function AnswerPopup({
                                                                 n,
                                                             )
                                                         }
+                                                        variant={
+                                                            isActive
+                                                                ? 'secondary'
+                                                                : 'default'
+                                                        }
                                                         className={cn(
                                                             'flex-1 rounded-none px-3 py-2',
-                                                            isActive
-                                                                ? 'bg-accent text-white'
-                                                                : 'bg-white text-gray-700',
                                                             n === 1 &&
                                                                 'rounded-l-full',
                                                             n === 5 &&
@@ -178,10 +184,10 @@ export default function AnswerPopup({
                                                 );
                                             })}
                                         </div>
-                                        <div className="mb-4 flex flex-row place-content-between px-4 pt-1 text-sm">
-                                            <div>Easy</div>
-                                            <div>Medium</div>
-                                            <div>Hard</div>
+                                        <div className="mb-4 flex flex-row place-content-between px-4 pt-1 text-sm text-[var(--foreground)]">
+                                            <p>Easy</p>
+                                            <p>Medium</p>
+                                            <p>Hard</p>
                                         </div>
                                     </div>
                                 )}
@@ -191,13 +197,14 @@ export default function AnswerPopup({
                                     <div className="flex gap-4">
                                         <Button
                                             className="w-32"
-                                            variant="secondary"
+                                            variant="default"
                                             onClick={() => handleConfirm(false)}
                                         >
                                             No
                                         </Button>
                                         <Button
                                             className="w-32"
+                                            variant="secondary"
                                             onClick={() => handleConfirm(true)}
                                         >
                                             Yes
@@ -208,7 +215,7 @@ export default function AnswerPopup({
                                 {step === 'difficulty' && (
                                     <div className="flex gap-4">
                                         <Button
-                                            variant="secondary"
+                                            variant="default"
                                             className="w-32"
                                             disabled={
                                                 selectedDifficulty === null
@@ -220,6 +227,7 @@ export default function AnswerPopup({
                                             Try again
                                         </Button>
                                         <Button
+                                            variant="secondary"
                                             className="w-32"
                                             disabled={
                                                 selectedDifficulty === null
