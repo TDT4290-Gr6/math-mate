@@ -16,7 +16,7 @@ import { cn } from '@/lib/utils';
 // Privacy notice for chat
 const PRIVACY_INITIAL_MESSAGE: ChatMessage = {
     chatID: 'privacy-notice',
-    sender: 'bot',
+    sender: 'assistant',
     content:
         "Privacy Notice: Please do not share any personal information in this chat. I'm here to help you with math problems only!",
     timestamp: new Date(),
