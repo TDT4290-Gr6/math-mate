@@ -5,8 +5,8 @@ import ChatbotWindow, {
     ChatMessage,
 } from '@/components/chatbot-window';
 import ProblemCard from '@/components/ui/problem-card';
-import React, { useEffect, useState } from 'react';
 import AnswerPopup from '@/components/answer-popup';
+import React, { useEffect, useState } from 'react';
 import ChatToggle from '@/components/chat-toggle';
 import { Button } from '@/components/ui/button';
 import { sendMessageAction } from './actions';
