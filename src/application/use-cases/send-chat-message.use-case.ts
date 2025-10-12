@@ -41,7 +41,7 @@ const systemPrompt = `
  *
  * Note: This store is not persistent and will reset if the server restarts.
  * For scalability or multi-instance deployment, consider using a shared external store (e.g., Redis or database).
- */      
+ */
 const conversationStore = new Map<number, ConversationMessage[]>();
 
 /**
@@ -54,7 +54,9 @@ export const sendChatMessageUseCase = (chatService: IChatService) => {
     return async (userID: number, message: string) => {
         let conversation = conversationStore.get(userID);
         if (!conversation) {
-            conversation = [{ success: true, role: 'system', content: systemPrompt }];
+            conversation = [
+                { success: true, role: 'system', content: systemPrompt },
+            ];
             conversationStore.set(userID, conversation);
         }
 
@@ -62,15 +64,14 @@ export const sendChatMessageUseCase = (chatService: IChatService) => {
 
         // Limit conversation history to last 5 messages plus system prompt
         const MAX_MESSAGES = 6; // 1 system + 5 user/assistant
-        
 
         const botReply = await chatService.sendMessage(conversation);
         conversation.push(botReply);
         if (conversation.length > MAX_MESSAGES) {
-                    const systemMessage = conversation[0];
-                    const recentMessages = conversation.slice(-(MAX_MESSAGES - 1));
-                    conversationStore.set(userID, [systemMessage, ...recentMessages]);
-                }
+            const systemMessage = conversation[0];
+            const recentMessages = conversation.slice(-(MAX_MESSAGES - 1));
+            conversationStore.set(userID, [systemMessage, ...recentMessages]);
+        }
         return botReply;
     };
 };

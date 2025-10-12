@@ -44,7 +44,7 @@ export default function ChatbotWindow({
     onClose,
     isLoading,
     initialMessage,
-    error
+    error,
 }: ChatbotWindowProps) {
     const [inputValue, setInputValue] = useState('');
     const containerRef = useRef<HTMLDivElement | null>(null);
@@ -70,7 +70,6 @@ export default function ChatbotWindow({
         // Scroll to bottom when adding new messages
         el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
     }, [chatHistory.messages.length]);
-
 
     return (
         <div>
@@ -116,8 +115,10 @@ export default function ChatbotWindow({
                     </div>
                 )}
             </div>
-            <div className="flex w-full px-4 rounded-lg">
-                <div className={`relative flex-1 ${error && "border border-[var(--destructive)] "} rounded-lg shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.2)]`}>
+            <div className="flex w-full rounded-lg px-4">
+                <div
+                    className={`relative flex-1 ${error && 'border border-[var(--destructive)]'} rounded-lg shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.2)]`}
+                >
                     <input
                         type="text"
                         value={inputValue}
@@ -147,7 +148,10 @@ export default function ChatbotWindow({
                     />
                 </div>
             </div>
-            <div className='flex  w-full justify-center items-end mt-4'> {error && <p className="text-[var(--destructive)]">{error}</p>}</div>
+            <div className="mt-4 flex w-full items-end justify-center">
+                {' '}
+                {error && <p className="text-[var(--destructive)]">{error}</p>}
+            </div>
         </div>
     );
 }

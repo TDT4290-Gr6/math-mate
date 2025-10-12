@@ -5,11 +5,11 @@ import ChatbotWindow, {
     ChatMessage,
 } from '@/components/chatbot-window';
 import ProblemCard from '@/components/ui/problem-card';
+import React, { useEffect, useState } from 'react';
 import ChatToggle from '@/components/chat-toggle';
 import { Button } from '@/components/ui/button';
 import { sendMessageAction } from './actions';
 import Header from '@/components/ui/header';
-import React, { useEffect, useState } from 'react';
 import Steps from '@/components/steps';
 import { cn } from '@/lib/utils';
 
@@ -149,7 +149,7 @@ export default function SolvingPage() {
                 }
             />
 
-            <div className="relative flex w-full flex-1 h-full overflow-hidden">
+            <div className="relative flex h-full w-full flex-1 overflow-hidden">
                 <div
                     className={cn(
                         'flex h-full flex-col items-center justify-between p-4',
