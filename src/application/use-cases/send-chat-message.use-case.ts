@@ -69,10 +69,10 @@ export const sendChatMessageUseCase = (chatService: IChatService) => {
 
         try {
             // Send to chat service
-            const botReply = await chatService.sendMessage(conversation);
+            const assistantReply = await chatService.sendMessage(conversation);
 
             // Add bot reply to conversation history
-            conversation.push(botReply);
+            conversation.push(assistantReply);
 
             // Limit conversation history
             const MAX_TURNS = 5; // 5 exchanges + system prompt
@@ -81,7 +81,7 @@ export const sendChatMessageUseCase = (chatService: IChatService) => {
             }
             conversationStore.set(userID, conversation);
 
-            return { success: true, message: botReply };
+            return { success: true, message: assistantReply };
         } catch (err: unknown) {
             // Rollback user message
             conversation.pop();
