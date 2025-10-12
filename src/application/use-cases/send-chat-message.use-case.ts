@@ -1,6 +1,4 @@
 import { IChatService } from '../services/chat.service.interface';
-import { Send } from 'lucide-react';
-
 /**
  * The type alias representing the structure of the send chat message use case.
  * This type allows dependency injection systems or controllers to infer the return type of the factory.

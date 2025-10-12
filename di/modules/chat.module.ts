@@ -16,8 +16,8 @@ import { DI_SYMBOLS } from '@/di/types';
  * Each dependency is bound to a unique DI symbol so that it can be injected into other modules or components
  * without requiring manual instantiation.
  *
- * The use of `toValue` ensures that these bindings are singletons within the container,
- * meaning each component is instantiated once and shared across the application lifecycle.
+ * The use of `toClass` and `toHigherOrderFunction` ensures that these bindings follow the container's
+ * configured lifecycle, with services typically instantiated once and shared across the application.
  *
  * @returns {Module} A configured IoC module containing all chat-related bindings.
  */
