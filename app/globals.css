@@ -76,6 +76,8 @@
     --sidebar-accent-foreground: oklch(0.6565 0.1862 39.4278);
     --sidebar-border: oklch(0.8853 0 0);
     --sidebar-ring: oklch(0.7071 0.0224 261.7494);
+    --chatbot: oklch(0.92 0.004 100);
+    --loading: oklch(94.681% 0.00445 77.997);
     --font-sans: Inter, sans-serif;
     --font-serif: Source Serif 4, serif;
     --font-mono: JetBrains Mono, monospace;
@@ -137,6 +139,8 @@
     --sidebar-accent-foreground: oklch(1 0 0);
     --sidebar-border: oklch(1 0 0);
     --sidebar-ring: oklch(0.551 0.0267 264.3277);
+    --chatbot: oklch(42.084% 0.00207 67.247);
+    --loading: oklch(31.882% 0.00333 48.206);
     --font-sans: Inter, sans-serif;
     --font-serif: Source Serif 4, serif;
     --font-mono: JetBrains Mono, monospace;
