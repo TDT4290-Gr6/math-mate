@@ -41,9 +41,17 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
     const [userId, setUserId] = useState<string | undefined>(undefined);
 
     useEffect(() => {
+        let cancelled = false;
         getUserId()
-            .then((id) => setUserId(id.toString()))
-            .catch(() => setUserId('Error'));
+            .then((id) => {
+                if (!cancelled) setUserId(id.toString());
+            })
+            .catch(() => {
+                if (!cancelled) setUserId('Failed to load');
+            });
+        return () => {
+            cancelled = true;
+        };
     }, []);
 
     // TODO: Implement logout functionality
@@ -74,7 +82,9 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                         <span className="font-semibold">User ID:</span>{' '}
                         <span
                             className={
-                                userId === 'Error' ? 'text-destructive' : ''
+                                userId === 'Failed to load'
+                                    ? 'text-destructive'
+                                    : ''
                             }
                         >
                             {userId ? (
