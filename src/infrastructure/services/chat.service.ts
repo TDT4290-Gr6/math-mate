@@ -23,7 +23,9 @@ export class ChatService implements IChatService {
         this.openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
     }
 
-    async sendMessage(messages: ConversationMessage[]): Promise<ConversationMessage> {
+    async sendMessage(
+        messages: ConversationMessage[],
+    ): Promise<ConversationMessage> {
         const openAIMessages = messages.map((m) => ({
             role: m.role,
             content: m.content,
@@ -34,7 +36,8 @@ export class ChatService implements IChatService {
                 model: 'gpt-5-mini',
                 messages: openAIMessages,
             });
-            const content = response.choices[0]?.message?.content ?? 'No response from AI';
+            const content =
+                response.choices[0]?.message?.content ?? 'No response from AI';
 
             return {
                 role: 'assistant',
@@ -43,7 +46,9 @@ export class ChatService implements IChatService {
             };
         } catch (error) {
             console.error('OpenAI API error:', error);
-            throw new Error('Failed to get response from chat service. Please try again.');
+            throw new Error(
+                'Failed to get response from chat service. Please try again.',
+            );
         }
     }
 }

@@ -1,8 +1,10 @@
-import { ConversationMessage, ISendChatMessageUseCase } from '@/application/use-cases/send-chat-message.use-case';
+import {
+    ConversationMessage,
+    ISendChatMessageUseCase,
+} from '@/application/use-cases/send-chat-message.use-case';
 import { IAuthenticationService } from '@/application/services/auth.service.interface';
-import { UnauthenticatedError } from '@/entities/errors/auth';
 import { Conversation } from 'openai/resources/conversations/conversations.mjs';
-
+import { UnauthenticatedError } from '@/entities/errors/auth';
 
 /**
  * The type alias representing the structure of the SendChatMessageController factory.
@@ -16,19 +18,19 @@ export type ISendChatMessageController = ReturnType<
 // Simple in-memory rate limiting per user
 const userMessageTimestamps = new Map<number, number[]>();
 const WINDOW_MS = 10_000; // 10 seconds
-const MAX_MESSAGES = 3;   // Max 3 messages per window
+const MAX_MESSAGES = 3; // Max 3 messages per window
 
 function canSendMessage(userID: number): boolean {
-  const now = Date.now();
-  const timestamps = userMessageTimestamps.get(userID) || [];
+    const now = Date.now();
+    const timestamps = userMessageTimestamps.get(userID) || [];
 
-  // Keep only timestamps within the window
-  const recent = timestamps.filter(ts => now - ts < WINDOW_MS);
+    // Keep only timestamps within the window
+    const recent = timestamps.filter((ts) => now - ts < WINDOW_MS);
 
-  if (recent.length >= MAX_MESSAGES) return false;
+    if (recent.length >= MAX_MESSAGES) return false;
 
-  userMessageTimestamps.set(userID, [...recent, now]);
-  return true;
+    userMessageTimestamps.set(userID, [...recent, now]);
+    return true;
 }
 
 /**
@@ -54,23 +56,32 @@ export const sendChatMessageController = (
             throw new UnauthenticatedError('User must be logged in.');
         }
         const userId = await authService.getCurrentUserId();
-        
+
         // Rate limiting
         if (!canSendMessage(userId!)) {
             return {
                 success: false,
                 role: 'assistant',
-                content: 'You are sending messages too quickly. Please wait a moment and try again.',
+                content:
+                    'You are sending messages too quickly. Please wait a moment and try again.',
             };
         }
 
         // Input validation
         if (typeof message !== 'string' || message.trim().length === 0) {
-            const error: ConversationMessage = { success: false, role: 'assistant', content: 'The message is not valid' };
+            const error: ConversationMessage = {
+                success: false,
+                role: 'assistant',
+                content: 'The message is not valid',
+            };
             return error;
         }
         if (message.length > 2000) {
-            const error: ConversationMessage = { success: false, role: 'assistant', content: 'Message exceeds maximum length of 2000 characters' };
+            const error: ConversationMessage = {
+                success: false,
+                role: 'assistant',
+                content: 'Message exceeds maximum length of 2000 characters',
+            };
             return error;
         }
         return sendChatUseCase(userId!, message);

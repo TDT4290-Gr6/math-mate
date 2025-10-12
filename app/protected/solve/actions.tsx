@@ -17,7 +17,9 @@ import { getInjection } from '@/di/container';
  *
  * @throws {Error} Throws a generic error if the chat controller fails or the message cannot be sent.
  */
-export async function sendMessageAction(message: string): Promise<ConversationMessage> {
+export async function sendMessageAction(
+    message: string,
+): Promise<ConversationMessage> {
     try {
         const chatController = getInjection('ISendChatMessageController');
 
@@ -26,10 +28,18 @@ export async function sendMessageAction(message: string): Promise<ConversationMe
     } catch (err: unknown) {
         if (err instanceof Error) {
             console.error('Failed to send message:', err.message);
-            return { success: false, role: 'assistant', content: 'Failed to send message. Please try again.' };
+            return {
+                success: false,
+                role: 'assistant',
+                content: 'Failed to send message. Please try again.',
+            };
         } else {
             console.error('Failed to send message:', err);
-            return { success: false, role: 'assistant', content: 'Failed to send message. Please try again.' };
-        } 
+            return {
+                success: false,
+                role: 'assistant',
+                content: 'Failed to send message. Please try again.',
+            };
+        }
     }
 }
