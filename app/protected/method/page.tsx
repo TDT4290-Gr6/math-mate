@@ -41,7 +41,7 @@ export default function MethodPage() {
             >
                 {problem?.methods.map((method) => (
                     <MethodCard
-                        key={method.id} 
+                        key={method.id}
                         title={method.title}
                         description={method.description}
                         buttonText="Get Started"

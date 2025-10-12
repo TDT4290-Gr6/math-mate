@@ -5,11 +5,10 @@ import { useProblemStore } from 'app/store/problem-store';
 import ProblemCard from '@/components/ui/problem-card';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { getProblems } from 'app/actions';
 import { Problem } from 'app/types';
-import { useRouter } from 'next/navigation';
-
 
 /**
  * Problem browsing page component that allows users to navigate through problems,
@@ -31,7 +30,7 @@ export default function ProblemPage() {
     const router = useRouter();
     const currentProblem = problems[currentIndex];
     const LIMIT = 10;
-    
+
     /**
      * Initial effect that loads saved subject preferences from localStorage
      * and fetches the initial set of problems
@@ -135,7 +134,7 @@ export default function ProblemPage() {
                     />
                 )}
                 <Button variant="secondary" onClick={goToMethodPage}>
-                  Get started solving
+                    Get started solving
                 </Button>
             </div>
         </div>
