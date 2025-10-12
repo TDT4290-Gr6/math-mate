@@ -2,13 +2,13 @@
 
 import SubjectSelectPopup from '@/components/subject-select-popup';
 import { useProblemStore } from 'app/store/problem-store';
+import type { Problem } from '@/entities/models/problem';
 import ProblemCard from '@/components/ui/problem-card';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { getProblems } from 'app/actions';
-import { Problem } from 'app/types';
 
 /**
  * Problem browsing page component that allows users to navigate through problems,

@@ -6,7 +6,8 @@ export function problemPresenter(problems: Problem[]) {
         problem: problem.problem,
         solution: problem.solution,
         subject: problem.subject,
-        title: problem.title,
+        level: problem.level,
         methods: problem.methods,
+        title: problem.title,
     }));
 }
