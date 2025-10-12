@@ -100,6 +100,6 @@ export function useChatbot() {
         sendMessage,
         isLoading,
         error,
-        setError, 
+        setError,
     };
 }

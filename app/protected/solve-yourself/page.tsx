@@ -11,7 +11,6 @@ import Title from '@/components/ui/title';
 import Link from 'next/link';
 import React from 'react';
 
-
 /**
  * SolveYourself
  *
