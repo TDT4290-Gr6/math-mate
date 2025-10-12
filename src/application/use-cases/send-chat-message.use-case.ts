@@ -62,16 +62,14 @@ export const sendChatMessageUseCase = (chatService: IChatService) => {
 
         conversation.push({ success: true, role: 'user', content: message });
 
-        // Limit conversation history to last 5 messages plus system prompt
-        const MAX_MESSAGES = 6; // 1 system + 5 user/assistant
-
+        // Limit conversation history to last 5 message exchanges plus system prompt
         const botReply = await chatService.sendMessage(conversation);
         conversation.push(botReply);
-        if (conversation.length > MAX_MESSAGES) {
-            const systemMessage = conversation[0];
-            const recentMessages = conversation.slice(-(MAX_MESSAGES - 1));
-            conversationStore.set(userID, [systemMessage, ...recentMessages]);
+        const MAX_TURNS = 5; // keep 5 user/assistant exchanges plus the system prompt
+        while (conversation.length > 1 + MAX_TURNS * 2) {
+            conversation.splice(1, 2);
         }
+        conversationStore.set(userID, conversation);
         return botReply;
     };
 };

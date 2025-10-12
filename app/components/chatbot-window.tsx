@@ -117,7 +117,10 @@ export default function ChatbotWindow({
             </div>
             <div className="flex w-full rounded-lg px-4">
                 <div
-                    className={`relative flex-1 ${error && 'border border-[var(--destructive)]'} rounded-lg shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.2)]`}
+                    className={cn(
+                        'relative flex-1 rounded-lg shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.2)]',
+                        error && 'border border-[var(--destructive)]',
+                    )}
                 >
                     <input
                         type="text"
