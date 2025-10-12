@@ -40,6 +40,7 @@ export default function ProblemPage() {
         const parsedSubjects = savedSubjects ? JSON.parse(savedSubjects) : [];
         setSubjects(parsedSubjects);
         fetchProblems(parsedSubjects);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const fetchProblems = async (subjects: string[]): Promise<number> => {
