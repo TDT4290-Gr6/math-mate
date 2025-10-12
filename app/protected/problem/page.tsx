@@ -1,27 +1,31 @@
 'use client';
 
 import SubjectSelectPopup from '@/components/subject-select-popup';
+import { useProblemStore } from 'app/store/problem-store';
 import ProblemCard from '@/components/ui/problem-card';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
 import { useEffect, useState } from 'react';
 import { getProblems } from 'app/actions';
-import Link from 'next/link';
+import { Problem } from 'app/types';
+import { useRouter } from 'next/navigation';
 
 export default function ProblemPage() {
-    const [problems, setProblems] = useState<
-        Awaited<ReturnType<typeof getProblems>>
-    >([]);
+    const [problems, setProblems] = useState<Problem[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [hasMore, setHasMore] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
     const [subjects, setSubjects] = useState([]);
+    const [error, setError] = useState<string | null>(null);
 
     const [isSubjectSelectOpen, setIsSubjectSelectOpen] = useState(false);
+    const setCurrentProblem = useProblemStore((state) => state.setProblem);
 
     const openSubjectSelect = () => setIsSubjectSelectOpen(true);
     const closeSubjectSelect = () => setIsSubjectSelectOpen(false);
-    const LIMIT = 5;
+    const LIMIT = 10;
+    const router = useRouter();
+    const currentProblem = problems[currentIndex];
 
     // Initial fetch
     useEffect(() => {
@@ -47,8 +51,8 @@ export default function ProblemPage() {
             }
 
             setProblems((prev) => [...prev, ...newProblems]);
-        } catch (error) {
-            console.error('Failed to fetch problems:', error);
+        } catch {
+            setError('Failed to get problems. Please try again later.');
         } finally {
             setIsLoading(false);
         }
@@ -63,7 +67,7 @@ export default function ProblemPage() {
                 await fetchProblems(subjects);
                 setCurrentIndex(nextIndex);
             }
-            // If no more problems to fetch, do nothing (can't go forward)
+            // If no more problems to fetch, do nothing (can't go forward), or render a message(TODO)
         } else {
             // If we already have this problem loaded, just move to it
             setCurrentIndex(nextIndex);
@@ -76,37 +80,18 @@ export default function ProblemPage() {
         }
     };
 
-    const currentProblem = problems[currentIndex];
-
     const fetchNewProblems = () => {
-        console.log('hei');
-
-        // // Reset all state
-        // setProblems([]);
-        // setCurrentIndex(0);
-        // setHasMore(true);
-
-        // // Update subjects
-        // const savedSubjects = localStorage.getItem('selectedSubjects');
-        // const newSubjects = savedSubjects ? JSON.parse(savedSubjects) : [];
-        // setSubjects(newSubjects);
-
-        // // Fetch fresh problems with new subjects
-        // setIsLoading(true);
-        // try {
-        //     const freshProblems = await getProblems(0, LIMIT, newSubjects);
-
-        //     if (freshProblems.length < LIMIT) {
-        //         setHasMore(false);
-        //     }
-
-        //     setProblems(freshProblems);
-        // } catch (error) {
-        //     console.error('Failed to fetch problems:', error);
-        // } finally {
-        //     setIsLoading(false);
-        // }
+        console.log('TODO');
     };
+
+    const goToMethodPage = () => {
+        setCurrentProblem(currentProblem); // Zustand
+        router.push('/protected/method');
+    };
+
+    if (error) {
+        return <p className="text-red-500">{error}</p>;
+    }
 
     return (
         <div className="flex min-h-screen flex-col items-center bg-[var(--background)] text-[var(--foreground)]">
@@ -141,8 +126,8 @@ export default function ProblemPage() {
                         }}
                     />
                 )}
-                <Button variant="secondary">
-                    <Link href="/protected/method">Get started solving</Link>
+                <Button variant="secondary" onClick={goToMethodPage}>
+                  Get started solving
                 </Button>
             </div>
         </div>
