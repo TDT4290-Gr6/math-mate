@@ -1,9 +1,9 @@
 import { sendChatMessageController } from '@/interface-adapters/controllers/chat.controller';
 import { sendChatMessageUseCase } from '@/application/use-cases/send-chat-message.use-case';
+import { MockChatService } from '@/infrastructure/services/chat.service.mock';
 import { ChatService } from '@/infrastructure/services/chat.service';
 import { createModule } from '@evyweb/ioctopus';
 import { DI_SYMBOLS } from '@/di/types';
-import { MockChatService } from '@/infrastructure/services/chat.service.mock';
 
 /**
  * Initializes and wires together all dependencies required for the chat feature.
@@ -34,7 +34,9 @@ export const chatModule = () => {
     // Bind UseCase with DI
     chatModule
         .bind(DI_SYMBOLS.ISendChatMessageUseCase)
-        .toHigherOrderFunction(sendChatMessageUseCase, [DI_SYMBOLS.IChatService]);
+        .toHigherOrderFunction(sendChatMessageUseCase, [
+            DI_SYMBOLS.IChatService,
+        ]);
 
     // Bind Controller with DI
     chatModule
