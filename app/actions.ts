@@ -32,3 +32,14 @@ export async function setCountry(countryId: number) {
         throw error;
     }
 }
+
+export async function getUserId() {
+    try {
+        const getUserController = getInjection('IGetUserController');
+        const user = await getUserController();
+        return user.id;
+    } catch (error) {
+        console.error('Failed to get user ID:', error);
+        throw error;
+    }
+}

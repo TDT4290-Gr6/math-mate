@@ -1,10 +1,11 @@
 'use client';
 
-import { UserRound, Moon, X } from 'lucide-react';
+import { UserRound, Moon, X, LoaderCircle } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 import { Switch } from '@/components/ui/switch';
 import { useTheme } from 'next-themes';
+import { getUserId } from '@/actions';
 import { Button } from './button';
-import React from 'react';
 
 interface SidebarMenuProps {
     onClose: () => void;
@@ -14,7 +15,7 @@ interface SidebarMenuProps {
  * SidebarMenu component.
  *
  * This component renders a sidebar on the right side of the screen containing:
- *   - User information (currently a placeholder for User ID)
+ *   - User ID
  *   - Settings section with a dark mode toggle
  *   - Logout button (currently logs to console)
  *   - List of previously solved math problems
@@ -36,6 +37,14 @@ interface SidebarMenuProps {
 export default function SidebarMenu({ onClose }: SidebarMenuProps) {
     // Theme handling
     const { theme, setTheme } = useTheme();
+
+    const [userId, setUserId] = useState<string | undefined>(undefined);
+
+    useEffect(() => {
+        getUserId()
+            .then((id) => setUserId(id.toString()))
+            .catch(() => setUserId('Error'));
+    }, []);
 
     // TODO: Implement logout functionality
     const handleLogout = () => {
@@ -62,7 +71,21 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                 <div className="flex items-center justify-between border-b">
                     {/* User ID display */}
                     <p>
-                        <span className="font-semibold">User ID:</span> TODO
+                        <span className="font-semibold">User ID:</span>{' '}
+                        <span
+                            className={
+                                userId === 'Error' ? 'text-destructive' : ''
+                            }
+                        >
+                            {userId ? (
+                                userId
+                            ) : (
+                                <LoaderCircle
+                                    className="inline animate-spin"
+                                    size={16}
+                                />
+                            )}
+                        </span>
                     </p>
 
                     {/* Close button */}
