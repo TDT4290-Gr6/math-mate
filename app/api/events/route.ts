@@ -1,14 +1,16 @@
-import { container } from '@/di/container';
+import { getInjection } from '@/di/container';
 import { NextResponse } from 'next/server';
-import { DI_SYMBOLS } from '@/di/types';
+
+interface IEventController {
+    handle: (body: unknown) => Promise<{ body: unknown; status: number } | unknown>;
+}
 
 export async function POST(request: Request) {
+   
     const body = await request.json().catch(() => null);
 
     try {
-        const createEventController = container.get(
-            DI_SYMBOLS.ICreateEventController,
-        );
+        const createEventController = getInjection("ICreateEventController");
 
         let result: { body: unknown; status: number };
 
@@ -27,10 +29,10 @@ export async function POST(request: Request) {
             }
         } else if (
             createEventController &&
-            typeof (createEventController as any).handle === 'function'
+            typeof (createEventController as IEventController).handle === 'function'
         ) {
             const controllerResult = await (
-                createEventController as any
+                createEventController as IEventController
             ).handle(body);
             if (
                 controllerResult &&
@@ -38,7 +40,7 @@ export async function POST(request: Request) {
                 'body' in controllerResult &&
                 'status' in controllerResult
             ) {
-                result = controllerResult;
+                result = controllerResult as { body: unknown; status: number };
             } else {
                 result = { body: controllerResult, status: 200 };
             }
