@@ -36,11 +36,13 @@ interface HeaderProps {
     variant?: 'simple' | 'problem';
     mathProblem?: React.ReactNode;
     className?: string;
+    showBackButton?: boolean;
 }
 export default function Header({
     variant = 'simple',
     mathProblem,
     className,
+    showBackButton = true,
 }: HeaderProps) {
     const [isOpen, setIsOpen] = useState(false);
     const router = useRouter();
@@ -80,7 +82,12 @@ export default function Header({
             <button
                 type="button"
                 aria-label="Go back"
-                className="flex size-10 cursor-pointer items-center justify-center"
+                aria-hidden={!showBackButton}
+                tabIndex={showBackButton ? 0 : -1}
+                className={cn(
+                    'flex size-10 cursor-pointer items-center justify-center',
+                    !showBackButton && 'invisible',
+                )}
                 onClick={() => router.back()}
             >
                 <ChevronLeft size={36} />
