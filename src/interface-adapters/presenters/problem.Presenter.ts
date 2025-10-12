@@ -1,4 +1,4 @@
-import { Problem } from '@/entities/models/problem';
+import type { Problem } from '@/entities/models/problem';
 
 export function problemPresenter(problems: Problem[]) {
     return problems.map((problem) => ({
