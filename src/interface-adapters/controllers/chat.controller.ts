@@ -1,7 +1,6 @@
 import { ConversationMessage, ISendChatMessageUseCase } from '@/application/use-cases/send-chat-message.use-case';
 import { IAuthenticationService } from '@/application/services/auth.service.interface';
 import { UnauthenticatedError } from '@/entities/errors/auth';
-import { Conversation } from 'openai/resources/conversations/conversations.mjs';
 
 
 /**
