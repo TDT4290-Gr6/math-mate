@@ -48,7 +48,10 @@ export const sendChatMessageController = (
             return { success: false, error: 'Invalid message format.' };
         }
         if (message.length > 2000) {
-            return { success: false, error: 'Message exceeds maximum length of 2000 characters.' };
+            return {
+                success: false,
+                error: 'Message exceeds maximum length of 2000 characters.',
+            };
         }
         return sendChatUseCase(userId!, message);
     };

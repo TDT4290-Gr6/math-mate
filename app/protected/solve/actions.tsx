@@ -1,6 +1,9 @@
 'use server';
 
-import { ConversationMessage, SendMessageResult } from '@/application/use-cases/send-chat-message.use-case';
+import {
+    ConversationMessage,
+    SendMessageResult,
+} from '@/application/use-cases/send-chat-message.use-case';
 import { getInjection } from '@/di/container';
 
 /**
