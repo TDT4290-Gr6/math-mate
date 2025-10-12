@@ -1,6 +1,26 @@
 'use server';
 
+import type { Problem } from '@/entities/models/problem';
 import { getInjection } from '@/di/container';
+
+export async function getProblems(
+    offset: number,
+    limit: number,
+    subjects: string[],
+): Promise<Problem[]> {
+    try {
+        const getProblemsController = getInjection('IGetProblemsController');
+        const problems = await getProblemsController({
+            offset,
+            limit,
+            subjects,
+        });
+        return problems;
+    } catch (error) {
+        console.error('Failed to get problems:', error);
+        throw error;
+    }
+}
 
 export async function getCountries() {
     try {
