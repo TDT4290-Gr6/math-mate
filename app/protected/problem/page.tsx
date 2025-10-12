@@ -102,11 +102,6 @@ export default function ProblemPage() {
         setCurrentProblem(currentProblem); // Zustand
         router.push('/protected/method');
     };
-
-    if (error) {
-        return <p className="text-red-500">{error}</p>;
-    }
-
     return (
         <div className="flex min-h-screen flex-col items-center bg-[var(--background)] text-[var(--foreground)]">
             <Header />
@@ -147,6 +142,7 @@ export default function ProblemPage() {
                 >
                     Get started solving
                 </Button>
+                {error && <p className="mt-4 text-red-500">{error}</p>}
             </div>
         </div>
     );
