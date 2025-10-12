@@ -19,7 +19,7 @@ export default function ProblemPage() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [hasMore, setHasMore] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
-    const [subjects, setSubjects] = useState([]);
+    const [subjects, setSubjects] = useState<string[]>([]);
     const [error, setError] = useState<string | null>(null);
 
     const [isSubjectSelectOpen, setIsSubjectSelectOpen] = useState(false);
