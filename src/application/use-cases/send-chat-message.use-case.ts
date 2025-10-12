@@ -92,6 +92,6 @@ export const sendChatMessageUseCase = (chatService: IChatService) => {
                 success: false,
                 error: 'Failed to get response from chat service. Please try again.',
             };
-    }
-  };
+        }
+    };
 };
