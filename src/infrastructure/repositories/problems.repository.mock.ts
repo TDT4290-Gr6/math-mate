@@ -8,7 +8,16 @@ export class MockProblemsRepository implements IProblemsRepository {
         this._problems = [];
     }
 
-    async getProblems(): Promise<Problem[]> {
-        return this._problems;
+    async getProblems(
+        offset: number,
+        limit: number,
+        subjects?: string[],
+    ): Promise<Problem[]> {
+        let filtered = this._problems;
+
+        if (subjects?.length) {
+            filtered = filtered.filter((problem) => subjects.includes(problem.subject));
+        }
+        return filtered.slice(offset, offset + limit);
     }
 }

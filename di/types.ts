@@ -36,7 +36,7 @@ export const DI_SYMBOLS = {
     ICreateUserUseCase: Symbol.for('ICreateUserUseCase'),
     ISignInUseCase: Symbol.for('ISignInUseCase'),
     ISetCountryUseCase: Symbol.for('ISetCountryUseCase'),
-    IGetProblemsUseCase: Symbol.for('IGetProblemsUsecase'),
+    IGetProblemsUseCase: Symbol.for('IGetProblemsUseCase'),
     ISendChatMessageUseCase: Symbol.for('ISendChatMessageUseCase'),
     IGetUserUseCase: Symbol.for('IGetUserUseCase'),
 

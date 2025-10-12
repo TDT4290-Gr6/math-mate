@@ -36,10 +36,10 @@ export default function MethodPage() {
             </div>
             <div
                 className={`flex w-full flex-col lg:flex-row ${
-                    problem?.methods.length === 3 ? 'max-w-6xl' : 'max-w-5xl'
+                    problem?.methods?.length === 3 ? 'max-w-6xl' : 'max-w-5xl'
                 } px-10`}
             >
-                {problem?.methods.map((method) => (
+                {problem?.methods?.map((method) => (
                     <MethodCard
                         key={method.id}
                         title={method.title}
