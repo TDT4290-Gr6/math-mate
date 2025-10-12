@@ -14,7 +14,6 @@ export type ISendChatMessageController = ReturnType<
     typeof sendChatMessageController
 >;
 
-
 /**
  * Factory function that creates a controller responsible for handling chat message requests.
  *
