@@ -1,4 +1,4 @@
-import { Problem } from 'app/types';
+import type { Problem } from '@/entities/models/problem';
 import { create } from 'zustand';
 
 export const useProblemStore = create<{
