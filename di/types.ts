@@ -60,13 +60,13 @@ export interface DI_RETURN_TYPES {
 
     // Repositories
     ICountriesRepository: ICountriesRepository;
-    [DI_SYMBOLS.IEventsRepository]: IEventsRepository;
+    IEventsRepository: IEventsRepository;
     IUsersRepository: IUsersRepository;
     ISolvesRepository: ISolvesRepository;
 
     // Use Cases
     ICreateCountryUseCase: ICreateCountryUseCase;
-    [DI_SYMBOLS.ILogEventUseCase]: ILogEventUseCase;
+    ILogEventUseCase: ILogEventUseCase;
     IGetCountriesUseCase: IGetCountriesUseCase;
     ICreateUserUseCase: ICreateUserUseCase;
     ISignInUseCase: ISignInUseCase;
@@ -76,7 +76,7 @@ export interface DI_RETURN_TYPES {
 
     // Controllers
     ICreateCountryController: ICreateCountryController;
-    [DI_SYMBOLS.ICreateEventController]: ICreateEventController;
+    ICreateEventController: ICreateEventController;
     IGetCountriesController: IGetCountriesController;
     ISignInController: ISignInController;
     ISetCountryController: ISetCountryController;
