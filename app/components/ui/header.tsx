@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils';
  * Header component with navigation and optional math problem display.
  *
  * Features:
- *   - Displays a back button (ChevronLeft) that navigates to the previous page.
+ *   - Optionally displays a back button (ChevronLeft) that navigates to the previous page.
  *   - Displays a math problem when `variant` is 'problem'.
  *   - Hamburger menu button that opens a `SidebarMenu` overlay.
  *   - Global keyboard shortcuts:
@@ -26,6 +26,8 @@ import { cn } from '@/lib/utils';
  *     The math problem content to display when `variant` is 'problem'. Normally a problem component.
  * @param className - string (optional)
  *    Additional CSS classes to apply to the header container.
+ * @param showBackButton - boolean (optional, default: true)
+ *    Controls whether the back button is displayed.
  *
  * Notes:
  *   - Sidebar overlay is rendered conditionally when `isOpen` is true.
