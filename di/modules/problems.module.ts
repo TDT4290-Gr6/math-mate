@@ -31,6 +31,7 @@ export function problemsModule() {
         .bind(DI_SYMBOLS.IGetProblemsController)
         .toHigherOrderFunction(getProblemsController, [
             DI_SYMBOLS.IGetProblemsUseCase,
+            DI_SYMBOLS.IAuthenticationService,
         ]);
 
     return problemsModule;
