@@ -28,3 +28,5 @@ export const insertEventSchema = eventSchema.pick({
     stepId: true,
     payload: true,
 });
+
+export type InsertEvent = z.infer<typeof insertEventSchema>;

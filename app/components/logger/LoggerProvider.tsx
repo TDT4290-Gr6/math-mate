@@ -37,45 +37,23 @@ function makeSessionId() {
 
 export function LoggerProvider({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
-    const sessionIdRef = useRef<string>('');
-
-    if (!sessionIdRef.current) {
-        try {
-            const existing =
-                typeof localStorage !== 'undefined'
-                    ? localStorage.getItem('mm:sessionId')
-                    : null;
-            if (existing) sessionIdRef.current = existing;
-            else {
-                const s = makeSessionId();
-                try {
-                    localStorage.setItem('mm:sessionId', s);
-                } catch {}
-                sessionIdRef.current = s;
-            }
-        } catch {
-            sessionIdRef.current = makeSessionId();
-        }
-    }
-
+    // Generate a sessionId once per provider instance
+    const sessionIdRef = useRef<string>(makeSessionId());
     const sessionId = sessionIdRef.current;
 
-    const logEvent = useCallback(
-        async (input: Partial<LogEventInput> & { actionName: string }) => {
-            const body = {
-                // default to 1 for quick testing (Zod requires userId >= 1)
-                userId: 4,
-                sessionId,
-                actionName: input.actionName,
-                loggedAt: new Date().toISOString(),
-                problemId: input.problemId,
-                methodId: input.methodId,
-                stepId: input.stepId,
-                payload:
-                    typeof input.payload === 'string'
-                        ? input.payload
-                        : JSON.stringify(input.payload ?? {}),
-            };
+
+    const logEvent = useCallback(async (input: Partial<LogEventInput> & { actionName: string }) => {
+        const body = {
+            // default to 1 for quick testing (Zod requires userId >= 1)
+            userId: 14,
+            sessionId: 364304023,
+            actionName: input.actionName,
+            loggedAt: new Date().toISOString(),
+            problemId: input.problemId,
+            methodId: input.methodId,
+            stepId: input.stepId,
+            payload: typeof input.payload === 'string' ? input.payload : JSON.stringify(input.payload ?? {}),
+        };
 
             try {
                 await fetch('/api/events', {
