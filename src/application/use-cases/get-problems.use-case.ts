@@ -1,5 +1,5 @@
-import { IProblemsRepository } from '../repositories/problems.repository.interface';
-import { Problem } from '@/entities/models/problem';
+import type { IProblemsRepository } from '../repositories/problems.repository.interface';
+import type { Problem } from '@/entities/models/problem';
 
 export type IGetProblemsUseCase = ReturnType<typeof getProblemsUseCase>;
 
