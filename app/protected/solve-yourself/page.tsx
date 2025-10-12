@@ -6,41 +6,60 @@ import ChatToggle from '@/components/chat-toggle';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
 import Title from '@/components/ui/title';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useChatbot } from 'app/hooks/useChatbot';
+import React from 'react';
 
 export default function SolveYourself() {
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
+    const problemDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc in nunc diam. Fusce accumsan tempor justo ac pellentesque. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
+
+    const { chatHistory, sendMessage, isLoading, error, setError } =
+        useChatbot();
+
+    // Listen for the chat-toggle event
+    useEffect(() => {
+        const handler = () => setIsChatOpen((v) => !v);
+        window.addEventListener('chat-toggle', handler as EventListener);
+        return () =>
+            window.removeEventListener('chat-toggle', handler as EventListener);
+    }, []);
 
     return (
-        <div className="flex min-h-screen flex-col items-center gap-6">
-            <Header />
+        <div className="flex min-h-screen flex-col items-center ${isChatOpen ? '' : 'gap-6'}">
+            {isChatOpen ? <Header variant='problem' mathProblem={<ProblemCard description={problemDescription} />} /> : <Header variant="simple" />}
 
-            <div className="flex w-5/9 justify-start pt-10">
-                <Title title={'Solve on your own:'} />
-            </div>
-            {/* TODO: Replace with question component :) */}
-            <ProblemCard description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc in nunc diam. Fusce accumsan tempor justo ac pellentesque. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." />
-
-            {isChatOpen && (
-                <div className="bg-border absolute top-0 bottom-0 left-1/2 w-0.5"></div>
+            {isChatOpen ? null : (
+                <div className={`flex w-5/9 justify-start mt-12 mb-8`}>
+                    <Title title={'Solve on your own:'} />
+                </div>
             )}
+
+            {/* TODO: Replace description with actual description :) */}
             {isChatOpen ? (
-                <div className="flex h-full w-1/2 flex-col p-4">
+                null
+            ) : <ProblemCard description={problemDescription} />}
+
+            {isChatOpen}
+            {isChatOpen ? (
+                <div className="flex h-full max-w-3/5 w-3/5 items-center flex-col">
                     <ChatbotWindow
                         chatHistory={chatHistory}
                         onClose={() => setIsChatOpen(!isChatOpen)}
-                        onSendMessage={handleSendMessage}
+                        onSendMessage={sendMessage}
                         isLoading={isLoading}
-                        initialMessage={PRIVACY_INITIAL_MESSAGE}
+                        error={error ? error : undefined}
                     />
                 </div>
             ) : (
-                <ChatToggle />
+                <div className="fixed bottom-20 right-200">
+                    <ChatToggle />
+                </div>
             )}
 
             {/* TODO: add backend titles and descriptions */}
-            <div className="mt-6 flex flex-row items-center gap-6">
+            <div className={`${isChatOpen ? '' : 'mt-6'} flex flex-row items-center gap-10 mb-12`}>
                 {/* TODO: change link to "method" page */}
                 <Link href="/protected/method">
                     <Button variant="default" className="w-40">

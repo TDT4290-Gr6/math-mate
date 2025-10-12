@@ -2,7 +2,7 @@
 
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import { Button } from '@/components/ui/button';
-import { Sparkles } from 'lucide-react';
+import { BsStars } from 'react-icons/bs';
 import React from 'react';
 
 export default function ChatToggle() {
@@ -25,9 +25,9 @@ export default function ChatToggle() {
                 <Button
                     aria-label="Open chat"
                     onClick={handleClick}
-                    className="hover:bg-card fixed right-6 bottom-6 h-12 w-12 rounded-full bg-[var(--chatbot)] shadow-lg transition-shadow hover:shadow-xl"
+                    className="hover:bg-card fixed right-34 bottom-26 h-18 w-18 rounded-full bg-[var(--chatbot)] shadow-lg transition-shadow hover:shadow-xl"
                 >
-                    <Sparkles className="text-[var(--foreground)]" />
+                    <BsStars className="text-[var(--foreground)] size-10 " />
                 </Button>
             </TooltipTrigger>
 
@@ -35,7 +35,7 @@ export default function ChatToggle() {
                 side="top"
                 sideOffset={10}
                 arrowColor="var(--chatbot)"
-                className="relative w-58 rounded-xl bg-[var(--chatbot)] p-3 text-[var(--foreground)] shadow-lg"
+                className="relative w-72 rounded-xl bg-[var(--chatbot)] p-3 text-[var(--foreground)] shadow-lg"
             >
                 <div className="text-sm">
                     <h3 className="mb-1 font-bold">
