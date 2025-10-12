@@ -1,17 +1,19 @@
 import type { IAuthenticationService } from '@/application/services/auth.service.interface';
 
 export class MockAuthenticationService implements IAuthenticationService {
-    private userMap: Map<string, string> = new Map(); // sessionId -> userId
+    private userId: number | null = 1;
+    private authenticated: boolean = true;
 
-    async validateSession(sessionId: string): Promise<boolean> {
-        return this.userMap.has(sessionId);
+    constructor(authenticated: boolean = true, userId: number | null = 1) {
+        this.authenticated = authenticated;
+        this.userId = userId;
     }
-    async createSession(userId: string): Promise<string> {
-        const sessionId = `session-${Math.random().toString(36)}`;
-        this.userMap.set(sessionId, userId);
-        return sessionId;
+
+    async getCurrentUserId(): Promise<number | null> {
+        return this.userId;
     }
-    async invalidateSession(sessionId: string): Promise<boolean> {
-        return this.userMap.delete(sessionId);
+
+    async isAuthenticated(): Promise<boolean> {
+        return this.authenticated;
     }
 }
