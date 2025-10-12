@@ -5,7 +5,6 @@ import {
 import { IAuthenticationService } from '@/application/services/auth.service.interface';
 import { UnauthenticatedError } from '@/entities/errors/auth';
 
-
 /**
  * The type alias representing the structure of the SendChatMessageController factory.
  * It infers the return type of the `sendChatMessageController` function, ensuring
