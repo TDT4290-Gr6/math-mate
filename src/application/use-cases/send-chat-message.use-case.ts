@@ -33,13 +33,12 @@ const systemPrompt = `
             Always format your response in Markdown, and use list formatting where appropriate.
             `;
 
-            
 /**
  * A temporary in-memory store that keeps track of each user's conversation history.
- * 
+ *
  * The key is the user's unique ID, and the value is the list of chat messages
  * (including the system prompt, user messages, and assistant responses).
- * 
+ *
  * Note: This store is not persistent and will reset if the server restarts.
  * For scalability or multi-instance deployment, consider using a shared external store (e.g., Redis or database).
  */      
@@ -47,7 +46,7 @@ const conversationStore = new Map<number, ConversationMessage[]>();
 
 /**
  * A use case that handles sending and receiving chat messages between the user and the AI model.
- * 
+ *
  * @param {IChatService} chatService - The chat service responsible for communicating with the AI model (e.g., OpenAI API).
  * @returns {Function} An async function that takes a user ID and message, manages conversation context, and returns the AI's response.
  */
