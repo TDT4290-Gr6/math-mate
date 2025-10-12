@@ -46,6 +46,7 @@ export default function ProblemPage() {
     const fetchProblems = async (subjects: string[]): Promise<number> => {
         if (isLoading || !hasMore) return 0;
 
+        setError(null);
         setIsLoading(true);
         try {
             const newProblems = await getProblems(
