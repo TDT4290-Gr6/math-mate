@@ -1,5 +1,5 @@
-import { IProblemsRepository } from '@/application/repositories/problems.repository.interface';
-import { Problem } from '@/entities/models/problem';
+import type { IProblemsRepository } from '@/application/repositories/problems.repository.interface';
+import type { Problem } from '@/entities/models/problem';
 
 export class MockProblemsRepository implements IProblemsRepository {
     private _problems: Problem[];
