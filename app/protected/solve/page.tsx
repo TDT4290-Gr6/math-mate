@@ -116,14 +116,14 @@ export default function SolvingPage() {
         try {
             const reply = await sendMessageAction(message);
             if (reply.success === false) {
-                setError(reply.content);
+                setError(reply.error);
                 setIsLoading(false);
                 return;
             } else {
                 const assistantMessage: ChatMessage = {
                     chatID: `assistant-${Date.now()}`,
                     sender: 'assistant',
-                    content: reply.content,
+                    content: reply.message.content,
                     timestamp: new Date(),
                 };
                 setChatHistory((prev) => ({

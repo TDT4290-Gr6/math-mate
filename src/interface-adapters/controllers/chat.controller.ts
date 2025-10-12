@@ -1,6 +1,7 @@
 import {
     ConversationMessage,
     ISendChatMessageUseCase,
+    SendMessageResult,
 } from '@/application/use-cases/send-chat-message.use-case';
 import { IAuthenticationService } from '@/application/services/auth.service.interface';
 import { UnauthenticatedError } from '@/entities/errors/auth';
@@ -31,34 +32,24 @@ export const sendChatMessageController = (
     authService: IAuthenticationService,
     sendChatUseCase: ISendChatMessageUseCase,
 ) => {
-    return async (message: string): Promise<ConversationMessage> => {
+    return async (message: string): Promise<SendMessageResult> => {
         const isAuthenticated = await authService.isAuthenticated();
         if (!isAuthenticated) {
-            throw new UnauthenticatedError('User must be logged in.');
+            return { success: false, error: 'User must be logged in.' };
         }
         const userId = await authService.getCurrentUserId();
 
         if (userId === null) {
-            throw new UnauthenticatedError('Unable to retrieve user ID.');
+            return { success: false, error: 'Unable to retrieve user ID.' };
         }
 
         // Input validation
         if (typeof message !== 'string' || message.trim().length === 0) {
-            const error: ConversationMessage = {
-                success: false,
-                role: 'assistant',
-                content: 'The message is not valid',
-            };
-            return error;
+            return { success: false, error: 'Invalid message format.' };
         }
         if (message.length > 2000) {
-            const error: ConversationMessage = {
-                success: false,
-                role: 'assistant',
-                content: 'Message exceeds maximum length of 2000 characters',
-            };
-            return error;
+            return { success: false, error: 'Message exceeds maximum length of 2000 characters.' };
         }
-        return sendChatUseCase(userId, message);
+        return sendChatUseCase(userId!, message);
     };
 };

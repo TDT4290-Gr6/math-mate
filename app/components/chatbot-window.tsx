@@ -2,7 +2,6 @@ import { ChevronDown, SendHorizontal } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import MessageBubble from './message-bubble';
 import { cn } from '@/lib/utils';
-import { error } from 'console';
 
 export interface ChatMessage {
     chatID: string;

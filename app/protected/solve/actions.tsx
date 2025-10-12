@@ -1,6 +1,6 @@
 'use server';
 
-import { ConversationMessage } from '@/application/use-cases/send-chat-message.use-case';
+import { ConversationMessage, SendMessageResult } from '@/application/use-cases/send-chat-message.use-case';
 import { getInjection } from '@/di/container';
 
 /**
@@ -19,7 +19,7 @@ import { getInjection } from '@/di/container';
  */
 export async function sendMessageAction(
     message: string,
-): Promise<ConversationMessage> {
+): Promise<SendMessageResult> {
     try {
         const chatController = getInjection('ISendChatMessageController');
 
@@ -30,15 +30,13 @@ export async function sendMessageAction(
             console.error('Failed to send message:', err.message);
             return {
                 success: false,
-                role: 'assistant',
-                content: 'Failed to send message. Please try again.',
+                error: 'Failed to send message. Please try again.',
             };
         } else {
             console.error('Failed to send message:', err);
             return {
                 success: false,
-                role: 'assistant',
-                content: 'Failed to send message. Please try again.',
+                error: 'Failed to send message. Please try again.',
             };
         }
     }

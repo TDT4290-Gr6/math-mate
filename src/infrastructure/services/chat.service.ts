@@ -42,7 +42,6 @@ export class ChatService implements IChatService {
             return {
                 role: 'assistant',
                 content,
-                success: true,
             };
         } catch (error) {
             console.error('OpenAI API error:', error);

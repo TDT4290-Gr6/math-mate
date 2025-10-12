@@ -1,3 +1,4 @@
+import { Send } from 'lucide-react';
 import { IChatService } from '../services/chat.service.interface';
 
 /**
@@ -11,11 +12,13 @@ export type ISendChatMessageUseCase = ReturnType<typeof sendChatMessageUseCase>;
  * Each message has a role (system, user, or assistant) and textual content.
  */
 export type ConversationMessage = {
-    success?: boolean;
     role: 'user' | 'assistant' | 'system';
     content: string;
 };
 
+export type SendMessageResult =
+  | { success: true; message: ConversationMessage }
+  | { success: false; error: string };
 /**
  * A predefined system prompt that establishes the chatbot's role and behavior.
  */
@@ -51,25 +54,40 @@ const conversationStore = new Map<number, ConversationMessage[]>();
  * @returns {Function} An async function that takes a user ID and message, manages conversation context, and returns the AI's response.
  */
 export const sendChatMessageUseCase = (chatService: IChatService) => {
-    return async (userID: number, message: string) => {
-        let conversation = conversationStore.get(userID);
-        if (!conversation) {
-            conversation = [
-                { success: true, role: 'system', content: systemPrompt },
-            ];
-            conversationStore.set(userID, conversation);
-        }
+  return async (userID: number, message: string): Promise<SendMessageResult> => {
+    let conversation = conversationStore.get(userID);
+    if (!conversation) {
+      conversation = [{ role: 'system', content: systemPrompt }];
+      conversationStore.set(userID, conversation);
+    }
 
-        conversation.push({ success: true, role: 'user', content: message });
+    // Add user message
+    conversation.push({ role: 'user', content: message });
 
-        // Limit conversation history to last 5 message exchanges plus system prompt
-        const botReply = await chatService.sendMessage(conversation);
-        conversation.push(botReply);
-        const MAX_TURNS = 5; // keep 5 user/assistant exchanges plus the system prompt
-        while (conversation.length > 1 + MAX_TURNS * 2) {
-            conversation.splice(1, 2);
-        }
-        conversationStore.set(userID, conversation);
-        return botReply;
-    };
+    try {
+      // Send to chat service
+      const botReply = await chatService.sendMessage(conversation);
+
+      // Add bot reply to conversation history
+      conversation.push(botReply);
+
+      // Limit conversation history
+      const MAX_TURNS = 5; // 5 exchanges + system prompt
+      while (conversation.length > 1 + MAX_TURNS * 2) {
+        conversation.splice(1, 2); // remove oldest user+assistant pair
+      }
+      conversationStore.set(userID, conversation);
+
+      return { success: true, message: botReply };
+    } catch (err: unknown) {
+      // Rollback user message
+      conversation.pop();
+      conversationStore.set(userID, conversation);
+
+      let errorMessage = 'Failed to get response from chat service.';
+      if (err instanceof Error) errorMessage = err.message;
+
+      return { success: false, error: errorMessage };
+    }
+  };
 };
