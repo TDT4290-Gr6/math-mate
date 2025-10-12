@@ -16,7 +16,9 @@ export class MockProblemsRepository implements IProblemsRepository {
         let filtered = this._problems;
 
         if (subjects?.length) {
-            filtered = filtered.filter((problem) => subjects.includes(problem.subject));
+            filtered = filtered.filter((problem) =>
+                subjects.includes(problem.subject),
+            );
         }
         return filtered.slice(offset, offset + limit);
     }

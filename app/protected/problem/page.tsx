@@ -92,7 +92,7 @@ export default function ProblemPage() {
     };
 
     const goToMethodPage = () => {
-        if(!currentProblem) return;
+        if (!currentProblem) return;
         setCurrentProblem(currentProblem); // Zustand
         router.push('/protected/method');
     };
@@ -134,7 +134,11 @@ export default function ProblemPage() {
                         }}
                     />
                 )}
-                <Button variant="secondary" onClick={goToMethodPage} disabled={!currentProblem}>
+                <Button
+                    variant="secondary"
+                    onClick={goToMethodPage}
+                    disabled={!currentProblem}
+                >
                     Get started solving
                 </Button>
             </div>
