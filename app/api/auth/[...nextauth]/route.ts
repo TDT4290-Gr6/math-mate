@@ -24,14 +24,29 @@ export const authOptions: NextAuthOptions = {
             const signInController = getInjection('ISignInController');
 
             try {
-                await signInController({
+                const { userId } = await signInController({
                     uuid: user.id + '',
                 });
+                user.id = '' + userId;
             } catch (error) {
                 console.error('[nextauth] signIn error', error);
                 return false;
             }
             return true;
+        },
+        async session({ session, token }) {
+            // if we stored a userId on the token during signIn, copy it into the session
+            if (token?.userId && session.user) {
+                session.user = { id: token.userId };
+            }
+            console.log('session callback', { session });
+
+            return session;
+        },
+        async jwt({ token, user }) {
+            // when the user object exists (on initial sign in), persist their id to the token
+            if (user?.id) token.userId = user.id;
+            return token;
         },
     },
 };
