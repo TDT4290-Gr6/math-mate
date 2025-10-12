@@ -7,7 +7,7 @@ import { z } from 'zod';
 
 const inputSchema = z.object({
     offset: z.number().nonnegative(),
-    limit: z.number().positive(),
+    limit: z.number().positive().max(100),
     subjects: z.array(z.string()).optional(),
 });
 
