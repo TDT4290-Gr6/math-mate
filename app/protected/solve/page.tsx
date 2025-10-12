@@ -9,7 +9,7 @@ import ChatToggle from '@/components/chat-toggle';
 import { Button } from '@/components/ui/button';
 import { sendMessageAction } from './actions';
 import Header from '@/components/ui/header';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Steps from '@/components/steps';
 import { cn } from '@/lib/utils';
 
@@ -72,7 +72,7 @@ export default function SolvingPage() {
         messages: [],
     });
     const [isLoading, setIsLoading] = useState(false);
-    const [input, setInput] = React.useState('');
+    const [error, setError] = React.useState<string | null>(null);
 
     // Listen for the chat-toggle event
     React.useEffect(() => {
@@ -81,6 +81,13 @@ export default function SolvingPage() {
         return () =>
             window.removeEventListener('chat-toggle', handler as EventListener);
     }, []);
+
+    // Clear error message after 7 seconds
+    useEffect(() => {
+        if (!error) return;
+        const timer = setTimeout(() => setError(null), 7000);
+        return () => clearTimeout(timer);
+    }, [error]);
 
     const handleNextStep = () => {
         if (currentStep < totalSteps) {
@@ -104,29 +111,35 @@ export default function SolvingPage() {
         setChatHistory((prev) => ({
             messages: [...prev.messages, userMessage],
         }));
-        setInput('');
 
         setIsLoading(true);
         try {
             const reply = await sendMessageAction(message);
-            const assistantMessage: ChatMessage = {
-                chatID: `assistant-${Date.now()}`,
-                sender: 'assistant',
-                content: reply,
-                timestamp: new Date(),
-            };
-            setChatHistory((prev) => ({
-                messages: [...prev.messages, assistantMessage],
-            }));
+            if (reply.success === false) {
+                setError(reply.content);
+                setIsLoading(false);
+                return;
+            } else {
+                const assistantMessage: ChatMessage = {
+                    chatID: `assistant-${Date.now()}`,
+                    sender: 'assistant',
+                    content: reply.content,
+                    timestamp: new Date(),
+                };
+                setChatHistory((prev) => ({
+                    messages: [...prev.messages, assistantMessage],
+                }));
+            }
         } catch (error) {
             console.log(error);
+            setError('Failed to get response. Please try again.');
         } finally {
             setIsLoading(false);
         }
     };
 
     return (
-        <div className="flex min-h-screen w-full flex-col items-center">
+        <div className="flex h-screen w-full flex-col items-center">
             <Header
                 variant="problem"
                 mathProblem={
@@ -136,7 +149,7 @@ export default function SolvingPage() {
                 }
             />
 
-            <div className="relative flex h-full w-full flex-1">
+            <div className="relative flex w-full flex-1 h-full overflow-hidden">
                 <div
                     className={cn(
                         'flex h-full flex-col items-center justify-between p-4',
@@ -146,7 +159,7 @@ export default function SolvingPage() {
                     <div className="h-full w-full flex-1">
                         <Steps steps={mockSteps} currentStep={currentStep} />
                     </div>
-                    <div className="flex-end mt-4 flex w-full justify-center gap-2">
+                    <div className="flex-end mb-20 flex w-full justify-center gap-2">
                         <Button
                             onClick={() => alert('Go to answer button clicked')}
                             className="w-1/4 rounded-full"
@@ -166,7 +179,7 @@ export default function SolvingPage() {
                     </div>
                 </div>
                 {isChatOpen && (
-                    <div className="bg-border absolute top-0 bottom-0 left-1/2 w-0.5"></div>
+                    <div className="bg-border absolute top-0 bottom-0 left-1/2 w-[1px]"></div>
                 )}
                 {isChatOpen ? (
                     <div className="flex h-full w-1/2 flex-col p-4">
@@ -175,6 +188,7 @@ export default function SolvingPage() {
                             onClose={() => setIsChatOpen(!isChatOpen)}
                             onSendMessage={handleSendMessage}
                             isLoading={isLoading}
+                            error={error ? error : undefined}
                             initialMessage={PRIVACY_INITIAL_MESSAGE}
                         />
                     </div>

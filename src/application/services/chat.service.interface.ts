@@ -1,5 +1,5 @@
-import { ChatMessage } from '../use-cases/send-chat-message.use-case';
+import { ConversationMessage } from '../use-cases/send-chat-message.use-case';
 
 export interface IChatService {
-    sendMessage(messages: ChatMessage[]): Promise<string>;
+    sendMessage(messages: ConversationMessage[]): Promise<ConversationMessage>;
 }

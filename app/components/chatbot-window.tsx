@@ -2,6 +2,7 @@ import { ChevronDown, SendHorizontal } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import MessageBubble from './message-bubble';
 import { cn } from '@/lib/utils';
+import { error } from 'console';
 
 export interface ChatMessage {
     chatID: string;
@@ -12,7 +13,6 @@ export interface ChatMessage {
 }
 
 export interface ChatHistory {
-    role: 'user' | 'assistant';
     messages: Array<ChatMessage>;
 }
 
@@ -22,6 +22,7 @@ interface ChatbotWindowProps {
     onClose?: () => void;
     isLoading?: boolean;
     initialMessage?: ChatMessage;
+    error?: string | null;
 }
 
 /**
@@ -43,6 +44,7 @@ export default function ChatbotWindow({
     onClose,
     isLoading,
     initialMessage,
+    error
 }: ChatbotWindowProps) {
     const [inputValue, setInputValue] = useState('');
     const containerRef = useRef<HTMLDivElement | null>(null);
@@ -69,6 +71,7 @@ export default function ChatbotWindow({
         el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
     }, [chatHistory.messages.length]);
 
+
     return (
         <div>
             <div className="relative">
@@ -82,7 +85,7 @@ export default function ChatbotWindow({
             </div>
             <div
                 ref={containerRef}
-                className="mt-5 flex h-full max-h-90 flex-col space-y-2 overflow-y-auto p-2"
+                className="mt-5 flex h-92 flex-col space-y-2 overflow-y-auto p-2"
             >
                 {initialMessage && (
                     <MessageBubble
@@ -113,8 +116,8 @@ export default function ChatbotWindow({
                     </div>
                 )}
             </div>
-            <div className="flex w-full p-2">
-                <div className="relative mt-4 flex-1">
+            <div className="flex w-full px-4 rounded-lg">
+                <div className={`relative flex-1 ${error && "border border-[var(--destructive)] "} rounded-lg shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.2)]`}>
                     <input
                         type="text"
                         value={inputValue}
@@ -144,6 +147,7 @@ export default function ChatbotWindow({
                     />
                 </div>
             </div>
+            <div className='flex  w-full justify-center items-end mt-4'> {error && <p className="text-[var(--destructive)]">{error}</p>}</div>
         </div>
     );
 }

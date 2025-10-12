@@ -1,4 +1,4 @@
-import { ChatMessage } from '@/application/use-cases/send-chat-message.use-case';
+import { ConversationMessage } from '@/application/use-cases/send-chat-message.use-case';
 import { IChatService } from '@/application/services/chat.service.interface';
 import OpenAI from 'openai';
 
@@ -24,7 +24,7 @@ export class ChatService implements IChatService {
         this.openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
     }
 
-    async sendMessage(messages: ChatMessage[]): Promise<string> {
+    async sendMessage(messages: ConversationMessage[]): Promise<ConversationMessage> {
         const openAIMessages = messages.map((m) => ({
             role: m.role,
             content: m.content,
@@ -35,11 +35,21 @@ export class ChatService implements IChatService {
                 model: 'gpt-5-mini',
                 messages: openAIMessages,
             });
-            return response.choices[0]?.message?.content ?? 'No response from AI';
+            const content = response.choices[0]?.message?.content ?? 'No response from AI';
 
+            return {
+                role: 'assistant',
+                content,
+                success: true,
+            };
         } catch (error) {
             console.error('OpenAI API error:', error);
-            throw new Error('Failed to get response from chat service. Please try again.');
+
+            return {
+                role: 'assistant',
+                content: 'Failed to get response from chat service. Please try again.',
+                success: false,
+            };
         }
     }
 }

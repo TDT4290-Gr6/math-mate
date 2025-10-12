@@ -10,7 +10,8 @@ export type ISendChatMessageUseCase = ReturnType<typeof sendChatMessageUseCase>;
  * Represents a single message in a chat conversation.
  * Each message has a role (system, user, or assistant) and textual content.
  */
-export type ChatMessage = {
+export type ConversationMessage = {
+    success?: boolean;
     role: 'user' | 'assistant' | 'system';
     content: string;
 };
@@ -42,7 +43,7 @@ const systemPrompt = `
  * Note: This store is not persistent and will reset if the server restarts.
  * For scalability or multi-instance deployment, consider using a shared external store (e.g., Redis or database).
  */      
-const conversationStore = new Map<number, ChatMessage[]>();
+const conversationStore = new Map<number, ConversationMessage[]>();
 
 /**
  * A use case that handles sending and receiving chat messages between the user and the AI model.
@@ -54,23 +55,23 @@ export const sendChatMessageUseCase = (chatService: IChatService) => {
     return async (userID: number, message: string) => {
         let conversation = conversationStore.get(userID);
         if (!conversation) {
-            conversation = [{ role: 'system', content: systemPrompt }];
+            conversation = [{ success: true, role: 'system', content: systemPrompt }];
             conversationStore.set(userID, conversation);
         }
 
-        conversation.push({ role: 'user', content: message });
+        conversation.push({ success: true, role: 'user', content: message });
 
         // Limit conversation history to last 5 messages plus system prompt
-        const MAX_MESSAGES = 5;
-        if (conversation.length > MAX_MESSAGES) {
-            const systemMessage = conversation[0];
-            const recentMessages = conversation.slice(-(MAX_MESSAGES - 1));
-            conversationStore.set(userID, [systemMessage, ...recentMessages]);
-        }
+        const MAX_MESSAGES = 6; // 1 system + 5 user/assistant
+        
 
         const botReply = await chatService.sendMessage(conversation);
-        conversation.push({ role: 'assistant', content: botReply });
-
+        conversation.push(botReply);
+        if (conversation.length > MAX_MESSAGES) {
+                    const systemMessage = conversation[0];
+                    const recentMessages = conversation.slice(-(MAX_MESSAGES - 1));
+                    conversationStore.set(userID, [systemMessage, ...recentMessages]);
+                }
         return botReply;
     };
 };
