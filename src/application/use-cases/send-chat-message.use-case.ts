@@ -87,10 +87,11 @@ export const sendChatMessageUseCase = (chatService: IChatService) => {
             conversation.pop();
             conversationStore.set(userID, conversation);
 
-            let errorMessage = 'Failed to get response from chat service.';
-            if (err instanceof Error) errorMessage = err.message;
-
-            return { success: false, error: errorMessage };
-        }
-    };
+            console.error('chatService.sendMessage failed', err);
+            return {
+                success: false,
+                error: 'Failed to get response from chat service. Please try again.',
+            };
+    }
+  };
 };
