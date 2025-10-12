@@ -1,43 +1,64 @@
 'use client';
 
-import MethodCard from '@/components/ui/methodcard';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 import Link from 'next/link';
+import Title from '@/components/ui/title';
+import ProblemCard from '@/components/ui/problem-card';
+import { useState } from 'react';
+import ChatbotWindow from '@/components/chatbot-window';
+import ChatToggle from '@/components/chat-toggle';
 
 export default function SolveYourself() {
-    const router = useRouter();
+    const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
 
     return (
         <div className="flex min-h-screen flex-col items-center gap-6">
             <Header />
 
-            <div className="flex w-full justify-start pt-10 pl-[15%]">
-                <h1 className="text-2xl text-[var(--foreground)]">
-                    TODO: add title component
-                </h1>
+            <div className="flex w-5/9 justify-start pt-10">
+                <Title title={"Solve on your own:"} />
             </div>
             {/* TODO: Replace with question component :) */}
-            <div className="flex h-40 w-5xl flex-row items-center gap-4 bg-[var(--card)]"></div>
-
+            <ProblemCard description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc in nunc diam. Fusce accumsan tempor justo ac pellentesque. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." />
+            
+            {isChatOpen && (
+                <div className="bg-border absolute top-0 bottom-0 left-1/2 w-0.5"></div>
+            )}
+            {isChatOpen ? (
+                <div className="flex h-full w-1/2 flex-col p-4">
+                    <ChatbotWindow
+                        chatHistory={chatHistory}
+                        onClose={() => setIsChatOpen(!isChatOpen)}
+                        onSendMessage={handleSendMessage}
+                        isLoading={isLoading}
+                        initialMessage={PRIVACY_INITIAL_MESSAGE}
+                    />
+                </div>
+            ) : (
+                <ChatToggle />
+            )}
+            
             {/* TODO: add backend titles and descriptions */}
-            <div className="flex flex-row items-center">
+            <div className="flex flex-row items-center gap-6 mt-6">
                 {/* TODO: change link to "method" page */}
-                <Button
-                    className="m-6 mb-20 w-40 bg-[var(--primary)] hover:bg-[var(--primary)] hover:shadow-md"
-                    onClick={() => router.push('/protected/dashboard')}
-                >
-                    Use step-by-step
-                </Button>
+                <Link href="/protected/method">
+                    <Button
+                        variant="default"
+                        className="w-40"
+                    >
+                        Use a step-by-step
+                    </Button>
+                </Link>
                 {/* TODO: change link to "solution" popup */}
-                <Button
-                    className="m-6 mb-20 w-40 bg-[var(--accent)] hover:bg-[var(--accent)] hover:shadow-md"
-                    onClick={() => router.push('/protected/dashboard')}
-                >
-                    Go to answer
-                </Button>
+                <Link href="/protected/solution">
+                    <Button
+                        variant="secondary"
+                        className="w-40"
+                    >
+                        Go to answer
+                    </Button>
+                </Link>
             </div>
         </div>
     );
