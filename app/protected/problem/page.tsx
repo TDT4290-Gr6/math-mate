@@ -10,6 +10,11 @@ import { getProblems } from 'app/actions';
 import { Problem } from 'app/types';
 import { useRouter } from 'next/navigation';
 
+
+/**
+ * Problem browsing page component that allows users to navigate through problems,
+ * select subjects, and begin solving problems.
+ */
 export default function ProblemPage() {
     const [problems, setProblems] = useState<Problem[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -19,15 +24,18 @@ export default function ProblemPage() {
     const [error, setError] = useState<string | null>(null);
 
     const [isSubjectSelectOpen, setIsSubjectSelectOpen] = useState(false);
-    const setCurrentProblem = useProblemStore((state) => state.setProblem);
-
     const openSubjectSelect = () => setIsSubjectSelectOpen(true);
     const closeSubjectSelect = () => setIsSubjectSelectOpen(false);
-    const LIMIT = 10;
+
+    const setCurrentProblem = useProblemStore((state) => state.setProblem);
     const router = useRouter();
     const currentProblem = problems[currentIndex];
-
-    // Initial fetch
+    const LIMIT = 10;
+    
+    /**
+     * Initial effect that loads saved subject preferences from localStorage
+     * and fetches the initial set of problems
+     */
     useEffect(() => {
         const savedSubjects = localStorage.getItem('selectedSubjects');
         const parsedSubjects = savedSubjects ? JSON.parse(savedSubjects) : [];
