@@ -23,6 +23,7 @@ import type { ISignInUseCase } from '@/application/use-cases/sign-in.use-case';
 export const DI_SYMBOLS = {
     // Services
     IAuthenticationService: Symbol.for('IAuthenticationService'),
+    IChatService: Symbol.for('IChatService'),
 
     // Repositories
     ICountriesRepository: Symbol.for('ICountriesRepository'),
@@ -47,9 +48,6 @@ export const DI_SYMBOLS = {
     ISetCountryController: Symbol.for('ISetCountryController'),
     IGetProblemsController: Symbol.for('IGetProblemsController'),
     ISendChatMessageController: Symbol.for('ISendChatMessageController'),
-
-    // Services
-    IChatService: Symbol.for('IChatService'),
     IGetUserController: Symbol.for('IGetUserController'),
 };
 
