@@ -4,7 +4,7 @@ import { Card } from './card';
 import Title from './title';
 
 interface ProblemProps {
-    description: string;
+    description: string | undefined;
     variant?: 'basic' | 'withButtons';
     onNext?: () => void;
     onPrevious?: () => void;
