@@ -1,4 +1,4 @@
-import { IGetProblemsUseCase } from '@/application/use-cases/get-problems.use-case';
+import type { IGetProblemsUseCase } from '@/application/use-cases/get-problems.use-case';
 import { problemPresenter } from '../presenters/problem.Presenter';
 import { InputParseError } from '@/entities/errors/common';
 import { z } from 'zod';
