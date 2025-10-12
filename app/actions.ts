@@ -1,7 +1,7 @@
 'use server';
 
+import type { Problem } from '@/entities/models/problem';
 import { getInjection } from '@/di/container';
-import { Problem } from './types';
 
 export async function getProblems(
     offset: number,
