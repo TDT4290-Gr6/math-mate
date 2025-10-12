@@ -42,8 +42,8 @@ export default function ProblemPage() {
         fetchProblems(parsedSubjects);
     }, []);
 
-    const fetchProblems = async (subjects: string[]) => {
-        if (isLoading || !hasMore) return;
+    const fetchProblems = async (subjects: string[]): Promise<number> => {
+        if (isLoading || !hasMore) return 0;
 
         setIsLoading(true);
         try {
@@ -57,9 +57,13 @@ export default function ProblemPage() {
                 setHasMore(false);
             }
 
-            setProblems((prev) => [...prev, ...newProblems]);
+            if (newProblems.length > 0) {
+                setProblems((prev) => [...prev, ...newProblems]);
+            }
+            return newProblems.length;
         } catch {
             setError('Failed to get problems. Please try again later.');
+            return 0;
         } finally {
             setIsLoading(false);
         }
@@ -71,8 +75,10 @@ export default function ProblemPage() {
         // If we are trying to go beyond what we have loaded, fetch first
         if (nextIndex >= problems.length) {
             if (hasMore && !isLoading) {
-                await fetchProblems(subjects);
-                setCurrentIndex(nextIndex);
+                const fetched = await fetchProblems(subjects);
+                if (fetched > 0) {
+                    setCurrentIndex(nextIndex);
+                }
             }
             // If no more problems to fetch, do nothing (can't go forward), or render a message(TODO)
         } else {
