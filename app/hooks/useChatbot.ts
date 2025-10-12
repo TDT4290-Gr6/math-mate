@@ -1,9 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { sendMessageAction } from '../actions/sendMessageAction';
 import { ChatHistory, ChatMessage } from '@/components/chatbot-window';
-
+import { sendMessageAction } from '../actions/sendMessageAction';
+import { useState, useEffect } from 'react';
 
 // Privacy notice for chat
 const PRIVACY_INITIAL_MESSAGE: ChatMessage = {
@@ -17,7 +16,9 @@ const PRIVACY_INITIAL_MESSAGE: ChatMessage = {
 };
 
 export function useChatbot() {
-    const [chatHistory, setChatHistory] = useState<ChatHistory>({ messages: [PRIVACY_INITIAL_MESSAGE] });
+    const [chatHistory, setChatHistory] = useState<ChatHistory>({
+        messages: [PRIVACY_INITIAL_MESSAGE],
+    });
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -38,7 +39,7 @@ export function useChatbot() {
             content: message,
             timestamp: new Date(),
         };
-        setChatHistory(prev => ({
+        setChatHistory((prev) => ({
             messages: [...prev.messages, userMessage],
         }));
 
@@ -55,7 +56,7 @@ export function useChatbot() {
                 content: reply.message.content,
                 timestamp: new Date(),
             };
-            setChatHistory(prev => ({
+            setChatHistory((prev) => ({
                 messages: [...prev.messages, assistantMessage],
             }));
         } catch {

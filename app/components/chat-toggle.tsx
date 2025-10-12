@@ -27,7 +27,7 @@ export default function ChatToggle() {
                     onClick={handleClick}
                     className="hover:bg-card fixed right-34 bottom-26 h-18 w-18 rounded-full bg-[var(--chatbot)] shadow-lg transition-shadow hover:shadow-xl"
                 >
-                    <BsStars className="text-[var(--foreground)] size-10 " />
+                    <BsStars className="size-10 text-[var(--foreground)]" />
                 </Button>
             </TooltipTrigger>
 

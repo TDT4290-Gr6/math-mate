@@ -115,24 +115,24 @@ export default function ChatbotWindow({
                 )}
             </div>
             <div className="flex w-full rounded-lg px-1">
-            <div className="relative flex-1">
-            <input
-                type="text"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyDown={handleKeyDown}
-                disabled={isLoading}
-                placeholder={
-                isLoading
-                    ? 'Generating a response...'
-                    : 'Ask a question...'
-                }
-                className={cn(
-                'w-full rounded-3xl border border-[var(--border)] bg-[var(--chatbot)] px-4 py-3 pr-12 text-sm shadow-[0_-4px_8px_-1px_rgba(0,0,0,0.1)] transition-opacity',
-                isLoading && 'opacity-50',
-                error && 'border-[var(--destructive)]'
-                )}
-            />
+                <div className="relative flex-1">
+                    <input
+                        type="text"
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                        disabled={isLoading}
+                        placeholder={
+                            isLoading
+                                ? 'Generating a response...'
+                                : 'Ask a question...'
+                        }
+                        className={cn(
+                            'w-full rounded-3xl border border-[var(--border)] bg-[var(--chatbot)] px-4 py-3 pr-12 text-sm shadow-[0_-4px_8px_-1px_rgba(0,0,0,0.1)] transition-opacity',
+                            isLoading && 'opacity-50',
+                            error && 'border-[var(--destructive)]',
+                        )}
+                    />
                     <SendHorizontal
                         onClick={handleSendMessage}
                         strokeWidth={2.5}
@@ -146,7 +146,7 @@ export default function ChatbotWindow({
                     />
                 </div>
             </div>
-            <div className="h-10 flex w-full items-center justify-center">
+            <div className="flex h-10 w-full items-center justify-center">
                 {' '}
                 {error && <p className="text-[var(--destructive)]">{error}</p>}
             </div>

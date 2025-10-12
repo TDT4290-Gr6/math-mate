@@ -4,17 +4,15 @@ import ChatbotWindow, {
     ChatHistory,
     ChatMessage,
 } from '@/components/chatbot-window';
+import { PRIVACY_INITIAL_MESSAGE, useChatbot } from 'app/hooks/useChatbot';
+import { sendMessageAction } from '../../actions/sendMessageAction';
 import ProblemCard from '@/components/ui/problem-card';
 import React, { useEffect, useState } from 'react';
 import ChatToggle from '@/components/chat-toggle';
 import { Button } from '@/components/ui/button';
-import { sendMessageAction } from '../../actions/sendMessageAction';
 import Header from '@/components/ui/header';
 import Steps from '@/components/steps';
 import { cn } from '@/lib/utils';
-import { PRIVACY_INITIAL_MESSAGE, useChatbot } from 'app/hooks/useChatbot';
-
-
 
 // Define the Step type
 interface Step {
