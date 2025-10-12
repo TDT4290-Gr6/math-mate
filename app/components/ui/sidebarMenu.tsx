@@ -93,6 +93,8 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                                 <LoaderCircle
                                     className="inline animate-spin"
                                     size={16}
+                                    aria-label="Loading user ID"
+                                    role="status"
                                 />
                             )}
                         </span>
