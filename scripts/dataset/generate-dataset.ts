@@ -1,6 +1,6 @@
 import type { ProblemInsert } from '@/entities/models/problem';
 import { LLMProviderType, type DatasetEntry } from './types';
-import { generateMethods } from './generateMethods';
+import { generateMethods } from './generate-methods';
 import { open as openPromise } from 'fs/promises';
 import { prisma } from '@/lib/prisma';
 
