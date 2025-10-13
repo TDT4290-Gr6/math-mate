@@ -1,17 +1,14 @@
 'use client';
 
-
+import ChatbotWindow from '@/components/chatbot-window';
 import ProblemCard from '@/components/ui/problem-card';
-import React, { useState } from 'react';
 import ChatToggle from '@/components/chat-toggle';
+import { useChatbot } from 'app/hooks/useChatbot';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
+import React, { useState } from 'react';
 import Steps from '@/components/steps';
 import { cn } from '@/lib/utils';
-import { useChatbot } from 'app/hooks/useChatbot';
-import ChatbotWindow from '@/components/chatbot-window';
-
-
 
 // Define the Step type
 interface Step {
