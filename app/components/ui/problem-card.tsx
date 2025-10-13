@@ -1,8 +1,8 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import LaTeXFormattedText from './latex-formatted-text';
 import { Button } from './button';
 import { Card } from './card';
 import Title from './title';
-import LaTeXFormattedText from './latex-formatted-text';
 
 interface ProblemProps {
     description: string | undefined;

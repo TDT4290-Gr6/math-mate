@@ -1,7 +1,7 @@
+import LaTeXFormattedText from './ui/latex-formatted-text';
 import { useEffect, useRef } from 'react';
 import MethodCard from './ui/methodcard';
 import { Minus } from 'lucide-react';
-import LaTeXFormattedText from './ui/latex-formatted-text';
 
 interface Step {
     stepID: string;

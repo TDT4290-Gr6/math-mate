@@ -1,7 +1,7 @@
+import LaTeXFormattedText from './ui/latex-formatted-text';
 import { ChatMessage } from './chatbot-window';
 import { cn } from '@/lib/utils';
 import React from 'react';
-import LaTeXFormattedText from './ui/latex-formatted-text';
 
 interface MessageBubbleProps {
     message: ChatMessage;
