@@ -1,6 +1,7 @@
 'use client';
 
 import ChatbotWindow from '@/components/chatbot-window';
+import { motion, AnimatePresence } from 'framer-motion';
 import ProblemCard from '@/components/ui/problem-card';
 import ChatToggle from '@/components/chat-toggle';
 import { useChatbot } from 'app/hooks/useChatbot';
@@ -10,7 +11,6 @@ import { useEffect, useState } from 'react';
 import Title from '@/components/ui/title';
 import Link from 'next/link';
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 
 /**
  * SolveYourself
@@ -56,20 +56,20 @@ export default function SolveYourself() {
 
     // Listen for the chat-toggle event
     useEffect(() => {
-    const handler = () => {
-      if (isChatOpen) {
-        // if closing chat — hide immediately
-        setShowChat(false);
-        setIsChatOpen(false);
-      } else {
-        // if opening chat — trigger animation first
-        setIsChatOpen(true);
-      }
-    };
-    window.addEventListener('chat-toggle', handler as EventListener);
-    return () =>
-      window.removeEventListener('chat-toggle', handler as EventListener);
-  }, [isChatOpen]);
+        const handler = () => {
+            if (isChatOpen) {
+                // if closing chat — hide immediately
+                setShowChat(false);
+                setIsChatOpen(false);
+            } else {
+                // if opening chat — trigger animation first
+                setIsChatOpen(true);
+            }
+        };
+        window.addEventListener('chat-toggle', handler as EventListener);
+        return () =>
+            window.removeEventListener('chat-toggle', handler as EventListener);
+    }, [isChatOpen]);
 
     return (
         <motion.div
@@ -99,16 +99,14 @@ export default function SolveYourself() {
                 </div>
             )}
             <AnimatePresence>
-                
                 {isChatOpen ? null : (
                     <motion.div layoutId="problem-card">
                         <ProblemCard description={problemDescription} />
                     </motion.div>
                 )}
             </AnimatePresence>
-        
 
-           <AnimatePresence>
+            <AnimatePresence>
                 {showChat ? (
                     <motion.div
                         key="chat-window"
