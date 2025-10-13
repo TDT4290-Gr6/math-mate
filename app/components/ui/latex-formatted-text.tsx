@@ -1,20 +1,20 @@
-import rehypeSanitize from 'rehype-sanitize';
 import ReactMarkdown from 'react-markdown';
 import rehypeKatex from 'rehype-katex';
 import remarkMath from 'remark-math';
-import React, { memo } from 'react';
 import remarkGfm from 'remark-gfm';
 import 'katex/dist/katex.min.css';
+import React, { memo } from 'react';
+import rehypeSanitize from 'rehype-sanitize';
 
 export interface LaTeXFormattedTextProps {
     text?: string;
     className?: string;
-    sanitize?: boolean; // Allow disabling for trusted content
+    sanitize?: boolean;  // Allow disabling for trusted content
 }
 
 // helper-function for replacing \[ with $
 function replaceLaTeXBlock(text: string) {
-    return text.replace(/\\\[\s*(.*?)\s*\\\]/g, (_, math) => `$$${math}$$ `);
+    return text.replace(/\\\[\s*([\s\S]*?)\s*\\\]/g, (_, math) => `$$${math.trim()}$$`);
 }
 
 /**
@@ -27,7 +27,7 @@ function replaceLaTeXBlock(text: string) {
  *
  * @returns {JSX.Element | null} Rendered Markdown with LaTeX formatting, or `null` if no text is provided.
  */
-function LaTeXFormattedTextcomponent({
+function LaTeXFormattedTextComponent({
     text,
     className,
     sanitize = true,
@@ -48,4 +48,4 @@ function LaTeXFormattedTextcomponent({
         </div>
     );
 }
-export const LaTeXFormattedText = memo(LaTeXFormattedTextcomponent);
+export const LaTeXFormattedText = memo(LaTeXFormattedTextComponent);
