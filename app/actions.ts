@@ -1,5 +1,6 @@
 'use server';
 
+import { SendMessageResult } from '@/application/use-cases/send-chat-message.use-case';
 import type { Problem } from '@/entities/models/problem';
 import { getInjection } from '@/di/container';
 
@@ -61,5 +62,44 @@ export async function getUserId() {
     } catch (error) {
         console.error('Failed to get user ID:', error);
         throw error;
+    }
+}
+
+/**
+ * Sends a user message to the chat controller and returns the AI assistant's response.
+ *
+ * This server-side action performs the following steps:
+ * 1. Retrieves the `ISendChatMessageController` instance from the dependency injection container.
+ * 2. Calls the controller with the provided message string.
+ * 3. Returns the assistant's response.
+ * 4. Catches and logs any errors that occur during the process, then returns a failure result to the caller.
+ *
+ * @param {string} message - The user's message to be sent to the chat service.
+ * @returns {Promise<SendMessageResult>} - A success object with the assistant's message, or a failure object with an error message.
+ *
+ * @throws {Error} Throws a generic error if the chat controller fails or the message cannot be sent.
+ */
+export async function sendMessageAction(
+    message: string,
+): Promise<SendMessageResult> {
+    try {
+        const chatController = getInjection('ISendChatMessageController');
+
+        const reply = await chatController(message);
+        return reply;
+    } catch (err: unknown) {
+        if (err instanceof Error) {
+            console.error('Failed to send message:', err.message);
+            return {
+                success: false,
+                error: 'Failed to send message. Please try again.',
+            };
+        } else {
+            console.error('Failed to send message:', err);
+            return {
+                success: false,
+                error: 'Failed to send message. Please try again.',
+            };
+        }
     }
 }
