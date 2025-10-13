@@ -51,8 +51,7 @@ export default function SolveYourself() {
     const problemDescription =
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc in nunc diam. Fusce accumsan tempor justo ac pellentesque. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.';
 
-    const { chatHistory, sendMessage, isLoading, error } =
-        useChatbot();
+    const { chatHistory, sendMessage, isLoading, error } = useChatbot();
 
     // Listen for the chat-toggle event
     useEffect(() => {
@@ -143,13 +142,13 @@ export default function SolveYourself() {
                     </Button>
                 </Link>
                 {/* TODO: change link to "solution" popup */}
-                    <Button 
-                        variant="secondary" 
-                        className="w-40"
-                        onClick={() => alert("Button pressed")}>
-                        Go to answer
-                    </Button>
-
+                <Button
+                    variant="secondary"
+                    className="w-40"
+                    onClick={() => alert('Button pressed')}
+                >
+                    Go to answer
+                </Button>
             </motion.div>
         </motion.div>
     );
