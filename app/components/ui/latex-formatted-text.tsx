@@ -3,11 +3,18 @@ import rehypeKatex from 'rehype-katex';
 import remarkMath from 'remark-math';
 import remarkGfm from 'remark-gfm';
 import 'katex/dist/katex.min.css';
-import React from 'react';
+import React, { memo } from 'react';
+import rehypeSanitize from 'rehype-sanitize';
 
 export interface LaTeXFormattedTextProps {
     text?: string;
     className?: string;
+    sanitize?: boolean;  // Allow disabling for trusted content
+}
+
+// helper-function for replacing \[ with $
+function replaceLaTeXBlock(text: string) {
+  return text.replace(/\\\[\s*(.*?)\s*\\\]/g, (_, math) => `$$${math}$$ `);
 }
 
 /**
@@ -20,9 +27,10 @@ export interface LaTeXFormattedTextProps {
  *
  * @returns {JSX.Element | null} Rendered Markdown with LaTeX formatting, or `null` if no text is provided.
  */
-export default function LaTeXFormattedText({
+function LaTeXFormattedTextcomponent({
     text,
     className,
+    sanitize = true,
 }: LaTeXFormattedTextProps) {
     if (!text) return null;
 
@@ -30,10 +38,14 @@ export default function LaTeXFormattedText({
         <div className={className}>
             <ReactMarkdown
                 remarkPlugins={[remarkMath, remarkGfm]}
-                rehypePlugins={[rehypeKatex]}
+                rehypePlugins={[
+                    ...(sanitize ? [rehypeSanitize] : []),
+                    rehypeKatex,
+                ]}
             >
-                {text}
+                {replaceLaTeXBlock(text)}
             </ReactMarkdown>
         </div>
     );
 }
+export const LaTeXFormattedText = memo(LaTeXFormattedTextcomponent);
