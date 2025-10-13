@@ -44,6 +44,8 @@ import React from 'react';
 
 export default function SolveYourself() {
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
+
+    // TODO: Replace with actual problem description
     const problemDescription =
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc in nunc diam. Fusce accumsan tempor justo ac pellentesque. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.';
 
@@ -77,12 +79,10 @@ export default function SolveYourself() {
                 </div>
             )}
 
-            {/* TODO: Replace description with actual description :) */}
             {isChatOpen ? null : (
                 <ProblemCard description={problemDescription} />
             )}
 
-            {isChatOpen}
             {isChatOpen ? (
                 <div className="flex h-full w-3/5 max-w-3/5 flex-col items-center">
                     <ChatbotWindow
@@ -90,7 +90,7 @@ export default function SolveYourself() {
                         onClose={() => setIsChatOpen(!isChatOpen)}
                         onSendMessage={sendMessage}
                         isLoading={isLoading}
-                        error={error ? error : undefined}
+                        error={error ?? undefined}
                     />
                 </div>
             ) : (
@@ -99,11 +99,9 @@ export default function SolveYourself() {
                 </div>
             )}
 
-            {/* TODO: add backend titles and descriptions */}
             <div
                 className={`${isChatOpen ? '' : 'mt-6'} mb-12 flex flex-row items-center gap-10`}
             >
-                {/* TODO: change link to "method" page */}
                 <Link href="/protected/method">
                     <Button variant="default" className="w-40">
                         Use a step-by-step

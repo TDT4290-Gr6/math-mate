@@ -25,7 +25,7 @@ export default function ChatToggle() {
                 <Button
                     aria-label="Open chat"
                     onClick={handleClick}
-                    className="hover:bg-card fixed right-34 bottom-26 h-18 w-18 rounded-full bg-[var(--chatbot)] shadow-lg transition-shadow hover:shadow-xl"
+                    className="hover:bg-card fixed right-34 bottom-20 h-18 w-18 rounded-full bg-[var(--chatbot)] shadow-lg transition-shadow hover:shadow-xl"
                 >
                     <BsStars className="size-10 text-[var(--foreground)]" />
                 </Button>

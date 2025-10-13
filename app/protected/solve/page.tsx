@@ -1,18 +1,17 @@
 'use client';
 
-import ChatbotWindow, {
-    ChatHistory,
-    ChatMessage,
-} from '@/components/chatbot-window';
-import { PRIVACY_INITIAL_MESSAGE, useChatbot } from 'app/hooks/useChatbot';
-import { sendMessageAction } from '../../actions/sendMessageAction';
+
 import ProblemCard from '@/components/ui/problem-card';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import ChatToggle from '@/components/chat-toggle';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
 import Steps from '@/components/steps';
 import { cn } from '@/lib/utils';
+import { useChatbot } from 'app/hooks/useChatbot';
+import ChatbotWindow from '@/components/chatbot-window';
+
+
 
 // Define the Step type
 interface Step {
@@ -126,7 +125,7 @@ export default function SolvingPage() {
                             onClose={() => setIsChatOpen(!isChatOpen)}
                             onSendMessage={sendMessage}
                             isLoading={isLoading}
-                            error={error ? error : undefined}
+                            error={error ?? undefined}
                         />
                     </div>
                 ) : (

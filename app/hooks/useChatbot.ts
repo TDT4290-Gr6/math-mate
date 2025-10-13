@@ -4,8 +4,8 @@ import { ChatHistory, ChatMessage } from '@/components/chatbot-window';
 import { sendMessageAction } from '../actions/sendMessageAction';
 import { useState, useEffect } from 'react';
 
-// Privacy notice for chat
-const PRIVACY_INITIAL_MESSAGE: ChatMessage = {
+// Privacy notice for chat - factory function
+const createPrivacyMessage = (): ChatMessage => ({
     chatID: 'privacy-notice',
     sender: 'assistant',
     content:
@@ -13,7 +13,7 @@ const PRIVACY_INITIAL_MESSAGE: ChatMessage = {
     timestamp: new Date(),
     className:
         'bg-card border border-[var(--accent)] text-[var(--accent)] mx-5',
-};
+});
 
 /**
  * useChatbot
@@ -46,7 +46,7 @@ const PRIVACY_INITIAL_MESSAGE: ChatMessage = {
 
 export function useChatbot() {
     const [chatHistory, setChatHistory] = useState<ChatHistory>({
-        messages: [PRIVACY_INITIAL_MESSAGE],
+        messages: [createPrivacyMessage()],
     });
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -88,7 +88,8 @@ export function useChatbot() {
             setChatHistory((prev) => ({
                 messages: [...prev.messages, assistantMessage],
             }));
-        } catch {
+        } catch (err) {
+            console.error('Failed to get response:', err);
             setError('Failed to get response. Please try again.');
         } finally {
             setIsLoading(false);

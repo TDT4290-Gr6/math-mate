@@ -146,7 +146,7 @@ export default function ChatbotWindow({
                     />
                 </div>
             </div>
-            <div className="flex h-10 w-full items-center justify-center">
+            <div className="flex min-h-10 w-full items-center justify-center">
                 {' '}
                 {error && <p className="text-[var(--destructive)]">{error}</p>}
             </div>
