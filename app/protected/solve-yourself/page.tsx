@@ -93,7 +93,7 @@ export default function SolveYourself() {
             )}
 
             {isChatOpen ? null : (
-                <div className={`mt-12 mb-8 flex w-5/9 justify-start`}>
+                <div className={`mt-12 mb-8 flex w-[55.56%] justify-start`}>
                     <Title title={'Solve on your own:'} />
                 </div>
             )}
