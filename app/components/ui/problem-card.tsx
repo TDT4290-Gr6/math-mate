@@ -1,5 +1,5 @@
+import { LaTeXFormattedText } from './latex-formatted-text';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { LaTeXFormattedText }  from './latex-formatted-text';
 import { Button } from './button';
 import { Card } from './card';
 import Title from './title';
