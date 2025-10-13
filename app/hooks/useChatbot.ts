@@ -1,7 +1,7 @@
 'use client';
 
 import { ChatHistory, ChatMessage } from '@/components/chatbot-window';
-import { sendMessageAction } from '../actions/sendMessageAction';
+import { sendMessageAction } from '../actions';
 import { useState, useEffect } from 'react';
 
 // Privacy notice for chat - factory function
