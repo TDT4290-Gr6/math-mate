@@ -1,6 +1,12 @@
-import { Problem, ProblemMethodsGenerator, LLMProviderType } from './types';
+import {
+    type ProblemMethodsGenerator,
+    LLMProviderType,
+    type ProblemMethodsResponseSchema,
+} from './types';
+import type { ProblemInsert } from '@/entities/models/problem';
 import { generateMethodsOpenAI } from './providers/openai';
 import { generateMethodsGemini } from './providers/gemini';
+import { z } from 'zod';
 
 const PROVIDERS: Record<LLMProviderType, ProblemMethodsGenerator> = {
     [LLMProviderType.OPENAI]: generateMethodsOpenAI,
@@ -46,12 +52,19 @@ Guidelines:
  * @throws If no response is parsed from the LLM provider.
  */
 export async function generateMethods(
-    problem: Problem,
+    problem: ProblemInsert,
     llmProvider: LLMProviderType,
-) {
+): Promise<z.infer<typeof ProblemMethodsResponseSchema>> {
     if (problem.methods.length !== 0) {
         // Methods already exist, skip generation
-        return problem;
+        return {
+            title: problem.title ?? '',
+            methods: problem.methods.map((method) => ({
+                title: method.title,
+                description: method.description,
+                steps: method.steps.map((step) => step.content),
+            })),
+        };
     }
 
     // Select the appropriate method generator based on the LLM provider

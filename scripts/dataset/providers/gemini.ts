@@ -1,4 +1,5 @@
-import { Problem, ProblemMethodsResponseSchema } from '../types';
+import type { ProblemInsert } from '@/entities/models/problem';
+import { ProblemMethodsResponseSchema } from '../types';
 import { GoogleGenAI } from '@google/genai';
 import dotenv from 'dotenv';
 import z from 'zod';
@@ -17,7 +18,10 @@ dotenv.config({ quiet: true, path: '.env.local' });
  *
  * @throws Will throw an error if the response cannot be parsed or does not match the schema, or if the API request fails.
  */
-export async function generateMethodsGemini(problem: Problem, prompt: string) {
+export async function generateMethodsGemini(
+    problem: ProblemInsert,
+    prompt: string,
+) {
     const token = process.env['GEMINI_TOKEN'];
     const model = 'gemini-2.5-flash';
     const client = new GoogleGenAI({ apiKey: token });

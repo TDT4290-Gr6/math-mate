@@ -1,3 +1,4 @@
+import type { ProblemInsert } from '@/entities/models/problem';
 import z from 'zod';
 
 export interface DatasetEntry {
@@ -7,21 +8,6 @@ export interface DatasetEntry {
     subject: string;
     level: number;
     unique_id: string;
-}
-
-export interface Problem {
-    title: string;
-    solution: string;
-    level: number;
-    problem: string;
-    subject: string;
-    methods: Method[];
-}
-
-export interface Method {
-    title: string;
-    description: string;
-    steps: string[];
 }
 
 export const MethodSchema = z.object({
@@ -41,6 +27,6 @@ export enum LLMProviderType {
 }
 
 export type ProblemMethodsGenerator = (
-    problem: Problem,
+    problem: ProblemInsert,
     prompt: string,
 ) => Promise<z.infer<typeof ProblemMethodsResponseSchema> | null>;

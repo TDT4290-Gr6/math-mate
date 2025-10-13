@@ -1,4 +1,5 @@
-import { Problem, ProblemMethodsResponseSchema } from '../types';
+import type { ProblemInsert } from '@/entities/models/problem';
+import { ProblemMethodsResponseSchema } from '../types';
 import OpenAI from 'openai';
 import dotenv from 'dotenv';
 import z from 'zod';
@@ -18,7 +19,10 @@ dotenv.config({ quiet: true, path: '.env.local' });
  *
  * @throws If the response cannot be parsed or does not match the expected schema, or if the API request fails.
  */
-export async function generateMethodsOpenAI(problem: Problem, prompt: string) {
+export async function generateMethodsOpenAI(
+    problem: ProblemInsert,
+    prompt: string,
+) {
     const token = process.env['OPENAI_API_KEY'];
     const model = 'gpt-5-mini';
     const client = new OpenAI({ apiKey: token });

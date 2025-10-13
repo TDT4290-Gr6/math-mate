@@ -1,4 +1,5 @@
-import { Problem, LLMProviderType, DatasetEntry } from './types';
+import type { ProblemInsert } from '@/entities/models/problem';
+import { LLMProviderType, type DatasetEntry } from './types';
 import { generateMethods } from './generateMethods';
 import { open as openPromise } from 'fs/promises';
 import { prisma } from '@/lib/prisma';
@@ -26,16 +27,17 @@ async function loadDataset(filePath: string): Promise<DatasetEntry[]> {
 }
 
 /**
- * Converts an array of `DatasetEntry` objects into an array of `Problem` objects.
+ * Converts an array of `DatasetEntry` objects into an array of `ProblemInsert` objects.
  *
- * Each `Problem` object is constructed using properties from the corresponding `DatasetEntry`,
+ * Each `ProblemInsert` object is constructed using properties from the corresponding `DatasetEntry`,
  * including a generated title, solution, level, problem statement, subject, and an empty methods array.
  *
  * @param dataset - The array of `DatasetEntry` objects to convert.
- * @returns An array of `Problem` objects derived from the input dataset.
+ * @returns An array of `ProblemInsert` objects derived from the input dataset.
  */
-function datasetToProblems(dataset: DatasetEntry[]): Problem[] {
-    return dataset.map((entry) => ({
+function datasetToProblems(dataset: DatasetEntry[]): ProblemInsert[] {
+    return dataset.map((entry, index) => ({
+        id: index + 1, // Dummy ID, will be ignored by Prisma on insert
         title: `Problem ${entry.unique_id}`,
         solution: entry.answer,
         level: entry.level,
@@ -46,11 +48,11 @@ function datasetToProblems(dataset: DatasetEntry[]): Problem[] {
 }
 
 /**
- * Asynchronously loads a dataset from a specified JSONL file and converts it into an array of `Problem` objects.
+ * Asynchronously loads a dataset from a specified JSONL file and converts it into an array of `ProblemInsert` objects.
  *
- * @returns A promise that resolves to an array of `Problem` instances.
+ * @returns A promise that resolves to an array of `ProblemInsert` instances.
  */
-async function getProblems(): Promise<Problem[]> {
+async function getProblems(): Promise<ProblemInsert[]> {
     const dataset = await loadDataset('MATH-500/test.jsonl');
     return datasetToProblems(dataset);
 }
