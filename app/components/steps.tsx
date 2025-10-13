@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import MethodCard from './ui/methodcard';
 import { Minus } from 'lucide-react';
+import LaTeXFormattedText from './ui/latex-formatted-text';
 
 interface Step {
     stepID: string;
@@ -57,7 +58,7 @@ export default function Steps({ steps, currentStep }: StepsProps) {
                         />
                         Step {index + 1}
                     </h3>
-                    <p className="text-sm">{step.content}</p>
+                    <LaTeXFormattedText text={step.content} />
                 </div>
             ))}
         </div>

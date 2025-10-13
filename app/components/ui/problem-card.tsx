@@ -2,6 +2,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from './button';
 import { Card } from './card';
 import Title from './title';
+import LaTeXFormattedText from './latex-formatted-text';
 
 interface ProblemProps {
     description: string | undefined;
@@ -29,9 +30,7 @@ export default function ProblemCard({
     return (
         <Card className="max-w-[50vw] p-6">
             <Title title={'Problem: '} />
-            <p className="mb-4 line-clamp-7 text-[var(--foreground)]">
-                {description}
-            </p>
+            <LaTeXFormattedText text={description} />
             {variant === 'withButtons' && (
                 <div className="flex justify-center gap-12">
                     <Button onClick={onPrevious} disabled={!onPrevious}>
