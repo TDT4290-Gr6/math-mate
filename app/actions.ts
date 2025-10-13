@@ -72,10 +72,10 @@ export async function getUserId() {
  * 1. Retrieves the `ISendChatMessageController` instance from the dependency injection container.
  * 2. Calls the controller with the provided message string.
  * 3. Returns the assistant's response.
- * 4. Catches and logs any errors that occur during the process, then throws a generic error to the caller.
+ * 4. Catches and logs any errors that occur during the process, then returns a failure result to the caller.
  *
  * @param {string} message - The user's message to be sent to the chat service.
- * @returns {Promise<string>} - The response from the AI assistant.
+ * @returns {Promise<SendMessageResult>} - A success object with the assistant's message, or a failure object with an error message.
  *
  * @throws {Error} Throws a generic error if the chat controller fails or the message cannot be sent.
  */

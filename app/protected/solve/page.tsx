@@ -55,7 +55,7 @@ export default function SolvingPage() {
     const totalSteps = mockSteps.length;
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
 
-    const { chatHistory, sendMessage, isLoading, error, setError } =
+    const { chatHistory, sendMessage, isLoading, error } =
         useChatbot();
 
     // Listen for the chat-toggle event
