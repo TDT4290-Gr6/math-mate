@@ -1,6 +1,26 @@
 'use server';
 
+import type { Problem } from '@/entities/models/problem';
 import { getInjection } from '@/di/container';
+
+export async function getProblems(
+    offset: number,
+    limit: number,
+    subjects: string[],
+): Promise<Problem[]> {
+    try {
+        const getProblemsController = getInjection('IGetProblemsController');
+        const problems = await getProblemsController({
+            offset,
+            limit,
+            subjects,
+        });
+        return problems;
+    } catch (error) {
+        console.error('Failed to get problems:', error);
+        throw error;
+    }
+}
 
 export async function getCountries() {
     try {
@@ -29,6 +49,17 @@ export async function setCountry(countryId: number) {
         return await setCountryController({ countryId });
     } catch (error) {
         console.error('Failed to set country for current user:', error);
+        throw error;
+    }
+}
+
+export async function getUserId() {
+    try {
+        const getUserController = getInjection('IGetUserController');
+        const user = await getUserController();
+        return user.id;
+    } catch (error) {
+        console.error('Failed to get user ID:', error);
         throw error;
     }
 }
