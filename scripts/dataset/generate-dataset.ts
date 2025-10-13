@@ -3,6 +3,9 @@ import { LLMProviderType, type DatasetEntry } from './types';
 import { generateMethods } from './generate-methods';
 import { open as openPromise } from 'fs/promises';
 import { prisma } from '@/lib/prisma';
+import dotenv from 'dotenv';
+
+dotenv.config({ quiet: true, path: '.env.local' });
 
 /**
  * Asynchronously loads a dataset from a file, where each line is a JSON-encoded entry.
@@ -18,11 +21,13 @@ import { prisma } from '@/lib/prisma';
 async function loadDataset(filePath: string): Promise<DatasetEntry[]> {
     const dataset: DatasetEntry[] = [];
     const file = await openPromise(filePath, 'r');
-
-    for await (const line of file.readLines()) {
-        if (line.trim()) dataset.push(JSON.parse(line));
+    try {
+        for await (const line of file.readLines()) {
+            if (line.trim()) dataset.push(JSON.parse(line));
+        }
+    } finally {
+        await file.close();
     }
-    file.close();
     return dataset;
 }
 
@@ -36,8 +41,7 @@ async function loadDataset(filePath: string): Promise<DatasetEntry[]> {
  * @returns An array of `ProblemInsert` objects derived from the input dataset.
  */
 function datasetToProblems(dataset: DatasetEntry[]): ProblemInsert[] {
-    return dataset.map((entry, index) => ({
-        id: index + 1, // Dummy ID, will be ignored by Prisma on insert
+    return dataset.map((entry) => ({
         title: `Problem ${entry.unique_id}`,
         solution: entry.answer,
         level: entry.level,
@@ -122,4 +126,11 @@ async function main() {
     }
 }
 
-main();
+main()
+    .catch((e) => {
+        console.error(e);
+        process.exitCode = 1;
+    })
+    .finally(async () => {
+        await prisma.$disconnect();
+    });

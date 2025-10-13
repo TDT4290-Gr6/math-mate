@@ -1,5 +1,5 @@
 import type { ProblemInsert } from '@/entities/models/problem';
-import z from 'zod';
+import { z } from 'zod';
 
 export interface DatasetEntry {
     problem: string;

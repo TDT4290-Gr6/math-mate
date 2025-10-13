@@ -2,7 +2,7 @@ import type { ProblemInsert } from '@/entities/models/problem';
 import { ProblemMethodsResponseSchema } from '../types';
 import { GoogleGenAI } from '@google/genai';
 import dotenv from 'dotenv';
-import z from 'zod';
+import { z } from 'zod';
 
 dotenv.config({ quiet: true, path: '.env.local' });
 
@@ -23,6 +23,9 @@ export async function generateMethodsGemini(
     prompt: string,
 ) {
     const token = process.env['GEMINI_TOKEN'];
+    if (!token) {
+        throw new Error('GEMINI_TOKEN is not set');
+    }
     const model = 'gemini-2.5-flash';
     const client = new GoogleGenAI({ apiKey: token });
 

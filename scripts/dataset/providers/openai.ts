@@ -2,7 +2,7 @@ import type { ProblemInsert } from '@/entities/models/problem';
 import { ProblemMethodsResponseSchema } from '../types';
 import OpenAI from 'openai';
 import dotenv from 'dotenv';
-import z from 'zod';
+import { z } from 'zod';
 
 dotenv.config({ quiet: true, path: '.env.local' });
 
@@ -24,6 +24,9 @@ export async function generateMethodsOpenAI(
     prompt: string,
 ) {
     const token = process.env['OPENAI_API_KEY'];
+    if (!token) {
+        throw new Error('OPENAI_API_KEY is not set');
+    }
     const model = 'gpt-5-mini';
     const client = new OpenAI({ apiKey: token });
 
