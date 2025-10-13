@@ -1,20 +1,23 @@
+import rehypeSanitize from 'rehype-sanitize';
 import ReactMarkdown from 'react-markdown';
 import rehypeKatex from 'rehype-katex';
 import remarkMath from 'remark-math';
+import React, { memo } from 'react';
 import remarkGfm from 'remark-gfm';
 import 'katex/dist/katex.min.css';
-import React, { memo } from 'react';
-import rehypeSanitize from 'rehype-sanitize';
 
 export interface LaTeXFormattedTextProps {
     text?: string;
     className?: string;
-    sanitize?: boolean;  // Allow disabling for trusted content
+    sanitize?: boolean; // Allow disabling for trusted content
 }
 
 // helper-function for replacing \[ with $
 function replaceLaTeXBlock(text: string) {
-    return text.replace(/\\\[\s*([\s\S]*?)\s*\\\]/g, (_, math) => `$$${math.trim()}$$`);
+    return text.replace(
+        /\\\[\s*([\s\S]*?)\s*\\\]/g,
+        (_, math) => `$$${math.trim()}$$`,
+    );
 }
 
 /**
