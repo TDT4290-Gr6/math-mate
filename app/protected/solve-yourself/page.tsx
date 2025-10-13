@@ -109,7 +109,7 @@ export default function SolveYourself() {
                 {showChat ? (
                     <motion.div
                         key="chat-window"
-                        className="flex h-full w-3/5 max-w-3/5 flex-col items-center"
+                        className="flex h-full w-3/5 max-w-[60%] flex-col items-center"
                         initial={{ scale: 0.1, opacity: 0, y: -30 }}
                         animate={{ scale: 1, opacity: 1, y: 0 }}
                         transition={{ duration: 0.4, ease: 'easeInOut' }}
