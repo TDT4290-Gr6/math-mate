@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils';
  * Header component with navigation and optional math problem display.
  *
  * Features:
- *   - Displays a back button (ChevronLeft) that navigates to the previous page.
+ *   - Optionally displays a back button (ChevronLeft) that navigates to the previous page.
  *   - Displays a math problem when `variant` is 'problem'.
  *   - Hamburger menu button that opens a `SidebarMenu` overlay.
  *   - Global keyboard shortcuts:
@@ -26,6 +26,8 @@ import { cn } from '@/lib/utils';
  *     The math problem content to display when `variant` is 'problem'. Normally a problem component.
  * @param className - string (optional)
  *    Additional CSS classes to apply to the header container.
+ * @param showBackButton - boolean (optional, default: true)
+ *    Controls whether the back button is displayed.
  *
  * Notes:
  *   - Sidebar overlay is rendered conditionally when `isOpen` is true.
@@ -36,11 +38,13 @@ interface HeaderProps {
     variant?: 'simple' | 'problem';
     mathProblem?: React.ReactNode;
     className?: string;
+    showBackButton?: boolean;
 }
 export default function Header({
     variant = 'simple',
     mathProblem,
     className,
+    showBackButton = true,
 }: HeaderProps) {
     const [isOpen, setIsOpen] = useState(false);
     const router = useRouter();
@@ -80,7 +84,12 @@ export default function Header({
             <button
                 type="button"
                 aria-label="Go back"
-                className="flex size-10 cursor-pointer items-center justify-center"
+                aria-hidden={!showBackButton}
+                tabIndex={showBackButton ? 0 : -1}
+                className={cn(
+                    'flex size-10 cursor-pointer items-center justify-center',
+                    !showBackButton && 'invisible',
+                )}
                 onClick={() => router.back()}
             >
                 <ChevronLeft size={36} />

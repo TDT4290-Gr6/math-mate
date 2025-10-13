@@ -10,6 +10,7 @@ interface MethodCardProps {
     description: string;
     buttonText: string;
     onButtonClick?: () => void;
+    disableButton?: boolean;
 }
 
 /**
@@ -29,6 +30,7 @@ export default function MethodCard({
     description,
     buttonText,
     onButtonClick,
+    disableButton,
 }: MethodCardProps) {
     return (
         <div className="relative mx-4 my-4 flex min-h-[64px] min-w-[128px] flex-col items-start justify-start rounded-xl bg-[var(--card)] p-4 text-start shadow-sm">
@@ -41,14 +43,16 @@ export default function MethodCard({
             </p>
 
             {/* Button */}
-            <div className="absolute right-8 -bottom-5">
-                <Button
-                    className="bg-[var(--accent)] px-6 py-2"
-                    onClick={onButtonClick}
-                >
-                    {buttonText}
-                </Button>
-            </div>
+            {!disableButton && (
+                <div className="absolute right-8 -bottom-5">
+                    <Button
+                        className="bg-[var(--accent)] px-6 py-2"
+                        onClick={onButtonClick}
+                    >
+                        {buttonText}
+                    </Button>
+                </div>
+            )}
         </div>
     );
 }

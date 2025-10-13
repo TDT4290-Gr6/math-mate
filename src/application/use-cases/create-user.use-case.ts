@@ -8,5 +8,5 @@ export const createUserUseCase =
     async (uuid: string): Promise<User> => {
         // apparently not really a uuid but the id passed from next-auth
 
-        return await userRepository.createUser({ uuid, country: 1 });
+        return await userRepository.createUser({ uuid });
     };

@@ -1,10 +1,11 @@
 'use client';
 
-import { UserRound, Moon, X } from 'lucide-react';
+import { UserRound, Moon, X, LoaderCircle } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 import { Switch } from '@/components/ui/switch';
 import { useTheme } from 'next-themes';
+import { getUserId } from '@/actions';
 import { Button } from './button';
-import React from 'react';
 
 interface SidebarMenuProps {
     onClose: () => void;
@@ -14,7 +15,7 @@ interface SidebarMenuProps {
  * SidebarMenu component.
  *
  * This component renders a sidebar on the right side of the screen containing:
- *   - User information (currently a placeholder for User ID)
+ *   - User ID
  *   - Settings section with a dark mode toggle
  *   - Logout button (currently logs to console)
  *   - List of previously solved math problems
@@ -36,6 +37,22 @@ interface SidebarMenuProps {
 export default function SidebarMenu({ onClose }: SidebarMenuProps) {
     // Theme handling
     const { theme, setTheme } = useTheme();
+
+    const [userId, setUserId] = useState<string | undefined>(undefined);
+
+    useEffect(() => {
+        let cancelled = false;
+        getUserId()
+            .then((id) => {
+                if (!cancelled) setUserId(id.toString());
+            })
+            .catch(() => {
+                if (!cancelled) setUserId('Failed to load');
+            });
+        return () => {
+            cancelled = true;
+        };
+    }, []);
 
     // TODO: Implement logout functionality
     const handleLogout = () => {
@@ -62,14 +79,31 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                 <div className="flex items-center justify-between border-b">
                     {/* User ID display */}
                     <p>
-                        <span className="font-semibold">User ID:</span> TODO
+                        <span className="font-semibold">User ID:</span>{' '}
+                        <span
+                            className={
+                                userId === 'Failed to load'
+                                    ? 'text-destructive'
+                                    : ''
+                            }
+                        >
+                            {userId ? (
+                                userId
+                            ) : (
+                                <LoaderCircle
+                                    className="inline animate-spin"
+                                    size={16}
+                                    aria-label="Loading user ID"
+                                    role="status"
+                                />
+                            )}
+                        </span>
                     </p>
 
                     {/* Close button */}
                     <Button
                         size="icon"
-                        variant="ghost"
-                        className="cursor-pointer"
+                        variant="transparent"
                         aria-label="Close sidebar"
                         onClick={onClose}
                     >

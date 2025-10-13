@@ -1,10 +1,5 @@
 'use client';
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Check, ChevronsUpDown } from 'lucide-react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-
 import {
     Form,
     FormControl,
@@ -23,47 +18,76 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Check, ChevronsUpDown } from 'lucide-react';
+import { getCountries, setCountry } from '@/actions';
 import { Button } from '@/components/ui/button';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { cn } from '@/lib/utils';
-import { useState } from 'react';
+import { z } from 'zod';
 
 const FormSchema = z.object({
-    country: z
-        .string({ error: 'You are required to select a country.' })
-        .min(1, 'You are required to select a country.'),
+    countryId: z.int({ error: 'You are required to select a country.' }),
 });
 
 interface CountrySelectDropdownProps {
-    onSubmit: (country: string) => void;
+    setOpen: (open: boolean) => void;
 }
 
-export function CountrySelectDropdown({
-    onSubmit,
-}: CountrySelectDropdownProps) {
-    // TODO: Get countries from backend
-    const countries = [
-        { label: 'Norway', value: '1' },
-        { label: 'India', value: '2' },
-    ] as const;
+export function CountrySelectDropdown({ setOpen }: CountrySelectDropdownProps) {
+    const [popoverOpen, setPopoverOpen] = useState(false);
+    const [countries, setCountries] = useState<
+        Awaited<ReturnType<typeof getCountries>>
+    >([]);
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
     });
 
     // Watch the country field so we can enable/disable the submit button
-    const selectedCountry = form.watch('country');
+    const selectedCountry = form.watch('countryId');
 
-    const [popoverOpen, setPopoverOpen] = useState(false);
+    useEffect(() => {
+        if (selectedCountry) form.clearErrors('countryId');
+    }, [selectedCountry, form]);
+
+    useEffect(() => {
+        getCountries()
+            .then((countries) => setCountries(countries))
+            .catch(() => {
+                form.setError('countryId', {
+                    type: 'manual',
+                    message:
+                        'Failed to load countries. Please try again later.',
+                });
+            });
+    }, [form]);
+
+    function handleSubmit(countryId: number) {
+        setCountry(countryId)
+            .then((result) => {
+                if (result.success) setOpen(false);
+            })
+            .catch(() => {
+                form.setError('countryId', {
+                    type: 'manual',
+                    message: 'Failed to set country. Please try again later.',
+                });
+            });
+    }
 
     return (
         <Form {...form}>
             <form
-                onSubmit={form.handleSubmit((data) => onSubmit(data.country))}
+                onSubmit={form.handleSubmit((data) =>
+                    handleSubmit(data.countryId),
+                )}
                 className="flex w-full flex-col items-center justify-center gap-4"
             >
                 <FormField
                     control={form.control}
-                    name="country"
+                    name="countryId"
                     render={({ field }) => (
                         <FormItem className="w-60">
                             <Popover
@@ -78,9 +102,9 @@ export function CountrySelectDropdown({
                                             {field.value
                                                 ? countries.find(
                                                       (country) =>
-                                                          country.value ===
+                                                          country.id ===
                                                           field.value,
-                                                  )?.label
+                                                  )?.name
                                                 : 'Select country'}
                                             <ChevronsUpDown className="opacity-50" />
                                         </Button>
@@ -93,24 +117,24 @@ export function CountrySelectDropdown({
                                             <CommandGroup>
                                                 {countries.map((country) => (
                                                     <CommandItem
-                                                        value={country.label}
-                                                        key={country.value}
+                                                        value={country.name}
+                                                        key={country.id}
                                                         onSelect={() => {
                                                             form.setValue(
-                                                                'country',
-                                                                country.value,
+                                                                'countryId',
+                                                                country.id,
                                                             );
                                                             setPopoverOpen(
                                                                 false,
                                                             );
                                                         }}
                                                     >
-                                                        {country.label}
+                                                        {country.name}
                                                         {/* Show checkmark for selected item */}
                                                         <Check
                                                             className={cn(
                                                                 'ml-auto',
-                                                                country.value ===
+                                                                country.id ===
                                                                     field.value
                                                                     ? 'opacity-100'
                                                                     : 'opacity-0',
@@ -131,6 +155,7 @@ export function CountrySelectDropdown({
                 <Button
                     type="submit"
                     variant="secondary"
+                    aria-disabled={!selectedCountry}
                     // Have button appear as disabled if no country is selected
                     className={cn(
                         'w-60',
