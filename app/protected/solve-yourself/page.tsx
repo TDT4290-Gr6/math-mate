@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import Title from '@/components/ui/title';
 import Link from 'next/link';
 import React from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 /**
  * SolveYourself
@@ -44,6 +45,7 @@ import React from 'react';
 
 export default function SolveYourself() {
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
+    const [showChat, setShowChat] = useState(false);
 
     // TODO: Replace with actual problem description
     const problemDescription =
@@ -54,19 +56,37 @@ export default function SolveYourself() {
 
     // Listen for the chat-toggle event
     useEffect(() => {
-        const handler = () => setIsChatOpen((v) => !v);
-        window.addEventListener('chat-toggle', handler as EventListener);
-        return () =>
-            window.removeEventListener('chat-toggle', handler as EventListener);
-    }, []);
+    const handler = () => {
+      if (isChatOpen) {
+        // if closing chat — hide immediately
+        setShowChat(false);
+        setIsChatOpen(false);
+      } else {
+        // if opening chat — trigger animation first
+        setIsChatOpen(true);
+      }
+    };
+    window.addEventListener('chat-toggle', handler as EventListener);
+    return () =>
+      window.removeEventListener('chat-toggle', handler as EventListener);
+  }, [isChatOpen]);
 
     return (
-        <div className="${isChatOpen ? '' : 'gap-6'} flex min-h-screen flex-col items-center">
+        <motion.div
+            className={`${isChatOpen ? '' : 'gap-6'} flex min-h-screen flex-col items-center`}
+            layout
+            transition={{ layout: { duration: 0.4, ease: 'easeInOut' } }}
+        >
             {isChatOpen ? (
                 <Header
                     variant="problem"
                     mathProblem={
-                        <ProblemCard description={problemDescription} />
+                        <motion.div
+                            layoutId="problem-card"
+                            onLayoutAnimationComplete={() => setShowChat(true)}
+                        >
+                            <ProblemCard description={problemDescription} />
+                        </motion.div>
                     }
                 />
             ) : (
@@ -78,28 +98,47 @@ export default function SolveYourself() {
                     <Title title={'Solve on your own:'} />
                 </div>
             )}
+            <AnimatePresence>
+                
+                {isChatOpen ? null : (
+                    <motion.div layoutId="problem-card">
+                        <ProblemCard description={problemDescription} />
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        
 
-            {isChatOpen ? null : (
-                <ProblemCard description={problemDescription} />
-            )}
+           <AnimatePresence>
+                {showChat ? (
+                    <motion.div
+                        key="chat-window"
+                        className="flex h-full w-3/5 max-w-3/5 flex-col items-center"
+                        initial={{ scale: 0.1, opacity: 0, y: -30 }}
+                        animate={{ scale: 1, opacity: 1, y: 0 }}
+                        transition={{ duration: 0.4, ease: 'easeInOut' }}
+                    >
+                        <ChatbotWindow
+                            chatHistory={chatHistory}
+                            onClose={() => {
+                                setShowChat(false);
+                                setIsChatOpen(false);
+                            }}
+                            onSendMessage={sendMessage}
+                            isLoading={isLoading}
+                            error={error ?? undefined}
+                        />
+                    </motion.div>
+                ) : (
+                    <div className="fixed right-200 bottom-20">
+                        <ChatToggle />
+                    </div>
+                )}
+            </AnimatePresence>
 
-            {isChatOpen ? (
-                <div className="flex h-full w-3/5 max-w-3/5 flex-col items-center">
-                    <ChatbotWindow
-                        chatHistory={chatHistory}
-                        onClose={() => setIsChatOpen(!isChatOpen)}
-                        onSendMessage={sendMessage}
-                        isLoading={isLoading}
-                        error={error ?? undefined}
-                    />
-                </div>
-            ) : (
-                <div className="fixed right-200 bottom-20">
-                    <ChatToggle />
-                </div>
-            )}
-
-            <div
+            {/* 🎯 Animate the buttons smoothly with layout */}
+            <motion.div
+                layout
+                transition={{ layout: { duration: 0.4, ease: 'easeInOut' } }}
                 className={`${isChatOpen ? '' : 'mt-6'} mb-12 flex flex-row items-center gap-10`}
             >
                 <Link href="/protected/method">
@@ -113,7 +152,7 @@ export default function SolveYourself() {
                         Go to answer
                     </Button>
                 </Link>
-            </div>
-        </div>
+            </motion.div>
+        </motion.div>
     );
 }
