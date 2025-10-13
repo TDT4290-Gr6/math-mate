@@ -127,9 +127,7 @@ export default function SolveYourself() {
                         />
                     </motion.div>
                 ) : (
-                    <div className="fixed right-200 bottom-20">
-                        <ChatToggle />
-                    </div>
+                    <ChatToggle />
                 )}
             </AnimatePresence>
 
