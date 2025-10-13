@@ -1,9 +1,8 @@
 'use server';
 
+import { SendMessageResult } from '@/application/use-cases/send-chat-message.use-case';
 import type { Problem } from '@/entities/models/problem';
 import { getInjection } from '@/di/container';
-import { SendMessageResult } from '@/application/use-cases/send-chat-message.use-case';
-
 
 export async function getProblems(
     offset: number,
@@ -65,7 +64,6 @@ export async function getUserId() {
         throw error;
     }
 }
-
 
 /**
  * Sends a user message to the chat controller and returns the AI assistant's response.
