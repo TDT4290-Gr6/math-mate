@@ -7,13 +7,14 @@ import React, {
     useRef,
     useCallback,
 } from 'react';
+import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 
 type LogPayload = Record<string, unknown>;
 
 export type LogEventInput = {
     userId: number;
-    sessionId: string;
+    sessionId: number;
     actionName: string;
     problemId?: number;
     methodId?: number;
@@ -42,11 +43,12 @@ export function LoggerProvider({ children }: { children: React.ReactNode }) {
     const sessionId = sessionIdRef.current;
 
 
+    const { data: session } = useSession();
+
     const logEvent = useCallback(async (input: Partial<LogEventInput> & { actionName: string }) => {
         const body = {
-            // default to 1 for quick testing (Zod requires userId >= 1)
             userId: 14,
-            sessionId: 364304023,
+            sessionId: 24234324,
             actionName: input.actionName,
             loggedAt: new Date().toISOString(),
             problemId: input.problemId,
@@ -65,7 +67,7 @@ export function LoggerProvider({ children }: { children: React.ReactNode }) {
                 console.warn('logEvent failed', err);
             }
         },
-        [sessionId],
+        [],
     );
 
     const lastPathRef = useRef<string | null>(null);

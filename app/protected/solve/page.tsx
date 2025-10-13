@@ -1,4 +1,4 @@
-'use client';
+ 'use client';
 
 import ChatbotWindow, {
     ChatHistory,
@@ -12,6 +12,8 @@ import { sendMessageAction } from './actions';
 import Header from '@/components/ui/header';
 import Steps from '@/components/steps';
 import { cn } from '@/lib/utils';
+import { MethodProvider, useTrackedLogger } from '@/components/logger/MethodProvider';
+import { useSearchParams } from 'next/navigation';
 
 // Privacy notice for chat
 const PRIVACY_INITIAL_MESSAGE: ChatMessage = {
@@ -65,6 +67,21 @@ const mockSteps: Step[] = [
  * chat state and passes messages to the ChatbotWindow.
  */
 export default function SolvingPage() {
+    const search = useSearchParams();
+    const methodIdParam = search?.get?.('methodId');
+    const stepIdParam = search?.get?.('stepId');
+    const methodId = methodIdParam ? Number(methodIdParam) : undefined;
+    const stepId = stepIdParam ? Number(stepIdParam) : undefined;
+
+    return (
+        <MethodProvider methodId={methodId} stepId={stepId}>
+            <SolvingContent />
+        </MethodProvider>
+    );
+}
+
+function SolvingContent() {
+    const tracked = useTrackedLogger();
     const [currentStep, setCurrentStep] = useState(1);
     const totalSteps = mockSteps.length;
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
@@ -76,11 +93,17 @@ export default function SolvingPage() {
 
     // Listen for the chat-toggle event
     React.useEffect(() => {
-        const handler = () => setIsChatOpen((v) => !v);
+        const handler = () => {
+            setIsChatOpen((v) => {
+                const next = !v;
+                void tracked.logEvent({ actionName: next ? 'chat_open' : 'chat_close' });
+                return next;
+            });
+        };
         window.addEventListener('chat-toggle', handler as EventListener);
         return () =>
             window.removeEventListener('chat-toggle', handler as EventListener);
-    }, []);
+    }, [tracked]);
 
     // Clear error message after 7 seconds
     useEffect(() => {
@@ -91,15 +114,20 @@ export default function SolvingPage() {
 
     const handleNextStep = () => {
         if (currentStep < totalSteps) {
+            const from = currentStep;
+            const to = currentStep + 1;
             setCurrentStep((prev) => prev + 1);
+            void tracked.logEvent({ actionName: 'next_step', payload: { from, to } });
         }
+    };
+
+    const handleGoToAnswer = () => {
+        void tracked.logEvent({ actionName: 'go_to_answer', payload: { currentStep } });
+        alert('Go to answer button clicked');
     };
 
     /**
      * Handles sending a message from the user to the chat service and updating the chat UI.
-     * It handle the loading state and appends both user and assistant messages to the chat history.
-     *
-     * @param {string} message - The content of the message to send.
      */
     const handleSendMessage = async (message: string) => {
         const userMessage: ChatMessage = {
@@ -111,6 +139,9 @@ export default function SolvingPage() {
         setChatHistory((prev) => ({
             messages: [...prev.messages, userMessage],
         }));
+
+        // log the user message
+        void tracked.logEvent({ actionName: 'chat_user_message', payload: { content: message } });
 
         setIsLoading(true);
         try {
@@ -129,6 +160,10 @@ export default function SolvingPage() {
                 setChatHistory((prev) => ({
                     messages: [...prev.messages, assistantMessage],
                 }));
+
+                // log assistant reply (truncated to 200 chars)
+                const snippet = reply.message.content?.slice(0, 200);
+                void tracked.logEvent({ actionName: 'chat_assistant_message', payload: { content_snippet: snippet } });
             }
         } catch (error) {
             console.log(error);
@@ -161,7 +196,7 @@ export default function SolvingPage() {
                     </div>
                     <div className="flex-end mb-20 flex w-full justify-center gap-2">
                         <Button
-                            onClick={() => alert('Go to answer button clicked')}
+                            onClick={() => handleGoToAnswer()}
                             className="w-1/4 rounded-full"
                             variant="default"
                         >
@@ -185,7 +220,10 @@ export default function SolvingPage() {
                     <div className="flex h-full w-1/2 flex-col p-4">
                         <ChatbotWindow
                             chatHistory={chatHistory}
-                            onClose={() => setIsChatOpen(!isChatOpen)}
+                            onClose={() => {
+                                setIsChatOpen(false);
+                                void tracked.logEvent({ actionName: 'chat_close' });
+                            }}
                             onSendMessage={handleSendMessage}
                             isLoading={isLoading}
                             error={error ? error : undefined}

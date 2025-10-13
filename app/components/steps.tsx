@@ -1,4 +1,7 @@
+'use client';
+
 import { useEffect, useRef } from 'react';
+import { useTrackedLogger } from '@/components/logger/MethodProvider';
 import MethodCard from './ui/methodcard';
 import { Minus } from 'lucide-react';
 
@@ -22,17 +25,45 @@ interface StepsProps {
  * Props:
  * @param steps - Array of step objects with id and content
  * @param currentStep - Number of steps to reveal
+ * 
+ * Logs:
+ * - `step_click`: when a user clicks a revealed step.
+ * - `step_visible`: when a new step becomes visible (auto event when currentStep changes).
  */
 export default function Steps({ steps, currentStep }: StepsProps) {
     const visibleSteps: Step[] = steps.slice(0, currentStep);
     const containerRef = useRef<HTMLDivElement | null>(null);
+    const tracked = useTrackedLogger();
 
+    // scroll when new steps appear
     useEffect(() => {
         const el = containerRef.current;
         if (!el) return;
-        // Scroll to bottom when adding new steps
         el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
     }, [visibleSteps.length]);
+
+    // log automatically when a new step becomes visible
+    useEffect(() => {
+        if (currentStep > 0) {
+            const newStep = steps[currentStep - 1];
+            if (newStep) {
+                void tracked.logEvent({
+                    actionName: 'step_visible',
+                    payload: { stepID: newStep.stepID },
+                   /*  stepId: Number(newStep.stepID), */ // optional numeric mapping if your logger expects number
+                });
+            }
+        }
+    }, [currentStep, steps, tracked]);
+
+    // log on step click
+    const handleStepClick = (step: Step) => {
+        void tracked.logEvent({
+            actionName: 'step_click',
+            payload: { stepID: step.stepID },
+            /* stepId: Number(step.stepID), */
+        });
+    };
 
     return (
         <div
@@ -47,8 +78,21 @@ export default function Steps({ steps, currentStep }: StepsProps) {
                     disableButton={true}
                 />
             </div>
+
             {visibleSteps.map((step, index) => (
-                <div key={step.stepID} className="p-2">
+                <div
+                    key={step.stepID}
+                    className="p-2"
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => handleStepClick(step)}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            handleStepClick(step);
+                        }
+                    }}
+                >
                     <h3 className="flex flex-row text-lg font-semibold">
                         <Minus
                             stroke="currentColor"

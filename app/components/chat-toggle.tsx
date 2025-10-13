@@ -4,9 +4,11 @@ import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import { Button } from '@/components/ui/button';
 import { Sparkles } from 'lucide-react';
 import React from 'react';
+import { useTrackedLogger } from '@/components/logger/MethodProvider';
 
 export default function ChatToggle() {
     const [open, setOpen] = React.useState(true);
+    const tracked = useTrackedLogger();
 
     React.useEffect(() => {
         const t = setTimeout(() => setOpen(false), 4000); // auto-close help tooltip
@@ -14,6 +16,9 @@ export default function ChatToggle() {
     }, []);
 
     const handleClick = () => {
+        try {
+            void tracked.logEvent({ actionName: 'chat_open' });
+        } catch {}
         if (typeof window !== 'undefined') {
             window.dispatchEvent(new CustomEvent('chat-toggle'));
         }
@@ -50,4 +55,3 @@ export default function ChatToggle() {
         </Tooltip>
     );
 }
-// ...existing code...

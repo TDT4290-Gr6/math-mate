@@ -1,6 +1,7 @@
 'use client';
 
 import { useLogger } from '@/components/logger/LoggerProvider';
+import { MethodProvider } from '@/components/logger/MethodProvider';
 import ProblemCard from '@/components/ui/problem-card';
 import MethodCard from '@/components/ui/methodcard';
 import { Button } from '@/components/ui/button';
@@ -69,13 +70,14 @@ export default function MethodPage() {
                 className={`flex w-full flex-col lg:flex-row ${methodCount === 3 ? 'max-w-6xl' : 'max-w-5xl'} px-10`}
             >
                 {Array.from({ length: methodCount }).map((_, i) => (
-                    <MethodCard
-                        key={i}
-                        title={`Method ${i + 1}`}
-                        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
-                        buttonText="Get Started"
-                        onButtonClick={() => router.push('/protected/solve')}
-                    />
+                    <MethodProvider key={i} methodId={i + 1}>
+                        <MethodCard
+                            title={`Method ${i + 1}`}
+                            description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+                            buttonText="Get Started"
+                            onButtonClick={() => router.push("/protected/solve")}
+                        />
+                    </MethodProvider>
                 ))}
             </div>
             <div className="flex flex-col items-center">
@@ -83,7 +85,7 @@ export default function MethodPage() {
                 {/* TODO: change link to "solve on your own" page */}
                 <Button
                     className="mb-20 w-48 bg-[var(--accent)]"
-                    onClick={() => router.push('/protected/dashboard')}
+                    data-log-action="solve_button_click" data-log-payload='{"problemId":42}'
                 >
                     Solve on your own
                 </Button>

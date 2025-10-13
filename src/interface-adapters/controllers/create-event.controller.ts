@@ -19,9 +19,9 @@ const LogEventDTO = z.object({
 export type ICreateEventController = ReturnType<typeof createEventController>;
 
 export const createEventController =
-    (logEventUseCase: ILogEventUseCase) => async (raw: unknown) => {
+    (logEventUseCase: ILogEventUseCase) => async (raw: LoggerLike) => {
         return withRequestLogger(async ({ log }) => {
-            const l = log as unknown as LoggerLike;
+            const l = log as LoggerLike;
             // Validate input med safeParse (try-catch alternativt)
             const { data, error } = LogEventDTO.safeParse(raw);
 
