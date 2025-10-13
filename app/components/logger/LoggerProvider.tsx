@@ -7,8 +7,8 @@ import React, {
     useRef,
     useCallback,
 } from 'react';
-import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 type LogPayload = Record<string, unknown>;
 
@@ -42,20 +42,23 @@ export function LoggerProvider({ children }: { children: React.ReactNode }) {
     const sessionIdRef = useRef<string>(makeSessionId());
     const sessionId = sessionIdRef.current;
 
-
     const { data: session } = useSession();
 
-    const logEvent = useCallback(async (input: Partial<LogEventInput> & { actionName: string }) => {
-        const body = {
-            userId: 14,
-            sessionId: 24234324,
-            actionName: input.actionName,
-            loggedAt: new Date().toISOString(),
-            problemId: input.problemId,
-            methodId: input.methodId,
-            stepId: input.stepId,
-            payload: typeof input.payload === 'string' ? input.payload : JSON.stringify(input.payload ?? {}),
-        };
+    const logEvent = useCallback(
+        async (input: Partial<LogEventInput> & { actionName: string }) => {
+            const body = {
+                userId: 14,
+                sessionId: 24234324,
+                actionName: input.actionName,
+                loggedAt: new Date().toISOString(),
+                problemId: input.problemId,
+                methodId: input.methodId,
+                stepId: input.stepId,
+                payload:
+                    typeof input.payload === 'string'
+                        ? input.payload
+                        : JSON.stringify(input.payload ?? {}),
+            };
 
             try {
                 await fetch('/api/events', {

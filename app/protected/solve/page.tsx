@@ -1,19 +1,22 @@
- 'use client';
+'use client';
 
 import ChatbotWindow, {
     ChatHistory,
     ChatMessage,
 } from '@/components/chatbot-window';
+import {
+    MethodProvider,
+    useTrackedLogger,
+} from '@/components/logger/MethodProvider';
 import ProblemCard from '@/components/ui/problem-card';
 import React, { useEffect, useState } from 'react';
 import ChatToggle from '@/components/chat-toggle';
+import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { sendMessageAction } from './actions';
 import Header from '@/components/ui/header';
 import Steps from '@/components/steps';
 import { cn } from '@/lib/utils';
-import { MethodProvider, useTrackedLogger } from '@/components/logger/MethodProvider';
-import { useSearchParams } from 'next/navigation';
 
 // Privacy notice for chat
 const PRIVACY_INITIAL_MESSAGE: ChatMessage = {
@@ -96,7 +99,9 @@ function SolvingContent() {
         const handler = () => {
             setIsChatOpen((v) => {
                 const next = !v;
-                void tracked.logEvent({ actionName: next ? 'chat_open' : 'chat_close' });
+                void tracked.logEvent({
+                    actionName: next ? 'chat_open' : 'chat_close',
+                });
                 return next;
             });
         };
@@ -117,12 +122,18 @@ function SolvingContent() {
             const from = currentStep;
             const to = currentStep + 1;
             setCurrentStep((prev) => prev + 1);
-            void tracked.logEvent({ actionName: 'next_step', payload: { from, to } });
+            void tracked.logEvent({
+                actionName: 'next_step',
+                payload: { from, to },
+            });
         }
     };
 
     const handleGoToAnswer = () => {
-        void tracked.logEvent({ actionName: 'go_to_answer', payload: { currentStep } });
+        void tracked.logEvent({
+            actionName: 'go_to_answer',
+            payload: { currentStep },
+        });
         alert('Go to answer button clicked');
     };
 
@@ -141,7 +152,10 @@ function SolvingContent() {
         }));
 
         // log the user message
-        void tracked.logEvent({ actionName: 'chat_user_message', payload: { content: message } });
+        void tracked.logEvent({
+            actionName: 'chat_user_message',
+            payload: { content: message },
+        });
 
         setIsLoading(true);
         try {
@@ -163,7 +177,10 @@ function SolvingContent() {
 
                 // log assistant reply (truncated to 200 chars)
                 const snippet = reply.message.content?.slice(0, 200);
-                void tracked.logEvent({ actionName: 'chat_assistant_message', payload: { content_snippet: snippet } });
+                void tracked.logEvent({
+                    actionName: 'chat_assistant_message',
+                    payload: { content_snippet: snippet },
+                });
             }
         } catch (error) {
             console.log(error);
@@ -222,7 +239,9 @@ function SolvingContent() {
                             chatHistory={chatHistory}
                             onClose={() => {
                                 setIsChatOpen(false);
-                                void tracked.logEvent({ actionName: 'chat_close' });
+                                void tracked.logEvent({
+                                    actionName: 'chat_close',
+                                });
                             }}
                             onSendMessage={handleSendMessage}
                             isLoading={isLoading}

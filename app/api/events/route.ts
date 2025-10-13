@@ -2,15 +2,16 @@ import { getInjection } from '@/di/container';
 import { NextResponse } from 'next/server';
 
 interface IEventController {
-    handle: (body: unknown) => Promise<{ body: unknown; status: number } | unknown>;
+    handle: (
+        body: unknown,
+    ) => Promise<{ body: unknown; status: number } | unknown>;
 }
 
 export async function POST(request: Request) {
-   
     const body = await request.json().catch(() => null);
 
     try {
-        const createEventController = getInjection("ICreateEventController");
+        const createEventController = getInjection('ICreateEventController');
 
         let result: { body: unknown; status: number };
 
@@ -29,7 +30,8 @@ export async function POST(request: Request) {
             }
         } else if (
             createEventController &&
-            typeof (createEventController as IEventController).handle === 'function'
+            typeof (createEventController as IEventController).handle ===
+                'function'
         ) {
             const controllerResult = await (
                 createEventController as IEventController

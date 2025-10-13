@@ -23,12 +23,15 @@ export type ILogEventUseCase = ReturnType<typeof LogEventUseCase>;
 export const LogEventUseCase = (eventRepository: IEventsRepository) => ({
     async execute(
         input: InsertEvent | Omit<InsertEvent, 'loggedAt'>,
-    options?: { log?: LoggerLike },
+        options?: { log?: LoggerLike },
     ): Promise<Event> {
         const log = options?.log;
 
         const start = Date.now();
-        log?.info({ action: input.actionName }, 'LogEventUseCase.execute start');
+        log?.info(
+            { action: input.actionName },
+            'LogEventUseCase.execute start',
+        );
 
         // Ensure we always have a timestamp, but keep DB column name 'logged_at'
         const withDefaults: InsertEvent = {

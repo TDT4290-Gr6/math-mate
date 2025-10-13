@@ -1,9 +1,9 @@
+import { withRequestLogger } from '@/infrastructure/services/logging/request-logger';
 import { ILogEventUseCase } from '@/application/use-cases/log-event.use-case';
+import type { LoggerLike } from '@/application/use-cases/log-event.use-case';
 import { InputParseError } from '@/entities/errors/common';
 import { prisma } from '@/lib/prisma';
 import { z } from 'zod';
-import { withRequestLogger } from '@/infrastructure/services/logging/request-logger';
-import type { LoggerLike } from '@/application/use-cases/log-event.use-case';
 
 const LogEventDTO = z.object({
     userId: z.number().int(),
@@ -26,8 +26,13 @@ export const createEventController =
             const { data, error } = LogEventDTO.safeParse(raw);
 
             if (error) {
-                l.warn({ raw, err: error }, 'createEventController: invalid input');
-                throw new InputParseError('Invalid input data', { cause: error });
+                l.warn(
+                    { raw, err: error },
+                    'createEventController: invalid input',
+                );
+                throw new InputParseError('Invalid input data', {
+                    cause: error,
+                });
             }
 
             // Sørg for at payload er string som forventet
@@ -37,13 +42,21 @@ export const createEventController =
                     : JSON.stringify(data.payload);
 
             // Verify the user exists to avoid a DB foreign-key error later
-            const user = await prisma.user.findUnique({ where: { id: data.userId } });
+            const user = await prisma.user.findUnique({
+                where: { id: data.userId },
+            });
             if (!user) {
-                l.warn({ userId: data.userId }, 'createEventController: user not found');
+                l.warn(
+                    { userId: data.userId },
+                    'createEventController: user not found',
+                );
                 throw new InputParseError('Invalid userId: user not found');
             }
 
-            l.info({ userId: data.userId, action: data.actionName }, 'createEventController: request validated');
+            l.info(
+                { userId: data.userId, action: data.actionName },
+                'createEventController: request validated',
+            );
 
             // Kall use case med renset data
             try {
@@ -64,9 +77,15 @@ export const createEventController =
                 l.info({ id: out.id }, 'createEventController: event created');
 
                 // Returner formatert respons (kan justeres etter behov)
-                return { status: 201, body: { id: out.id, loggedAt: out.loggedAt } };
+                return {
+                    status: 201,
+                    body: { id: out.id, loggedAt: out.loggedAt },
+                };
             } catch (err) {
-                l.error({ err }, 'createEventController: failed to create event');
+                l.error(
+                    { err },
+                    'createEventController: failed to create event',
+                );
                 throw err;
             }
         });

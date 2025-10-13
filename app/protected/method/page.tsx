@@ -1,7 +1,7 @@
 'use client';
 
-import { useLogger } from '@/components/logger/LoggerProvider';
 import { MethodProvider } from '@/components/logger/MethodProvider';
+import { useLogger } from '@/components/logger/LoggerProvider';
 import ProblemCard from '@/components/ui/problem-card';
 import MethodCard from '@/components/ui/methodcard';
 import { Button } from '@/components/ui/button';
@@ -75,7 +75,9 @@ export default function MethodPage() {
                             title={`Method ${i + 1}`}
                             description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
                             buttonText="Get Started"
-                            onButtonClick={() => router.push("/protected/solve")}
+                            onButtonClick={() =>
+                                router.push('/protected/solve')
+                            }
                         />
                     </MethodProvider>
                 ))}
@@ -85,7 +87,8 @@ export default function MethodPage() {
                 {/* TODO: change link to "solve on your own" page */}
                 <Button
                     className="mb-20 w-48 bg-[var(--accent)]"
-                    data-log-action="solve_button_click" data-log-payload='{"problemId":42}'
+                    data-log-action="solve_button_click"
+                    data-log-payload='{"problemId":42}'
                 >
                     Solve on your own
                 </Button>

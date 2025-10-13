@@ -1,10 +1,10 @@
 'use client';
 
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
+import { useTrackedLogger } from '@/components/logger/MethodProvider';
 import { Button } from '@/components/ui/button';
 import { Sparkles } from 'lucide-react';
 import React from 'react';
-import { useTrackedLogger } from '@/components/logger/MethodProvider';
 
 export default function ChatToggle() {
     const [open, setOpen] = React.useState(true);

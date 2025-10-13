@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
 import { useTrackedLogger } from '@/components/logger/MethodProvider';
+import { useEffect, useRef } from 'react';
 import MethodCard from './ui/methodcard';
 import { Minus } from 'lucide-react';
 
@@ -25,7 +25,7 @@ interface StepsProps {
  * Props:
  * @param steps - Array of step objects with id and content
  * @param currentStep - Number of steps to reveal
- * 
+ *
  * Logs:
  * - `step_click`: when a user clicks a revealed step.
  * - `step_visible`: when a new step becomes visible (auto event when currentStep changes).
@@ -50,7 +50,7 @@ export default function Steps({ steps, currentStep }: StepsProps) {
                 void tracked.logEvent({
                     actionName: 'step_visible',
                     payload: { stepID: newStep.stepID },
-                   /*  stepId: Number(newStep.stepID), */ // optional numeric mapping if your logger expects number
+                    /*  stepId: Number(newStep.stepID), */ // optional numeric mapping if your logger expects number
                 });
             }
         }

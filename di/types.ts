@@ -4,11 +4,11 @@ import type { ICreateEventController } from '@/interface-adapters/controllers/cr
 import type { ICountriesRepository } from '@/application/repositories/countries.repository.interface';
 import type { ISetCountryController } from '@/interface-adapters/controllers/set-country.controller';
 import type { ISolvesRepository } from '@/application/repositories/solves.repository.interface';
+import type { IEventsRepository } from '@/application/repositories/events.repository.interface';
 import type { IGetUserController } from '@/interface-adapters/controllers/get-user.controller';
 import type { IUsersRepository } from '@/application/repositories/users.repository.interface';
 import { ISendChatMessageController } from '@/interface-adapters/controllers/chat.controller';
 import { ISendChatMessageUseCase } from '@/application/use-cases/send-chat-message.use-case';
-import type { IEventsRepository } from '@/application/repositories/events.repository.interface';
 import type { ICreateCountryUseCase } from '@/application/use-cases/create-country.use-case';
 import type { ISignInController } from '@/interface-adapters/controllers/signIn.controller';
 import type { IAuthenticationService } from '@/application/services/auth.service.interface';

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React from 'react';
-import { SessionProvider } from 'next-auth/react';
 import { LoggerProvider } from './components/logger/LoggerProvider';
+import { SessionProvider } from 'next-auth/react';
+import React from 'react';
 
 export function Providers({ children }: { children: React.ReactNode }) {
     return (
