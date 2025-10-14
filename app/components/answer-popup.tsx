@@ -41,7 +41,7 @@ export default function AnswerPopup({
              Clicking it advances to 'confirm'. This is a one-way action (not a toggle).
          - 'confirm': shows the revealed answer and asks the user whether their solution
              matched (Yes / No). Selecting either sets `wasCorrect` and moves to 'difficulty'.
-         - 'difficulty': user rates how hard the problem was (1..4). The UI highlights
+         - 'difficulty': user rates how hard the problem was (1..5). The UI highlights
          ratings cumulatively (buttons 1..N). Once a rating is chosen, the footer
              shows 'Try again' and 'Next question' actions; selecting one finishes the flow.
          - 'done': final state after an action; the popup is closed and `onClose` is called.
@@ -80,7 +80,7 @@ export default function AnswerPopup({
     }
 
     function handleFinalAction(action: 'next' | 'retry') {
-        // TO-DO: handle difficulty rating answer and decide if a user can re-evaluata a problem
+        // TODO: handle difficulty rating answer and decide whether a user can re-evaluate a problem
         console.log({ wasCorrect, selectedDifficulty, action });
         setStep('done');
         if (action === 'next') {
@@ -98,7 +98,7 @@ export default function AnswerPopup({
         >
             <DialogContent
                 onInteractOutside={(event) => event.preventDefault()} // prevent click outside
-                onEscapeKeyDown={(event) => event.preventDefault()} // prevent escape key
+                onEscapeKeyDown={() => onClose?.()} // allow Escape to close dialog
                 className="px-8 pt-8 pb-4"
             >
                 <DialogHeader>
