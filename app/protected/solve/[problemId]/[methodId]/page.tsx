@@ -54,7 +54,7 @@ export default function SolvingPage() {
         <div className="flex min-h-screen w-full flex-col items-center">
             <AnswerPopup
                 isOpen={isAnswerPopupOpen}
-                answer={'final answer'}
+                answer={method?.steps?.at(-1)?.content ?? "Answer is not provided"}
                 onClose={() => setIsAnswerPopupOpen(false)}
             />
             <Header
