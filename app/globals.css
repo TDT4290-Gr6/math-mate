@@ -78,6 +78,8 @@
     --sidebar-ring: oklch(0.7071 0.0224 261.7494);
     --chatbot: oklch(0.92 0.004 100);
     --loading: oklch(94.681% 0.00445 77.997);
+    --answer-card: oklch(0.76 0.014 75);
+    --answer-card-secondary: oklch(0.92 0.004 100);
     --font-sans: Inter, sans-serif;
     --font-serif: Source Serif 4, serif;
     --font-mono: JetBrains Mono, monospace;
@@ -141,6 +143,8 @@
     --sidebar-ring: oklch(0.551 0.0267 264.3277);
     --chatbot: oklch(42.084% 0.00207 67.247);
     --loading: oklch(31.882% 0.00333 48.206);
+    --answer-card: oklch(0.83 0.002 247);
+    --answer-card-secondary: oklch(0.83 0.002 247);
     --font-sans: Inter, sans-serif;
     --font-serif: Source Serif 4, serif;
     --font-mono: JetBrains Mono, monospace;

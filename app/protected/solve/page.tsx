@@ -2,6 +2,7 @@
 
 import ChatbotWindow from '@/components/chatbot-window';
 import ProblemCard from '@/components/ui/problem-card';
+import AnswerPopup from '@/components/answer-popup';
 import ChatToggle from '@/components/chat-toggle';
 import { useChatbot } from 'app/hooks/useChatbot';
 import { Button } from '@/components/ui/button';
@@ -54,6 +55,7 @@ export default function SolvingPage() {
     const [currentStep, setCurrentStep] = useState(1);
     const totalSteps = mockSteps.length;
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
+    const [isAnswerPopupOpen, setIsAnswerPopupOpen] = useState(false);
 
     const { chatHistory, sendMessage, isLoading, error } = useChatbot();
 
@@ -72,7 +74,12 @@ export default function SolvingPage() {
     };
 
     return (
-        <div className="flex h-screen w-full flex-col items-center">
+        <div className="flex min-h-screen w-full flex-col items-center">
+            <AnswerPopup
+                isOpen={isAnswerPopupOpen}
+                answer={'final answer'}
+                onClose={() => setIsAnswerPopupOpen(false)}
+            />
             <Header
                 variant="problem"
                 mathProblem={
@@ -94,7 +101,7 @@ export default function SolvingPage() {
                     </div>
                     <div className="flex-end mb-20 flex w-full justify-center gap-2">
                         <Button
-                            onClick={() => alert('Go to answer button clicked')}
+                            onClick={() => setIsAnswerPopupOpen(true)}
                             className="w-1/4 rounded-full"
                             variant="default"
                         >

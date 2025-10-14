@@ -1,7 +1,10 @@
 module.exports = {
     ci: {
         collect: {
-            url: ['http://localhost:3000' /* Add other pages to test */],
+            url: [
+                'http://localhost:3000',
+                'http://localhost:3000/protected/solve' /* Add other pages to test */,
+            ],
             startServerCommand: 'npm start',
             startServerReadyPattern: 'ready in',
             startServerReadyTimeout: 30000,
