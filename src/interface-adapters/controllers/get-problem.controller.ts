@@ -1,9 +1,9 @@
 import { IAuthenticationService } from '@/application/services/auth.service.interface';
 import { IGetProblemUseCase } from '@/application/use-cases/get-problem.use-case';
+import { problemPresenter } from '../presenters/problem.presenter';
 import { UnauthenticatedError } from '@/entities/errors/auth';
 import { InputParseError } from '@/entities/errors/common';
 import { z } from 'zod';
-import { problemPresenter } from '../presenters/problem.presenter';
 
 const inputSchema = z.object({
     problemId: z.int().nonnegative(),

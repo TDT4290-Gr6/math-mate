@@ -1,9 +1,9 @@
 import type { ICreateCountryController } from '@/interface-adapters/controllers/create-country.controller';
 import type { IGetCountriesController } from '@/interface-adapters/controllers/get-countries.controller';
-import type { IGetProblemController } from '@/interface-adapters/controllers/get-problem.controller';
 import type { IGetProblemsController } from '@/interface-adapters/controllers/get-problems.controller';
 import type { ICountriesRepository } from '@/application/repositories/countries.repository.interface';
 import type { ISetCountryController } from '@/interface-adapters/controllers/set-country.controller';
+import type { IGetProblemController } from '@/interface-adapters/controllers/get-problem.controller';
 import type { IProblemsRepository } from '@/application/repositories/problems.repository.interface';
 import type { ISendChatMessageController } from '@/interface-adapters/controllers/chat.controller';
 import type { ISendChatMessageUseCase } from '@/application/use-cases/send-chat-message.use-case';
@@ -14,9 +14,9 @@ import type { ICreateCountryUseCase } from '@/application/use-cases/create-count
 import type { ISignInController } from '@/interface-adapters/controllers/signIn.controller';
 import type { IAuthenticationService } from '@/application/services/auth.service.interface';
 import type { IGetCountriesUseCase } from '@/application/use-cases/get-countries.use-case';
-import type { IGetProblemUseCase } from '@/application/use-cases/get-problem.use-case';
 import type { IGetProblemsUseCase } from '@/application/use-cases/get-problems.use-case';
 import type { ISetCountryUseCase } from '@/application/use-cases/set-country.use-case';
+import type { IGetProblemUseCase } from '@/application/use-cases/get-problem.use-case';
 import type { ICreateUserUseCase } from '@/application/use-cases/create-user.use-case';
 import type { IChatService } from '@/application/services/chat.service.interface';
 import type { IGetUserUseCase } from '@/application/use-cases/get-user.use-case';

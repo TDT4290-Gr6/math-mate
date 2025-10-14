@@ -1,16 +1,16 @@
 'use client';
 
+import { useFetchProblem } from 'app/hooks/useFetchProblem';
 import ChatbotWindow from '@/components/chatbot-window';
 import ProblemCard from '@/components/ui/problem-card';
 import ChatToggle from '@/components/chat-toggle';
 import { useChatbot } from 'app/hooks/useChatbot';
 import { Button } from '@/components/ui/button';
-import React, { useState } from 'react';
 import Header from '@/components/ui/header';
 import { useParams } from 'next/navigation';
+import React, { useState } from 'react';
 import Steps from '@/components/steps';
 import { cn } from '@/lib/utils';
-import { useFetchProblem } from 'app/hooks/useFetchProblem';
 
 /**
  * SolvingPage

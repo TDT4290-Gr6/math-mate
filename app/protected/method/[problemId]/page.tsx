@@ -1,11 +1,11 @@
 'use client';
 
+import { useFetchProblem } from 'app/hooks/useFetchProblem';
 import ProblemCard from '@/components/ui/problem-card';
 import { useParams, useRouter } from 'next/navigation';
 import MethodCard from '@/components/ui/methodcard';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
-import { useFetchProblem } from 'app/hooks/useFetchProblem';
 
 /**
  * The page component that displays a set of method cards to help solve

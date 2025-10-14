@@ -1,11 +1,11 @@
 import { getProblemsController } from '@/interface-adapters/controllers/get-problems.controller';
 import { MockProblemsRepository } from '@/infrastructure/repositories/problems.repository.mock';
+import { getProblemController } from '@/interface-adapters/controllers/get-problem.controller';
 import { ProblemsRepository } from '@/infrastructure/repositories/problems.repository';
 import { getProblemsUseCase } from '@/application/use-cases/get-problems.use-case';
 import { getProblemUseCase } from '@/application/use-cases/get-problem.use-case';
 import { createModule } from '@evyweb/ioctopus';
 import { DI_SYMBOLS } from '../types';
-import { getProblemController } from '@/interface-adapters/controllers/get-problem.controller';
 
 export function problemsModule() {
     const problemsModule = createModule();
