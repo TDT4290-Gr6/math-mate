@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import Title from '@/components/ui/title';
 import Link from 'next/link';
 import React from 'react';
+import { useProblemStore } from 'app/store/problem-store';
 
 /**
  * SolveYourself
@@ -47,9 +48,7 @@ export default function SolveYourself() {
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
     const [showChat, setShowChat] = useState(false);
 
-    // TODO: Replace with actual problem description
-    const problemDescription =
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc in nunc diam. Fusce accumsan tempor justo ac pellentesque. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.';
+    const problem = useProblemStore((state) => state.problem);
 
     const { chatHistory, sendMessage, isLoading, error } = useChatbot();
 
@@ -84,7 +83,7 @@ export default function SolveYourself() {
                             layoutId="problem-card"
                             onLayoutAnimationComplete={() => setShowChat(true)}
                         >
-                            <ProblemCard description={problemDescription} />
+                            <ProblemCard description={problem?.problem} />
                         </motion.div>
                     }
                 />
@@ -100,7 +99,7 @@ export default function SolveYourself() {
             <AnimatePresence>
                 {isChatOpen ? null : (
                     <motion.div layoutId="problem-card">
-                        <ProblemCard description={problemDescription} />
+                        <ProblemCard description={problem?.problem} />
                     </motion.div>
                 )}
             </AnimatePresence>
@@ -130,7 +129,7 @@ export default function SolveYourself() {
                 )}
             </AnimatePresence>
 
-            {/* 🎯 Animate the buttons smoothly with layout */}
+            {/* Animate the buttons smoothly with layout */}
             <motion.div
                 layout
                 transition={{ layout: { duration: 0.4, ease: 'easeInOut' } }}
