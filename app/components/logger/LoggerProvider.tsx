@@ -1,12 +1,6 @@
 'use client';
 
-import React, {
-    createContext,
-    useContext,
-    useEffect,
-    useRef,
-    useCallback,
-} from 'react';
+import React, { createContext, useContext, useEffect, useRef, useCallback } from 'react';
 import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 
@@ -26,29 +20,45 @@ type LoggerContextValue = {
     logEvent: (
         input: Partial<LogEventInput> & { actionName: string },
     ) => Promise<void>;
-    sessionId: string;
+    sessionId: number;
 };
 
 const LoggerContext = createContext<LoggerContextValue | undefined>(undefined);
 
-function makeSessionId() {
-    // numeric session id so it can be stored as BigInt if needed
-    return `${Date.now()}${Math.floor(Math.random() * 1000)}`;
+// generate per-browser-session ID
+function getSessionId(): number {
+    if (typeof window === 'undefined') return Math.floor(Math.random() * 1e9);
+
+    const existing = sessionStorage.getItem('logSessionId');
+    if (existing) return Number(existing);
+
+    const newId = Math.floor(Math.random() * 1e9);
+    sessionStorage.setItem('logSessionId', newId.toString());
+    return newId;
 }
+
 
 export function LoggerProvider({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
-    // Generate a sessionId once per provider instance
-    const sessionIdRef = useRef<string>(makeSessionId());
-    const sessionId = sessionIdRef.current;
+    const { data: session, status } = useSession(); // track status
 
-    const { data: session } = useSession();
+    // Extract sessionId from session if available
+    // Persistent per-browser-session ID
+    const sessionId = useRef(getSessionId());
 
     const logEvent = useCallback(
         async (input: Partial<LogEventInput> & { actionName: string }) => {
+            // Wait for session to be loaded and userId to exist
+            if (status !== 'authenticated' || !session?.user?.id) {
+                console.warn('logEvent skipped: session not ready');
+                return;
+            }
+
+            const userId = Number(session.user.id);
+
             const body = {
-                userId: 14,
-                sessionId: 24234324,
+                userId,
+                sessionId: sessionId.current,
                 actionName: input.actionName,
                 loggedAt: new Date().toISOString(),
                 problemId: input.problemId,
@@ -70,23 +80,25 @@ export function LoggerProvider({ children }: { children: React.ReactNode }) {
                 console.warn('logEvent failed', err);
             }
         },
-        [],
+        [session, status, sessionId],
     );
 
     const lastPathRef = useRef<string | null>(null);
     useEffect(() => {
-        if (!pathname) return;
+        if (!pathname || status !== 'authenticated') return;
         if (lastPathRef.current === pathname) return;
+
         lastPathRef.current = pathname;
         void logEvent({ actionName: 'page_view', payload: { path: pathname } });
-    }, [pathname, logEvent]);
+    }, [pathname, logEvent, status]);
 
     return (
-        <LoggerContext.Provider value={{ logEvent, sessionId }}>
+        <LoggerContext.Provider value={{ logEvent, sessionId: sessionId.current }}>
             {children}
         </LoggerContext.Provider>
     );
 }
+
 
 export function useLogger() {
     const ctx = useContext(LoggerContext);
