@@ -14,7 +14,8 @@ import Header from '@/components/ui/header';
 export default function MethodPage() {
     const params = useParams<{ problemId: string }>();
     const problemId = Number(params.problemId);
-    const { problem, loading, error } = useFetchProblem(problemId);
+    const { problem, loadingProblem, errorProblem } =
+        useFetchProblem(problemId);
     const router = useRouter();
     return (
         <div className="flex min-h-screen flex-col items-center gap-6">
@@ -22,7 +23,16 @@ export default function MethodPage() {
                 variant="problem"
                 mathProblem={
                     <div className="flex h-50 flex-row items-center justify-center gap-4">
-                        <ProblemCard description={problem?.problem} />
+                        <ProblemCard
+                            description={
+                                loadingProblem
+                                    ? 'Loading problem...'
+                                    : errorProblem
+                                      ? 'Error loading problem'
+                                      : (problem?.problem ??
+                                        'No problem available')
+                            }
+                        />
                     </div>
                 }
             />

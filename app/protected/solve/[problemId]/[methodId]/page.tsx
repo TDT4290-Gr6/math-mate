@@ -26,7 +26,8 @@ export default function SolvingPage() {
     const params = useParams<{ problemId: string; methodId: string }>();
     const problemId = Number(params.problemId);
     const methodId = Number(params.methodId);
-    const { problem, loading } = useFetchProblem(problemId);
+    const { problem, loadingProblem, errorProblem } =
+        useFetchProblem(problemId);
 
     const [currentStep, setCurrentStep] = useState(1);
 
@@ -53,7 +54,16 @@ export default function SolvingPage() {
                 variant="problem"
                 mathProblem={
                     <div className="flex h-50 flex-row items-center justify-center gap-4">
-                        <ProblemCard description={problem?.problem} />
+                        <ProblemCard
+                            description={
+                                loadingProblem
+                                    ? 'Loading problem...'
+                                    : errorProblem
+                                      ? 'Error loading problem'
+                                      : (problem?.problem ??
+                                        'No problem available')
+                            }
+                        />
                     </div>
                 }
             />

@@ -50,7 +50,8 @@ export default function SolveYourself() {
     const [showChat, setShowChat] = useState(false);
     const params = useParams<{ problemId: string }>();
     const problemId = Number(params.problemId);
-    const { problem, loading } = useFetchProblem(problemId);
+    const { problem, loadingProblem, errorProblem } =
+        useFetchProblem(problemId);
     const { chatHistory, sendMessage, isLoading, error } = useChatbot();
 
     // Listen for the chat-toggle event
@@ -84,7 +85,16 @@ export default function SolveYourself() {
                             layoutId="problem-card"
                             onLayoutAnimationComplete={() => setShowChat(true)}
                         >
-                            <ProblemCard description={problem?.problem} />
+                            <ProblemCard
+                                description={
+                                    loadingProblem
+                                        ? 'Loading problem...'
+                                        : errorProblem
+                                          ? 'Error loading problem'
+                                          : (problem?.problem ??
+                                            'No problem available')
+                                }
+                            />
                         </motion.div>
                     }
                 />
