@@ -3,33 +3,18 @@
 import ProblemCard from '@/components/ui/problem-card';
 import { useParams, useRouter } from 'next/navigation';
 import MethodCard from '@/components/ui/methodcard';
-import { Problem } from '@/entities/models/problem';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
-import { useEffect, useState } from 'react';
-import { getProblem } from '@/actions';
+import { useFetchProblem } from 'app/hooks/useFetchProblem';
 
 /**
  * The page component that displays a set of method cards to help solve
  * a math problem. Users can also choose to solve the problem on their own.
  */
 export default function MethodPage() {
-    const [problem, setProblem] = useState<Problem>();
     const params = useParams<{ problemId: string }>();
     const problemId = Number(params.problemId);
-
-    useEffect(() => {
-        fetchProblem();
-        async function fetchProblem() {
-            try {
-                const fetchedProblem = await getProblem(problemId);
-                setProblem(fetchedProblem);
-            } catch (err) {
-                console.error('Error fetching problem:', err);
-            }
-        }
-    }, []);
-
+    const { problem, loading, error } = useFetchProblem(problemId);
     const router = useRouter();
     return (
         <div className="flex min-h-screen flex-col items-center gap-6">

@@ -1,17 +1,18 @@
 'use client';
 
-import { useProblemStore } from 'app/store/problem-store';
 import ChatbotWindow from '@/components/chatbot-window';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProblemCard from '@/components/ui/problem-card';
 import ChatToggle from '@/components/chat-toggle';
 import { useChatbot } from 'app/hooks/useChatbot';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
-import { useEffect, useState } from 'react';
 import Title from '@/components/ui/title';
 import Link from 'next/link';
 import React from 'react';
+import { useParams } from 'next/navigation';
+import { useFetchProblem } from 'app/hooks/useFetchProblem';
 
 /**
  * SolveYourself
@@ -47,10 +48,11 @@ import React from 'react';
 export default function SolveYourself() {
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
     const [showChat, setShowChat] = useState(false);
-
-    const problem = useProblemStore((state) => state.problem);
-
+    const params = useParams<{ problemId: string }>();
+    const problemId = Number(params.problemId);
+    const { problem, loading } = useFetchProblem(problemId);
     const { chatHistory, sendMessage, isLoading, error } = useChatbot();
+    
 
     // Listen for the chat-toggle event
     useEffect(() => {
@@ -135,7 +137,7 @@ export default function SolveYourself() {
                 transition={{ layout: { duration: 0.4, ease: 'easeInOut' } }}
                 className={`${isChatOpen ? '' : 'mt-6'} mb-12 flex flex-row items-center gap-10`}
             >
-                <Link href="/protected/method">
+                <Link href={`/protected/method/${problem?.id}`}>
                     <Button variant="default" className="w-40">
                         Use a step-by-step
                     </Button>

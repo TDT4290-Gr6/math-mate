@@ -1,15 +1,16 @@
 'use client';
 
-import { useProblemStore } from 'app/store/problem-store';
 import ChatbotWindow from '@/components/chatbot-window';
 import ProblemCard from '@/components/ui/problem-card';
 import ChatToggle from '@/components/chat-toggle';
 import { useChatbot } from 'app/hooks/useChatbot';
 import { Button } from '@/components/ui/button';
-import React, { use, useState } from 'react';
+import React, { useState } from 'react';
 import Header from '@/components/ui/header';
+import { useParams } from 'next/navigation';
 import Steps from '@/components/steps';
 import { cn } from '@/lib/utils';
+import { useFetchProblem } from 'app/hooks/useFetchProblem';
 
 /**
  * SolvingPage
@@ -18,19 +19,18 @@ import { cn } from '@/lib/utils';
  * guidance and an optional chat helper. Manages step navigation and
  * chat state and passes messages to the ChatbotWindow.
  */
-export default function SolvingPage({
-    params,
-}: {
-    params: Promise<{ methodId: string }>;
-}) {
+export default function SolvingPage() {
     const { chatHistory, sendMessage, isLoading, error } = useChatbot();
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
 
+    const params = useParams<{ problemId: string; methodId: string }>();
+    const problemId = Number(params.problemId);
+    const methodId = Number(params.methodId);
+    const { problem, loading } = useFetchProblem(problemId);
+
     const [currentStep, setCurrentStep] = useState(1);
-    const problem = useProblemStore((state) => state.problem);
-    const { methodId } = use(params);
-    const methodIdNumber = Number(methodId);
-    const method = problem?.methods.find((m) => m.id === methodIdNumber);
+
+    const method = problem?.methods.find((m) => m.id === methodId);
     const totalSteps = method?.steps?.length ?? 0;
 
     // Listen for the chat-toggle event
