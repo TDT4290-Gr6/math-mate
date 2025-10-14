@@ -1,18 +1,35 @@
 'use client';
 
-import { useProblemStore } from 'app/store/problem-store';
 import ProblemCard from '@/components/ui/problem-card';
+import { useParams, useRouter } from 'next/navigation';
 import MethodCard from '@/components/ui/methodcard';
+import { Problem } from '@/entities/models/problem';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { getProblem } from '@/actions';
 
 /**
  * The page component that displays a set of method cards to help solve
  * a math problem. Users can also choose to solve the problem on their own.
  */
 export default function MethodPage() {
-    const problem = useProblemStore((state) => state.problem);
+    const [problem, setProblem] = useState<Problem>();
+    const params = useParams<{ problemId: string }>();
+    const problemId = Number(params.problemId);
+
+    useEffect(() => {
+        fetchProblem();
+        async function fetchProblem() {
+            try {
+                const fetchedProblem = await getProblem(problemId);
+                setProblem(fetchedProblem);
+            } catch (err) {
+                console.error('Error fetching problem:', err);
+            }
+        }
+    }, []);
+
     const router = useRouter();
     return (
         <div className="flex min-h-screen flex-col items-center gap-6">
@@ -46,17 +63,20 @@ export default function MethodPage() {
                         description={method.description}
                         buttonText="Get Started"
                         onButtonClick={() =>
-                            router.push(`/protected/solve/${method.id}`)
+                            router.push(
+                                `/protected/solve/${problem.id}/${method.id}`,
+                            )
                         }
                     />
                 ))}
             </div>
             <div className="flex flex-col items-center">
                 <p className="pb-4">or</p>
-                {/* TODO: change link to "solve on your own" page */}
                 <Button
                     className="mb-20 w-48 bg-[var(--accent)]"
-                    onClick={() => router.push('/protected/solve-yourself')}
+                    onClick={() =>
+                        router.push(`/protected/solve-yourself/${problem?.id}`)
+                    }
                 >
                     Solve on your own
                 </Button>
