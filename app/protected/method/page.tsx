@@ -1,5 +1,6 @@
 'use client';
 
+import { useProblemStore } from 'app/store/problem-store';
 import ProblemCard from '@/components/ui/problem-card';
 import MethodCard from '@/components/ui/methodcard';
 import { Button } from '@/components/ui/button';
@@ -11,8 +12,7 @@ import { useRouter } from 'next/navigation';
  * a math problem. Users can also choose to solve the problem on their own.
  */
 export default function MethodPage() {
-    //TODO: backend functionality for method and methodcount
-    const methodCount = 3;
+    const problem = useProblemStore((state) => state.problem);
     const router = useRouter();
     return (
         <div className="flex min-h-screen flex-col items-center gap-6">
@@ -20,7 +20,7 @@ export default function MethodPage() {
                 variant="problem"
                 mathProblem={
                     <div className="flex h-50 flex-row items-center justify-center gap-4">
-                        <ProblemCard description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc in nunc diam. Fusce accumsan tempor justo ac pellentesque. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." />
+                        <ProblemCard description={problem?.problem} />
                     </div>
                 }
             />
@@ -34,16 +34,16 @@ export default function MethodPage() {
                     up to you which method to use.
                 </p>
             </div>
-
-            {/* TODO: add backend titles and descriptions */}
             <div
-                className={`flex w-full flex-col lg:flex-row ${methodCount === 3 ? 'max-w-6xl' : 'max-w-5xl'} px-10`}
+                className={`flex w-full flex-col lg:flex-row ${
+                    problem?.methods?.length === 3 ? 'max-w-6xl' : 'max-w-5xl'
+                } px-10`}
             >
-                {Array.from({ length: methodCount }).map((_, i) => (
+                {problem?.methods?.map((method) => (
                     <MethodCard
-                        key={i}
-                        title={`Method ${i + 1}`}
-                        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+                        key={method.id}
+                        title={method.title}
+                        description={method.description}
                         buttonText="Get Started"
                         onButtonClick={() => router.push('/protected/solve')}
                     />
@@ -54,7 +54,7 @@ export default function MethodPage() {
                 {/* TODO: change link to "solve on your own" page */}
                 <Button
                     className="mb-20 w-48 bg-[var(--accent)]"
-                    onClick={() => router.push('/protected/dashboard')}
+                    onClick={() => router.push('/protected/solve-yourself')}
                 >
                     Solve on your own
                 </Button>
