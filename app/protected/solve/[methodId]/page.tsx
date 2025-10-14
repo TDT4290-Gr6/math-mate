@@ -1,29 +1,15 @@
 'use client';
 
-import ChatbotWindow, {
-    ChatHistory,
-    ChatMessage,
-} from '@/components/chatbot-window';
 import { useProblemStore } from 'app/store/problem-store';
-import React, { use, useEffect, useState } from 'react';
+import ChatbotWindow from '@/components/chatbot-window';
 import ProblemCard from '@/components/ui/problem-card';
 import ChatToggle from '@/components/chat-toggle';
+import { useChatbot } from 'app/hooks/useChatbot';
 import { Button } from '@/components/ui/button';
-import { sendMessageAction } from '../actions';
+import React, { use, useState } from 'react';
 import Header from '@/components/ui/header';
 import Steps from '@/components/steps';
 import { cn } from '@/lib/utils';
-
-// Privacy notice for chat
-const PRIVACY_INITIAL_MESSAGE: ChatMessage = {
-    chatID: 'privacy-notice',
-    sender: 'assistant',
-    content:
-        "Privacy Notice: Please do not share any personal information in this chat. I'm here to help you with math problems only!",
-    timestamp: new Date(),
-    className:
-        'bg-card border border-[var(--accent)] text-[var(--accent)] mx-5',
-};
 
 /**
  * SolvingPage
@@ -37,13 +23,10 @@ export default function SolvingPage({
 }: {
     params: Promise<{ methodId: string }>;
 }) {
-    const [currentStep, setCurrentStep] = useState(1);
+    const { chatHistory, sendMessage, isLoading, error } = useChatbot();
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
-    const [chatHistory, setChatHistory] = React.useState<ChatHistory>({
-        messages: [],
-    });
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = React.useState<string | null>(null);
+
+    const [currentStep, setCurrentStep] = useState(1);
     const problem = useProblemStore((state) => state.problem);
     const { methodId } = use(params);
     const methodIdNumber = Number(methodId);
@@ -58,59 +41,9 @@ export default function SolvingPage({
             window.removeEventListener('chat-toggle', handler as EventListener);
     }, []);
 
-    // Clear error message after 7 seconds
-    useEffect(() => {
-        if (!error) return;
-        const timer = setTimeout(() => setError(null), 7000);
-        return () => clearTimeout(timer);
-    }, [error]);
-
     const handleNextStep = () => {
         if (currentStep < totalSteps - 1) {
             setCurrentStep((prev) => prev + 1);
-        }
-    };
-
-    /**
-     * Handles sending a message from the user to the chat service and updating the chat UI.
-     * It handle the loading state and appends both user and assistant messages to the chat history.
-     *
-     * @param {string} message - The content of the message to send.
-     */
-    const handleSendMessage = async (message: string) => {
-        const userMessage: ChatMessage = {
-            chatID: `user-${Date.now()}`,
-            sender: 'user',
-            content: message,
-            timestamp: new Date(),
-        };
-        setChatHistory((prev) => ({
-            messages: [...prev.messages, userMessage],
-        }));
-
-        setIsLoading(true);
-        try {
-            const reply = await sendMessageAction(message);
-            if (reply.success === false) {
-                setError(reply.error);
-                setIsLoading(false);
-                return;
-            } else {
-                const assistantMessage: ChatMessage = {
-                    chatID: `assistant-${Date.now()}`,
-                    sender: 'assistant',
-                    content: reply.message.content,
-                    timestamp: new Date(),
-                };
-                setChatHistory((prev) => ({
-                    messages: [...prev.messages, assistantMessage],
-                }));
-            }
-        } catch (error) {
-            console.log(error);
-            setError('Failed to get response. Please try again.');
-        } finally {
-            setIsLoading(false);
         }
     };
 
@@ -167,10 +100,9 @@ export default function SolvingPage({
                         <ChatbotWindow
                             chatHistory={chatHistory}
                             onClose={() => setIsChatOpen(!isChatOpen)}
-                            onSendMessage={handleSendMessage}
+                            onSendMessage={sendMessage}
                             isLoading={isLoading}
-                            error={error ? error : undefined}
-                            initialMessage={PRIVACY_INITIAL_MESSAGE}
+                            error={error ?? undefined}
                         />
                     </div>
                 ) : (

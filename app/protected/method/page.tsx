@@ -56,7 +56,7 @@ export default function MethodPage() {
                 {/* TODO: change link to "solve on your own" page */}
                 <Button
                     className="mb-20 w-48 bg-[var(--accent)]"
-                    onClick={() => router.push('/protected/dashboard')}
+                    onClick={() => router.push('/protected/solve-yourself')}
                 >
                     Solve on your own
                 </Button>
