@@ -5,8 +5,8 @@ import ChatbotWindow, {
     ChatMessage,
 } from '@/components/chatbot-window';
 import { useProblemStore } from 'app/store/problem-store';
-import ProblemCard from '@/components/ui/problem-card';
 import React, { use, useEffect, useState } from 'react';
+import ProblemCard from '@/components/ui/problem-card';
 import ChatToggle from '@/components/chat-toggle';
 import { Button } from '@/components/ui/button';
 import { sendMessageAction } from '../actions';
@@ -47,8 +47,8 @@ export default function SolvingPage({
     const problem = useProblemStore((state) => state.problem);
     const { methodId } = use(params);
     const methodIdNumber = Number(methodId);
-    const method = problem?.methods.find(m => m.id === methodIdNumber);;
-    const totalSteps = (method?.steps?.length) ?? 0;
+    const method = problem?.methods.find((m) => m.id === methodIdNumber);
+    const totalSteps = method?.steps?.length ?? 0;
 
     // Listen for the chat-toggle event
     React.useEffect(() => {
@@ -66,7 +66,7 @@ export default function SolvingPage({
     }, [error]);
 
     const handleNextStep = () => {
-        if (currentStep < totalSteps-1) {
+        if (currentStep < totalSteps - 1) {
             setCurrentStep((prev) => prev + 1);
         }
     };
