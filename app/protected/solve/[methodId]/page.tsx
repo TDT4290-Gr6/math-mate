@@ -4,11 +4,12 @@ import ChatbotWindow, {
     ChatHistory,
     ChatMessage,
 } from '@/components/chatbot-window';
+import { useProblemStore } from 'app/store/problem-store';
 import ProblemCard from '@/components/ui/problem-card';
-import React, { useEffect, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import ChatToggle from '@/components/chat-toggle';
 import { Button } from '@/components/ui/button';
-import { sendMessageAction } from './actions';
+import { sendMessageAction } from '../actions';
 import Header from '@/components/ui/header';
 import Steps from '@/components/steps';
 import { cn } from '@/lib/utils';
@@ -24,39 +25,6 @@ const PRIVACY_INITIAL_MESSAGE: ChatMessage = {
         'bg-card border border-[var(--accent)] text-[var(--accent)] mx-5',
 };
 
-// Define the Step type
-interface Step {
-    stepID: string;
-    content: string;
-}
-
-// Mock steps data for testing
-const mockSteps: Step[] = [
-    {
-        stepID: 'step-1',
-        content:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-    },
-    {
-        stepID: 'step-2',
-        content:
-            'Subtract 5 from both sides to isolate the term with x: 2x + 5 - 5 = 13 - 5',
-    },
-    {
-        stepID: 'step-3',
-        content: 'Simplify both sides: 2x = 8',
-    },
-    {
-        stepID: 'step-4',
-        content: 'Divide both sides by 2 to solve for x: 2x ÷ 2 = 8 ÷ 2',
-    },
-    {
-        stepID: 'step-5',
-        content:
-            "Final answer: x = 4. Let's verify by substituting back: 2(4) + 5 = 8 + 5 = 13 ✓",
-    },
-];
-
 /**
  * SolvingPage
  *
@@ -64,15 +32,23 @@ const mockSteps: Step[] = [
  * guidance and an optional chat helper. Manages step navigation and
  * chat state and passes messages to the ChatbotWindow.
  */
-export default function SolvingPage() {
+export default function SolvingPage({
+    params,
+}: {
+    params: Promise<{ methodId: string }>;
+}) {
     const [currentStep, setCurrentStep] = useState(1);
-    const totalSteps = mockSteps.length;
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
     const [chatHistory, setChatHistory] = React.useState<ChatHistory>({
         messages: [],
     });
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = React.useState<string | null>(null);
+    const problem = useProblemStore((state) => state.problem);
+    const { methodId } = use(params);
+    const methodIdNumber = Number(methodId);
+    const method = problem?.methods.find(m => m.id === methodIdNumber);;
+    const totalSteps = (method?.steps?.length) ?? 0;
 
     // Listen for the chat-toggle event
     React.useEffect(() => {
@@ -90,7 +66,7 @@ export default function SolvingPage() {
     }, [error]);
 
     const handleNextStep = () => {
-        if (currentStep < totalSteps) {
+        if (currentStep < totalSteps-1) {
             setCurrentStep((prev) => prev + 1);
         }
     };
@@ -144,7 +120,7 @@ export default function SolvingPage() {
                 variant="problem"
                 mathProblem={
                     <div className="flex h-50 flex-row items-center justify-center gap-4">
-                        <ProblemCard description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc in nunc diam. Fusce accumsan tempor justo ac pellentesque. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." />
+                        <ProblemCard description={problem?.problem} />
                     </div>
                 }
             />
@@ -157,7 +133,12 @@ export default function SolvingPage() {
                     )}
                 >
                     <div className="h-full w-full flex-1">
-                        <Steps steps={mockSteps} currentStep={currentStep} />
+                        <Steps
+                            steps={method?.steps}
+                            currentStep={currentStep}
+                            methodTitle={method?.title}
+                            methodDescription={method?.description}
+                        />
                     </div>
                     <div className="flex-end mb-20 flex w-full justify-center gap-2">
                         <Button
