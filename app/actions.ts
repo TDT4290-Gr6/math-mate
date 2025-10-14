@@ -23,6 +23,16 @@ export async function getProblems(
     }
 }
 
+export async function getProblem(problemId: number): Promise<Problem> {
+    try {
+        const getProblemController = getInjection('IGetProblemController');
+        return await getProblemController({ problemId });
+    } catch (error) {
+        console.error('Failed to get problem:', error);
+        throw error;
+    }
+}
+
 export async function getCountries() {
     try {
         const getCountriesController = getInjection('IGetCountriesController');
@@ -64,6 +74,7 @@ export async function getUserId() {
         throw error;
     }
 }
+
 
 /**
  * Sends a user message to the chat controller and returns the AI assistant's response.
