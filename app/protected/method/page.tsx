@@ -45,7 +45,7 @@ export default function MethodPage() {
                         title={method.title}
                         description={method.description}
                         buttonText="Get Started"
-                        onButtonClick={() => router.push('/protected/solve')}
+                        onButtonClick={() => router.push(`/protected/solve/${method.id}`)}
                     />
                 ))}
             </div>
