@@ -1,10 +1,10 @@
 'use client';
 
-import ChatbotWindow from '@/components/chatbot-window';
 import {
     MethodProvider,
     useTrackedLogger,
 } from '@/components/logger/MethodProvider';
+import ChatbotWindow from '@/components/chatbot-window';
 import ProblemCard from '@/components/ui/problem-card';
 import ChatToggle from '@/components/chat-toggle';
 import { useChatbot } from 'app/hooks/useChatbot';

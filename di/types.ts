@@ -18,8 +18,8 @@ import type { IGetCountriesUseCase } from '@/application/use-cases/get-countries
 import type { IGetProblemsUseCase } from '@/application/use-cases/get-problems.use-case';
 import type { ISetCountryUseCase } from '@/application/use-cases/set-country.use-case';
 import type { ICreateUserUseCase } from '@/application/use-cases/create-user.use-case';
-import type { IChatService } from '@/application/services/chat.service.interface';
 import type { ILogEventUseCase } from '@/application/use-cases/log-event.use-case';
+import type { IChatService } from '@/application/services/chat.service.interface';
 import type { IGetUserUseCase } from '@/application/use-cases/get-user.use-case';
 import type { ISignInUseCase } from '@/application/use-cases/sign-in.use-case';
 

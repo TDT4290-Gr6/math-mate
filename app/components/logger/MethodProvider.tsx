@@ -1,15 +1,15 @@
 'use client';
 
-import {
-    useLogger,
-    type LogEventInput,
-} from '@/components/logger/LoggerProvider';
 import React, {
     createContext,
     useContext,
     useEffect,
     useCallback,
 } from 'react';
+import {
+    useLogger,
+    type LogEventInput,
+} from '@/components/logger/LoggerProvider';
 
 type MethodContextValue = {
     methodId?: number;
