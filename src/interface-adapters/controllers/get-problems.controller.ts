@@ -1,6 +1,6 @@
 import type { IGetProblemsUseCase } from '@/application/use-cases/get-problems.use-case';
 import { IAuthenticationService } from '@/application/services/auth.service.interface';
-import { problemPresenter } from '../presenters/problem.presenter';
+import { problemsPresenter } from '../presenters/problems.presenter';
 import { UnauthenticatedError } from '@/entities/errors/auth';
 import { InputParseError } from '@/entities/errors/common';
 import { z } from 'zod';
@@ -35,5 +35,5 @@ export const getProblemsController =
 
         const problems = await getProblemsUseCase(offset, limit, subjects);
 
-        return problemPresenter(problems);
+        return problemsPresenter(problems);
     };

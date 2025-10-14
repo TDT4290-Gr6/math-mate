@@ -1,5 +1,10 @@
 import type { IProblemsRepository } from '@/application/repositories/problems.repository.interface';
+import {
+    DatabaseOperationError,
+    NotFoundError,
+} from '@/entities/errors/common';
 import type { Problem } from '@/entities/models/problem';
+import { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 
 export class ProblemsRepository implements IProblemsRepository {
@@ -44,5 +49,52 @@ export class ProblemsRepository implements IProblemsRepository {
         }));
 
         return problems;
+    }
+
+    async getProblemById(id: number): Promise<Problem> {
+        try {
+            const prismaProblem = await prisma.problem.findUniqueOrThrow({
+                where: { id },
+                include: {
+                    Method: {
+                        orderBy: { id: 'asc' },
+                        include: {
+                            Step: { orderBy: { stepNumber: 'asc' } },
+                        },
+                    },
+                },
+            });
+
+            return {
+                id: prismaProblem.id,
+                title: prismaProblem.title ?? undefined,
+                problem: prismaProblem.problem,
+                solution: prismaProblem.solution,
+                subject: prismaProblem.subject,
+                level: prismaProblem.level,
+                methods: prismaProblem.Method.map((method) => ({
+                    id: method.id,
+                    title: method.title,
+                    description: method.description,
+                    steps: method.Step.map((step) => ({
+                        id: step.id,
+                        stepNumber: step.stepNumber,
+                        content: step.content,
+                    })),
+                })),
+            };
+        } catch (error) {
+            if (error instanceof Prisma.PrismaClientKnownRequestError) {
+                if (error.code === 'P2025') {
+                    throw new NotFoundError(`Problem with id ${id} not found`);
+                }
+
+                throw new DatabaseOperationError(
+                    'Failed to fetch problem from the database.',
+                    { cause: error },
+                );
+            }
+            throw error;
+        }
     }
 }
