@@ -1,4 +1,5 @@
 import { countriesModule } from './modules/countries.module';
+import { problemsModule } from './modules/problems.module';
 import { type DI_RETURN_TYPES, DI_SYMBOLS } from './types';
 import { solvesModule } from './modules/solves.module';
 import { eventsModule } from './modules/events.module';
@@ -13,6 +14,7 @@ container.load(Symbol('countriesModule'), countriesModule());
 container.load(Symbol('usersModule'), usersModule());
 container.load(Symbol('authModule'), authModule());
 container.load(Symbol('solvesModule'), solvesModule());
+container.load(Symbol('problemsModule'), problemsModule());
 container.load(Symbol('chatModule'), chatModule());
 container.load(Symbol('eventsModule'), eventsModule());
 

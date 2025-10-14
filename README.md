@@ -45,3 +45,26 @@ For a practical reference, see this example of [Clean Architecture in Next.js](h
 - shadcn
 - eslint/prettier
 - ioctopus (for di)
+
+## Generating methods and steps for a dataset
+
+There is a script in `scripts/dataset/generate-dataset.ts` that can be used to generate methods and steps for a dataset. This script would need to be modified depending on the structure of the dataset, to adhere to the `ProblemInsert` interface in `src/entities/models/problem.ts` (`methods` should be set to an empty array). The methods and steps will be generated when calling `generateMethods` defined in `scripts/dataset/generate-methods.ts`.
+
+The generation of methods and steps can be done by either using OpenAI or Gemini, depending on the `llmProvider` variable passed to `generateMethods`. Running the script can be done by running `npm run generate-dataset`, and the problems and generated methods, steps and title will be stored in the database. Only problems that are not already in the database will be processed.
+
+Currently the MATH-500 dataset is used. To use the script for MATH-500, you need to download the dataset from [Hugging Face](https://huggingface.co/datasets/HuggingFaceH4/MATH-500). The dataset should be placed in `MATH-500/test.jsonl`, and can be downloaded using git:
+
+```bash
+git lfs install
+git clone git@hf.co:datasets/HuggingFaceH4/MATH-500
+```
+
+To use Gemini or OpenAI, you need to set the respective API keys in a `.env.local` file in the root of the project.
+
+### OpenAI API key
+
+You can get a OpenAI API key by creating a new API key on the [OpenAI platform](https://platform.openai.com/account/api-keys). Environment variable name: `OPENAI_API_KEY`.
+
+### Gemini API key
+
+You can get a Gemini API key by creating a new project in the [Gemini AI Studio](https://aistudio.google.com/api-keys). Environment variable name: `GEMINI_TOKEN`.
