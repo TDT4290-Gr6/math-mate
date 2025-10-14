@@ -3,6 +3,8 @@
 import { ChatHistory, ChatMessage } from '@/components/chatbot-window';
 import { sendMessageAction } from '../actions';
 import { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import { useLogger } from '@/components/logger/LoggerProvider';
 
 // Privacy notice for chat - factory function
 const createPrivacyMessage = (): ChatMessage => ({
@@ -14,6 +16,13 @@ const createPrivacyMessage = (): ChatMessage => ({
     className:
         'bg-card border border-[var(--accent)] text-[var(--accent)] mx-5',
 });
+
+// Generate or retrieve ephemeral per-chat session ID
+function createNewChatSession(): string {
+    const id = `${Date.now()}${Math.floor(Math.random() * 1e6)}`;
+    sessionStorage.setItem('chatSessionId', id);
+    return id;
+}
 
 /**
  * useChatbot
@@ -45,6 +54,8 @@ const createPrivacyMessage = (): ChatMessage => ({
  */
 
 export function useChatbot() {
+    const { data: session, status } = useSession();
+    const logger = useLogger();
     const [chatHistory, setChatHistory] = useState<ChatHistory>({
         messages: [createPrivacyMessage()],
     });
@@ -61,7 +72,18 @@ export function useChatbot() {
     /**
      * Sends a user message and updates chat history with user and assistant messages.
      */
-    const sendMessage = async (message: string) => {
+    const sendMessage = async (message: string, problemId?: number) => {
+        if (status !== 'authenticated' || !session?.user?.id) {
+            setError('You must be signed in to chat.');
+            return;
+        }
+
+        const chatSessionId =
+            sessionStorage.getItem('chatSessionId') || createNewChatSession();
+
+        const userId = Number(session.user.id);
+
+        // Add user message to chat history
         const userMessage: ChatMessage = {
             chatID: `user-${Date.now()}`,
             sender: 'user',
@@ -72,6 +94,14 @@ export function useChatbot() {
             messages: [...prev.messages, userMessage],
         }));
 
+        // Log user message
+        void logger.logEvent({
+            actionName: 'chat_message_sent',
+            userId,
+            sessionId: logger.sessionId, // get the per-browser session ID from LoggerProvider
+            payload: { chatSessionId, message, problemId },
+        });
+
         setIsLoading(true);
         try {
             const reply = await sendMessageAction(message);
@@ -79,6 +109,7 @@ export function useChatbot() {
                 setError(reply.error);
                 return;
             }
+
             const assistantMessage: ChatMessage = {
                 chatID: `assistant-${Date.now()}`,
                 sender: 'assistant',
@@ -88,6 +119,14 @@ export function useChatbot() {
             setChatHistory((prev) => ({
                 messages: [...prev.messages, assistantMessage],
             }));
+
+            // Log assistant response
+            void logger.logEvent({
+                actionName: 'chat_message_received',
+                userId,
+                sessionId: logger.sessionId,
+                payload: { chatSessionId, reply: reply.message.content, problemId },
+            });
         } catch (err) {
             console.error('Failed to get response:', err);
             setError('Failed to get response. Please try again.');
