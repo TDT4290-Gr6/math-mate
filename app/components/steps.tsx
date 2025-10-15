@@ -1,11 +1,7 @@
 import { useEffect, useRef } from 'react';
 import MethodCard from './ui/methodcard';
 import { Minus } from 'lucide-react';
-
-interface Step {
-    id: number;
-    content: string;
-}
+import type { Step } from '@/entities/models/step';
 
 interface StepsProps {
     steps?: Array<Step>;

@@ -110,7 +110,16 @@ export default function SolveYourself() {
             <AnimatePresence>
                 {isChatOpen ? null : (
                     <motion.div layoutId="problem-card">
-                        <ProblemCard description={problem?.problem} />
+                        <ProblemCard
+                            description={
+                                loadingProblem
+                                    ? 'Loading problem...'
+                                    : errorProblem
+                                      ? 'Error loading problem'
+                                      : (problem?.problem ??
+                                        'No problem available')
+                            }
+                        />
                     </motion.div>
                 )}
             </AnimatePresence>

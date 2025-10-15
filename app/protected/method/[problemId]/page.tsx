@@ -59,7 +59,7 @@ export default function MethodPage() {
                         buttonText="Get Started"
                         onButtonClick={() =>
                             router.push(
-                                `/protected/solve/${problem.id}/${method.id}`,
+                                `/protected/solve/${problemId}/${method.id}`,
                             )
                         }
                     />
@@ -70,8 +70,9 @@ export default function MethodPage() {
                 <Button
                     className="mb-20 w-48 bg-[var(--accent)]"
                     onClick={() =>
-                        router.push(`/protected/solve-yourself/${problem?.id}`)
+                        router.push(`/protected/solve-yourself/${problemId}`)
                     }
+                    disabled={!Number.isFinite(problemId)}
                 >
                     Solve on your own
                 </Button>

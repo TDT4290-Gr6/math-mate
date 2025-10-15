@@ -1,4 +1,4 @@
-import { Problem } from '@/entities/models/problem';
+import type { Problem } from '@/entities/models/problem';
 import { useEffect, useState } from 'react';
 import { getProblem } from '@/actions';
 
