@@ -5,11 +5,11 @@ import type { IGetProblemsController } from '@/interface-adapters/controllers/ge
 import type { ICountriesRepository } from '@/application/repositories/countries.repository.interface';
 import type { ISetCountryController } from '@/interface-adapters/controllers/set-country.controller';
 import type { IProblemsRepository } from '@/application/repositories/problems.repository.interface';
+import type { IAddSolvedProblemUseCase } from '@/application/use-cases/add-solved-problem.use-case';
 import type { ISendChatMessageController } from '@/interface-adapters/controllers/chat.controller';
 import type { ISendChatMessageUseCase } from '@/application/use-cases/send-chat-message.use-case';
 import type { ISolvesRepository } from '@/application/repositories/solves.repository.interface';
 import type { IGetUserController } from '@/interface-adapters/controllers/get-user.controller';
-import type { IAddSolvedProblemUseCase } from '@/application/use-cases/add-solved-problem.use-case';
 import type { IUsersRepository } from '@/application/repositories/users.repository.interface';
 import type { ICreateCountryUseCase } from '@/application/use-cases/create-country.use-case';
 import type { ISignInController } from '@/interface-adapters/controllers/signIn.controller';
