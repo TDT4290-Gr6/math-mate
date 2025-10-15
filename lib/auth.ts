@@ -1,3 +1,4 @@
+import GoogleProvider from 'next-auth/providers/google';
 import GithubProvider from 'next-auth/providers/github';
 import { getInjection } from '@/di/container';
 import { NextAuthOptions } from 'next-auth';
@@ -8,11 +9,17 @@ if (!process.env.NEXT_AUTH_GITHUB_ID || !process.env.NEXT_AUTH_GITHUB_SECRET) {
     );
 }
 
+if (!process.env.NEXT_AUTH_GOOGLE_ID || !process.env.NEXT_AUTH_GOOGLE_SECRET) {
+    throw new Error(
+        'Missing NEXT_AUTH_GOOGLE_ID or NEXT_AUTH_GOOGLE_SECRET environment variables',
+    );
+}
+
 /**
  * NextAuth.js configuration options for authentication.
  *
  * @remarks
- * - Configures GitHub as an authentication provider using environment variables for credentials.
+ * - Configures GitHub and Google as an authentication provider using environment variables for credentials.
  * - Specifies a custom sign-in page at `/auth/signIn`.
  * - Implements custom callback functions for sign-in, session, and JWT handling:
  *   - `signIn`: Invokes a dependency-injected sign-in controller, updates the user ID, and handles errors.
@@ -26,6 +33,10 @@ export const authOptions: NextAuthOptions = {
         GithubProvider({
             clientId: process.env.NEXT_AUTH_GITHUB_ID,
             clientSecret: process.env.NEXT_AUTH_GITHUB_SECRET,
+        }),
+        GoogleProvider({
+            clientId: process.env.NEXT_AUTH_GOOGLE_ID,
+            clientSecret: process.env.NEXT_AUTH_GOOGLE_SECRET,
         }),
         // ...add more providers here
     ],
