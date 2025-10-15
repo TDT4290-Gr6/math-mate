@@ -9,7 +9,7 @@ import type { ISendChatMessageController } from '@/interface-adapters/controller
 import type { ISendChatMessageUseCase } from '@/application/use-cases/send-chat-message.use-case';
 import type { ISolvesRepository } from '@/application/repositories/solves.repository.interface';
 import type { IGetUserController } from '@/interface-adapters/controllers/get-user.controller';
-import { IAddSolvedProblemUseCase } from '@/application/use-cases/add-solved-problem.use-case';
+import type { IAddSolvedProblemUseCase } from '@/application/use-cases/add-solved-problem.use-case';
 import type { IUsersRepository } from '@/application/repositories/users.repository.interface';
 import type { ICreateCountryUseCase } from '@/application/use-cases/create-country.use-case';
 import type { ISignInController } from '@/interface-adapters/controllers/signIn.controller';
