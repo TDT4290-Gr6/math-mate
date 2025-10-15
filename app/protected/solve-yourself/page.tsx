@@ -79,9 +79,9 @@ export default function SolveYourself() {
             transition={{ layout: { duration: 0.4, ease: 'easeInOut' } }}
         >
             <AnswerPopup
-                            isOpen={isAnswerPopupOpen}
-                            answer={'final answer'}
-                            onClose={() => setIsAnswerPopupOpen(false)}
+                isOpen={isAnswerPopupOpen}
+                answer={'final answer'}
+                onClose={() => setIsAnswerPopupOpen(false)}
             />
             {isChatOpen ? (
                 <Header
