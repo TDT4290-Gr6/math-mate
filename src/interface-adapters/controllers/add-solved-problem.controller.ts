@@ -1,5 +1,6 @@
 import { IAddSolvedProblemUseCase } from '@/application/use-cases/add-solved-problem.use-case';
 import { IAuthenticationService } from '@/application/services/auth.service.interface';
+import { solvePresenter } from '../presenters/solve.presenter';
 import { UnauthenticatedError } from '@/entities/errors/auth';
 import { insertSolveSchema } from '@/entities/models/solve';
 import { InputParseError } from '@/entities/errors/common';
@@ -39,5 +40,6 @@ export const addSolvedProblemController =
             throw new InputParseError('Invalid input', { cause: result.error });
         }
 
-        return await addSolvedProblemUseCase(result.data);
+        const solve = await addSolvedProblemUseCase(result.data);
+        return solvePresenter(solve);
     };
