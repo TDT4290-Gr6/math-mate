@@ -1,6 +1,12 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useRef, useCallback } from 'react';
+import React, {
+    createContext,
+    useContext,
+    useEffect,
+    useRef,
+    useCallback,
+} from 'react';
 import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 
@@ -36,7 +42,6 @@ function getSessionId(): number {
     sessionStorage.setItem('logSessionId', newId.toString());
     return newId;
 }
-
 
 export function LoggerProvider({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
@@ -93,12 +98,13 @@ export function LoggerProvider({ children }: { children: React.ReactNode }) {
     }, [pathname, logEvent, status]);
 
     return (
-        <LoggerContext.Provider value={{ logEvent, sessionId: sessionId.current }}>
+        <LoggerContext.Provider
+            value={{ logEvent, sessionId: sessionId.current }}
+        >
             {children}
         </LoggerContext.Provider>
     );
 }
-
 
 export function useLogger() {
     const ctx = useContext(LoggerContext);
