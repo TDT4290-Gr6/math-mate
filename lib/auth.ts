@@ -1,3 +1,4 @@
+import GoogleProvider from 'next-auth/providers/google';
 import GithubProvider from 'next-auth/providers/github';
 import { getInjection } from '@/di/container';
 import { NextAuthOptions } from 'next-auth';
@@ -5,6 +6,12 @@ import { NextAuthOptions } from 'next-auth';
 if (!process.env.NEXT_AUTH_GITHUB_ID || !process.env.NEXT_AUTH_GITHUB_SECRET) {
     throw new Error(
         'Missing NEXT_AUTH_GITHUB_ID or NEXT_AUTH_GITHUB_SECRET environment variables',
+    );
+}
+
+if (!process.env.NEXT_AUTH_GOOGLE_ID || !process.env.NEXT_AUTH_GOOGLE_SECRET) {
+    throw new Error(
+        'Missing NEXT_AUTH_GOOGLE_ID or NEXT_AUTH_GOOGLE_SECRET environment variables',
     );
 }
 
@@ -26,6 +33,10 @@ export const authOptions: NextAuthOptions = {
         GithubProvider({
             clientId: process.env.NEXT_AUTH_GITHUB_ID,
             clientSecret: process.env.NEXT_AUTH_GITHUB_SECRET,
+        }),
+        GoogleProvider({
+            clientId: process.env.NEXT_AUTH_GOOGLE_ID,
+            clientSecret: process.env.NEXT_AUTH_GOOGLE_SECRET,
         }),
         // ...add more providers here
     ],
