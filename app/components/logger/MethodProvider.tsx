@@ -73,9 +73,9 @@ export function MethodProvider({
     );
 
     // Emit a page_view enriched with available ids when this provider becomes active
-    useEffect(() => {
+   /*  useEffect(() => {
         const tracked = getTrackedLogger();
-        const payload: Record<string, unknown> = { source: 'method_provider' };
+        const payload: { path?: string } = {};
         if (typeof window !== 'undefined')
             payload.path = window.location.pathname;
         void tracked.logEvent({
@@ -83,7 +83,7 @@ export function MethodProvider({
             payload,
             problemId: problemId,
         });
-    }, [getTrackedLogger, problemId]);
+    }, [getTrackedLogger, problemId]); */
 
     // Listen for the global chat-toggle event and log it with available ids.
     useEffect(() => {

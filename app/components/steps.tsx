@@ -50,7 +50,7 @@ export default function Steps({ steps, currentStep }: StepsProps) {
                 void tracked.logEvent({
                     actionName: 'step_visible',
                     payload: { stepID: newStep.stepID },
-                    /*  stepId: Number(newStep.stepID), */ // optional numeric mapping if your logger expects number
+                    
                 });
             }
         }

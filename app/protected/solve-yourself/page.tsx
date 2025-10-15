@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import Title from '@/components/ui/title';
 import Link from 'next/link';
 import React from 'react';
+import { useChatUILogger } from 'app/hooks/useChatUILogger';
 
 /**
  * SolveYourself
@@ -46,6 +47,9 @@ import React from 'react';
 export default function SolveYourself() {
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
     const [showChat, setShowChat] = useState(false);
+    const problemId = 1;
+
+    useChatUILogger({ page: 'solve-yourself', problemId });
 
     // TODO: Replace with actual problem description
     const problemDescription =

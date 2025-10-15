@@ -14,6 +14,7 @@ import Header from '@/components/ui/header';
 import React, { useState } from 'react';
 import Steps from '@/components/steps';
 import { cn } from '@/lib/utils';
+import { useChatUILogger } from 'app/hooks/useChatUILogger';
 
 // Define the Step type
 interface Step {
@@ -62,8 +63,9 @@ export default function SolvingPage() {
     const methodId = methodIdParam ? Number(methodIdParam) : undefined;
     const stepId = stepIdParam ? Number(stepIdParam) : undefined;
 
+    /* TODO: pass method and step ID */
     return (
-        <MethodProvider methodId={methodId} stepId={stepId}>
+        <MethodProvider methodId={2} problemId={4}>
             <SolvingContent />
         </MethodProvider>
     );
@@ -74,6 +76,10 @@ function SolvingContent() {
     const [currentStep, setCurrentStep] = useState(1);
     const totalSteps = mockSteps.length;
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
+    const problemId = 123;
+    const methodId = 7;
+    const { logChatOpen, logChatClose } = useChatUILogger({ page: 'solve-yourself', problemId });
+
 
     const { chatHistory, sendMessage, isLoading, error } = useChatbot();
 
@@ -84,6 +90,7 @@ function SolvingContent() {
                 const next = !v;
                 void tracked.logEvent({
                     actionName: next ? 'chat_open' : 'chat_close',
+                    problemId: 1 // pass problem ID
                 });
                 return next;
             });
@@ -100,6 +107,7 @@ function SolvingContent() {
             setCurrentStep((prev) => prev + 1);
             void tracked.logEvent({
                 actionName: 'next_step',
+                
                 payload: { from, to },
             });
         }
@@ -109,6 +117,7 @@ function SolvingContent() {
         void tracked.logEvent({
             actionName: 'go_to_answer',
             payload: { currentStep },
+            problemId: 1, // pass problem id
         });
         alert('Go to answer button clicked');
     };
@@ -162,13 +171,12 @@ function SolvingContent() {
                             chatHistory={chatHistory}
                             onClose={() => {
                                 setIsChatOpen(!isChatOpen);
-                                void tracked.logEvent({
-                                    actionName: 'chat_close',
-                                });
+                                logChatClose();
                             }}
                             onSendMessage={sendMessage}
                             isLoading={isLoading}
                             error={error ?? undefined}
+                            
                         />
                     </div>
                 ) : (
