@@ -1,7 +1,21 @@
 import { IAuthenticationService } from '@/application/services/auth.service.interface';
-import { authOptions } from 'app/api/auth/[...nextauth]/route';
 import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 
+/**
+ * Service for handling authentication using NextAuth.
+ *
+ * Implements the `IAuthenticationService` interface to provide methods for retrieving
+ * the current authenticated user's ID and checking authentication status.
+ *
+ * @remarks
+ * This service relies on NextAuth's `getServerSession` and `authOptions` to access session data.
+ *
+ * @example
+ * const authService = new NextAuthService();
+ * const userId = await authService.getCurrentUserId();
+ * const isAuthenticated = await authService.isAuthenticated();
+ */
 export class NextAuthService implements IAuthenticationService {
     async getCurrentUserId(): Promise<number | null> {
         const session = await getServerSession(authOptions);
