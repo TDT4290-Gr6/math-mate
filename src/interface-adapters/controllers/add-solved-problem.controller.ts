@@ -8,6 +8,20 @@ import { z } from 'zod';
 export type IAddSolvedProblemController = ReturnType<
     typeof addSolvedProblemController
 >;
+/**
+ * Function that creates a controller for adding a solved problem.
+ *
+ * @param authenticationService - Service responsible for checking user authentication.
+ * @param addSolvedProblemUseCase - Use case for adding a solved problem to the system.
+ * @returns An async function that takes validated input, checks authentication, validates input schema,
+ *          and delegates to the use case to add the solved problem.
+ *
+ * The returned function:
+ * - Verifies if the user is authenticated using the injected authenticationService.
+ * - Validates the input against the insertSolveSchema.
+ * - Throws appropriate errors if authentication or validation fails.
+ * - Calls the injected addSolvedProblemUseCase with the validated data.
+ */
 export const addSolvedProblemController =
     (
         authenticationService: IAuthenticationService,
@@ -19,11 +33,11 @@ export const addSolvedProblemController =
             throw new UnauthenticatedError('User must be logged in.');
         }
 
-        const result = insertSolveSchema.partial().safeParse(input);
+        const result = insertSolveSchema.safeParse(input);
 
         if (!result.success) {
             throw new InputParseError('Invalid input', { cause: result.error });
         }
 
-        return await addSolvedProblemUseCase(input);
+        return await addSolvedProblemUseCase(result.data);
     };
