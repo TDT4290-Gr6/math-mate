@@ -1,4 +1,4 @@
-import { IAddSolvedProblemController } from '@/interface-adapters/controllers/add-solved-problem.controller';
+import type { IAddSolvedProblemController } from '@/interface-adapters/controllers/add-solved-problem.controller';
 import type { ICreateCountryController } from '@/interface-adapters/controllers/create-country.controller';
 import type { IGetCountriesController } from '@/interface-adapters/controllers/get-countries.controller';
 import type { IGetProblemsController } from '@/interface-adapters/controllers/get-problems.controller';
