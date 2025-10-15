@@ -1,10 +1,10 @@
 'use client';
 
 import { ChatHistory, ChatMessage } from '@/components/chatbot-window';
-import { sendMessageAction } from '../actions';
-import { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
 import { useLogger } from '@/components/logger/LoggerProvider';
+import { sendMessageAction } from '../actions';
+import { useSession } from 'next-auth/react';
+import { useState, useEffect } from 'react';
 
 // Privacy notice for chat - factory function
 const createPrivacyMessage = (): ChatMessage => ({
@@ -125,7 +125,11 @@ export function useChatbot() {
                 actionName: 'chat_message_received',
                 userId,
                 sessionId: logger.sessionId,
-                payload: { chatSessionId, reply: reply.message.content, problemId },
+                payload: {
+                    chatSessionId,
+                    reply: reply.message.content,
+                    problemId,
+                },
             });
         } catch (err) {
             console.error('Failed to get response:', err);

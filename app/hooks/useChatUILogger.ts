@@ -28,4 +28,5 @@ export function useChatUILogger({
         });
 
     return { logChatOpen, logChatClose };
+    return { logChatOpen, logChatClose };
 }

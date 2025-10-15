@@ -4,6 +4,7 @@ import {
     MethodProvider,
     useTrackedLogger,
 } from '@/components/logger/MethodProvider';
+import { useChatUILogger } from 'app/hooks/useChatUILogger';
 import ChatbotWindow from '@/components/chatbot-window';
 import ProblemCard from '@/components/ui/problem-card';
 import ChatToggle from '@/components/chat-toggle';
@@ -14,7 +15,6 @@ import Header from '@/components/ui/header';
 import React, { useState } from 'react';
 import Steps from '@/components/steps';
 import { cn } from '@/lib/utils';
-import { useChatUILogger } from 'app/hooks/useChatUILogger';
 
 // Define the Step type
 interface Step {
