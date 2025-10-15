@@ -19,7 +19,7 @@ if (!process.env.NEXT_AUTH_GOOGLE_ID || !process.env.NEXT_AUTH_GOOGLE_SECRET) {
  * NextAuth.js configuration options for authentication.
  *
  * @remarks
- * - Configures GitHub as an authentication provider using environment variables for credentials.
+ * - Configures GitHub and Google as an authentication provider using environment variables for credentials.
  * - Specifies a custom sign-in page at `/auth/signIn`.
  * - Implements custom callback functions for sign-in, session, and JWT handling:
  *   - `signIn`: Invokes a dependency-injected sign-in controller, updates the user ID, and handles errors.
