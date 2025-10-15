@@ -1,3 +1,4 @@
+import { LaTeXFormattedText } from './latex-formatted-text';
 import { Button } from '@/components/ui/button';
 import Title from './title';
 import React from 'react';
@@ -38,9 +39,7 @@ export default function MethodCard({
             <Title title={title} />
 
             {/* Description */}
-            <p className="mb-4 line-clamp-7 text-[var(--foreground)]">
-                {description}
-            </p>
+            <LaTeXFormattedText text={description} />
 
             {/* Button */}
             {!disableButton && (

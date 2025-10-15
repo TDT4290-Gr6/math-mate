@@ -7,6 +7,7 @@ import {
 import { useChatUILogger } from 'app/hooks/useChatUILogger';
 import ChatbotWindow from '@/components/chatbot-window';
 import ProblemCard from '@/components/ui/problem-card';
+import AnswerPopup from '@/components/answer-popup';
 import ChatToggle from '@/components/chat-toggle';
 import { useChatbot } from 'app/hooks/useChatbot';
 import { useSearchParams } from 'next/navigation';
@@ -75,6 +76,7 @@ function SolvingContent() {
     const [currentStep, setCurrentStep] = useState(1);
     const totalSteps = mockSteps.length;
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
+    const [isAnswerPopupOpen, setIsAnswerPopupOpen] = useState(false);
 
     const problemId = 123;
     const methodId = 7;
@@ -115,16 +117,21 @@ function SolvingContent() {
     };
 
     const handleGoToAnswer = () => {
+        setIsAnswerPopupOpen(true)
         void tracked.logEvent({
             actionName: 'go_to_answer',
             payload: { currentStep },
             problemId,
         });
-        alert('Go to answer button clicked');
     };
 
     return (
-        <div className="flex h-screen w-full flex-col items-center">
+        <div className="flex min-h-screen w-full flex-col items-center">
+            <AnswerPopup
+                isOpen={isAnswerPopupOpen}
+                answer={'final answer'}
+                onClose={() => setIsAnswerPopupOpen(false)}
+            />
             <Header
                 variant="problem"
                 mathProblem={
