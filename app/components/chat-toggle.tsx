@@ -25,7 +25,7 @@ export default function ChatToggle() {
                 <Button
                     aria-label="Open chat"
                     onClick={handleClick}
-                    className="fixed right-34 bottom-20 h-18 w-18 rounded-full bg-[var(--chatbot)] shadow-lg hover:bg-card hover:shadow-xl transition-shadow"
+                    className="hover:bg-card fixed right-34 bottom-20 h-18 w-18 rounded-full bg-[var(--chatbot)] shadow-lg transition-shadow hover:shadow-xl"
                 >
                     <BsStars className="size-10 text-[var(--foreground)]" />
                 </Button>
@@ -38,7 +38,9 @@ export default function ChatToggle() {
                 className="relative w-72 rounded-xl bg-[var(--chatbot)] p-3 text-[var(--foreground)] shadow-lg"
             >
                 <div className="text-sm">
-                    <h3 className="mb-1 font-bold">Need help with the math problem?</h3>
+                    <h3 className="mb-1 font-bold">
+                        Need help with the math problem?
+                    </h3>
                     <p>
                         Press me to open a chat to ask questions about the math
                         problem or one of the steps.
