@@ -1,9 +1,5 @@
+import { LaTeXFormattedText } from './ui/latex-formatted-text';
 import { ChatMessage } from './chatbot-window';
-import ReactMarkdown from 'react-markdown';
-import rehypeKatex from 'rehype-katex';
-import remarkMath from 'remark-math';
-import remarkGfm from 'remark-gfm';
-import 'katex/dist/katex.min.css';
 import { cn } from '@/lib/utils';
 import React from 'react';
 
@@ -37,12 +33,7 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
                     message.className, // Apply custom styling if provided
                 )}
             >
-                <ReactMarkdown
-                    remarkPlugins={[remarkGfm, remarkMath]}
-                    rehypePlugins={[rehypeKatex]}
-                >
-                    {message.content}
-                </ReactMarkdown>
+                <LaTeXFormattedText text={message.content} />
             </div>
         </div>
     );
