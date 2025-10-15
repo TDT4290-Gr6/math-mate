@@ -118,7 +118,7 @@ function SolvingContent() {
     };
 
     const handleGoToAnswer = () => {
-        setIsAnswerPopupOpen(true)
+        setIsAnswerPopupOpen(true);
         void tracked.logEvent({
             actionName: 'go_to_answer',
             payload: { currentStep },
