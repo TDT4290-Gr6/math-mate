@@ -98,7 +98,8 @@ function SolvingContent() {
             });
         };
         window.addEventListener('chat-toggle', handler as EventListener);
-        return () => window.removeEventListener('chat-toggle', handler as EventListener);
+        return () =>
+            window.removeEventListener('chat-toggle', handler as EventListener);
     }, [logChatOpen, logChatClose]);
 
     // Step navigation
