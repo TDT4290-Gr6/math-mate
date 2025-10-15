@@ -32,7 +32,6 @@ interface SidebarMenuProps {
  * Notes:
  *   - The `dummyProblems` array is placeholder data and should be replaced with real user data.
  *   - The component uses a `mounted` state to ensure theme-dependent UI only renders on the client.
- *   - Logout functionality is not fully implemented and currently logs a message to the console.
  */
 
 export default function SidebarMenu({ onClose }: SidebarMenuProps) {
@@ -54,10 +53,6 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
             cancelled = true;
         };
     }, []);
-
-    const handleLogout = () => {
-        signOut();
-    };
 
     // Dummy math problems
     const dummyProblems = [
@@ -136,7 +131,7 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                         type="button"
                         className="bg-sidebar-primary hover:bg-sidebar-accent flex cursor-pointer items-center gap-2 rounded-4xl px-4 py-2"
                         onClick={() => {
-                            handleLogout();
+                            signOut();
                             onClose();
                         }}
                     >
