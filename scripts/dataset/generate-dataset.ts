@@ -65,10 +65,11 @@ async function getProblems(): Promise<ProblemInsert[]> {
  * Main function to generate and store math problems in the database.
  *
  * - Retrieves a list of problems using `getProblems()`.
+ * - For each problem, checks if it contains visual elements (e.g., '[asy]') and skips it if so.
  * - For each problem, checks if it already exists in the database.
  * - If the problem does not exist, generates a title and solution methods using an LLM provider.
  * - Saves the new problem, its generated title, methods, and steps to the database.
- * - Logs progress and results to the console.
+ * - Logs progress to the console.
  *
  * @returns Resolves when all problems have been processed and stored.
  */
@@ -78,7 +79,13 @@ async function main() {
 
     for (let i = 0; i < problems.length; i++) {
         const problem = problems[i];
-        console.log(`Generating title and methods for problem number ${i + 1}`);
+
+        if (problem.problem.includes('[asy]')) {
+            console.log(
+                `Problem ${i + 1} contains visual elements, skipping...`,
+            );
+            continue;
+        }
 
         // Fetch and see if it already exists in the database
         const existingProblem = await prisma.problem.findUnique({
@@ -92,6 +99,7 @@ async function main() {
             continue;
         }
 
+        console.log(`Generating title and methods for problem number ${i + 1}`);
         const generated = await generateMethods(problem, llmProvider);
 
         console.log(
