@@ -4,6 +4,7 @@ import {
     MethodProvider,
     useTrackedLogger,
 } from '@/components/logger/MethodProvider';
+import { useChatUILogger } from 'app/hooks/useChatUILogger';
 import ChatbotWindow from '@/components/chatbot-window';
 import ProblemCard from '@/components/ui/problem-card';
 import ChatToggle from '@/components/chat-toggle';
@@ -14,7 +15,6 @@ import Header from '@/components/ui/header';
 import React, { useState } from 'react';
 import Steps from '@/components/steps';
 import { cn } from '@/lib/utils';
-import { useChatUILogger } from 'app/hooks/useChatUILogger';
 
 // Define the Step type
 interface Step {
@@ -78,8 +78,10 @@ function SolvingContent() {
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
     const problemId = 123;
     const methodId = 7;
-    const { logChatOpen, logChatClose } = useChatUILogger({ page: 'solve-yourself', problemId });
-
+    const { logChatOpen, logChatClose } = useChatUILogger({
+        page: 'solve-yourself',
+        problemId,
+    });
 
     const { chatHistory, sendMessage, isLoading, error } = useChatbot();
 
@@ -90,7 +92,7 @@ function SolvingContent() {
                 const next = !v;
                 void tracked.logEvent({
                     actionName: next ? 'chat_open' : 'chat_close',
-                    problemId: 1 // pass problem ID
+                    problemId: 1, // pass problem ID
                 });
                 return next;
             });
@@ -107,7 +109,7 @@ function SolvingContent() {
             setCurrentStep((prev) => prev + 1);
             void tracked.logEvent({
                 actionName: 'next_step',
-                
+
                 payload: { from, to },
             });
         }
@@ -176,7 +178,6 @@ function SolvingContent() {
                             onSendMessage={sendMessage}
                             isLoading={isLoading}
                             error={error ?? undefined}
-                            
                         />
                     </div>
                 ) : (

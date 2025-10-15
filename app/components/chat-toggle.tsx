@@ -17,7 +17,10 @@ export default function ChatToggle() {
 
     const handleClick = () => {
         try {
-            void tracked.logEvent({ actionName: open ? 'chat_open' : 'chat_close', payload: "test"});
+            void tracked.logEvent({
+                actionName: open ? 'chat_open' : 'chat_close',
+                payload: 'test',
+            });
         } catch {}
         if (typeof window !== 'undefined') {
             window.dispatchEvent(new CustomEvent('chat-toggle'));

@@ -73,7 +73,7 @@ export function MethodProvider({
     );
 
     // Emit a page_view enriched with available ids when this provider becomes active
-   /*  useEffect(() => {
+    /*  useEffect(() => {
         const tracked = getTrackedLogger();
         const payload: { path?: string } = {};
         if (typeof window !== 'undefined')

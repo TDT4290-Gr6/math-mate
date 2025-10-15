@@ -1,5 +1,6 @@
 'use client';
 
+import { useChatUILogger } from 'app/hooks/useChatUILogger';
 import ChatbotWindow from '@/components/chatbot-window';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProblemCard from '@/components/ui/problem-card';
@@ -11,7 +12,6 @@ import { useEffect, useState } from 'react';
 import Title from '@/components/ui/title';
 import Link from 'next/link';
 import React from 'react';
-import { useChatUILogger } from 'app/hooks/useChatUILogger';
 
 /**
  * SolveYourself
