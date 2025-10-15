@@ -3,6 +3,7 @@
 import { UserRound, Moon, X, LoaderCircle } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { Switch } from '@/components/ui/switch';
+import { signOut } from 'next-auth/react';
 import { useTheme } from 'next-themes';
 import { getUserId } from '@/actions';
 import { Button } from './button';
@@ -54,9 +55,8 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
         };
     }, []);
 
-    // TODO: Implement logout functionality
     const handleLogout = () => {
-        console.log('Logging out...');
+        signOut();
     };
 
     // Dummy math problems
