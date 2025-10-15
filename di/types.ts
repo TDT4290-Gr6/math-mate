@@ -1,3 +1,4 @@
+import { IAddSolvedProblemController } from '@/interface-adapters/controllers/add-solved-problem.controller';
 import type { ICreateCountryController } from '@/interface-adapters/controllers/create-country.controller';
 import type { IGetCountriesController } from '@/interface-adapters/controllers/get-countries.controller';
 import type { IGetProblemsController } from '@/interface-adapters/controllers/get-problems.controller';
@@ -8,6 +9,7 @@ import type { ISendChatMessageController } from '@/interface-adapters/controller
 import type { ISendChatMessageUseCase } from '@/application/use-cases/send-chat-message.use-case';
 import type { ISolvesRepository } from '@/application/repositories/solves.repository.interface';
 import type { IGetUserController } from '@/interface-adapters/controllers/get-user.controller';
+import { IAddSolvedProblemUseCase } from '@/application/use-cases/add-solved-problem.use-case';
 import type { IUsersRepository } from '@/application/repositories/users.repository.interface';
 import type { ICreateCountryUseCase } from '@/application/use-cases/create-country.use-case';
 import type { ISignInController } from '@/interface-adapters/controllers/signIn.controller';
@@ -40,6 +42,7 @@ export const DI_SYMBOLS = {
     IGetProblemsUseCase: Symbol.for('IGetProblemsUseCase'),
     ISendChatMessageUseCase: Symbol.for('ISendChatMessageUseCase'),
     IGetUserUseCase: Symbol.for('IGetUserUseCase'),
+    IAddSolvedProblemUseCase: Symbol.for('IAddSolvedProblemUseCase'),
 
     // Controllers
     ICreateCountryController: Symbol.for('ICreateCountryController'),
@@ -49,6 +52,7 @@ export const DI_SYMBOLS = {
     IGetProblemsController: Symbol.for('IGetProblemsController'),
     ISendChatMessageController: Symbol.for('ISendChatMessageController'),
     IGetUserController: Symbol.for('IGetUserController'),
+    IAddSolvedProblemController: Symbol.for('IAddSolvedProblemController'),
 };
 
 export interface DI_RETURN_TYPES {
@@ -71,6 +75,7 @@ export interface DI_RETURN_TYPES {
     IGetProblemsUseCase: IGetProblemsUseCase;
     ISendChatMessageUseCase: ISendChatMessageUseCase;
     IGetUserUseCase: IGetUserUseCase;
+    IAddSolvedProblemUseCase: IAddSolvedProblemUseCase;
 
     // Controllers
     ICreateCountryController: ICreateCountryController;
@@ -80,4 +85,5 @@ export interface DI_RETURN_TYPES {
     IGetProblemsController: IGetProblemsController;
     ISendChatMessageController: ISendChatMessageController;
     IGetUserController: IGetUserController;
+    IAddSolvedProblemController: IAddSolvedProblemController;
 }
