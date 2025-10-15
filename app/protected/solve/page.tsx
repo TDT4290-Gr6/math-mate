@@ -60,7 +60,6 @@ export default function SolvingPage() {
     const search = useSearchParams();
     const methodIdParam = search?.get?.('methodId');
     const stepIdParam = search?.get?.('stepId');
-    const methodId = methodIdParam ? Number(methodIdParam) : undefined;
     const stepId = stepIdParam ? Number(stepIdParam) : undefined;
 
     /* TODO: pass method and step ID */
@@ -76,38 +75,40 @@ function SolvingContent() {
     const [currentStep, setCurrentStep] = useState(1);
     const totalSteps = mockSteps.length;
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
+
     const problemId = 123;
     const methodId = 7;
-    const { logChatOpen, logChatClose } = useChatUILogger({ page: 'solve-yourself', problemId });
 
+    // Get structured chat logging helpers
+    const { logChatOpen, logChatClose } = useChatUILogger({
+        page: 'solve',
+        problemId,
+    });
 
     const { chatHistory, sendMessage, isLoading, error } = useChatbot();
 
-    // Listen for the chat-toggle event
+    // Handle chat toggle (dispatched from ChatToggle)
     React.useEffect(() => {
         const handler = () => {
-            setIsChatOpen((v) => {
-                const next = !v;
-                void tracked.logEvent({
-                    actionName: next ? 'chat_open' : 'chat_close',
-                    problemId: 1 // pass problem ID
-                });
+            setIsChatOpen((prev) => {
+                const next = !prev;
+                if (next) logChatOpen();
+                else logChatClose();
                 return next;
             });
         };
         window.addEventListener('chat-toggle', handler as EventListener);
-        return () =>
-            window.removeEventListener('chat-toggle', handler as EventListener);
-    }, [tracked]);
+        return () => window.removeEventListener('chat-toggle', handler as EventListener);
+    }, [logChatOpen, logChatClose]);
 
+    // Step navigation
     const handleNextStep = () => {
         if (currentStep < totalSteps) {
             const from = currentStep;
             const to = currentStep + 1;
-            setCurrentStep((prev) => prev + 1);
+            setCurrentStep(to);
             void tracked.logEvent({
                 actionName: 'next_step',
-                
                 payload: { from, to },
             });
         }
@@ -117,7 +118,7 @@ function SolvingContent() {
         void tracked.logEvent({
             actionName: 'go_to_answer',
             payload: { currentStep },
-            problemId: 1, // pass problem id
+            problemId,
         });
         alert('Go to answer button clicked');
     };
@@ -128,7 +129,7 @@ function SolvingContent() {
                 variant="problem"
                 mathProblem={
                     <div className="flex h-50 flex-row items-center justify-center gap-4">
-                        <ProblemCard description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc in nunc diam. Fusce accumsan tempor justo ac pellentesque. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." />
+                        <ProblemCard description="Lorem ipsum dolor sit amet, consectetur adipiscing elit..." />
                     </div>
                 }
             />
@@ -145,7 +146,7 @@ function SolvingContent() {
                     </div>
                     <div className="flex-end mb-20 flex w-full justify-center gap-2">
                         <Button
-                            onClick={() => handleGoToAnswer()}
+                            onClick={handleGoToAnswer}
                             className="w-1/4 rounded-full"
                             variant="default"
                         >
@@ -153,7 +154,7 @@ function SolvingContent() {
                         </Button>
                         {currentStep < totalSteps && (
                             <Button
-                                onClick={() => handleNextStep()}
+                                onClick={handleNextStep}
                                 className="w-1/4 rounded-full"
                                 variant="secondary"
                             >
@@ -170,13 +171,12 @@ function SolvingContent() {
                         <ChatbotWindow
                             chatHistory={chatHistory}
                             onClose={() => {
-                                setIsChatOpen(!isChatOpen);
+                                setIsChatOpen(false);
                                 logChatClose();
                             }}
                             onSendMessage={sendMessage}
                             isLoading={isLoading}
                             error={error ?? undefined}
-                            
                         />
                     </div>
                 ) : (

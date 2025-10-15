@@ -2,13 +2,30 @@
 
 import { useLogger } from '@/components/logger/LoggerProvider';
 
-export function useChatUILogger({ page, problemId }: { page: string; problemId?: number }) {
-  const logger = useLogger();
+export function useChatUILogger({
+    page,
+    problemId,
+    methodId,
+}: {
+    page: string;
+    problemId?: number;
+    methodId?: number;
+}) {
+    const logger = useLogger();
 
-  const logChatOpen = () =>
-    logger.logEvent({ actionName: 'chat_open', payload: { page, problemId } });
-  const logChatClose = () =>
-    logger.logEvent({ actionName: 'chat_close', payload: { page, problemId } });
+    const logChatOpen = () =>
+        void logger.logEvent({
+            actionName: 'chat_open',
+            problemId: problemId,
+            methodId: methodId,
+            payload: { page },
+        });
 
-  return { logChatOpen, logChatClose };
+    const logChatClose = () =>
+        void logger.logEvent({
+            actionName: 'chat_close',
+            payload: { page, problemId, methodId },
+        });
+
+    return { logChatOpen, logChatClose };
 }

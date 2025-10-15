@@ -5,6 +5,7 @@ import React, {
     useContext,
     useEffect,
     useCallback,
+    useRef,
 } from 'react';
 import {
     useLogger,
@@ -39,6 +40,7 @@ export function MethodProvider({
     problemId?: number;
 }) {
     const logger = useLogger();
+    const lastLoggedPath = useRef<string | null>(null);
 
     const getTrackedLogger = useCallback(
         () => ({
@@ -72,40 +74,20 @@ export function MethodProvider({
         [logger, methodId, stepId],
     );
 
-    // Emit a page_view enriched with available ids when this provider becomes active
-   /*  useEffect(() => {
-        const tracked = getTrackedLogger();
-        const payload: { path?: string } = {};
-        if (typeof window !== 'undefined')
-            payload.path = window.location.pathname;
-        void tracked.logEvent({
-            actionName: 'page_view',
-            payload,
-            problemId: problemId,
-        });
-    }, [getTrackedLogger, problemId]); */
-
-    // Listen for the global chat-toggle event and log it with available ids.
     useEffect(() => {
-        const handler = () => {
+        if (typeof window === 'undefined') return;
+        const path = window.location.pathname;
+
+        // Only log if the path is new
+        if (lastLoggedPath.current !== path) {
+            lastLoggedPath.current = path;
             const tracked = getTrackedLogger();
             void tracked.logEvent({
-                actionName: 'chat_toggle',
-                payload: { source: 'method_provider' },
-                problemId: problemId,
+                actionName: 'page_view',
+                payload: { path },
+                problemId,
             });
-        };
-        if (typeof window !== 'undefined') {
-            window.addEventListener('chat-toggle', handler as EventListener);
         }
-        return () => {
-            if (typeof window !== 'undefined') {
-                window.removeEventListener(
-                    'chat-toggle',
-                    handler as EventListener,
-                );
-            }
-        };
     }, [getTrackedLogger, problemId]);
 
     return (
