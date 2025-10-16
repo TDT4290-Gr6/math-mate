@@ -7,6 +7,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from './ui/dialog';
+import { LaTeXFormattedText } from './ui/latex-formatted-text';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { Button } from './ui/button';
@@ -139,7 +140,17 @@ export default function AnswerPopup({
                                             close you got.
                                         </p>
                                         <div className="my-3 h-12 rounded-md bg-[var(--answer-card-secondary)] px-4 py-3 text-[var(--secondary-foreground)]">
-                                            {answer}
+                                            <LaTeXFormattedText
+                                                text={
+                                                    (answer.startsWith('$')
+                                                        ? ''
+                                                        : '$') +
+                                                    answer +
+                                                    (answer.endsWith('$')
+                                                        ? ''
+                                                        : '$')
+                                                }
+                                            />
                                         </div>
                                         <p className="text-[var(--foreground)]">
                                             Did you arrive at the correct
