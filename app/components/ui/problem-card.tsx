@@ -34,16 +34,20 @@ export default function ProblemCard({
             {variant === 'withButtons' && (
                 <div className="flex justify-center gap-12">
                     <Button onClick={onPrevious} disabled={!onPrevious}>
-                        <ChevronLeft className="h-4 w-4" />
+                        <div className='flex flex-row gap-2 items-center'>
+                        <ChevronLeft className="h-4 w-4 mt-1" />
                         Previous problem
+                        </div>
                     </Button>
                     <Button
                         variant="secondary"
                         onClick={onNext}
                         disabled={!onNext}
                     >
+                    <div className='flex flex-row gap-2 items-center'>
                         Another problem
-                        <ChevronRight className="h-4 w-4" />
+                        <ChevronRight className="h-4 w-4 mt-1" />
+                    </div>
                     </Button>
                 </div>
             )}

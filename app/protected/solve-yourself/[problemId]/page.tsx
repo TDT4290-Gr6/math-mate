@@ -163,13 +163,13 @@ export default function SolveYourself() {
                 className={`${isChatOpen ? '' : 'mt-6'} mb-12 flex flex-row items-center gap-10`}
             >
                 <Link href={`/protected/methods/${problem?.id}`}>
-                    <Button variant="default" className="w-40">
+                    <Button variant="default" className="w-48">
                         Use a step-by-step
                     </Button>
                 </Link>
                 <Button
                     variant="secondary"
-                    className="w-40"
+                    className="w-48"
                     onClick={() => setIsAnswerPopupOpen(true)}
                 >
                     Go to answer

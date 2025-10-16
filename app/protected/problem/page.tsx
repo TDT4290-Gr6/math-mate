@@ -113,7 +113,7 @@ export default function ProblemPage() {
                     onPrevious={handlePrevious}
                 />
             </div>
-            <div className="mt-10 flex flex-col justify-center gap-8">
+            <div className="mt-4 flex flex-col justify-center gap-12">
                 <button
                     className="text-opacity-20 cursor-pointer text-sm underline underline-offset-4 opacity-70 hover:opacity-90"
                     onClick={openSubjectSelect}

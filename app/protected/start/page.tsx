@@ -52,7 +52,7 @@ export default function StartPage() {
                         <Button
                             asChild
                             variant="secondary"
-                            className="absolute right-24 -bottom-4 gap-2"
+                            className="absolute right-20 -bottom-6 gap-2"
                         >
                             <Link href="/protected/problem">
                                 Start Practicing{' '}
