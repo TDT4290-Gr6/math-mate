@@ -81,7 +81,7 @@ export default function SolveYourself() {
         >
             <AnswerPopup
                 isOpen={isAnswerPopupOpen}
-                answer={'final answer'}
+                answer={problem?.solution ?? 'No solution available'}
                 onClose={() => setIsAnswerPopupOpen(false)}
             />
             {isChatOpen ? (
