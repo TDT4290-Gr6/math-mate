@@ -1,5 +1,7 @@
-// app/page.tsx
+'use server';
+
+import { redirect } from 'next/navigation';
 
 export default async function HomePage() {
-    return null; // This page is not implemented yet
+    redirect('/protected/start');
 }
