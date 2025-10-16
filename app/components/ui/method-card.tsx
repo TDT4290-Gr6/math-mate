@@ -2,6 +2,7 @@ import { LaTeXFormattedText } from './latex-formatted-text';
 import { Button } from '@/components/ui/button';
 import Title from './title';
 import React from 'react';
+import { Card, CardHeader } from './card';
 
 /**
  * Props for the `MethodCard` component.
@@ -12,6 +13,7 @@ interface MethodCardProps {
     buttonText: string;
     onButtonClick?: () => void;
     disableButton?: boolean;
+    methodNumber?: number;
 }
 
 /**
@@ -32,14 +34,26 @@ export default function MethodCard({
     buttonText,
     onButtonClick,
     disableButton,
+    methodNumber,
 }: MethodCardProps) {
     return (
-        <div className="relative mx-4 my-4 flex min-h-[64px] min-w-[128px] flex-col items-start justify-start rounded-xl bg-[var(--card)] p-4 text-start shadow-sm">
+        
+        <Card className="relative w-full m-3 px-6 gap-2 pt-4">
+            {/* Methodnumber */}
+            <Title 
+                title={methodNumber !== undefined ? `method ${methodNumber}:` : 'Chosen method:'} 
+                size={20} 
+            />
             {/* Title */}
-            <Title title={title} />
+            <p className="line-clamp-7 mt-[-26px] text-sm font-semibold pt-4">
+                {title}
+            </p>
+            <div className="border-b border-[var(--border)]"/>
 
             {/* Description */}
-            <LaTeXFormattedText text={description} />
+            <div className="mb-8 mt-2">
+                <LaTeXFormattedText text={description} />
+            </div>
 
             {/* Button */}
             {!disableButton && (
@@ -52,6 +66,6 @@ export default function MethodCard({
                     </Button>
                 </div>
             )}
-        </div>
+        </Card>
     );
 }
