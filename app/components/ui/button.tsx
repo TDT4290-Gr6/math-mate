@@ -11,7 +11,7 @@ const buttonVariants = cva(
             variant: {
                 default: 'bg-primary text-primary-foreground',
                 secondary: 'bg-[var(--accent)] text-primary-foreground',
-                ghost: 'bg-[var(--sidebar-primary)]',
+                ghost: 'bg-sidebar-primary text-primary-foreground',
                 transparent: 'bg-transparent hover:bg-[var(--primary)]/10',
                 link: 'underline underline-offset-4',
             },
