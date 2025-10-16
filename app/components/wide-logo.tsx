@@ -10,7 +10,10 @@ type WideLogoProps = {
     variant?: 'background' | 'card';
 };
 
-export default function WideLogo({ className, variant = 'card' }: WideLogoProps) {
+export default function WideLogo({
+    className,
+    variant = 'card',
+}: WideLogoProps) {
     return (
         <svg
             width="313"
