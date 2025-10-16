@@ -107,7 +107,7 @@ export default function AnswerPopup({
                         <Title title="Here's the answer:" />
                     </DialogTitle>
                     <DialogDescription asChild>
-                        <div className="flex h-40 w-full flex-col items-center justify-start">
+                        <div className="flex h-44 w-full flex-col items-center justify-start">
                             <div className="flex w-3/4 max-w-sm flex-1">
                                 {step === 'reveal' && (
                                     <div className="w-full text-center">
@@ -205,7 +205,7 @@ export default function AnswerPopup({
                                     </div>
                                 )}
                             </div>
-                            <div className="flex h-12 w-3/4 max-w-sm items-center justify-center">
+                            <div className="m-3 flex h-12 w-3/4 max-w-sm items-center justify-center">
                                 {step === 'confirm' && (
                                     <div className="flex gap-4">
                                         <Button
@@ -229,7 +229,7 @@ export default function AnswerPopup({
                                     <div className="flex gap-4">
                                         <Button
                                             variant="default"
-                                            className="w-32"
+                                            className="w-40"
                                             disabled={
                                                 selectedDifficulty === null
                                             }
@@ -241,7 +241,7 @@ export default function AnswerPopup({
                                         </Button>
                                         <Button
                                             variant="secondary"
-                                            className="w-32"
+                                            className="w-40"
                                             disabled={
                                                 selectedDifficulty === null
                                             }

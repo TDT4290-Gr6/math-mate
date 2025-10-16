@@ -90,7 +90,7 @@ export default function SolvingPage() {
                             methodDescription={method?.description}
                         />
                     </div>
-                    <div className="flex-end mb-20 flex w-full justify-center gap-2">
+                    <div className="flex-end mt-6 mb-20 flex w-full justify-center gap-10">
                         <Button
                             onClick={() => setIsAnswerPopupOpen(true)}
                             className="w-1/4 rounded-full"
