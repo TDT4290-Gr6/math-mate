@@ -4,6 +4,7 @@ import { useChatUILogger } from 'app/hooks/useChatUILogger';
 import ChatbotWindow from '@/components/chatbot-window';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProblemCard from '@/components/ui/problem-card';
+import AnswerPopup from '@/components/answer-popup';
 import ChatToggle from '@/components/chat-toggle';
 import { useChatbot } from 'app/hooks/useChatbot';
 import { Button } from '@/components/ui/button';
@@ -47,6 +48,7 @@ import React from 'react';
 export default function SolveYourself() {
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
     const [showChat, setShowChat] = useState(false);
+    const [isAnswerPopupOpen, setIsAnswerPopupOpen] = useState(false);
     const problemId = 1;
 
     useChatUILogger({ page: 'solve-yourself', problemId });
@@ -80,6 +82,11 @@ export default function SolveYourself() {
             layout
             transition={{ layout: { duration: 0.4, ease: 'easeInOut' } }}
         >
+            <AnswerPopup
+                isOpen={isAnswerPopupOpen}
+                answer={'final answer'}
+                onClose={() => setIsAnswerPopupOpen(false)}
+            />
             {isChatOpen ? (
                 <Header
                     variant="problem"
@@ -145,11 +152,10 @@ export default function SolveYourself() {
                         Use a step-by-step
                     </Button>
                 </Link>
-                {/* TODO: change link to "solution" popup */}
                 <Button
                     variant="secondary"
                     className="w-40"
-                    onClick={() => alert('Button pressed')}
+                    onClick={() => setIsAnswerPopupOpen(true)}
                 >
                     Go to answer
                 </Button>

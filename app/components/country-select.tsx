@@ -40,7 +40,10 @@ export default function CountrySelect() {
             >
                 <DialogHeader>
                     <DialogTitle>
-                        <Title title="Country of residence:" />
+                        <Title
+                            title="Country of residence:"
+                            titleComponent="span"
+                        />
                     </DialogTitle>
                     <DialogDescription>
                         As this is a research project, we would like to know
