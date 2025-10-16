@@ -1,20 +1,19 @@
-'use client';
-import { getProviders, ClientSafeProvider, signIn } from 'next-auth/react';
+'use server';
+
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { useEffect, useState } from 'react';
+import SignInProviders from './SignInProviders';
+import { getProviders } from 'next-auth/react';
 
-export default function SignInPage() {
-    const [providers, setProviders] = useState<Record<
-        string,
-        ClientSafeProvider
-    > | null>(null);
+export default async function SignInPage() {
+    const providers = await getProviders();
 
-    useEffect(() => {
-        getProviders().then(setProviders);
-    }, []);
+    // serialize providers to a minimal array so we don't pass functions or complex objects
+    const serializedProviders = providers
+        ? Object.values(providers).map((p) => ({ id: p.id, name: p.name }))
+        : null;
+
     return (
-        <main className="">
+        <main className="flex justify-center">
             <div className="container flex min-h-screen flex-col items-center justify-center">
                 <div className="relative w-80">
                     <h1 className="border-accent absolute -top-15 -left-15 inline-block border-b-4 pb-1 text-2xl font-bold">
@@ -27,23 +26,7 @@ export default function SignInPage() {
                             </p>
                         </CardHeader>
                         <CardContent className="flex flex-col items-center gap-4">
-                            {providers ? (
-                                Object.values(providers).map((provider) => (
-                                    <Button
-                                        key={provider.name}
-                                        className="rounded-full bg-blue-500 px-20 py-6 font-semibold text-white hover:bg-blue-600"
-                                        onClick={() => {
-                                            signIn(provider.id, {
-                                                callbackUrl: '/protected/start',
-                                            });
-                                        }}
-                                    >
-                                        {provider.name}
-                                    </Button>
-                                ))
-                            ) : (
-                                <p>Loading...</p>
-                            )}
+                            <SignInProviders providers={serializedProviders} />
                         </CardContent>
                     </Card>
                 </div>
