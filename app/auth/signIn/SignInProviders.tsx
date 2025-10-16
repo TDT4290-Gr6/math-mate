@@ -25,7 +25,8 @@ export default function SignInProviders({
             {providers.map((provider) => (
                 <Button
                     key={provider.id}
-                    className="rounded-full bg-blue-500 px-20 py-6 font-semibold text-white hover:bg-blue-600"
+                    className="px-20 py-6 font-semibold"
+                    variant="secondary"
                     onClick={() => {
                         signIn(provider.id, {
                             callbackUrl: '/protected/start',
