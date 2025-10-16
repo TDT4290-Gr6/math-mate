@@ -194,7 +194,7 @@ export default function AnswerPopup({
                                     </div>
                                 )}
                             </div>
-                            <div className="flex h-12 w-3/4 max-w-sm items-center justify-center  m-3">
+                            <div className="m-3 flex h-12 w-3/4 max-w-sm items-center justify-center">
                                 {step === 'confirm' && (
                                     <div className="flex gap-4">
                                         <Button

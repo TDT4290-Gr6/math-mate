@@ -1,7 +1,7 @@
 import { LaTeXFormattedText } from './ui/latex-formatted-text';
 import type { Step } from '@/entities/models/step';
-import { useEffect, useRef } from 'react';
 import MethodCard from './ui/method-card';
+import { useEffect, useRef } from 'react';
 import { Minus } from 'lucide-react';
 
 interface StepsProps {
