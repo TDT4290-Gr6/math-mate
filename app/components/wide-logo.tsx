@@ -1,13 +1,13 @@
 import { cn } from '@/lib/utils';
 
 type WideLogoProps = {
-  className?: string;
-  /** 
-   * Choose the circle color variant. 
-   * 'background' → uses fill-background  
-   * 'card' → uses fill-card  
-   */
-  variant?: 'background' | 'card';
+    className?: string;
+    /**
+     * Choose the circle color variant.
+     * 'background' → uses fill-background
+     * 'card' → uses fill-card
+     */
+    variant?: 'background' | 'card';
 };
 
 export default function WideLogo({ className, variant }: WideLogoProps) {
@@ -27,7 +27,7 @@ export default function WideLogo({ className, variant }: WideLogoProps) {
                 height="110"
                 rx="55"
                 className={cn(
-                    variant === 'background' ? 'fill-background' : 'fill-card'
+                    variant === 'background' ? 'fill-background' : 'fill-card',
                 )}
             />
             {/* Sqrt */}
