@@ -4,6 +4,7 @@ import type { IGetCountriesController } from '@/interface-adapters/controllers/g
 import type { IGetProblemsController } from '@/interface-adapters/controllers/get-problems.controller';
 import type { ICountriesRepository } from '@/application/repositories/countries.repository.interface';
 import type { ISetCountryController } from '@/interface-adapters/controllers/set-country.controller';
+import type { IGetProblemController } from '@/interface-adapters/controllers/get-problem.controller';
 import type { IProblemsRepository } from '@/application/repositories/problems.repository.interface';
 import type { IAddSolvedProblemUseCase } from '@/application/use-cases/add-solved-problem.use-case';
 import type { ISendChatMessageController } from '@/interface-adapters/controllers/chat.controller';
@@ -17,6 +18,7 @@ import type { IAuthenticationService } from '@/application/services/auth.service
 import type { IGetCountriesUseCase } from '@/application/use-cases/get-countries.use-case';
 import type { IGetProblemsUseCase } from '@/application/use-cases/get-problems.use-case';
 import type { ISetCountryUseCase } from '@/application/use-cases/set-country.use-case';
+import type { IGetProblemUseCase } from '@/application/use-cases/get-problem.use-case';
 import type { ICreateUserUseCase } from '@/application/use-cases/create-user.use-case';
 import type { IChatService } from '@/application/services/chat.service.interface';
 import type { IGetUserUseCase } from '@/application/use-cases/get-user.use-case';
@@ -39,6 +41,7 @@ export const DI_SYMBOLS = {
     ICreateUserUseCase: Symbol.for('ICreateUserUseCase'),
     ISignInUseCase: Symbol.for('ISignInUseCase'),
     ISetCountryUseCase: Symbol.for('ISetCountryUseCase'),
+    IGetProblemUseCase: Symbol.for('IGetProblemUseCase'),
     IGetProblemsUseCase: Symbol.for('IGetProblemsUseCase'),
     ISendChatMessageUseCase: Symbol.for('ISendChatMessageUseCase'),
     IGetUserUseCase: Symbol.for('IGetUserUseCase'),
@@ -49,6 +52,7 @@ export const DI_SYMBOLS = {
     IGetCountriesController: Symbol.for('IGetCountriesController'),
     ISignInController: Symbol.for('ISignInController'),
     ISetCountryController: Symbol.for('ISetCountryController'),
+    IGetProblemController: Symbol.for('IGetProblemController'),
     IGetProblemsController: Symbol.for('IGetProblemsController'),
     ISendChatMessageController: Symbol.for('ISendChatMessageController'),
     IGetUserController: Symbol.for('IGetUserController'),
@@ -72,6 +76,7 @@ export interface DI_RETURN_TYPES {
     ICreateUserUseCase: ICreateUserUseCase;
     ISignInUseCase: ISignInUseCase;
     ISetCountryUseCase: ISetCountryUseCase;
+    IGetProblemUseCase: IGetProblemUseCase;
     IGetProblemsUseCase: IGetProblemsUseCase;
     ISendChatMessageUseCase: ISendChatMessageUseCase;
     IGetUserUseCase: IGetUserUseCase;
@@ -82,6 +87,7 @@ export interface DI_RETURN_TYPES {
     IGetCountriesController: IGetCountriesController;
     ISignInController: ISignInController;
     ISetCountryController: ISetCountryController;
+    IGetProblemController: IGetProblemController;
     IGetProblemsController: IGetProblemsController;
     ISendChatMessageController: ISendChatMessageController;
     IGetUserController: IGetUserController;

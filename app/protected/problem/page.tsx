@@ -1,7 +1,6 @@
 'use client';
 
 import SubjectSelectPopup from '@/components/subject-select-popup';
-import { useProblemStore } from 'app/store/problem-store';
 import type { Problem } from '@/entities/models/problem';
 import ProblemCard from '@/components/ui/problem-card';
 import { Button } from '@/components/ui/button';
@@ -26,7 +25,6 @@ export default function ProblemPage() {
     const openSubjectSelect = () => setIsSubjectSelectOpen(true);
     const closeSubjectSelect = () => setIsSubjectSelectOpen(false);
 
-    const setCurrentProblem = useProblemStore((state) => state.setProblem);
     const router = useRouter();
     const currentProblem = problems[currentIndex];
     const LIMIT = 10;
@@ -99,11 +97,6 @@ export default function ProblemPage() {
         console.log('TODO');
     };
 
-    const goToMethodPage = () => {
-        if (!currentProblem) return;
-        setCurrentProblem(currentProblem); // Zustand
-        router.push('/protected/method');
-    };
     return (
         <div className="flex min-h-screen flex-col items-center bg-[var(--background)] text-[var(--foreground)]">
             <Header />
@@ -139,7 +132,9 @@ export default function ProblemPage() {
                 )}
                 <Button
                     variant="secondary"
-                    onClick={goToMethodPage}
+                    onClick={() =>
+                        router.push(`/protected/methods/${currentProblem.id}`)
+                    }
                     disabled={!currentProblem}
                 >
                     Get started solving

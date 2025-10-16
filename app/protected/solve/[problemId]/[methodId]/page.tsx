@@ -1,5 +1,6 @@
 'use client';
 
+import { useFetchProblem } from 'app/hooks/useFetchProblem';
 import ChatbotWindow from '@/components/chatbot-window';
 import ProblemCard from '@/components/ui/problem-card';
 import AnswerPopup from '@/components/answer-popup';
@@ -7,42 +8,10 @@ import ChatToggle from '@/components/chat-toggle';
 import { useChatbot } from 'app/hooks/useChatbot';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
+import { useParams } from 'next/navigation';
 import React, { useState } from 'react';
 import Steps from '@/components/steps';
 import { cn } from '@/lib/utils';
-
-// Define the Step type
-interface Step {
-    stepID: string;
-    content: string;
-}
-
-// Mock steps data for testing
-const mockSteps: Step[] = [
-    {
-        stepID: 'step-1',
-        content:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-    },
-    {
-        stepID: 'step-2',
-        content:
-            'Subtract 5 from both sides to isolate the term with x: 2x + 5 - 5 = 13 - 5',
-    },
-    {
-        stepID: 'step-3',
-        content: 'Simplify both sides: 2x = 8',
-    },
-    {
-        stepID: 'step-4',
-        content: 'Divide both sides by 2 to solve for x: 2x ÷ 2 = 8 ÷ 2',
-    },
-    {
-        stepID: 'step-5',
-        content:
-            "Final answer: x = 4. Let's verify by substituting back: 2(4) + 5 = 8 + 5 = 13 ✓",
-    },
-];
 
 /**
  * SolvingPage
@@ -52,12 +21,20 @@ const mockSteps: Step[] = [
  * chat state and passes messages to the ChatbotWindow.
  */
 export default function SolvingPage() {
-    const [currentStep, setCurrentStep] = useState(1);
-    const totalSteps = mockSteps.length;
+    const { chatHistory, sendMessage, isLoading, error } = useChatbot();
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
     const [isAnswerPopupOpen, setIsAnswerPopupOpen] = useState(false);
 
-    const { chatHistory, sendMessage, isLoading, error } = useChatbot();
+    const params = useParams<{ problemId: string; methodId: string }>();
+    const problemId = Number(params.problemId);
+    const methodId = Number(params.methodId);
+    const { problem, loadingProblem, errorProblem } =
+        useFetchProblem(problemId);
+
+    const [currentStep, setCurrentStep] = useState(1);
+
+    const method = problem?.methods.find((m) => m.id === methodId);
+    const totalSteps = method?.steps?.length ?? 0;
 
     // Listen for the chat-toggle event
     React.useEffect(() => {
@@ -68,7 +45,7 @@ export default function SolvingPage() {
     }, []);
 
     const handleNextStep = () => {
-        if (currentStep < totalSteps) {
+        if (currentStep < totalSteps - 1) {
             setCurrentStep((prev) => prev + 1);
         }
     };
@@ -77,14 +54,23 @@ export default function SolvingPage() {
         <div className="flex min-h-screen w-full flex-col items-center">
             <AnswerPopup
                 isOpen={isAnswerPopupOpen}
-                answer={'final answer'}
+                answer={problem?.solution ?? 'No solution available'}
                 onClose={() => setIsAnswerPopupOpen(false)}
             />
             <Header
                 variant="problem"
                 mathProblem={
                     <div className="flex h-50 flex-row items-center justify-center gap-4">
-                        <ProblemCard description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc in nunc diam. Fusce accumsan tempor justo ac pellentesque. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." />
+                        <ProblemCard
+                            description={
+                                loadingProblem
+                                    ? 'Loading problem...'
+                                    : errorProblem
+                                      ? 'Error loading problem'
+                                      : (problem?.problem ??
+                                        'No problem available')
+                            }
+                        />
                     </div>
                 }
             />
@@ -97,7 +83,12 @@ export default function SolvingPage() {
                     )}
                 >
                     <div className="h-full w-full flex-1">
-                        <Steps steps={mockSteps} currentStep={currentStep} />
+                        <Steps
+                            steps={method?.steps}
+                            currentStep={currentStep}
+                            methodTitle={method?.title}
+                            methodDescription={method?.description}
+                        />
                     </div>
                     <div className="flex-end mb-20 flex w-full justify-center gap-2">
                         <Button
