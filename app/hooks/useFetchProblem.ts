@@ -4,7 +4,7 @@ import { getProblem } from '@/actions';
 
 export function useFetchProblem(problemId: number) {
     const [problem, setProblem] = useState<Problem>();
-    const [loadingProblem, setLoadingProblem] = useState(false);
+    const [loadingProblem, setLoadingProblem] = useState(true);
     const [errorProblem, setErrorProblem] = useState<string | null>(null);
 
     useEffect(() => {
