@@ -133,7 +133,7 @@ export default function ProblemPage() {
                 <Button
                     variant="secondary"
                     onClick={() =>
-                        router.push(`/protected/method/${currentProblem.id}`)
+                        router.push(`/protected/methods/${currentProblem.id}`)
                     }
                     disabled={!currentProblem}
                 >

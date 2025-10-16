@@ -155,7 +155,7 @@ export default function SolveYourself() {
                 transition={{ layout: { duration: 0.4, ease: 'easeInOut' } }}
                 className={`${isChatOpen ? '' : 'mt-6'} mb-12 flex flex-row items-center gap-10`}
             >
-                <Link href={`/protected/method/${problem?.id}`}>
+                <Link href={`/protected/methods/${problem?.id}`}>
                     <Button variant="default" className="w-40">
                         Use a step-by-step
                     </Button>
