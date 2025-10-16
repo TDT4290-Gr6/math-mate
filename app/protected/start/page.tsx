@@ -27,7 +27,10 @@ export default function StartPage() {
                 <CountrySelect />
                 <Card className="relative w-2xl p-5">
                     <CardHeader>
-                        <WideLogo className="m-2 h-18 w-auto" variant='background' />
+                        <WideLogo
+                            className="m-2 h-18 w-auto"
+                            variant="background"
+                        />
                         <CardDescription className="text-foreground relative text-base">
                             This website is made to help students learn math in
                             a simple and supportive way. You can explore

@@ -3,8 +3,8 @@ import { ChevronLeft, Menu } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import SidebarMenu from './sidebarMenu';
-import { cn } from '@/lib/utils';
 import WideLogo from '../wide-logo';
+import { cn } from '@/lib/utils';
 
 /**
  * Header component with navigation and optional math problem display.
@@ -89,12 +89,12 @@ export default function Header({
                     aria-hidden={!showBackButton}
                     tabIndex={showBackButton ? 0 : -1}
                     className={cn(
-                        'flex cursor-pointer items-top justify-left',
+                        'items-top justify-left flex cursor-pointer',
                         !showBackButton && 'invisible',
                     )}
                     onClick={() => router.push('/protected/start')}
                 >
-                    <WideLogo className="m-2 h-16 w-auto" variant='card' />
+                    <WideLogo className="m-2 h-16 w-auto" variant="card" />
                 </button>
             </div>
             {/* Math problem display */}
