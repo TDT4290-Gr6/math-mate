@@ -7,6 +7,9 @@ export class MockProblemsRepository implements IProblemsRepository {
     constructor() {
         this._problems = [];
     }
+  getProblemById(id: number): Promise<Problem> {
+    throw new Error('Method not implemented.');
+  }
 
     async getProblems(
         offset: number,
