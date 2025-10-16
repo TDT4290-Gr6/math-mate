@@ -37,7 +37,7 @@ export default function MethodCard({
 }: MethodCardProps) {
     return (
         <Card className="relative m-3 w-full gap-2 px-6 pt-4">
-            {/* Methodnumber */}
+            {/* Method number */}
             <Title
                 title={
                     methodNumber !== undefined
