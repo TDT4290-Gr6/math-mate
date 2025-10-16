@@ -62,16 +62,16 @@ export default function AnswerPopup({
              through `isOpen`/`onClose` so it can reopen the dialog later.
              */
     const [step, setStep] = useState<Step>('reveal');
-    const [selectedDifficulty, setSelectedDifficulty] = useState<number | null>(
-        null,
-    );
+    const [selectedDifficulty, setSelectedDifficulty] = useState<
+        number | undefined
+    >(undefined);
     const [wasCorrect, setWasCorrect] = useState(false);
     const router = useRouter();
 
     useEffect(() => {
         if (isOpen) {
             setStep('reveal');
-            setSelectedDifficulty(null);
+            setSelectedDifficulty(undefined);
             setWasCorrect(false);
         }
     }, [isOpen]);
@@ -176,7 +176,7 @@ export default function AnswerPopup({
                                             {[1, 2, 3, 4, 5].map((n) => {
                                                 const isActive =
                                                     selectedDifficulty !==
-                                                        null &&
+                                                        undefined &&
                                                     n <= selectedDifficulty;
                                                 return (
                                                     <Button
@@ -240,7 +240,7 @@ export default function AnswerPopup({
                                             variant="default"
                                             className="w-40"
                                             disabled={
-                                                selectedDifficulty === null
+                                                selectedDifficulty === undefined
                                             }
                                             onClick={() =>
                                                 handleFinalAction('retry')
@@ -252,7 +252,7 @@ export default function AnswerPopup({
                                             variant="secondary"
                                             className="w-40"
                                             disabled={
-                                                selectedDifficulty === null
+                                                selectedDifficulty === undefined
                                             }
                                             onClick={() =>
                                                 handleFinalAction('next')
