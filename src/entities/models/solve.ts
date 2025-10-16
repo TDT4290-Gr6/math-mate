@@ -15,10 +15,10 @@ export const solveSchema = z.object({
 
 export type Solve = z.infer<typeof solveSchema>;
 
+// Attempts will be calculated when creating a new solve
 export const insertSolveSchema = solveSchema.pick({
     userId: true,
     problemId: true,
-    attempts: true,
     startedSolvingAt: true,
     finishedSolvingAt: true,
     stepsUsed: true,
