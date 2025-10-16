@@ -3,7 +3,7 @@
 import { useFetchProblem } from 'app/hooks/useFetchProblem';
 import ProblemCard from '@/components/ui/problem-card';
 import { useParams, useRouter } from 'next/navigation';
-import MethodCard from '@/components/ui/methodcard';
+import MethodCard from '@/components/ui/method-card';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
 
@@ -51,7 +51,7 @@ export default function MethodPage() {
                     problem?.methods?.length === 3 ? 'max-w-6xl' : 'max-w-5xl'
                 } px-10`}
             >
-                {problem?.methods?.map((method) => (
+                {problem?.methods?.map((method, index) => (
                     <MethodCard
                         key={method.id}
                         title={method.title}
@@ -62,6 +62,8 @@ export default function MethodPage() {
                                 `/protected/solve/${problemId}/${method.id}`,
                             )
                         }
+                        methodNumber={index + 1}
+
                     />
                 ))}
             </div>
