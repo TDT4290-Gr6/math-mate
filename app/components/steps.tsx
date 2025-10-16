@@ -1,5 +1,5 @@
-import type { Step } from '@/entities/models/step';
 import { LaTeXFormattedText } from './ui/latex-formatted-text';
+import type { Step } from '@/entities/models/step';
 import { useEffect, useRef } from 'react';
 import MethodCard from './ui/methodcard';
 import { Minus } from 'lucide-react';
