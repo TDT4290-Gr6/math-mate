@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import SidebarMenu from './sidebarMenu';
 import { cn } from '@/lib/utils';
+import WideLogo from '../wide-logo';
 
 /**
  * Header component with navigation and optional math problem display.
@@ -80,32 +81,36 @@ export default function Header({
                 className,
             )}
         >
-            {/* Back button */}
-            <button
-                type="button"
-                aria-label="Go back"
-                aria-hidden={!showBackButton}
-                tabIndex={showBackButton ? 0 : -1}
-                className={cn(
-                    'flex size-10 cursor-pointer items-center justify-center',
-                    !showBackButton && 'invisible',
-                )}
-                onClick={() => router.back()}
-            >
-                <ChevronLeft size={36} />
-            </button>
+            {/* Logo button */}
+            <div className="flex w-1/6">
+                <button
+                    type="button"
+                    aria-label="Go to start page"
+                    aria-hidden={!showBackButton}
+                    tabIndex={showBackButton ? 0 : -1}
+                    className={cn(
+                        'flex cursor-pointer items-top justify-left',
+                        !showBackButton && 'invisible',
+                    )}
+                    onClick={() => router.push('/protected/start')}
+                >
+                    <WideLogo className="m-2 h-16 w-auto" variant='card' />
+                </button>
+            </div>
             {/* Math problem display */}
             <div className="mt-2">{variant === 'problem' && mathProblem}</div>
             {/* Hamburger menu */}
-            <button
-                type="button"
-                className="flex size-10 cursor-pointer items-center justify-center"
-                aria-haspopup="dialog"
-                aria-expanded={isOpen}
-                onClick={() => setIsOpen(true)}
-            >
-                <Menu size={36} />
-            </button>
+            <div className="flex w-1/6 justify-end">
+                <button
+                    type="button"
+                    className="flex size-10 cursor-pointer items-center justify-center"
+                    aria-haspopup="dialog"
+                    aria-expanded={isOpen}
+                    onClick={() => setIsOpen(true)}
+                >
+                    <Menu size={36} />
+                </button>
+            </div>
 
             {/* Sidebar overlay */}
             {isOpen && <SidebarMenu onClose={() => setIsOpen(false)} />}
