@@ -1,5 +1,3 @@
-'use server';
-
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import SignInProviders from './SignInProviders';
 import { getProviders } from 'next-auth/react';

@@ -13,13 +13,18 @@ export default function SignInProviders({
 }: {
     providers: Provider[] | null;
 }) {
-    if (!providers || providers.length === 0) return <p>Loading...</p>;
+    if (!providers || providers.length === 0)
+        return (
+            <p className="text-destructive">
+                No authentication providers available.
+            </p>
+        );
 
     return (
         <>
-            {Object.values(providers).map((provider) => (
+            {providers.map((provider) => (
                 <Button
-                    key={provider.name}
+                    key={provider.id}
                     className="rounded-full bg-blue-500 px-20 py-6 font-semibold text-white hover:bg-blue-600"
                     onClick={() => {
                         signIn(provider.id, {
