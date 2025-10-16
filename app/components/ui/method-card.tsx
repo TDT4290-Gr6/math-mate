@@ -2,7 +2,6 @@ import { LaTeXFormattedText } from './latex-formatted-text';
 import { Button } from '@/components/ui/button';
 import { Card } from './card';
 import Title from './title';
-import React from 'react';
 
 /**
  * Props for the `MethodCard` component.
