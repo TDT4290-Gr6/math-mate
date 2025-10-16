@@ -10,7 +10,7 @@ import { useChatbot } from 'app/hooks/useChatbot';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
 import { useParams } from 'next/navigation';
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Steps from '@/components/steps';
 import { cn } from '@/lib/utils';
 
@@ -26,6 +26,7 @@ export default function SolvingPage() {
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
     const [isAnswerPopupOpen, setIsAnswerPopupOpen] = useState(false);
     const [showToggle, setShowToggle] = useState(true);
+    const [startedSolvingAt] = useState(new Date());
 
     const params = useParams<{ problemId: string; methodId: string }>();
     const problemId = Number(params.problemId);
@@ -39,7 +40,7 @@ export default function SolvingPage() {
     const totalSteps = method?.steps?.length ?? 0;
 
     // Listen for the chat-toggle event
-    React.useEffect(() => {
+    useEffect(() => {
         const handler = () => setIsChatOpen((v) => !v);
         window.addEventListener('chat-toggle', handler as EventListener);
         return () =>
@@ -57,6 +58,9 @@ export default function SolvingPage() {
             <AnswerPopup
                 isOpen={isAnswerPopupOpen}
                 answer={problem?.solution ?? 'No solution available'}
+                problemId={problemId}
+                startedSolvingAt={startedSolvingAt}
+                stepsUsed={currentStep}
                 onClose={() => setIsAnswerPopupOpen(false)}
             />
             <Header

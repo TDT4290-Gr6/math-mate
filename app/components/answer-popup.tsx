@@ -20,12 +20,18 @@ import Title from './ui/title';
  * @param isOpen: Controls whether the dialog is visible. The parent typically
  *         manages this boolean so it can open/close the popup.
  * @param answer: The answer text to reveal inside the popup.
+ * @param problemId: The ID of the problem being solved, used when recording the solution.
+ * @param startedSolvingAt: Timestamp when the user started solving the problem.
+ * @param stepsUsed: Number of steps the user took to solve the problem.
  * @param onClose: Optional callback invoked when the dialog is requested to close
  *          (either by user action or when the component finishes its flow).
  */
 interface AnswerPopupProps {
     isOpen: boolean;
     answer: string;
+    problemId: number;
+    startedSolvingAt: Date;
+    stepsUsed: number;
     onClose?: () => void;
 }
 
@@ -34,6 +40,9 @@ type Step = 'reveal' | 'confirm' | 'difficulty' | 'done';
 export default function AnswerPopup({
     isOpen,
     answer,
+    problemId,
+    startedSolvingAt,
+    stepsUsed,
     onClose,
 }: AnswerPopupProps) {
     /*
