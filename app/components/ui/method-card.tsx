@@ -47,9 +47,10 @@ export default function MethodCard({
                 size={20}
             />
             {/* Title */}
-            <p className="border-border mt-[-26px] line-clamp-7 border-b pt-4 pb-2 text-sm font-semibold">
-                {title}
-            </p>
+            <LaTeXFormattedText
+                text={title}
+                className="border-border mt-[-26px] line-clamp-7 border-b pt-4 pb-2 text-sm font-semibold"
+            />
 
             {/* Description */}
             <div className="mt-2 mb-8">
