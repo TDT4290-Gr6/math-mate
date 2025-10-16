@@ -7,8 +7,13 @@ export class MockProblemsRepository implements IProblemsRepository {
     constructor() {
         this._problems = [];
     }
+
     getProblemById(id: number): Promise<Problem> {
-        throw new Error('Method not implemented.');
+        const problem = this._problems.find((p) => p.id === id);
+        if (!problem) {
+            throw new Error(`Problem with id ${id} not found`);
+        }
+        return Promise.resolve(problem);
     }
 
     async getProblems(
