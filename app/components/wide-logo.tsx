@@ -1,6 +1,19 @@
 import { cn } from '@/lib/utils';
 
-export default function WideLogo({ className }: { className?: string }) {
+type WideLogoProps = {
+    className?: string;
+    /**
+     * Choose the circle color variant.
+     * 'background' → uses fill-background
+     * 'card' → uses fill-card
+     */
+    variant?: 'background' | 'card';
+};
+
+export default function WideLogo({
+    className,
+    variant = 'card',
+}: WideLogoProps) {
     return (
         <svg
             width="313"
@@ -16,7 +29,9 @@ export default function WideLogo({ className }: { className?: string }) {
                 width="110"
                 height="110"
                 rx="55"
-                className="fill-background"
+                className={cn(
+                    variant === 'background' ? 'fill-background' : 'fill-card',
+                )}
             />
             {/* Sqrt */}
             <path
