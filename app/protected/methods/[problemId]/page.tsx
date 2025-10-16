@@ -63,7 +63,6 @@ export default function MethodPage() {
                             )
                         }
                         methodNumber={index + 1}
-
                     />
                 ))}
             </div>
