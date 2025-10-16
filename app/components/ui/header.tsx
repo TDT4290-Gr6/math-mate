@@ -1,7 +1,7 @@
 'use client';
-import { Menu } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import SidebarMenu from './sidebarMenu';
+import { Menu } from 'lucide-react';
 import WideLogo from '../wide-logo';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
