@@ -8,6 +8,7 @@ import {
     DialogTitle,
 } from './ui/dialog';
 import { LaTeXFormattedText } from './ui/latex-formatted-text';
+import { addSolvedProblem } from '@/actions';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { Button } from './ui/button';
@@ -66,6 +67,10 @@ export default function AnswerPopup({
         number | undefined
     >(undefined);
     const [wasCorrect, setWasCorrect] = useState(false);
+    const [finishedSolvingAt, setFinishedSolvingAt] = useState<
+        Date | undefined
+    >(undefined);
+
     const router = useRouter();
 
     useEffect(() => {
@@ -78,6 +83,8 @@ export default function AnswerPopup({
 
     function handleReveal() {
         if (step === 'reveal') setStep('confirm');
+        // Treat revealing the answer as finishing the problem attempt
+        setFinishedSolvingAt(new Date());
     }
 
     function handleConfirm(correct: boolean) {
@@ -89,9 +96,20 @@ export default function AnswerPopup({
         setSelectedDifficulty(level);
     }
 
-    function handleFinalAction(action: 'next' | 'retry') {
-        // TODO: handle difficulty rating answer and decide whether a user can re-evaluate a problem
-        console.log({ wasCorrect, selectedDifficulty, action });
+    async function handleFinalAction(action: 'next' | 'retry') {
+        // TODO: decide whether a user can re-evaluate a problem
+        try {
+            await addSolvedProblem(
+                problemId,
+                stepsUsed,
+                startedSolvingAt,
+                finishedSolvingAt,
+                selectedDifficulty,
+            );
+        } catch (error) {
+            console.error('Failed to record solved problem:', error);
+        }
+
         setStep('done');
         if (action === 'next') {
             router.push('/protected/problem');
