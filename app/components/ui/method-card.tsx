@@ -42,7 +42,7 @@ export default function MethodCard({
             <Title
                 title={
                     methodNumber !== undefined
-                        ? `method ${methodNumber}:`
+                        ? `Method ${methodNumber}:`
                         : 'Chosen method:'
                 }
                 size={20}
