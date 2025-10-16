@@ -48,10 +48,9 @@ export default function MethodCard({
                 size={20}
             />
             {/* Title */}
-            <p className="mt-[-26px] line-clamp-7 pt-4 text-sm font-semibold">
+            <p className="border-border mt-[-26px] line-clamp-7 border-b pt-4 pb-2 text-sm font-semibold">
                 {title}
             </p>
-            <div className="border-b border-[var(--border)]" />
 
             {/* Description */}
             <div className="mt-2 mb-8">
