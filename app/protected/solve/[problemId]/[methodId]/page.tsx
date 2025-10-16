@@ -117,9 +117,9 @@ export default function SolvingPage() {
                 <AnimatePresence onExitComplete={() => setShowToggle(true)}>
                     {isChatOpen && (
                         <motion.div
-                            initial={{ opacity: 0, x: 200, y: 200, scale: 0.4 }} // start bottom-right
-                            animate={{ opacity: 1, x: 0, y: 0, scale: 1 }} // final position
-                            exit={{ opacity: 0, x: 200, y: 200, scale: 0.1 }} // exit to bottom-right
+                            initial={{ opacity: 0, x: 100, y: 180, scale: 0.4 }}
+                            animate={{ opacity: 1, x: 0, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, x: 100, y: 180, scale: 0.4 }}
                             transition={{ duration: 0.5, ease: 'easeInOut' }}
                             className="flex h-full w-1/2 flex-col p-4"
                         >
