@@ -2,6 +2,7 @@
 
 import { useFetchProblem } from 'app/hooks/useFetchProblem';
 import ChatbotWindow from '@/components/chatbot-window';
+import { motion, AnimatePresence } from 'framer-motion';
 import ProblemCard from '@/components/ui/problem-card';
 import AnswerPopup from '@/components/answer-popup';
 import ChatToggle from '@/components/chat-toggle';
@@ -12,8 +13,6 @@ import { useParams } from 'next/navigation';
 import React, { useState } from 'react';
 import Steps from '@/components/steps';
 import { cn } from '@/lib/utils';
-import { motion, AnimatePresence } from 'framer-motion';
-
 
 /**
  * SolvingPage
@@ -28,7 +27,6 @@ export default function SolvingPage() {
     const [isAnswerPopupOpen, setIsAnswerPopupOpen] = useState(false);
     const [showToggle, setShowToggle] = useState(true);
 
-
     const params = useParams<{ problemId: string; methodId: string }>();
     const problemId = Number(params.problemId);
     const methodId = Number(params.methodId);
@@ -39,8 +37,6 @@ export default function SolvingPage() {
 
     const method = problem?.methods.find((m) => m.id === methodId);
     const totalSteps = method?.steps?.length ?? 0;
-
-
 
     // Listen for the chat-toggle event
     React.useEffect(() => {
@@ -118,29 +114,27 @@ export default function SolvingPage() {
                 {isChatOpen && (
                     <div className="bg-border absolute top-0 bottom-0 left-1/2 w-[1px]"></div>
                 )}
-                <AnimatePresence
-                    onExitComplete={() => setShowToggle(true)}
-                    >
-                {isChatOpen && (
-                    <motion.div
-                        initial={{ opacity: 0, x: 200, y: 200, scale: 0.4 }} // start bottom-right
-                        animate={{ opacity: 1, x: 0, y: 0, scale: 1 }} // final position
-                        exit={{ opacity: 0, x: 200, y: 200, scale: 0.1 }} // exit to bottom-right
-                        transition={{ duration: 0.5, ease: 'easeInOut' }}
-
-                        className="flex h-full w-1/2 flex-col p-4">
-                        <ChatbotWindow
-                            chatHistory={chatHistory}
-                            onClose={() => {
-                                setShowToggle(false);   // hide toggle immediately
-                                setIsChatOpen(false);
-                            }}
-                            onSendMessage={sendMessage}
-                            isLoading={isLoading}
-                            error={error ?? undefined}
-                        />
-                    </motion.div>
-                )}
+                <AnimatePresence onExitComplete={() => setShowToggle(true)}>
+                    {isChatOpen && (
+                        <motion.div
+                            initial={{ opacity: 0, x: 200, y: 200, scale: 0.4 }} // start bottom-right
+                            animate={{ opacity: 1, x: 0, y: 0, scale: 1 }} // final position
+                            exit={{ opacity: 0, x: 200, y: 200, scale: 0.1 }} // exit to bottom-right
+                            transition={{ duration: 0.5, ease: 'easeInOut' }}
+                            className="flex h-full w-1/2 flex-col p-4"
+                        >
+                            <ChatbotWindow
+                                chatHistory={chatHistory}
+                                onClose={() => {
+                                    setShowToggle(false); // hide toggle immediately
+                                    setIsChatOpen(false);
+                                }}
+                                onSendMessage={sendMessage}
+                                isLoading={isLoading}
+                                error={error ?? undefined}
+                            />
+                        </motion.div>
+                    )}
                 </AnimatePresence>
                 {showToggle && !isChatOpen && <ChatToggle />}
             </div>
