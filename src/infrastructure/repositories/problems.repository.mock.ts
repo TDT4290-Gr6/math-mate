@@ -8,6 +8,14 @@ export class MockProblemsRepository implements IProblemsRepository {
         this._problems = [];
     }
 
+    getProblemById(id: number): Promise<Problem> {
+        const problem = this._problems.find((p) => p.id === id);
+        if (!problem) {
+            throw new Error(`Problem with id ${id} not found`);
+        }
+        return Promise.resolve(problem);
+    }
+
     async getProblems(
         offset: number,
         limit: number,

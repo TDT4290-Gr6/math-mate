@@ -2,18 +2,16 @@
 
 import { useTrackedLogger } from '@/components/logger/MethodProvider';
 import { LaTeXFormattedText } from './ui/latex-formatted-text';
+import type { Step } from '@/entities/models/step';
+import MethodCard from './ui/method-card';
 import { useEffect, useRef } from 'react';
-import MethodCard from './ui/methodcard';
 import { Minus } from 'lucide-react';
 
-interface Step {
-    stepID: string;
-    content: string;
-}
-
 interface StepsProps {
-    steps: Array<Step>;
+    steps?: Array<Step>;
     currentStep: number;
+    methodTitle: string | undefined;
+    methodDescription: string | undefined;
 }
 
 /**
@@ -26,13 +24,16 @@ interface StepsProps {
  * Props:
  * @param steps - Array of step objects with id and content
  * @param currentStep - Number of steps to reveal
- *
- * Logs:
- * - `step_click`: when a user clicks a revealed step.
- * - `step_visible`: when a new step becomes visible (auto event when currentStep changes).
+ * @param methodTitle - Title of the solving method
+ * @param methodDescription - Description of the solving method
  */
-export default function Steps({ steps, currentStep }: StepsProps) {
-    const visibleSteps: Step[] = steps.slice(0, currentStep);
+export default function Steps({
+    steps,
+    currentStep,
+    methodTitle,
+    methodDescription,
+}: StepsProps) {
+    const visibleSteps: Step[] = steps?.slice(0, currentStep) ?? [];
     const containerRef = useRef<HTMLDivElement | null>(null);
     const tracked = useTrackedLogger();
 
@@ -59,27 +60,17 @@ export default function Steps({ steps, currentStep }: StepsProps) {
         >
             <div className="flex w-full max-w-5xl flex-col px-10 text-sm lg:flex-row">
                 <MethodCard
-                    title="Method 1"
-                    description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                    title={methodTitle ?? 'Untitled method'}
+                    description={
+                        methodDescription ?? 'No description available'
+                    }
                     buttonText="Get Started"
                     disableButton={true}
                 />
             </div>
 
             {visibleSteps.map((step, index) => (
-                <div
-                    key={step.stepID}
-                    className="p-2"
-                    role="button"
-                    tabIndex={0}
-                    onClick={() => handleStepClick(step)}
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                            e.preventDefault();
-                            handleStepClick(step);
-                        }
-                    }}
-                >
+                <div key={step.id} className="p-2">
                     <h3 className="flex flex-row text-lg font-semibold">
                         <Minus
                             stroke="currentColor"

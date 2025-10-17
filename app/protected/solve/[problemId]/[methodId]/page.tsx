@@ -5,7 +5,9 @@ import {
     useTrackedLogger,
 } from '@/components/logger/MethodProvider';
 import { useChatUILogger } from 'app/hooks/useChatUILogger';
+import { useFetchProblem } from 'app/hooks/useFetchProblem';
 import ChatbotWindow from '@/components/chatbot-window';
+import { motion, AnimatePresence } from 'framer-motion';
 import ProblemCard from '@/components/ui/problem-card';
 import AnswerPopup from '@/components/answer-popup';
 import ChatToggle from '@/components/chat-toggle';
@@ -13,42 +15,10 @@ import { useChatbot } from 'app/hooks/useChatbot';
 import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
+import { useParams } from 'next/navigation';
 import React, { useState } from 'react';
 import Steps from '@/components/steps';
 import { cn } from '@/lib/utils';
-
-// Define the Step type
-interface Step {
-    stepID: string;
-    content: string;
-}
-
-// Mock steps data for testing
-const mockSteps: Step[] = [
-    {
-        stepID: 'step-1',
-        content:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-    },
-    {
-        stepID: 'step-2',
-        content:
-            'Subtract 5 from both sides to isolate the term with x: 2x + 5 - 5 = 13 - 5',
-    },
-    {
-        stepID: 'step-3',
-        content: 'Simplify both sides: 2x = 8',
-    },
-    {
-        stepID: 'step-4',
-        content: 'Divide both sides by 2 to solve for x: 2x ÷ 2 = 8 ÷ 2',
-    },
-    {
-        stepID: 'step-5',
-        content:
-            "Final answer: x = 4. Let's verify by substituting back: 2(4) + 5 = 8 + 5 = 13 ✓",
-    },
-];
 
 /**
  * SolvingPage
@@ -58,14 +28,13 @@ const mockSteps: Step[] = [
  * chat state and passes messages to the ChatbotWindow.
  */
 export default function SolvingPage() {
-    const search = useSearchParams();
-    const methodIdParam = search?.get?.('methodId');
-    const stepIdParam = search?.get?.('stepId');
-    const stepId = stepIdParam ? Number(stepIdParam) : undefined;
+    const params = useParams<{ problemId: string; methodId: string }>();
+    const problemId = Number(params.problemId);
+    const methodId = Number(params.methodId);
 
     /* TODO: pass method and step ID */
     return (
-        <MethodProvider methodId={2} problemId={4} stepId={stepId}>
+        <MethodProvider methodId={methodId} problemId={problemId}>
             <SolvingContent />
         </MethodProvider>
     );
@@ -73,24 +42,30 @@ export default function SolvingPage() {
 
 function SolvingContent() {
     const tracked = useTrackedLogger();
-    const [currentStep, setCurrentStep] = useState(0);
-    const totalSteps = mockSteps.length;
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
     const [isAnswerPopupOpen, setIsAnswerPopupOpen] = useState(false);
+    const [showToggle, setShowToggle] = useState(true);
 
-    // TODO: pass actual problemID and methodID
-    const problemId = 11;
-    const methodId = 7;
 
+    
+    const { chatHistory, sendMessage, isLoading, error } = useChatbot();
+    const params = useParams<{ problemId: string; methodId: string }>();
+    const problemId = Number(params.problemId);
+    const methodId = Number(params.methodId);
+    const { problem, loadingProblem, errorProblem } =
+    useFetchProblem(problemId);
+    
+    const [currentStep, setCurrentStep] = useState(0);
+    
+    const method = problem?.methods.find((m) => m.id === methodId);
+    const totalSteps = method?.steps?.length ?? 0;
     // Get structured chat logging helpers
     const { logChatOpen, logChatClose } = useChatUILogger({
         page: 'solve',
         problemId,
         methodId,
     });
-
-    const { chatHistory, sendMessage, isLoading, error } = useChatbot();
-
+    
     // Handle chat toggle (dispatched from ChatToggle)
     React.useEffect(() => {
         const handler = () => {
@@ -116,9 +91,9 @@ function SolvingContent() {
                 payload: { total_steps: totalSteps},
                 stepId: nextStep,
             });
-        }
-    };
-
+        };
+    }
+    
     const handleGoToAnswer = () => {
         setIsAnswerPopupOpen(true);
         void tracked.logEvent({
@@ -131,14 +106,23 @@ function SolvingContent() {
         <div className="flex min-h-screen w-full flex-col items-center">
             <AnswerPopup
                 isOpen={isAnswerPopupOpen}
-                answer={'final answer'}
+                answer={problem?.solution ?? 'No solution available'}
                 onClose={() => setIsAnswerPopupOpen(false)}
             />
             <Header
                 variant="problem"
                 mathProblem={
                     <div className="flex h-50 flex-row items-center justify-center gap-4">
-                        <ProblemCard description="Lorem ipsum dolor sit amet, consectetur adipiscing elit..." />
+                        <ProblemCard
+                            description={
+                                loadingProblem
+                                    ? 'Loading problem...'
+                                    : errorProblem
+                                      ? 'Error loading problem'
+                                      : (problem?.problem ??
+                                        'No problem available')
+                            }
+                        />
                     </div>
                 }
             />
@@ -151,9 +135,14 @@ function SolvingContent() {
                     )}
                 >
                     <div className="h-full w-full flex-1">
-                        <Steps steps={mockSteps} currentStep={currentStep} />
+                        <Steps
+                            steps={method?.steps}
+                            currentStep={currentStep}
+                            methodTitle={method?.title}
+                            methodDescription={method?.description}
+                        />
                     </div>
-                    <div className="flex-end mb-20 flex w-full justify-center gap-2">
+                    <div className="flex-end mt-6 mb-20 flex w-full justify-center gap-10">
                         <Button
                             onClick={handleGoToAnswer}
                             className="w-1/4 rounded-full"
@@ -175,22 +164,29 @@ function SolvingContent() {
                 {isChatOpen && (
                     <div className="bg-border absolute top-0 bottom-0 left-1/2 w-[1px]"></div>
                 )}
-                {isChatOpen ? (
-                    <div className="flex h-full w-1/2 flex-col p-4">
-                        <ChatbotWindow
-                            chatHistory={chatHistory}
-                            onClose={() => {
-                                setIsChatOpen(false);
-                                logChatClose();
-                            }}
-                            onSendMessage={sendMessage}
-                            isLoading={isLoading}
-                            error={error ?? undefined}
-                        />
-                    </div>
-                ) : (
-                    <ChatToggle />
-                )}
+                <AnimatePresence onExitComplete={() => setShowToggle(true)}>
+                    {isChatOpen && (
+                        <motion.div
+                            initial={{ opacity: 0, x: 100, y: 180, scale: 0.4 }}
+                            animate={{ opacity: 1, x: 0, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, x: 100, y: 180, scale: 0.4 }}
+                            transition={{ duration: 0.5, ease: 'easeInOut' }}
+                            className="flex h-full w-1/2 flex-col p-4"
+                        >
+                            <ChatbotWindow
+                                chatHistory={chatHistory}
+                                onClose={() => {
+                                    setShowToggle(false); // hide toggle immediately
+                                    setIsChatOpen(false);
+                                }}
+                                onSendMessage={sendMessage}
+                                isLoading={isLoading}
+                                error={error ?? undefined}
+                            />
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+                {showToggle && !isChatOpen && <ChatToggle />}
             </div>
         </div>
     );

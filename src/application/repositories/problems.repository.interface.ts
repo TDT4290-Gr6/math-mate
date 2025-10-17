@@ -6,4 +6,5 @@ export interface IProblemsRepository {
         limit: number,
         subjects?: string[],
     ): Promise<Problem[]>;
+    getProblemById(id: number): Promise<Problem>;
 }

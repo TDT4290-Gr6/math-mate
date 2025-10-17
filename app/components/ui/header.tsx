@@ -1,15 +1,16 @@
 'use client';
-import { ChevronLeft, Menu } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import SidebarMenu from './sidebarMenu';
+import { Menu } from 'lucide-react';
+import WideLogo from '../wide-logo';
 import { cn } from '@/lib/utils';
+import Link from 'next/link';
 
 /**
  * Header component with navigation and optional math problem display.
  *
  * Features:
- *   - Optionally displays a back button (ChevronLeft) that navigates to the previous page.
+ *   - Optionally displays the logo in the top left.
  *   - Displays a math problem when `variant` is 'problem'.
  *   - Hamburger menu button that opens a `SidebarMenu` overlay.
  *   - Global keyboard shortcuts:
@@ -26,8 +27,8 @@ import { cn } from '@/lib/utils';
  *     The math problem content to display when `variant` is 'problem'. Normally a problem component.
  * @param className - string (optional)
  *    Additional CSS classes to apply to the header container.
- * @param showBackButton - boolean (optional, default: true)
- *    Controls whether the back button is displayed.
+ * @param showLogo - boolean (optional, default: true)
+ *    Controls whether the logo-link is displayed.
  *
  * Notes:
  *   - Sidebar overlay is rendered conditionally when `isOpen` is true.
@@ -38,16 +39,15 @@ interface HeaderProps {
     variant?: 'simple' | 'problem';
     mathProblem?: React.ReactNode;
     className?: string;
-    showBackButton?: boolean;
+    showLogo?: boolean;
 }
 export default function Header({
     variant = 'simple',
     mathProblem,
     className,
-    showBackButton = true,
+    showLogo = true,
 }: HeaderProps) {
     const [isOpen, setIsOpen] = useState(false);
-    const router = useRouter();
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -80,32 +80,35 @@ export default function Header({
                 className,
             )}
         >
-            {/* Back button */}
-            <button
-                type="button"
-                aria-label="Go back"
-                aria-hidden={!showBackButton}
-                tabIndex={showBackButton ? 0 : -1}
-                className={cn(
-                    'flex size-10 cursor-pointer items-center justify-center',
-                    !showBackButton && 'invisible',
-                )}
-                onClick={() => router.back()}
-            >
-                <ChevronLeft size={36} />
-            </button>
+            {/* Logo button */}
+            <div className="flex w-1/6">
+                <Link
+                    aria-label="Go to start page"
+                    aria-hidden={!showLogo}
+                    tabIndex={showLogo ? 0 : -1}
+                    className={cn(
+                        'items-top justify-left flex cursor-pointer',
+                        !showLogo && 'invisible',
+                    )}
+                    href="/protected/start"
+                >
+                    <WideLogo className="m-2 h-16 w-auto" variant="card" />
+                </Link>
+            </div>
             {/* Math problem display */}
             {variant === 'problem' && mathProblem}
             {/* Hamburger menu */}
-            <button
-                type="button"
-                className="flex size-10 cursor-pointer items-center justify-center"
-                aria-haspopup="dialog"
-                aria-expanded={isOpen}
-                onClick={() => setIsOpen(true)}
-            >
-                <Menu size={36} />
-            </button>
+            <div className="flex w-1/6 justify-end">
+                <button
+                    type="button"
+                    className="flex size-10 cursor-pointer items-center justify-center"
+                    aria-haspopup="dialog"
+                    aria-expanded={isOpen}
+                    onClick={() => setIsOpen(true)}
+                >
+                    <Menu size={36} />
+                </button>
+            </div>
 
             {/* Sidebar overlay */}
             {isOpen && <SidebarMenu onClose={() => setIsOpen(false)} />}

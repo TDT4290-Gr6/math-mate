@@ -45,7 +45,7 @@ export default function CountrySelect() {
                             titleComponent="span"
                         />
                     </DialogTitle>
-                    <DialogDescription>
+                    <DialogDescription className="text-foreground">
                         As this is a research project, we would like to know
                         what is your country of residence:
                     </DialogDescription>

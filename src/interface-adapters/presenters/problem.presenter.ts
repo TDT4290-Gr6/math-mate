@@ -1,7 +1,7 @@
 import type { Problem } from '@/entities/models/problem';
 
-export function problemPresenter(problems: Problem[]) {
-    return problems.map((problem) => ({
+export function problemPresenter(problem: Problem) {
+    return {
         id: problem.id,
         problem: problem.problem,
         solution: problem.solution,
@@ -9,5 +9,5 @@ export function problemPresenter(problems: Problem[]) {
         level: problem.level,
         methods: problem.methods,
         title: problem.title,
-    }));
+    };
 }

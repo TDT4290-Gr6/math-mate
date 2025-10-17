@@ -1,6 +1,7 @@
 'use client';
 
 import { useChatUILogger } from 'app/hooks/useChatUILogger';
+import { useFetchProblem } from 'app/hooks/useFetchProblem';
 import ChatbotWindow from '@/components/chatbot-window';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProblemCard from '@/components/ui/problem-card';
@@ -9,6 +10,7 @@ import ChatToggle from '@/components/chat-toggle';
 import { useChatbot } from 'app/hooks/useChatbot';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
+import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Title from '@/components/ui/title';
 import Link from 'next/link';
@@ -48,16 +50,15 @@ import React from 'react';
 export default function SolveYourself() {
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
     const [showChat, setShowChat] = useState(false);
+    const params = useParams<{ problemId: string }>();
+    const problemId = Number(params.problemId);
     const [isAnswerPopupOpen, setIsAnswerPopupOpen] = useState(false);
-    const problemId = 1;
-
+    const { problem, loadingProblem, errorProblem } =
+        useFetchProblem(problemId);
+    const { chatHistory, sendMessage, isLoading, error } = useChatbot();
     useChatUILogger({ page: 'solve-yourself', problemId });
 
-    // TODO: Replace with actual problem description
-    const problemDescription =
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc in nunc diam. Fusce accumsan tempor justo ac pellentesque. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.';
 
-    const { chatHistory, sendMessage, isLoading, error } = useChatbot();
 
     // Listen for the chat-toggle event
     useEffect(() => {
@@ -84,7 +85,7 @@ export default function SolveYourself() {
         >
             <AnswerPopup
                 isOpen={isAnswerPopupOpen}
-                answer={'final answer'}
+                answer={problem?.solution ?? 'No solution available'}
                 onClose={() => setIsAnswerPopupOpen(false)}
             />
             {isChatOpen ? (
@@ -95,7 +96,16 @@ export default function SolveYourself() {
                             layoutId="problem-card"
                             onLayoutAnimationComplete={() => setShowChat(true)}
                         >
-                            <ProblemCard description={problemDescription} />
+                            <ProblemCard
+                                description={
+                                    loadingProblem
+                                        ? 'Loading problem...'
+                                        : errorProblem
+                                          ? 'Error loading problem'
+                                          : (problem?.problem ??
+                                            'No problem available')
+                                }
+                            />
                         </motion.div>
                     }
                 />
@@ -111,7 +121,16 @@ export default function SolveYourself() {
             <AnimatePresence>
                 {isChatOpen ? null : (
                     <motion.div layoutId="problem-card">
-                        <ProblemCard description={problemDescription} />
+                        <ProblemCard
+                            description={
+                                loadingProblem
+                                    ? 'Loading problem...'
+                                    : errorProblem
+                                      ? 'Error loading problem'
+                                      : (problem?.problem ??
+                                        'No problem available')
+                            }
+                        />
                     </motion.div>
                 )}
             </AnimatePresence>
@@ -141,20 +160,20 @@ export default function SolveYourself() {
                 )}
             </AnimatePresence>
 
-            {/* 🎯 Animate the buttons smoothly with layout */}
+            {/* Animate the buttons smoothly with layout */}
             <motion.div
                 layout
                 transition={{ layout: { duration: 0.4, ease: 'easeInOut' } }}
                 className={`${isChatOpen ? '' : 'mt-6'} mb-12 flex flex-row items-center gap-10`}
             >
-                <Link href="/protected/method">
-                    <Button variant="default" className="w-40">
+                <Link href={`/protected/methods/${problem?.id}`}>
+                    <Button variant="default" className="w-48">
                         Use a step-by-step
                     </Button>
                 </Link>
                 <Button
                     variant="secondary"
-                    className="w-40"
+                    className="w-48"
                     onClick={() => setIsAnswerPopupOpen(true)}
                 >
                     Go to answer

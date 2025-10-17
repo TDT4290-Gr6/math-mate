@@ -7,6 +7,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from './ui/dialog';
+import { LaTeXFormattedText } from './ui/latex-formatted-text';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { Button } from './ui/button';
@@ -118,7 +119,7 @@ export default function AnswerPopup({
                         <Title title="Here's the answer:" />
                     </DialogTitle>
                     <DialogDescription asChild>
-                        <div className="flex h-40 w-full flex-col items-center justify-start">
+                        <div className="flex h-44 w-full flex-col items-center justify-start">
                             <div className="flex w-3/4 max-w-sm flex-1">
                                 {step === 'reveal' && (
                                     <div className="w-full text-center">
@@ -151,7 +152,17 @@ export default function AnswerPopup({
                                             close you got.
                                         </p>
                                         <div className="my-3 h-12 rounded-md bg-[var(--answer-card-secondary)] px-4 py-3 text-[var(--secondary-foreground)]">
-                                            {answer}
+                                            <LaTeXFormattedText
+                                                text={
+                                                    (answer.startsWith('$')
+                                                        ? ''
+                                                        : '$') +
+                                                    answer +
+                                                    (answer.endsWith('$')
+                                                        ? ''
+                                                        : '$')
+                                                }
+                                            />
                                         </div>
                                         <p className="text-[var(--foreground)]">
                                             Did you arrive at the correct
@@ -206,7 +217,7 @@ export default function AnswerPopup({
                                     </div>
                                 )}
                             </div>
-                            <div className="flex h-12 w-3/4 max-w-sm items-center justify-center">
+                            <div className="m-3 flex h-12 w-3/4 max-w-sm items-center justify-center">
                                 {step === 'confirm' && (
                                     <div className="flex gap-4">
                                         <Button
@@ -230,7 +241,7 @@ export default function AnswerPopup({
                                     <div className="flex gap-4">
                                         <Button
                                             variant="default"
-                                            className="w-32"
+                                            className="w-40"
                                             disabled={
                                                 rating === null
                                             }
@@ -242,7 +253,7 @@ export default function AnswerPopup({
                                         </Button>
                                         <Button
                                             variant="secondary"
-                                            className="w-32"
+                                            className="w-40"
                                             disabled={
                                                 rating === null
                                             }

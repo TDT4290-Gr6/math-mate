@@ -1,31 +1,42 @@
 'use client';
 
-import { MethodProvider } from '@/components/logger/MethodProvider';
-import { useProblemStore } from 'app/store/problem-store';
+import { useFetchProblem } from 'app/hooks/useFetchProblem';
 import ProblemCard from '@/components/ui/problem-card';
-import MethodCard from '@/components/ui/methodcard';
+import { useParams, useRouter } from 'next/navigation';
+import MethodCard from '@/components/ui/method-card';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
-import { useRouter } from 'next/navigation';
 
 /**
  * The page component that displays a set of method cards to help solve
  * a math problem. Users can also choose to solve the problem on their own.
  */
 export default function MethodPage() {
-    const problem = useProblemStore((state) => state.problem);
+    const params = useParams<{ problemId: string }>();
+    const problemId = Number(params.problemId);
+    const { problem, loadingProblem, errorProblem } =
+        useFetchProblem(problemId);
     const router = useRouter();
-
     return (
         <div className="flex min-h-screen flex-col items-center gap-6">
             <Header
                 variant="problem"
                 mathProblem={
                     <div className="flex h-50 flex-row items-center justify-center gap-4">
-                        <ProblemCard description={problem?.problem} />
+                        <ProblemCard
+                            description={
+                                loadingProblem
+                                    ? 'Loading problem...'
+                                    : errorProblem
+                                      ? 'Error loading problem'
+                                      : (problem?.problem ??
+                                        'No problem available')
+                            }
+                        />
                     </div>
                 }
             />
+
             <div className="px-[15%] pt-4">
                 <p>
                     To help you with the math problem you will be provided a set
@@ -40,25 +51,29 @@ export default function MethodPage() {
                     problem?.methods?.length === 3 ? 'max-w-6xl' : 'max-w-5xl'
                 } px-10`}
             >
-                {problem?.methods?.map((method) => (
-                    <MethodProvider key={method.id} methodId={1} problemId={1}>
-                        <MethodCard
-                            title={method.title}
-                            description={method.description}
-                            buttonText="Get Started"
-                            onButtonClick={() =>
-                                router.push('/protected/solve')
-                            }
-                        />
-                    </MethodProvider>
+                {problem?.methods?.map((method, index) => (
+                    <MethodCard
+                        key={method.id}
+                        title={method.title}
+                        description={method.description}
+                        buttonText="Get Started"
+                        onButtonClick={() =>
+                            router.push(
+                                `/protected/solve/${problemId}/${method.id}`,
+                            )
+                        }
+                        methodNumber={index + 1}
+                    />
                 ))}
             </div>
             <div className="flex flex-col items-center">
                 <p className="pb-4">or</p>
-                {/* TODO: change link to "solve on your own" page */}
                 <Button
                     className="mb-20 w-48 bg-[var(--accent)]"
-                    onClick={() => router.push('/protected/solve-yourself')}
+                    onClick={() =>
+                        router.push(`/protected/solve-yourself/${problemId}`)
+                    }
+                    disabled={!Number.isFinite(problemId)}
                 >
                     Solve on your own
                 </Button>
