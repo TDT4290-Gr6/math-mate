@@ -24,9 +24,10 @@ export function useChatUILogger({
     const logChatClose = () =>
         void logger.logEvent({
             actionName: 'chat_close',
-            payload: { page, problemId, methodId },
+            problemId: problemId,
+            methodId: methodId,
+            payload: { page },
         });
 
-    return { logChatOpen, logChatClose };
     return { logChatOpen, logChatClose };
 }
