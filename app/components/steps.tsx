@@ -1,6 +1,5 @@
 'use client';
 
-import { useTrackedLogger } from '@/components/logger/MethodProvider';
 import { LaTeXFormattedText } from './ui/latex-formatted-text';
 import type { Step } from '@/entities/models/step';
 import MethodCard from './ui/method-card';
@@ -35,7 +34,6 @@ export default function Steps({
 }: StepsProps) {
     const visibleSteps: Step[] = steps?.slice(0, currentStep) ?? [];
     const containerRef = useRef<HTMLDivElement | null>(null);
-    const tracked = useTrackedLogger();
 
     // scroll when new steps appear
     useEffect(() => {
@@ -43,15 +41,6 @@ export default function Steps({
         if (!el) return;
         el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
     }, [visibleSteps.length]);
-
-    // log on step click - TODO: this method is not used so should be removed
-    const handleStepClick = (step: Step) => {
-        const numericStepId = parseInt(step.stepID.replace(/\D/g, ''), 10);
-        void tracked.logEvent({
-            actionName: 'next_step',
-            stepId: numericStepId,
-        });
-    };
 
     return (
         <div
