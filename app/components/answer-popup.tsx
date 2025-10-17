@@ -7,12 +7,12 @@ import {
     DialogHeader,
     DialogTitle,
 } from './ui/dialog';
-import { useTrackedLogger } from './logger/MethodProvider';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { Button } from './ui/button';
 import { cn } from '@/lib/utils';
 import Title from './ui/title';
+import { useTrackedLogger } from './logger/MethodProvider';
 
 /**
  * Props for the AnswerPopup component.
@@ -53,7 +53,7 @@ export default function AnswerPopup({
              through `isOpen`/`onClose` so it can reopen the dialog later.
              */
     const [step, setStep] = useState<Step>('reveal');
-    const [selectedDifficulty, setSelectedDifficulty] = useState<number | null>(
+    const [rating, setRating] = useState<number | null>(
         null,
     );
     const [wasCorrect, setWasCorrect] = useState(false);
@@ -63,34 +63,41 @@ export default function AnswerPopup({
     useEffect(() => {
         if (isOpen) {
             setStep('reveal');
-            setSelectedDifficulty(null);
+            setRating(null);
             setWasCorrect(false);
         }
     }, [isOpen]);
 
     function handleReveal() {
         if (step === 'reveal') setStep('confirm');
+        void tracked.logEvent({
+            actionName: "reveal_answer",
+        });
     }
 
     function handleConfirm(correct: boolean) {
         setWasCorrect(correct);
         setStep('difficulty');
+        void tracked.logEvent({
+            actionName: "answer_evaluation",
+            payload: { correct }
+        });
     }
 
-    function handleSelectDifficulty(level: number) {
-        setSelectedDifficulty(level);
+    function handleSetRating(level: number) {
+        setRating(level);
     }
 
     function handleFinalAction(action: 'next' | 'retry') {
-        // TODO: handle difficulty rating answer and decide whether a user can re-evaluate a problem
-        console.log({ wasCorrect, selectedDifficulty, action });
+        // TODO: handle difficulty rating answer
+        console.log({ wasCorrect, rating, action });
         setStep('done');
         if (action === 'next') {
             router.push('/protected/problem');
         }
         void tracked.logEvent({
-            actionName: 'answer_feedback',
-            payload: { selectedDifficulty },
+            actionName: 'rate_difficulty',
+            payload: { rating }
         });
         onClose?.();
     }
@@ -161,14 +168,14 @@ export default function AnswerPopup({
                                         <div className="flex items-center justify-between gap-2">
                                             {[1, 2, 3, 4, 5].map((n) => {
                                                 const isActive =
-                                                    selectedDifficulty !==
+                                                    rating !==
                                                         null &&
-                                                    n <= selectedDifficulty;
+                                                    n <= rating;
                                                 return (
                                                     <Button
                                                         key={n}
                                                         onClick={() =>
-                                                            handleSelectDifficulty(
+                                                            handleSetRating(
                                                                 n,
                                                             )
                                                         }
@@ -226,7 +233,7 @@ export default function AnswerPopup({
                                             variant="default"
                                             className="w-32"
                                             disabled={
-                                                selectedDifficulty === null
+                                                rating === null
                                             }
                                             onClick={() =>
                                                 handleFinalAction('retry')
@@ -238,7 +245,7 @@ export default function AnswerPopup({
                                             variant="secondary"
                                             className="w-32"
                                             disabled={
-                                                selectedDifficulty === null
+                                                rating === null
                                             }
                                             onClick={() =>
                                                 handleFinalAction('next')
