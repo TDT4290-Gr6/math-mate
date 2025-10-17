@@ -46,6 +46,7 @@ export function MethodProvider({
     const getTrackedLogger = useCallback(
         () => ({
             logEvent: async (input: {
+                methodId?: number;
                 stepId?: number;
                 actionName: string;
                 payload?: unknown;
@@ -60,7 +61,7 @@ export function MethodProvider({
                 const evt: Partial<LogEventInput> & { actionName: string } = {
                     actionName: input.actionName,
                     payload,
-                    methodId,
+                    methodId: input.methodId ?? methodId,
                     stepId: input.stepId ?? stepId,
                     problemId: input.problemId,
                 };
@@ -88,7 +89,8 @@ export function MethodProvider({
                 actionName: 'page_view',
                 payload: { path },
                 problemId,
-                stepId: undefined
+                stepId: undefined,
+                methodId: undefined
             });
         }
     }, [getTrackedLogger, problemId]);
