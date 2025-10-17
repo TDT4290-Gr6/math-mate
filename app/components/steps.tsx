@@ -43,26 +43,14 @@ export default function Steps({ steps, currentStep }: StepsProps) {
         el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
     }, [visibleSteps.length]);
 
-    // log automatically when a new step becomes visible
-    useEffect(() => {
-        if (currentStep > 0) {
-            const newStep = steps[currentStep - 1];
-            if (newStep) {
-                void tracked.logEvent({
-                    actionName: 'step_visible',
-                    payload: { stepID: newStep.stepID },
-                });
-            }
-        }
-    }, [currentStep, steps, tracked]);
-
-    // log on step click
+    // log on step click - TODO: this method is not used so should be removed
     const handleStepClick = (step: Step) => {
-        void tracked.logEvent({
-            actionName: 'step_click',
-            payload: { stepID: step.stepID },
-            /* stepId: Number(step.stepID), */
-        });
+        //const numericStepId = parseInt(step.stepID.replace(/\D/g, ''), 10);
+        //void tracked.logEvent({
+          //  actionName: 'step_click',
+            //payload: {},
+            //stepId: numericStepId,
+        //});
     };
 
     return (

@@ -22,6 +22,7 @@ type MethodContextValue = {
             actionName: string;
             payload?: unknown;
             problemId?: number;
+            stepId?: number;
         }) => Promise<void>;
     };
 };
@@ -45,6 +46,7 @@ export function MethodProvider({
     const getTrackedLogger = useCallback(
         () => ({
             logEvent: async (input: {
+                stepId?: number;
                 actionName: string;
                 payload?: unknown;
                 problemId?: number;
@@ -59,7 +61,7 @@ export function MethodProvider({
                     actionName: input.actionName,
                     payload,
                     methodId,
-                    stepId,
+                    stepId: input.stepId ?? stepId,
                     problemId: input.problemId,
                 };
 
@@ -86,6 +88,7 @@ export function MethodProvider({
                 actionName: 'page_view',
                 payload: { path },
                 problemId,
+                stepId: undefined
             });
         }
     }, [getTrackedLogger, problemId]);

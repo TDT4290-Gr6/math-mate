@@ -65,7 +65,7 @@ export default function SolvingPage() {
 
     /* TODO: pass method and step ID */
     return (
-        <MethodProvider methodId={2} problemId={4}>
+        <MethodProvider methodId={2} problemId={4} stepId={stepId}>
             <SolvingContent />
         </MethodProvider>
     );
@@ -73,7 +73,7 @@ export default function SolvingPage() {
 
 function SolvingContent() {
     const tracked = useTrackedLogger();
-    const [currentStep, setCurrentStep] = useState(1);
+    const [currentStep, setCurrentStep] = useState(0);
     const totalSteps = mockSteps.length;
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
     const [isAnswerPopupOpen, setIsAnswerPopupOpen] = useState(false);
@@ -112,7 +112,8 @@ function SolvingContent() {
             setCurrentStep(to);
             void tracked.logEvent({
                 actionName: 'next_step',
-                payload: { from, to },
+                payload: {}, 
+                stepId: to,
             });
         }
     };
