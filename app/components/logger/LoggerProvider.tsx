@@ -53,13 +53,10 @@ export function LoggerProvider({ children }: { children: React.ReactNode }) {
 
     const logEvent = useCallback(
         async (input: Partial<LogEventInput> & { actionName: string }) => {
-            // Wait for session to be loaded and userId to exist
-            if (status !== 'authenticated' || !session?.user?.id) {
-                console.warn('logEvent skipped: session not ready');
-                return;
-            }
-
-            const userId = Number(session.user.id);
+            console.log(session)
+            // Allow userId to be optionally and send events immediately to be able
+            // to restore logs for pre-auth interactions.
+            const userId = session?.user?.id ? Number(session.user.id) : undefined;
 
             const body = {
                 userId,
@@ -85,7 +82,7 @@ export function LoggerProvider({ children }: { children: React.ReactNode }) {
                 console.warn('logEvent failed', err);
             }
         },
-        [session, status, sessionId],
+        [session, sessionId],
     );
 
     const lastPathRef = useRef<string | null>(null);
