@@ -1,4 +1,5 @@
 import { addSolvedProblemController } from '@/interface-adapters/controllers/add-solved-problem.controller';
+import { getLatestSolvesController } from '@/interface-adapters/controllers/get-latest-solves.controller';
 import { addSolvedProblemUseCase } from '@/application/use-cases/add-solved-problem.use-case';
 import { MockSolvesRepository } from '@/infrastructure/repositories/solves.repository.mock';
 import { getLatestSolvesUseCase } from '@/application/use-cases/get-latest-solves.use-case';
@@ -38,6 +39,13 @@ export function solvesModule() {
         .toHigherOrderFunction(getLatestSolvesUseCase, [
             DI_SYMBOLS.IUsersRepository,
             DI_SYMBOLS.ISolvesRepository,
+        ]);
+
+    solvesModule
+        .bind(DI_SYMBOLS.IGetLatestSolvesController)
+        .toHigherOrderFunction(getLatestSolvesController, [
+            DI_SYMBOLS.IAuthenticationService,
+            DI_SYMBOLS.IGetLatestSolvesUseCase,
         ]);
 
     return solvesModule;
