@@ -1,13 +1,13 @@
 'use client';
 
 import { UserRound, Moon, X, LoaderCircle } from 'lucide-react';
-import { LaTeXFormattedText } from './latex-formatted-text';
+import { LaTeXFormattedText } from './ui/latex-formatted-text';
 import { getLatestSolves, getUserId } from '@/actions';
 import { Switch } from '@/components/ui/switch';
 import { useEffect, useState } from 'react';
 import { signOut } from 'next-auth/react';
 import { useTheme } from 'next-themes';
-import { Button } from './button';
+import { Button } from './ui/button';
 import Link from 'next/link';
 
 interface SidebarMenuProps {
