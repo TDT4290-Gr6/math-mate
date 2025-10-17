@@ -37,8 +37,15 @@ export class SolvesRepository implements ISolvesRepository {
             const solves = await prisma.solves.findMany({
                 where: { userId: userId, finishedSolvingAt: { not: null } },
                 orderBy: { finishedSolvingAt: 'desc' },
+                include: { problem: { select: { title: true } } },
             });
-            return solves as Solve[];
+            const solvesWithTitle = solves.map((solve) => {
+                return {
+                    ...solve,
+                    problemTitle: solve.problem?.title,
+                } as Solve;
+            });
+            return solvesWithTitle as Solve[];
         } catch (error) {
             throw new DatabaseOperationError(
                 'Failed to get latest solves by user ID',
