@@ -12,6 +12,7 @@ import { useState, useEffect } from 'react';
 import { Button } from './ui/button';
 import { cn } from '@/lib/utils';
 import Title from './ui/title';
+import { useTrackedLogger } from './logger/MethodProvider';
 
 /**
  * Props for the AnswerPopup component.
@@ -57,6 +58,7 @@ export default function AnswerPopup({
     );
     const [wasCorrect, setWasCorrect] = useState(false);
     const router = useRouter();
+    const tracked = useTrackedLogger();
 
     useEffect(() => {
         if (isOpen) {
@@ -86,6 +88,10 @@ export default function AnswerPopup({
         if (action === 'next') {
             router.push('/protected/problem');
         }
+        void tracked.logEvent({
+            actionName: 'answer_feedback',
+            payload: { selectedDifficulty,  }
+        });
         onClose?.();
     }
 
