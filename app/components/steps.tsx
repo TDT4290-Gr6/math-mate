@@ -47,9 +47,9 @@ export default function Steps({ steps, currentStep }: StepsProps) {
     const handleStepClick = (step: Step) => {
         //const numericStepId = parseInt(step.stepID.replace(/\D/g, ''), 10);
         //void tracked.logEvent({
-          //  actionName: 'step_click',
-            //payload: {},
-            //stepId: numericStepId,
+        //  actionName: 'step_click',
+        //payload: {},
+        //stepId: numericStepId,
         //});
     };
 

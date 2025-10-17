@@ -88,7 +88,7 @@ export function MethodProvider({
                 actionName: 'page_view',
                 payload: { path },
                 problemId,
-                stepId: undefined
+                stepId: undefined,
             });
         }
     }, [getTrackedLogger, problemId]);

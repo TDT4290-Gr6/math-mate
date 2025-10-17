@@ -112,7 +112,7 @@ function SolvingContent() {
             setCurrentStep(to);
             void tracked.logEvent({
                 actionName: 'next_step',
-                payload: {}, 
+                payload: {},
                 stepId: to,
             });
         }
