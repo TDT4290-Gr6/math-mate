@@ -9,6 +9,7 @@ import type { IProblemsRepository } from '@/application/repositories/problems.re
 import type { IAddSolvedProblemUseCase } from '@/application/use-cases/add-solved-problem.use-case';
 import type { ISendChatMessageController } from '@/interface-adapters/controllers/chat.controller';
 import type { ISendChatMessageUseCase } from '@/application/use-cases/send-chat-message.use-case';
+import type { IGetLatestSolvesUseCase } from '@/application/use-cases/get-latest-solves.use-case';
 import type { ISolvesRepository } from '@/application/repositories/solves.repository.interface';
 import type { IGetUserController } from '@/interface-adapters/controllers/get-user.controller';
 import type { IUsersRepository } from '@/application/repositories/users.repository.interface';
@@ -46,6 +47,7 @@ export const DI_SYMBOLS = {
     ISendChatMessageUseCase: Symbol.for('ISendChatMessageUseCase'),
     IGetUserUseCase: Symbol.for('IGetUserUseCase'),
     IAddSolvedProblemUseCase: Symbol.for('IAddSolvedProblemUseCase'),
+    IGetLatestSolvesUseCase: Symbol.for('IGetLatestSolvesUseCase'),
 
     // Controllers
     ICreateCountryController: Symbol.for('ICreateCountryController'),
@@ -81,6 +83,7 @@ export interface DI_RETURN_TYPES {
     ISendChatMessageUseCase: ISendChatMessageUseCase;
     IGetUserUseCase: IGetUserUseCase;
     IAddSolvedProblemUseCase: IAddSolvedProblemUseCase;
+    IGetLatestSolvesUseCase: IGetLatestSolvesUseCase;
 
     // Controllers
     ICreateCountryController: ICreateCountryController;
