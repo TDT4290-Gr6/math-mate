@@ -113,3 +113,16 @@ export async function sendMessageAction(
         }
     }
 }
+
+export async function getLatestSolves() {
+    try {
+        const getLatestSolvesController = getInjection(
+            'IGetLatestSolvesController',
+        );
+        const solves = await getLatestSolvesController();
+        return solves;
+    } catch (error) {
+        console.error('Failed to get latest solves:', error);
+        throw error;
+    }
+}

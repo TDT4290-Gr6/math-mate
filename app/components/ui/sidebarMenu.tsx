@@ -1,12 +1,14 @@
 'use client';
 
 import { UserRound, Moon, X, LoaderCircle } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import { LaTeXFormattedText } from './latex-formatted-text';
+import { getLatestSolves, getUserId } from '@/actions';
 import { Switch } from '@/components/ui/switch';
+import { useEffect, useState } from 'react';
 import { signOut } from 'next-auth/react';
 import { useTheme } from 'next-themes';
-import { getUserId } from '@/actions';
 import { Button } from './button';
+import Link from 'next/link';
 
 interface SidebarMenuProps {
     onClose: () => void;
@@ -18,7 +20,7 @@ interface SidebarMenuProps {
  * This component renders a sidebar on the right side of the screen containing:
  *   - User ID
  *   - Settings section with a dark mode toggle
- *   - Logout button (currently logs to console)
+ *   - Logout button
  *   - List of previously solved math problems
  *
  * Features:
@@ -39,6 +41,9 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
     const { theme, setTheme } = useTheme();
 
     const [userId, setUserId] = useState<string | undefined>(undefined);
+    const [solves, setSolves] = useState<
+        Awaited<ReturnType<typeof getLatestSolves>>
+    >([]);
 
     useEffect(() => {
         let cancelled = false;
@@ -49,24 +54,20 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
             .catch(() => {
                 if (!cancelled) setUserId('Failed to load');
             });
+
+        getLatestSolves()
+            .then((latestSolves) => {
+                if (!cancelled) setSolves(latestSolves);
+            })
+            .catch(() => {
+                if (!cancelled) setSolves([]);
+            });
+
         return () => {
             cancelled = true;
         };
     }, []);
 
-    // Dummy math problems
-    const dummyProblems = [
-        'Quadratic equation roots',
-        'Area of a triangle formula',
-        'Derivative of a polynomial',
-        'Definite integral evaluation',
-        'Simplify a rational expression',
-        'Slope of a linear function',
-        'Factor a quadratic trinomial',
-        'Convert degrees to radians',
-        'Sum of a geometric series',
-        'Probability of dice roll',
-    ];
     return (
         <div className="bg-sidebar fixed top-0 right-0 z-50 flex h-full w-72 flex-col p-6 shadow-[-2px_0_8px_rgba(0,0,0,0.3)]">
             <div className="flex flex-col gap-6">
@@ -109,7 +110,6 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                 {/* Menu content */}
 
                 {/* Settings */}
-                {/* Settings */}
                 <div className="flex flex-col gap-4">
                     <p className="border-b pb-1 font-semibold">Settings:</p>
                     {/* Darkmode toggle */}
@@ -151,15 +151,21 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                 </p>
             </div>
             <div className="mt-4 flex flex-col gap-4 overflow-y-auto">
-                {dummyProblems.map((problem, index) => (
-                    // TODO: Link to the problem
-                    <p
-                        key={index}
-                        className="text-foreground hover:bg-sidebar-accent h-11 rounded-xl p-2"
-                    >
-                        {problem}
+                {solves.length > 0 ? (
+                    solves.map((solve) => (
+                        <Link
+                            key={solve.id}
+                            className="text-foreground hover:bg-accent rounded-xl p-2 text-pretty"
+                            href={`/protected/methods/${solve.problemId}`}
+                        >
+                            <LaTeXFormattedText text={solve.problemTitle} />
+                        </Link>
+                    ))
+                ) : (
+                    <p className="text-foreground hover:bg-accent rounded-xl p-2 text-pretty">
+                        No previously solved problems.
                     </p>
-                ))}
+                )}
             </div>
         </div>
     );
