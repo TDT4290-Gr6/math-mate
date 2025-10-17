@@ -53,10 +53,12 @@ export function LoggerProvider({ children }: { children: React.ReactNode }) {
 
     const logEvent = useCallback(
         async (input: Partial<LogEventInput> & { actionName: string }) => {
-            console.log(session)
+            console.log(session);
             // Allow userId to be optionally and send events immediately to be able
             // to restore logs for pre-auth interactions.
-            const userId = session?.user?.id ? Number(session.user.id) : undefined;
+            const userId = session?.user?.id
+                ? Number(session.user.id)
+                : undefined;
 
             const body = {
                 userId,

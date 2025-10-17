@@ -113,7 +113,7 @@ function SolvingContent() {
             setCurrentStep(nextStep);
             void tracked.logEvent({
                 actionName: 'next_step',
-                payload: { total_steps: totalSteps},
+                payload: { total_steps: totalSteps },
                 stepId: nextStep,
             });
         }
@@ -123,7 +123,7 @@ function SolvingContent() {
         setIsAnswerPopupOpen(true);
         void tracked.logEvent({
             actionName: 'go_to_answer',
-            payload: { currentStep }
+            payload: { currentStep },
         });
     };
 

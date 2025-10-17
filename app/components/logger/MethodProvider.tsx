@@ -129,7 +129,7 @@ export function useTrackedLogger() {
                     actionName: input.actionName,
                     payload,
                     problemId: input.problemId,
-                    methodId: input.methodId
+                    methodId: input.methodId,
                 };
                 await global.logEvent(evt);
             },

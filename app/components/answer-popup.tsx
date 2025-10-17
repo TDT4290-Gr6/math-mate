@@ -7,12 +7,12 @@ import {
     DialogHeader,
     DialogTitle,
 } from './ui/dialog';
+import { useTrackedLogger } from './logger/MethodProvider';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { Button } from './ui/button';
 import { cn } from '@/lib/utils';
 import Title from './ui/title';
-import { useTrackedLogger } from './logger/MethodProvider';
 
 /**
  * Props for the AnswerPopup component.
@@ -53,9 +53,7 @@ export default function AnswerPopup({
              through `isOpen`/`onClose` so it can reopen the dialog later.
              */
     const [step, setStep] = useState<Step>('reveal');
-    const [rating, setRating] = useState<number | null>(
-        null,
-    );
+    const [rating, setRating] = useState<number | null>(null);
     const [wasCorrect, setWasCorrect] = useState(false);
     const router = useRouter();
     const tracked = useTrackedLogger();
@@ -71,7 +69,7 @@ export default function AnswerPopup({
     function handleReveal() {
         if (step === 'reveal') setStep('confirm');
         void tracked.logEvent({
-            actionName: "reveal_answer",
+            actionName: 'reveal_answer',
         });
     }
 
@@ -79,8 +77,8 @@ export default function AnswerPopup({
         setWasCorrect(correct);
         setStep('difficulty');
         void tracked.logEvent({
-            actionName: "answer_evaluation",
-            payload: { correct }
+            actionName: 'answer_evaluation',
+            payload: { correct },
         });
     }
 
@@ -96,7 +94,7 @@ export default function AnswerPopup({
         }
         void tracked.logEvent({
             actionName: 'rate_difficulty',
-            payload: { rating }
+            payload: { rating },
         });
         onClose?.();
     }
@@ -167,16 +165,13 @@ export default function AnswerPopup({
                                         <div className="flex items-center justify-between gap-2">
                                             {[1, 2, 3, 4, 5].map((n) => {
                                                 const isActive =
-                                                    rating !==
-                                                        null &&
+                                                    rating !== null &&
                                                     n <= rating;
                                                 return (
                                                     <Button
                                                         key={n}
                                                         onClick={() =>
-                                                            handleSetRating(
-                                                                n,
-                                                            )
+                                                            handleSetRating(n)
                                                         }
                                                         variant={
                                                             isActive
@@ -231,9 +226,7 @@ export default function AnswerPopup({
                                         <Button
                                             variant="default"
                                             className="w-32"
-                                            disabled={
-                                                rating === null
-                                            }
+                                            disabled={rating === null}
                                             onClick={() =>
                                                 handleFinalAction('retry')
                                             }
@@ -243,9 +236,7 @@ export default function AnswerPopup({
                                         <Button
                                             variant="secondary"
                                             className="w-32"
-                                            disabled={
-                                                rating === null
-                                            }
+                                            disabled={rating === null}
                                             onClick={() =>
                                                 handleFinalAction('next')
                                             }
