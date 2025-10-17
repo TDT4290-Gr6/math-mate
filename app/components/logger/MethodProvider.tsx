@@ -90,7 +90,7 @@ export function MethodProvider({
                 payload: { path },
                 problemId,
                 stepId: undefined,
-                methodId: undefined
+                methodId: undefined,
             });
         }
     }, [getTrackedLogger, problemId]);
