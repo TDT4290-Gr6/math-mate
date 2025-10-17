@@ -22,10 +22,11 @@ For each method:
 - Write a brief explanation describing the relevance of the method to the problem without including specific solution steps
 - Outline the solution process using a list of steps. Each step should:
   - Be a single, concise line without sub-steps
-  - Avoid including the final answer in any steps except the very last
   - Focus on providing educational value, by letting the user know what they should do next, instead of you solving each step for them
+  - Avoid including the final answer in any steps except the very last
   - Ensure the final step explicitly provides the final answer
-  
+  - The final step should not include any additional calculations or explanations, just the final answer
+
   The three methods should represent different approaches to solving the same problem, such as:
   - Different mathematical techniques (e.g. algebraic vs geometric vs numerical)
   - Different levels of complexity or abstraction
@@ -38,6 +39,7 @@ Guidelines:
 - Do not perform actual calculations in your response - focus on the methodology
 - Each step should be concise and fit on a single line
 - You should under no circumstances include any additional comments like "(do not compute here)", "(do not simplify here)", "(leave the arithmetic until the last step)" or similar
+- Again, remember to use LaTeX formatting for all mathematical expressions, wrapped in $, not in parenthesis.
 `;
 
 /**
