@@ -11,6 +11,7 @@ import {
     useLogger,
     type LogEventInput,
 } from '@/components/logger/LoggerProvider';
+import { usePathname } from 'next/navigation';
 
 type MethodContextValue = {
     methodId?: number;
@@ -41,6 +42,7 @@ export function MethodProvider({
     problemId?: number;
 }) {
     const logger = useLogger();
+    const path = usePathname();
     const lastLoggedPath = useRef<string | null>(null);
 
     const getTrackedLogger = useCallback(
@@ -49,7 +51,6 @@ export function MethodProvider({
                 stepId?: number;
                 actionName: string;
                 payload?: unknown;
-                problemId?: number;
             }) => {
                 // attach method/step/problem from context automatically only when provided
                 const payload =
@@ -61,8 +62,8 @@ export function MethodProvider({
                     actionName: input.actionName,
                     payload,
                     methodId,
+                    problemId: problemId,
                     stepId: input.stepId ?? stepId,
-                    problemId: input.problemId,
                 };
 
                 try {
@@ -73,12 +74,11 @@ export function MethodProvider({
                 }
             },
         }),
-        [logger, methodId, stepId],
+        [logger, methodId, problemId, stepId],
     );
 
     useEffect(() => {
         if (typeof window === 'undefined') return;
-        const path = window.location.pathname;
 
         // Only log if the path is new
         if (lastLoggedPath.current !== path) {
@@ -87,11 +87,10 @@ export function MethodProvider({
             void tracked.logEvent({
                 actionName: 'page_view',
                 payload: { path },
-                problemId,
                 stepId: undefined,
             });
         }
-    }, [getTrackedLogger, problemId]);
+    }, [path, getTrackedLogger]);
 
     return (
         <MethodContext.Provider
@@ -118,6 +117,7 @@ export function useTrackedLogger() {
                 actionName: string;
                 payload?: unknown;
                 problemId?: number;
+                methodId?: number;
             }) => {
                 const payload =
                     typeof input.payload === 'string'
@@ -127,6 +127,7 @@ export function useTrackedLogger() {
                     actionName: input.actionName,
                     payload,
                     problemId: input.problemId,
+                    methodId: input.methodId
                 };
                 await global.logEvent(evt);
             },

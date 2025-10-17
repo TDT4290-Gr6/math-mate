@@ -90,7 +90,6 @@ export default function AnswerPopup({
 
     function handleFinalAction(action: 'next' | 'retry') {
         // TODO: handle difficulty rating answer
-        console.log({ wasCorrect, rating, action });
         setStep('done');
         if (action === 'next') {
             router.push('/protected/problem');

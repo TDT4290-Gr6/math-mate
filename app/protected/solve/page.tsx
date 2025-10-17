@@ -78,13 +78,15 @@ function SolvingContent() {
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
     const [isAnswerPopupOpen, setIsAnswerPopupOpen] = useState(false);
 
-    const problemId = 123;
+    // TODO: pass actual problemID and methodID
+    const problemId = 11;
     const methodId = 7;
 
     // Get structured chat logging helpers
     const { logChatOpen, logChatClose } = useChatUILogger({
         page: 'solve',
         problemId,
+        methodId,
     });
 
     const { chatHistory, sendMessage, isLoading, error } = useChatbot();
@@ -107,13 +109,12 @@ function SolvingContent() {
     // Step navigation
     const handleNextStep = () => {
         if (currentStep < totalSteps) {
-            const from = currentStep;
-            const to = currentStep + 1;
-            setCurrentStep(to);
+            const nextStep = currentStep + 1;
+            setCurrentStep(nextStep);
             void tracked.logEvent({
                 actionName: 'next_step',
-                payload: {},
-                stepId: to,
+                payload: { total_steps: totalSteps},
+                stepId: nextStep,
             });
         }
     };
@@ -122,8 +123,7 @@ function SolvingContent() {
         setIsAnswerPopupOpen(true);
         void tracked.logEvent({
             actionName: 'go_to_answer',
-            payload: { currentStep },
-            problemId,
+            payload: { currentStep }
         });
     };
 

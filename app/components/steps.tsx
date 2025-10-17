@@ -45,12 +45,11 @@ export default function Steps({ steps, currentStep }: StepsProps) {
 
     // log on step click - TODO: this method is not used so should be removed
     const handleStepClick = (step: Step) => {
-        //const numericStepId = parseInt(step.stepID.replace(/\D/g, ''), 10);
-        //void tracked.logEvent({
-        //  actionName: 'step_click',
-        //payload: {},
-        //stepId: numericStepId,
-        //});
+        const numericStepId = parseInt(step.stepID.replace(/\D/g, ''), 10);
+        void tracked.logEvent({
+            actionName: 'next_step',
+            stepId: numericStepId,
+        });
     };
 
     return (
