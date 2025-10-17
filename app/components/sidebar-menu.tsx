@@ -44,6 +44,7 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
     const [solves, setSolves] = useState<
         Awaited<ReturnType<typeof getLatestSolves>>
     >([]);
+    const [solvesLoading, setSolvesLoading] = useState(true);
 
     useEffect(() => {
         let cancelled = false;
@@ -61,6 +62,9 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
             })
             .catch(() => {
                 if (!cancelled) setSolves([]);
+            })
+            .finally(() => {
+                if (!cancelled) setSolvesLoading(false);
             });
 
         return () => {
@@ -151,20 +155,28 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                 </p>
             </div>
             <div className="mt-4 flex flex-col gap-4 overflow-y-auto">
-                {solves.length > 0 ? (
+                {solvesLoading ? (
+                    // Display 10 skeleton loaders while loading
+                    Array.from({ length: 10 }).map((_, index) => (
+                        <div
+                            key={index}
+                            className="bg-sidebar-primary hover:bg-accent h-12 w-full animate-pulse rounded-xl"
+                        />
+                    ))
+                ) : solves.length === 0 ? (
+                    <p className="text-foreground bg-sidebar-primary hover:bg-accent rounded-xl p-2 text-pretty">
+                        No previously solved problems.
+                    </p>
+                ) : (
                     solves.map((solve) => (
                         <Link
                             key={solve.id}
-                            className="text-foreground hover:bg-accent rounded-xl p-2 text-pretty"
+                            className="text-foreground bg-sidebar-primary hover:bg-accent rounded-xl p-2 text-pretty"
                             href={`/protected/methods/${solve.problemId}`}
                         >
                             <LaTeXFormattedText text={solve.problemTitle} />
                         </Link>
                     ))
-                ) : (
-                    <p className="text-foreground hover:bg-accent rounded-xl p-2 text-pretty">
-                        No previously solved problems.
-                    </p>
                 )}
             </div>
         </div>
