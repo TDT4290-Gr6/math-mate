@@ -32,6 +32,23 @@ export class SolvesRepository implements ISolvesRepository {
             );
         }
     }
+    async getLatestByUserId(userId: number): Promise<Solve[]> {
+        try {
+            const solves = await prisma.solves.findMany({
+                where: { userId: userId, finishedSolvingAt: { not: null } },
+                orderBy: { finishedSolvingAt: 'desc' },
+            });
+            return solves as Solve[];
+        } catch (error) {
+            throw new DatabaseOperationError(
+                'Failed to get latest solves by user ID',
+                {
+                    cause: error,
+                },
+            );
+        }
+    }
+
     async getByProblemId(problemId: number): Promise<Solve[]> {
         try {
             const solves = await prisma.solves.findMany({
