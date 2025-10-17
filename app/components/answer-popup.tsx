@@ -7,12 +7,12 @@ import {
     DialogHeader,
     DialogTitle,
 } from './ui/dialog';
+import { useTrackedLogger } from './logger/MethodProvider';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { Button } from './ui/button';
 import { cn } from '@/lib/utils';
 import Title from './ui/title';
-import { useTrackedLogger } from './logger/MethodProvider';
 
 /**
  * Props for the AnswerPopup component.
@@ -90,7 +90,7 @@ export default function AnswerPopup({
         }
         void tracked.logEvent({
             actionName: 'answer_feedback',
-            payload: { selectedDifficulty,  }
+            payload: { selectedDifficulty },
         });
         onClose?.();
     }
