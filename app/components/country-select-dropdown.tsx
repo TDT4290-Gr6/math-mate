@@ -18,7 +18,7 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover';
-import { useTrackedLogger } from './logger/MethodProvider';
+import { useTrackedLogger } from './logger/LoggerProvider';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { getCountries, setCountry } from '@/actions';

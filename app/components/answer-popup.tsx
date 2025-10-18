@@ -8,7 +8,7 @@ import {
     DialogTitle,
 } from './ui/dialog';
 import { LaTeXFormattedText } from './ui/latex-formatted-text';
-import { useTrackedLogger } from './logger/MethodProvider';
+import { useTrackedLogger } from './logger/LoggerProvider';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { Button } from './ui/button';

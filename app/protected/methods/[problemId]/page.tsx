@@ -6,6 +6,7 @@ import { useParams, useRouter } from 'next/navigation';
 import MethodCard from '@/components/ui/method-card';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
+import { useTrackedLogger } from '@/components/logger/LoggerProvider';
 
 /**
  * The page component that displays a set of method cards to help solve
@@ -17,6 +18,27 @@ export default function MethodPage() {
     const { problem, loadingProblem, errorProblem } =
         useFetchProblem(problemId);
     const router = useRouter();
+    const tracked = useTrackedLogger();
+
+    const handleSolve = () => {
+        router.push(`/protected/solve-yourself/${problemId}`)
+        void tracked.logEvent({
+            actionName: 'solve_yourself',
+            problemId: problemId,
+            payload: {},
+        }); 
+    }
+
+    const handleChooseMethod = (methodId: number) => {
+        router.push(`/protected/solve/${problemId}/${methodId}`)
+        void tracked.logEvent({
+            actionName: 'choose_method',
+            problemId: problemId,
+            methodId: methodId,
+            payload: {},
+        }); 
+    }
+
     return (
         <div className="flex min-h-screen flex-col items-center gap-6">
             <Header
@@ -57,11 +79,7 @@ export default function MethodPage() {
                         title={method.title}
                         description={method.description}
                         buttonText="Get Started"
-                        onButtonClick={() =>
-                            router.push(
-                                `/protected/solve/${problemId}/${method.id}`,
-                            )
-                        }
+                        onButtonClick={() => handleChooseMethod(method.id)}
                         methodNumber={index + 1}
                     />
                 ))}
@@ -70,9 +88,7 @@ export default function MethodPage() {
                 <p className="pb-4">or</p>
                 <Button
                     className="mb-20 w-48 bg-[var(--accent)]"
-                    onClick={() =>
-                        router.push(`/protected/solve-yourself/${problemId}`)
-                    }
+                    onClick={handleSolve}
                     disabled={!Number.isFinite(problemId)}
                 >
                     Solve on your own

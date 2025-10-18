@@ -8,7 +8,7 @@ import Header from '@/components/ui/header';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { getProblems } from 'app/actions';
-import { useTrackedLogger } from '@/components/logger/MethodProvider';
+import { useTrackedLogger } from '@/components/logger/LoggerProvider';
 
 /**
  * Problem browsing page component that allows users to navigate through problems,
