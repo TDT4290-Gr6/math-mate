@@ -127,7 +127,7 @@ export default function ProblemPage() {
                 )}
                 <Button
                     variant="secondary"
-                    className='m-14'
+                    className="m-14"
                     onClick={() =>
                         router.push(`/protected/methods/${currentProblem.id}`)
                     }

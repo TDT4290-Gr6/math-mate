@@ -49,7 +49,7 @@ export default function MethodPage() {
             <div
                 className={`flex w-full flex-col lg:flex-row ${
                     problem?.methods?.length === 3 ? 'max-w-6xl' : 'max-w-5xl'
-                } px-10 min-h-[300px]`}
+                } min-h-[300px] px-10`}
             >
                 {problem?.methods?.map((method, index) => (
                     <MethodCard
