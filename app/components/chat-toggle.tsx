@@ -1,30 +1,28 @@
 'use client';
-
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import { Button } from '@/components/ui/button';
 import { BsStars } from 'react-icons/bs';
 import React from 'react';
 
-export default function ChatToggle() {
-    const [open, setOpen] = React.useState(true);
+interface ChatToggleProps {
+    onClick?: () => void;
+}
 
-    // Hide tooltip after a few seconds
+export default function ChatToggle({ onClick }: ChatToggleProps) {
+    const [openTooltip, setOpenTooltip] = React.useState(true);
+
+    // Hide tooltip after 4 seconds
     React.useEffect(() => {
-        const t = setTimeout(() => setOpen(false), 4000);
+        const t = setTimeout(() => setOpenTooltip(false), 4000);
         return () => clearTimeout(t);
     }, []);
 
-    const handleClick = () => {
-        // Broadcast the toggle event
-        window.dispatchEvent(new CustomEvent('chat-toggle'));
-    };
-
     return (
-        <Tooltip open={open} onOpenChange={setOpen}>
+        <Tooltip open={openTooltip} onOpenChange={setOpenTooltip}>
             <TooltipTrigger asChild>
                 <Button
                     aria-label="Open chat"
-                    onClick={handleClick}
+                    onClick={onClick}
                     className="hover:bg-card fixed right-34 bottom-20 h-18 w-18 rounded-full bg-[var(--chatbot)] shadow-lg transition-shadow hover:shadow-xl"
                 >
                     <BsStars className="size-10 text-[var(--foreground)]" />
@@ -42,8 +40,7 @@ export default function ChatToggle() {
                         Need help with the math problem?
                     </h3>
                     <p>
-                        Press me to open a chat to ask questions about the math
-                        problem or one of the steps.
+                        Press me to open a chat to ask questions about the math problem or one of the steps.
                     </p>
                 </div>
             </TooltipContent>

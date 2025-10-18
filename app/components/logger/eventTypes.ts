@@ -2,8 +2,8 @@ export type AnalyticsEventMap = {
     page_view: { path: string };
     submit_country: { countryId: number };
     failed_country_submit: { countryId?: number; error?: string };
-    chat_open: { page: string };
-    chat_close: { page: string };
+    chat_open: { page?: string };
+    chat_close: { page?: string };
     chat_message_sent: {
         page?: string;
         chatSessionId: string;

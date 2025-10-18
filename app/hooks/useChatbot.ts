@@ -97,9 +97,7 @@ export function useChatbot() {
         // Log user message
         void logger.logEvent({
             actionName: 'chat_message_sent',
-            userId,
-            sessionId: logger.sessionId, // get the per-browser session ID from LoggerProvider
-            payload: { chatSessionId, message, problemId },
+            payload: { chatSessionId, message },
         });
 
         setIsLoading(true);
@@ -123,12 +121,9 @@ export function useChatbot() {
             // Log assistant response
             void logger.logEvent({
                 actionName: 'chat_message_received',
-                userId,
-                sessionId: logger.sessionId,
                 payload: {
                     chatSessionId,
                     reply: reply.message.content,
-                    problemId,
                 },
             });
         } catch (err) {

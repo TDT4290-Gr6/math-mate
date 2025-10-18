@@ -49,7 +49,6 @@ import React from 'react';
 
 export default function SolveYourself() {
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
-    const [showChat, setShowChat] = useState(false);
     const params = useParams<{ problemId: string }>();
     const problemId = Number(params.problemId);
     const [isAnswerPopupOpen, setIsAnswerPopupOpen] = useState(false);
@@ -67,7 +66,6 @@ export default function SolveYourself() {
         const handler = () => {
             if (isChatOpen) {
                 // if closing chat — hide immediately
-                setShowChat(false);
                 setIsChatOpen(false);
             } else {
                 // if opening chat — trigger animation first
@@ -88,6 +86,18 @@ export default function SolveYourself() {
         });
     };
 
+    // Open chat and log
+    const openChat = () => {
+        setIsChatOpen(true);
+        void tracked.logEvent({ actionName: 'chat_open', payload: {} });
+    };
+
+    // Close chat and log
+    const closeChat = () => {
+        setIsChatOpen(false);
+        void tracked.logEvent({ actionName: 'chat_close', payload: {} });
+    };
+
     return (
         <motion.div
             className={`${isChatOpen ? '' : 'gap-6'} flex min-h-screen flex-col items-center`}
@@ -105,7 +115,7 @@ export default function SolveYourself() {
                     mathProblem={
                         <motion.div
                             layoutId="problem-card"
-                            onLayoutAnimationComplete={() => setShowChat(true)}
+                            onLayoutAnimationComplete={() => setIsChatOpen(true)}
                         >
                             <ProblemCard
                                 description={
@@ -147,7 +157,7 @@ export default function SolveYourself() {
             </AnimatePresence>
 
             <AnimatePresence>
-                {showChat ? (
+                {isChatOpen ? (
                     <motion.div
                         key="chat-window"
                         className="flex h-full w-3/5 max-w-[60%] flex-col items-center"
@@ -158,8 +168,8 @@ export default function SolveYourself() {
                         <ChatbotWindow
                             chatHistory={chatHistory}
                             onClose={() => {
-                                setShowChat(false);
                                 setIsChatOpen(false);
+                                closeChat();
                             }}
                             onSendMessage={sendMessage}
                             isLoading={isLoading}
@@ -167,7 +177,7 @@ export default function SolveYourself() {
                         />
                     </motion.div>
                 ) : (
-                    <ChatToggle />
+                    <ChatToggle onClick={openChat}/>
                 )}
             </AnimatePresence>
 

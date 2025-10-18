@@ -81,6 +81,18 @@ export default function SolvingPage() {
         });
     };
 
+    // Open chat and log
+    const openChat = () => {
+        setIsChatOpen(true);
+        void tracked.logEvent({ actionName: 'chat_open', payload: {} });
+    };
+
+    // Close chat and log
+    const closeChat = () => {
+        setIsChatOpen(false);
+        void tracked.logEvent({ actionName: 'chat_close', payload: {} });
+    };
+
     return (
         <div className="flex min-h-screen w-full flex-col items-center">
             <AnswerPopup
@@ -157,6 +169,7 @@ export default function SolvingPage() {
                                 onClose={() => {
                                     setShowToggle(false);
                                     setIsChatOpen(false);
+                                    closeChat();
                                 }}
                                 onSendMessage={sendMessage}
                                 isLoading={isLoading}
@@ -165,7 +178,7 @@ export default function SolvingPage() {
                         </motion.div>
                     )}
                 </AnimatePresence>
-                {showToggle && !isChatOpen && <ChatToggle />}
+                {showToggle && !isChatOpen && <ChatToggle onClick={openChat}/>}
             </div>
         </div>
     );
