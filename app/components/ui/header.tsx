@@ -95,9 +95,7 @@ export default function Header({
                 <ChevronLeft size={36} />
             </button>
             {/* Math problem display */}
-            <div className="mt-2">
-                {variant === 'problem' && mathProblem}
-            </div>
+            <div className="mt-2">{variant === 'problem' && mathProblem}</div>
             {/* Hamburger menu */}
             <button
                 type="button"
