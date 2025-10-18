@@ -1,12 +1,12 @@
 'use client';
 
+import { useTrackedLogger } from '@/components/logger/LoggerProvider';
 import { useFetchProblem } from 'app/hooks/useFetchProblem';
 import ProblemCard from '@/components/ui/problem-card';
 import { useParams, useRouter } from 'next/navigation';
 import MethodCard from '@/components/ui/method-card';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
-import { useTrackedLogger } from '@/components/logger/LoggerProvider';
 
 /**
  * The page component that displays a set of method cards to help solve
@@ -21,23 +21,23 @@ export default function MethodPage() {
     const tracked = useTrackedLogger();
 
     const handleSolve = () => {
-        router.push(`/protected/solve-yourself/${problemId}`)
+        router.push(`/protected/solve-yourself/${problemId}`);
         void tracked.logEvent({
             actionName: 'solve_yourself',
             problemId: problemId,
             payload: {},
-        }); 
-    }
+        });
+    };
 
     const handleChooseMethod = (methodId: number) => {
-        router.push(`/protected/solve/${problemId}/${methodId}`)
+        router.push(`/protected/solve/${problemId}/${methodId}`);
         void tracked.logEvent({
             actionName: 'choose_method',
             problemId: problemId,
             methodId: methodId,
             payload: {},
-        }); 
-    }
+        });
+    };
 
     return (
         <div className="flex min-h-screen flex-col items-center gap-6">

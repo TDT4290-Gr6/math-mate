@@ -31,4 +31,6 @@ export type AnalyticsEventMap = {
     toggle_subject: { page?: string, subject: string, selected: boolean, current_selection: Array<string> }
     open_subject_popup: { page?: string };
     close_subject_popup: { page?: string };
+    open_sidebar: { page?: string };
+    close_sidebar: { page?: string }
 };

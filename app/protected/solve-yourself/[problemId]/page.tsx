@@ -1,19 +1,19 @@
 'use client';
 
+import { useTrackedLogger } from '@/components/logger/LoggerProvider';
 import { useFetchProblem } from 'app/hooks/useFetchProblem';
 import { useChatUILogger } from 'app/hooks/useChatUILogger';
 import ChatbotWindow from '@/components/chatbot-window';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProblemCard from '@/components/ui/problem-card';
+import { useParams, useRouter } from 'next/navigation';
 import AnswerPopup from '@/components/answer-popup';
 import ChatToggle from '@/components/chat-toggle';
 import { useChatbot } from 'app/hooks/useChatbot';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
-import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Title from '@/components/ui/title';
-import Link from 'next/link';
 import React from 'react';
 
 /**
@@ -55,8 +55,12 @@ export default function SolveYourself() {
     const [isAnswerPopupOpen, setIsAnswerPopupOpen] = useState(false);
     const { problem, loadingProblem, errorProblem } =
         useFetchProblem(problemId);
+
     const { chatHistory, sendMessage, isLoading, error } = useChatbot();
     useChatUILogger({ page: 'solve-yourself', problemId });
+
+    const router = useRouter();
+    const tracked = useTrackedLogger();
 
     // Listen for the chat-toggle event
     useEffect(() => {
@@ -74,6 +78,15 @@ export default function SolveYourself() {
         return () =>
             window.removeEventListener('chat-toggle', handler as EventListener);
     }, [isChatOpen]);
+
+    const handleStepByStep = () => {
+        router.push(`/protected/methods/${problem?.id}`);
+        void tracked.logEvent({
+            actionName: 'use_step_by_step',
+            problemId: problemId,
+            payload: {},
+        });
+    };
 
     return (
         <motion.div
@@ -164,11 +177,13 @@ export default function SolveYourself() {
                 transition={{ layout: { duration: 0.4, ease: 'easeInOut' } }}
                 className={`${isChatOpen ? '' : 'mt-6'} mb-12 flex flex-row items-center gap-10`}
             >
-                <Link href={`/protected/methods/${problem?.id}`}>
-                    <Button variant="default" className="w-48">
-                        Use a step-by-step
-                    </Button>
-                </Link>
+                <Button
+                    variant="default"
+                    className="w-48"
+                    onClick={handleStepByStep}
+                >
+                    Use a step-by-step
+                </Button>
                 <Button
                     variant="secondary"
                     className="w-48"

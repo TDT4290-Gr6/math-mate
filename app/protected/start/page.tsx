@@ -13,9 +13,20 @@ import { Button } from '@/components/ui/button';
 import WideLogo from '@/components/wide-logo';
 import Header from '@/components/ui/header';
 import { ChevronRight } from 'lucide-react';
-import Link from 'next/link';
+import { useTrackedLogger } from '@/components/logger/LoggerProvider';
+import { useRouter } from 'next/navigation';
 
 export default function StartPage() {
+    const tracked = useTrackedLogger();
+    const router = useRouter();
+
+    const handleGetStarted = () => {
+        router.push("/protected/problem");
+        void tracked.logEvent({
+            actionName: "start_practicing",
+            payload: {}
+        })
+    }
     return (
         <>
             <Header
@@ -56,11 +67,12 @@ export default function StartPage() {
                             asChild
                             variant="secondary"
                             className="absolute right-20 -bottom-6 gap-2"
-                        >
-                            <Link href="/protected/problem">
+                            onClick={handleGetStarted}
+                        > 
+                            <span>
                                 Start Practicing{' '}
                                 <ChevronRight className="-mr-1" />
-                            </Link>
+                            </span>
                         </Button>
                     </CardFooter>
                 </Card>

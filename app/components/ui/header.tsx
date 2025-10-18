@@ -1,10 +1,11 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import SidebarMenu from './sidebarMenu';
 import { Menu } from 'lucide-react';
 import WideLogo from '../wide-logo';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
+import { useTrackedLogger } from '../logger/LoggerProvider';
 
 /**
  * Header component with navigation and optional math problem display.
@@ -48,6 +49,17 @@ export default function Header({
     showLogo = true,
 }: HeaderProps) {
     const [isOpen, setIsOpen] = useState(false);
+    const tracked = useTrackedLogger();
+
+    const openSidebar = useCallback(() => {
+        setIsOpen(true);
+        void tracked.logEvent({ actionName: 'open_sidebar', payload: {} });
+    }, [tracked]);
+
+    const closeSidebar = useCallback(() => {
+        setIsOpen(false);
+        void tracked.logEvent({ actionName: 'close_sidebar', payload: {} });
+    }, [tracked]);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -61,16 +73,16 @@ export default function Header({
                 return;
             }
             if (e.key === 'e') {
-                setIsOpen(true); // open menu
+                openSidebar(); // open menu
             } else if (e.key === 'Escape') {
-                setIsOpen(false); // close menu
+                closeSidebar(); // close menu
             }
         };
 
         window.addEventListener('keydown', handleKeyDown);
 
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, []);
+    }, [closeSidebar, openSidebar]);
 
     return (
         <div
@@ -104,14 +116,14 @@ export default function Header({
                     className="flex size-10 cursor-pointer items-center justify-center"
                     aria-haspopup="dialog"
                     aria-expanded={isOpen}
-                    onClick={() => setIsOpen(true)}
+                    onClick={openSidebar}
                 >
                     <Menu size={36} />
                 </button>
             </div>
 
             {/* Sidebar overlay */}
-            {isOpen && <SidebarMenu onClose={() => setIsOpen(false)} />}
+            {isOpen && <SidebarMenu onClose={closeSidebar} />}
         </div>
     );
 }
