@@ -1,9 +1,9 @@
 'use client';
 
 import { ChatHistory, ChatMessage } from '@/components/chatbot-window';
-import { getUserId, sendMessageAction } from '../actions';
+import { clearConversationAction, sendMessageAction } from '../actions';
 import { useState, useEffect } from 'react';
-import { clearConversation } from '@/application/use-cases/send-chat-message.use-case';
+
 
 
 export interface ChatContext {
@@ -76,10 +76,7 @@ export function useChatbot() {
     useEffect(() => {
         return () => {
             // clear conversation when the component using this hook unmounts
-            (async () => {
-                const userId = await getUserId();
-                clearConversation(userId);
-            })();
+            clearConversationAction();
         };
     }, []);
 

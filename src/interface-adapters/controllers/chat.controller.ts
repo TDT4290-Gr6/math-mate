@@ -53,6 +53,11 @@ export const sendChatMessageController = (
                 error: 'Message exceeds maximum length of 2000 characters.',
             };
         }
-        return sendChatUseCase(userId!, context, message);
+
+        const sanitizedContext =
+            typeof context === 'string'
+                ? context.trim().slice(0, 4000)
+                : '';
+        return sendChatUseCase(userId!, sanitizedContext, message.trim());
     };
 };
