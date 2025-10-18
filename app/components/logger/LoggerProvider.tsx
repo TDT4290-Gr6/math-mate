@@ -3,25 +3,27 @@
 import React, {
     createContext,
     useContext,
+    useEffect,
     useRef,
     useCallback,
-    useEffect,
 } from 'react';
+import type { AnalyticsEventMap } from './eventTypes';
 import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 
-export type LogEventInput = {
-    userId?: number;
-    sessionId?: number;
-    actionName: string;
+export type LogEventInput<K extends keyof AnalyticsEventMap> = {
+    actionName: K;
+    payload: AnalyticsEventMap[K];
     problemId?: number;
     methodId?: number;
     stepId?: number;
-    payload?: Record<string, unknown> | string;
+    path?: string;
 };
 
 type LoggerContextValue = {
-    logEvent: (input: LogEventInput) => Promise<void>;
+    logEvent: <K extends keyof AnalyticsEventMap>(
+        input: LogEventInput<K>,
+    ) => Promise<void>;
     sessionId: number;
 };
 
@@ -39,11 +41,10 @@ function getSessionId(): number {
 export function LoggerProvider({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     const { data: session } = useSession();
-    // Extract sessionId from session if available
     const sessionId = useRef(getSessionId());
 
     const logEvent = useCallback(
-        async (input: LogEventInput) => {
+        async <K extends keyof AnalyticsEventMap>(input: LogEventInput<K>) => {
             // Allow userId to be optionally and send events immediately to be able
             // to restore logs for pre-auth interactions.
             const userId = session?.user?.id
@@ -70,6 +71,7 @@ export function LoggerProvider({ children }: { children: React.ReactNode }) {
                 sessionId: sessionId.current,
                 actionName: input.actionName,
                 loggedAt: new Date().toISOString(),
+                path: input.path ?? pathname, // add current path automatically
                 problemId: input.problemId,
                 methodId: input.methodId,
                 stepId: input.stepId,

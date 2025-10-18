@@ -96,7 +96,7 @@ function SolvingContent() {
         setIsAnswerPopupOpen(true);
         void tracked.logEvent({
             actionName: 'go_to_answer',
-            payload: { currentStep },
+            payload: { current_step: currentStep },
         });
     };
 

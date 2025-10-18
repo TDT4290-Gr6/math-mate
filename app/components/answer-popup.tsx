@@ -71,6 +71,7 @@ export default function AnswerPopup({
         if (step === 'reveal') setStep('confirm');
         void tracked.logEvent({
             actionName: 'reveal_answer',
+            payload: {}
         });
     }
 
@@ -93,10 +94,12 @@ export default function AnswerPopup({
         if (action === 'next') {
             router.push('/protected/problem');
         }
-        void tracked.logEvent({
-            actionName: 'rate_difficulty',
-            payload: { rating },
-        });
+        if (rating != null) {
+            void tracked.logEvent({
+                actionName: 'rate_difficulty',
+                payload: { rating },
+            });
+        }
         onClose?.();
     }
 
