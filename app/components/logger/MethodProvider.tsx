@@ -21,7 +21,7 @@ type MethodContextValue = {
     getTrackedLogger: () => {
         logEvent: (input: {
             actionName: string;
-            payload?: unknown;
+            payload?: string | Record<string, unknown>;
             problemId?: number;
             stepId?: number;
         }) => Promise<void>;
@@ -51,19 +51,13 @@ export function MethodProvider({
                 methodId?: number;
                 stepId?: number;
                 actionName: string;
-                payload?: unknown;
+                payload?: string | Record<string, unknown>;
             }) => {
-                // attach method/step/problem from context automatically only when provided
-                const payload =
-                    typeof input.payload === 'string'
-                        ? input.payload
-                        : JSON.stringify(input.payload ?? {});
-
                 const evt: Partial<LogEventInput> & { actionName: string } = {
                     actionName: input.actionName,
-                    payload,
+                    payload: input.payload ?? {},
                     methodId,
-                    problemId: problemId,
+                    problemId,
                     stepId: input.stepId ?? stepId,
                 };
 

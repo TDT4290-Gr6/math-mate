@@ -3,41 +3,34 @@
 import React, {
     createContext,
     useContext,
-    useEffect,
     useRef,
     useCallback,
+    useEffect,
 } from 'react';
 import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 
-type LogPayload = Record<string, unknown>;
-
 export type LogEventInput = {
-    userId: number;
-    sessionId: number;
+    userId?: number;
+    sessionId?: number;
     actionName: string;
     problemId?: number;
     methodId?: number;
     stepId?: number;
-    payload?: string | LogPayload;
+    payload?: Record<string, unknown> | string;
 };
 
 type LoggerContextValue = {
-    logEvent: (
-        input: Partial<LogEventInput> & { actionName: string },
-    ) => Promise<void>;
+    logEvent: (input: LogEventInput) => Promise<void>;
     sessionId: number;
 };
 
 const LoggerContext = createContext<LoggerContextValue | undefined>(undefined);
 
-// generate per-browser-session ID
 function getSessionId(): number {
     if (typeof window === 'undefined') return Math.floor(Math.random() * 1e9);
-
     const existing = sessionStorage.getItem('logSessionId');
     if (existing) return Number(existing);
-
     const newId = Math.floor(Math.random() * 1e9);
     sessionStorage.setItem('logSessionId', newId.toString());
     return newId;
@@ -45,19 +38,32 @@ function getSessionId(): number {
 
 export function LoggerProvider({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
-    const { data: session, status } = useSession(); // track status
-
+    const { data: session } = useSession();
     // Extract sessionId from session if available
-    // Persistent per-browser-session ID
     const sessionId = useRef(getSessionId());
 
     const logEvent = useCallback(
-        async (input: Partial<LogEventInput> & { actionName: string }) => {
+        async (input: LogEventInput) => {
             // Allow userId to be optionally and send events immediately to be able
             // to restore logs for pre-auth interactions.
             const userId = session?.user?.id
                 ? Number(session.user.id)
                 : undefined;
+
+            // Normalize payload into an object.
+            let payloadObject: Record<string, unknown> = {};
+
+            if (input.payload == null) {
+                payloadObject = {};
+            } else if (typeof input.payload === 'object') {
+                payloadObject = input.payload as Record<string, unknown>;
+            } else {
+                // fallback for other primitive types
+                payloadObject = { value: input.payload };
+            }
+
+            // Merge in the current path (path inside payload as requested).
+            const mergedPayload = { ...payloadObject, path: pathname };
 
             const body = {
                 userId,
@@ -67,10 +73,7 @@ export function LoggerProvider({ children }: { children: React.ReactNode }) {
                 problemId: input.problemId,
                 methodId: input.methodId,
                 stepId: input.stepId,
-                payload:
-                    typeof input.payload === 'string'
-                        ? input.payload
-                        : JSON.stringify(input.payload ?? {}),
+                payload: JSON.stringify(mergedPayload),
             };
 
             try {
@@ -83,17 +86,16 @@ export function LoggerProvider({ children }: { children: React.ReactNode }) {
                 console.warn('logEvent failed', err);
             }
         },
-        [session, sessionId],
+        [session, pathname],
     );
 
     const lastPathRef = useRef<string | null>(null);
     useEffect(() => {
-        if (!pathname || status !== 'authenticated') return;
         if (lastPathRef.current === pathname) return;
 
         lastPathRef.current = pathname;
         void logEvent({ actionName: 'page_view', payload: { path: pathname } });
-    }, [pathname, logEvent, status]);
+    }, [pathname, logEvent]);
 
     return (
         <LoggerContext.Provider
