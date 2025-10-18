@@ -106,9 +106,7 @@ async function main() {
             `Done generating methods for problem number ${i + 1}. Saving to database...`,
         );
 
-        // Save to database
-        // Prisma/supabase handles nested creates with references
-        await prisma.problem.create({
+        const insertionObject = {
             data: {
                 problem: problem.problem,
                 solution: problem.solution,
@@ -128,7 +126,13 @@ async function main() {
                     })),
                 },
             },
-        });
+        };
+
+        console.dir(insertionObject, { depth: null });
+
+        // Save to database
+        // Prisma/supabase handles nested creates with references
+        await prisma.problem.create(insertionObject);
 
         console.log(`Done saving problem number ${i + 1} to database.`);
     }
