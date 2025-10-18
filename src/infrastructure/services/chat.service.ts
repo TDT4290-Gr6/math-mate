@@ -32,12 +32,17 @@ export class ChatService implements IChatService {
         }));
 
         try {
-            const response = await this.openai.chat.completions.create({
+            const response = await this.openai.responses.create({
                 model: 'gpt-5-mini',
-                messages: openAIMessages,
+                reasoning: { effort: "low" },
+                max_output_tokens: 1024,
+                input: openAIMessages,
+
             });
+            console.debug('OpenAI responses.create raw response:', response);
+            
             const content =
-                response.choices[0]?.message?.content ?? 'No response from AI';
+                response.output_text ?? 'No response from AI';
 
             return {
                 role: 'assistant',
