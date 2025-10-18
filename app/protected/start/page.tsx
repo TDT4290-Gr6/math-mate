@@ -25,7 +25,7 @@ export default function StartPage() {
             />
             <div className="flex min-h-screen flex-col items-center justify-center">
                 <CountrySelect />
-                <Card className="relative w-2xl p-5">
+                <Card className="relative w-3xl p-5">
                     <CardHeader>
                         <WideLogo
                             className="m-2 h-18 w-auto"
