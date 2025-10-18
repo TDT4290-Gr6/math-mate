@@ -40,7 +40,8 @@ export default function ChatToggle({ onClick }: ChatToggleProps) {
                         Need help with the math problem?
                     </h3>
                     <p>
-                        Press me to open a chat to ask questions about the math problem or one of the steps.
+                        Press me to open a chat to ask questions about the math
+                        problem or one of the steps.
                     </p>
                 </div>
             </TooltipContent>

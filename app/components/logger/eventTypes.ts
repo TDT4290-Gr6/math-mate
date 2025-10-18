@@ -20,17 +20,25 @@ export type AnalyticsEventMap = {
     answer_evaluation: { page?: string; correct: boolean };
     rate_difficulty: { page?: string; rating: number };
     save_selected_subjects: { page?: string; subjects: Array<string> };
-    cancel_selected_subjects: { page?: string, initial_subjects: Array<string> }
+    cancel_selected_subjects: {
+        page?: string;
+        initial_subjects: Array<string>;
+    };
     next_problem: { page?: string; next_problemId: number };
     previous_problem: { page?: string; previous_problemId?: number };
     start_solving: { page?: string };
     choose_method: { page?: string };
     solve_yourself: { page?: string };
     use_step_by_step: { page?: string };
-    start_practicing: { page?: string }
-    toggle_subject: { page?: string, subject: string, selected: boolean, current_selection: Array<string> }
+    start_practicing: { page?: string };
+    toggle_subject: {
+        page?: string;
+        subject: string;
+        selected: boolean;
+        current_selection: Array<string>;
+    };
     open_subject_popup: { page?: string };
     close_subject_popup: { page?: string };
     open_sidebar: { page?: string };
-    close_sidebar: { page?: string }
+    close_sidebar: { page?: string };
 };

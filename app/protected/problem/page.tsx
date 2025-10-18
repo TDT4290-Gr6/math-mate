@@ -26,20 +26,20 @@ export default function ProblemPage() {
 
     const [isSubjectSelectOpen, setIsSubjectSelectOpen] = useState(false);
     const openSubjectSelect = () => {
-        setIsSubjectSelectOpen(true)
+        setIsSubjectSelectOpen(true);
         void tracked.logEvent({
-            actionName: "open_subject_popup",
+            actionName: 'open_subject_popup',
             problemId: currentProblem.id,
             payload: {},
-        })
+        });
     };
-    const closeSubjectSelect = () => { 
+    const closeSubjectSelect = () => {
         setIsSubjectSelectOpen(false);
         void tracked.logEvent({
-            actionName: "close_subject_popup",
+            actionName: 'close_subject_popup',
             problemId: currentProblem.id,
             payload: {},
-        })
+        });
     };
 
     const router = useRouter();

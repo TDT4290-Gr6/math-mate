@@ -178,7 +178,7 @@ export default function SolvingPage() {
                         </motion.div>
                     )}
                 </AnimatePresence>
-                {showToggle && !isChatOpen && <ChatToggle onClick={openChat}/>}
+                {showToggle && !isChatOpen && <ChatToggle onClick={openChat} />}
             </div>
         </div>
     );
