@@ -36,11 +36,11 @@ export default function MethodCard({
     methodNumber,
 }: MethodCardProps) {
     return (
-        <Card className="relative m-3 w-full gap-2 px-6 pt-4">
-            {/* Method number */}
-            <Title
-                title={
-                    methodNumber !== undefined
+            <Card className="relative m-3 w-full gap-2 px-6 pt-4">
+                {/* Method number */}
+                <Title
+                    title={
+                        methodNumber !== undefined
                         ? `Method ${methodNumber}:`
                         : 'Chosen method:'
                 }

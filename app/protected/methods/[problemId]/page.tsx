@@ -37,7 +37,7 @@ export default function MethodPage() {
                 }
             />
 
-            <div className="px-[15%] pt-4">
+            <div className="px-[15%]">
                 <p>
                     To help you with the math problem you will be provided a set
                     of methods you can use to solve the problem. You don&#39;t
@@ -49,7 +49,7 @@ export default function MethodPage() {
             <div
                 className={`flex w-full flex-col lg:flex-row ${
                     problem?.methods?.length === 3 ? 'max-w-6xl' : 'max-w-5xl'
-                } px-10`}
+                } px-10 min-h-[300px]`}
             >
                 {problem?.methods?.map((method, index) => (
                     <MethodCard
