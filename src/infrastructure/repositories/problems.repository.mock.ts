@@ -17,7 +17,9 @@ export class MockProblemsRepository implements IProblemsRepository {
     ): Promise<Problem[]> {
         let filtered = this._problems;
 
-        filtered = filtered.filter((problem) => problem.level >= Math.floor(score));
+        filtered = filtered.filter(
+            (problem) => problem.level >= Math.floor(score),
+        );
 
         if (subjects?.length) {
             filtered = filtered.filter((problem) =>
