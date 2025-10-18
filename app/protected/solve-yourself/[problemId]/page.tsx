@@ -1,7 +1,7 @@
 'use client';
 
-import { useChatUILogger } from 'app/hooks/useChatUILogger';
 import { useFetchProblem } from 'app/hooks/useFetchProblem';
+import { useChatUILogger } from 'app/hooks/useChatUILogger';
 import ChatbotWindow from '@/components/chatbot-window';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProblemCard from '@/components/ui/problem-card';
@@ -57,8 +57,6 @@ export default function SolveYourself() {
         useFetchProblem(problemId);
     const { chatHistory, sendMessage, isLoading, error } = useChatbot();
     useChatUILogger({ page: 'solve-yourself', problemId });
-
-
 
     // Listen for the chat-toggle event
     useEffect(() => {

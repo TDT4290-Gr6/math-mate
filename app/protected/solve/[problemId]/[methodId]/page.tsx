@@ -4,8 +4,8 @@ import {
     MethodProvider,
     useTrackedLogger,
 } from '@/components/logger/MethodProvider';
-import { useChatUILogger } from 'app/hooks/useChatUILogger';
 import { useFetchProblem } from 'app/hooks/useFetchProblem';
+import { useChatUILogger } from 'app/hooks/useChatUILogger';
 import ChatbotWindow from '@/components/chatbot-window';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProblemCard from '@/components/ui/problem-card';
@@ -46,17 +46,15 @@ function SolvingContent() {
     const [isAnswerPopupOpen, setIsAnswerPopupOpen] = useState(false);
     const [showToggle, setShowToggle] = useState(true);
 
-
-    
     const { chatHistory, sendMessage, isLoading, error } = useChatbot();
     const params = useParams<{ problemId: string; methodId: string }>();
     const problemId = Number(params.problemId);
     const methodId = Number(params.methodId);
     const { problem, loadingProblem, errorProblem } =
-    useFetchProblem(problemId);
-    
+        useFetchProblem(problemId);
+
     const [currentStep, setCurrentStep] = useState(0);
-    
+
     const method = problem?.methods.find((m) => m.id === methodId);
     const totalSteps = method?.steps?.length ?? 0;
     // Get structured chat logging helpers
@@ -65,7 +63,7 @@ function SolvingContent() {
         problemId,
         methodId,
     });
-    
+
     // Handle chat toggle (dispatched from ChatToggle)
     React.useEffect(() => {
         const handler = () => {
@@ -91,9 +89,9 @@ function SolvingContent() {
                 payload: { total_steps: totalSteps },
                 stepId: nextStep,
             });
-        };
-    }
-    
+        }
+    };
+
     const handleGoToAnswer = () => {
         setIsAnswerPopupOpen(true);
         void tracked.logEvent({
