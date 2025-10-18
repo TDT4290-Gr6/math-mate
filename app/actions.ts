@@ -90,12 +90,13 @@ export async function getUserId() {
  * @throws {Error} Throws a generic error if the chat controller fails or the message cannot be sent.
  */
 export async function sendMessageAction(
+    context: string,
     message: string,
 ): Promise<SendMessageResult> {
     try {
         const chatController = getInjection('ISendChatMessageController');
 
-        const reply = await chatController(message);
+        const reply = await chatController(context, message);
         return reply;
     } catch (err: unknown) {
         if (err instanceof Error) {

@@ -2,6 +2,8 @@ import { ChevronDown, SendHorizontal } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import MessageBubble from './message-bubble';
 import { cn } from '@/lib/utils';
+import { Step } from '@/entities/models/step';
+import { ChatContext } from '../hooks/useChatbot';
 
 export interface ChatMessage {
     chatID: string;
@@ -17,11 +19,16 @@ export interface ChatHistory {
 
 interface ChatbotWindowProps {
     chatHistory: ChatHistory;
-    onSendMessage?: (message: string) => void;
+    onSendMessage?: (message: string, chatContext: ChatContext) => void;
     onClose?: () => void;
     isLoading?: boolean;
     initialMessage?: ChatMessage;
     error?: string | null;
+    steps?: Array<Step>;
+    currentStep?: number;
+    methodTitle?: string;
+    methodDescription?: string;
+    problemDescription?: string;
 }
 
 /**
@@ -44,15 +51,27 @@ export default function ChatbotWindow({
     isLoading,
     initialMessage,
     error,
+    steps,
+    currentStep,
+    methodTitle,
+    methodDescription,
+    problemDescription,
 }: ChatbotWindowProps) {
     const [inputValue, setInputValue] = useState('');
     const containerRef = useRef<HTMLDivElement | null>(null);
+
 
     const handleSendMessage = async () => {
         if (inputValue.trim() && onSendMessage && !isLoading) {
             const messageToSend = inputValue.trim();
             setInputValue('');
-            onSendMessage(messageToSend);
+            onSendMessage(messageToSend, {
+                problemDescription,
+                methodTitle,
+                methodDescription,
+                steps,
+                currentStep,
+            });
         }
     };
 

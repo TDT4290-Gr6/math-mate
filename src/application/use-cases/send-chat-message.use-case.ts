@@ -22,16 +22,20 @@ export type SendMessageResult =
  */
 const systemPrompt = `
             You are a helpful math tutor chatbot. 
-            You should only respond to math-related questions.
-
-            If the user provides step-by-step explanations, your role is to help them understand those steps.
-            If no steps are provided, you should offer clear step-by-step guidance on how to solve the problem — but do not give the final answer.
+            You should only respond to math-related questions, and help the user solve their math problems.
+            You should encourage the user to think for themselves, and guide them through the problem-solving process.
+            Never give the final answer directly, and never give out all steps at once.
+            If you provide math equations that the user has not seen yet, let the user try to solve them on their own first.
 
             All math expressions must use LaTeX syntax:
             - Use "$...$" for inline math.
             - Use "$$...$$" for block math (when showing multiple lines or long equations).
             Do not use square brackets "[]" or commas "," inside LaTeX expressions.
             Always format your response in Markdown, and use list formatting where appropriate.
+
+            Always be polite and encouraging, and adapt your explanations to the user's level of understanding. Ask if the user 
+            wants more hints or further clarification on any step, but you are not able to draw diagrams or graphs, so dont ask 
+            to provide anything other than text-based explanations and LaTeX math.
             `;
 
 /**
@@ -44,6 +48,9 @@ const systemPrompt = `
  * For scalability or multi-instance deployment, consider using a shared external store (e.g., Redis or database).
  */
 const conversationStore = new Map<number, ConversationMessage[]>();
+export const clearConversation = (userID: number) => {
+    conversationStore.delete(userID);
+};
 
 /**
  * A use case that handles sending and receiving chat messages between the user and the AI model.
@@ -54,12 +61,18 @@ const conversationStore = new Map<number, ConversationMessage[]>();
 export const sendChatMessageUseCase = (chatService: IChatService) => {
     return async (
         userID: number,
+        context: string,
         message: string,
     ): Promise<SendMessageResult> => {
         let conversation = conversationStore.get(userID);
+        let systemPromptWithContext = systemPrompt + context + "\n";
+
         if (!conversation) {
-            conversation = [{ role: 'system', content: systemPrompt }];
+            conversation = [{ role: 'system', content: systemPromptWithContext }];
             conversationStore.set(userID, conversation);
+        } else if (conversation[0].content !== systemPromptWithContext) {
+            // Update system prompt if context has changed
+            conversation[0].content = systemPromptWithContext;
         }
 
         // Add user message
