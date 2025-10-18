@@ -1,5 +1,6 @@
 'use client';
 
+import { useTrackedLogger } from '@/components/logger/LoggerProvider';
 import SubjectSelectPopup from '@/components/subject-select-popup';
 import type { Problem } from '@/entities/models/problem';
 import ProblemCard from '@/components/ui/problem-card';
@@ -8,7 +9,6 @@ import Header from '@/components/ui/header';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { getProblems } from 'app/actions';
-import { useTrackedLogger } from '@/components/logger/LoggerProvider';
 
 /**
  * Problem browsing page component that allows users to navigate through problems,
@@ -25,8 +25,22 @@ export default function ProblemPage() {
     const tracked = useTrackedLogger();
 
     const [isSubjectSelectOpen, setIsSubjectSelectOpen] = useState(false);
-    const openSubjectSelect = () => setIsSubjectSelectOpen(true);
-    const closeSubjectSelect = () => setIsSubjectSelectOpen(false);
+    const openSubjectSelect = () => {
+        setIsSubjectSelectOpen(true)
+        void tracked.logEvent({
+            actionName: "open_subject_popup",
+            problemId: currentProblem.id,
+            payload: {},
+        })
+    };
+    const closeSubjectSelect = () => { 
+        setIsSubjectSelectOpen(false);
+        void tracked.logEvent({
+            actionName: "close_subject_popup",
+            problemId: currentProblem.id,
+            payload: {},
+        })
+    };
 
     const router = useRouter();
     const currentProblem = problems[currentIndex];
@@ -92,7 +106,7 @@ export default function ProblemPage() {
             actionName: 'next_problem',
             problemId: currentProblem.id,
             payload: { next_problemId: problems[nextIndex].id },
-        }); 
+        });
     };
 
     const handlePrevious = () => {
@@ -117,9 +131,9 @@ export default function ProblemPage() {
         void tracked.logEvent({
             actionName: 'start_solving',
             problemId: currentProblem.id,
-            payload: {}
+            payload: {},
         });
-    }
+    };
 
     const fetchNewProblems = () => {
         console.log('TODO');

@@ -4,6 +4,7 @@ import { Subject, SUBJECT_NAMES } from '../../constants/subjects';
 import SubjectCheckbox from '../subject-checkbox';
 import { useLocalStorage } from 'react-use';
 import { useState, useEffect } from 'react';
+import { useTrackedLogger } from '../logger/LoggerProvider';
 
 interface SubjectSelectProps {
     size: 'small' | 'large';
@@ -19,6 +20,7 @@ interface SubjectSelectProps {
  * @returns The rendered list of subject checkboxes.
  */
 export default function SubjectSelect({ size }: SubjectSelectProps) {
+    const tracked = useTrackedLogger();
     // Store selected subjects in local storage
     const [selectedSubjects, setSelectedSubjects] = useLocalStorage<Subject[]>(
         'selectedSubjects',
@@ -38,12 +40,26 @@ export default function SubjectSelect({ size }: SubjectSelectProps) {
      * @param subject - The subject to toggle in the selection.
      */
     function toggleSubject(subject: Subject) {
-        if (selectedSubjects?.includes(subject)) {
-            setSelectedSubjects(selectedSubjects.filter((s) => s !== subject));
-        } else {
-            setSelectedSubjects([...(selectedSubjects ?? []), subject]);
-        }
+        const currentSelection = selectedSubjects ?? []; // fallback to empty array
+        const isSelected = currentSelection.includes(subject);
+
+        const newSelection = isSelected
+            ? currentSelection.filter((s) => s !== subject)
+            : [...currentSelection, subject];
+
+        setSelectedSubjects(newSelection);
+
+        // Log the toggle action with the updated selection
+        void tracked.logEvent({
+            actionName: 'toggle_subject',
+            payload: {
+                subject,
+                selected: !isSelected,
+                current_selection: newSelection,
+            },
+        });
     }
+
 
     return (
         <>
