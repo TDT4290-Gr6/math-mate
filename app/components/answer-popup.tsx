@@ -71,7 +71,7 @@ export default function AnswerPopup({
         if (step === 'reveal') setStep('confirm');
         void tracked.logEvent({
             actionName: 'reveal_answer',
-            payload: {}
+            payload: {},
         });
     }
 

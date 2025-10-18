@@ -1,9 +1,6 @@
 'use client';
 
-import {
-    MethodProvider,
-    useTrackedLogger,
-} from '@/components/logger/MethodProvider';
+import { useTrackedLogger } from '@/components/logger/LoggerProvider'; // now your hook handles URL params
 import { useFetchProblem } from 'app/hooks/useFetchProblem';
 import { useChatUILogger } from 'app/hooks/useChatUILogger';
 import ChatbotWindow from '@/components/chatbot-window';
@@ -12,7 +9,6 @@ import ProblemCard from '@/components/ui/problem-card';
 import AnswerPopup from '@/components/answer-popup';
 import ChatToggle from '@/components/chat-toggle';
 import { useChatbot } from 'app/hooks/useChatbot';
-import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
 import { useParams } from 'next/navigation';
@@ -28,43 +24,29 @@ import { cn } from '@/lib/utils';
  * chat state and passes messages to the ChatbotWindow.
  */
 export default function SolvingPage() {
+    const tracked = useTrackedLogger(); // automatically gets problemId/methodId from URL
     const params = useParams<{ problemId: string; methodId: string }>();
     const problemId = Number(params.problemId);
     const methodId = Number(params.methodId);
 
-    /* TODO: pass method and step ID */
-    return (
-        <MethodProvider methodId={methodId} problemId={problemId}>
-            <SolvingContent />
-        </MethodProvider>
-    );
-}
-
-function SolvingContent() {
-    const tracked = useTrackedLogger();
-    const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
+    const [isChatOpen, setIsChatOpen] = useState(false);
     const [isAnswerPopupOpen, setIsAnswerPopupOpen] = useState(false);
     const [showToggle, setShowToggle] = useState(true);
 
     const { chatHistory, sendMessage, isLoading, error } = useChatbot();
-    const params = useParams<{ problemId: string; methodId: string }>();
-    const problemId = Number(params.problemId);
-    const methodId = Number(params.methodId);
     const { problem, loadingProblem, errorProblem } =
         useFetchProblem(problemId);
 
     const [currentStep, setCurrentStep] = useState(0);
-
     const method = problem?.methods.find((m) => m.id === methodId);
     const totalSteps = method?.steps?.length ?? 0;
-    // Get structured chat logging helpers
+
     const { logChatOpen, logChatClose } = useChatUILogger({
         page: 'solve',
         problemId,
         methodId,
     });
 
-    // Handle chat toggle (dispatched from ChatToggle)
     React.useEffect(() => {
         const handler = () => {
             setIsChatOpen((prev) => {
@@ -79,7 +61,6 @@ function SolvingContent() {
             window.removeEventListener('chat-toggle', handler as EventListener);
     }, [logChatOpen, logChatClose]);
 
-    // Step navigation
     const handleNextStep = () => {
         if (currentStep < totalSteps) {
             const nextStep = currentStep + 1;
@@ -174,7 +155,7 @@ function SolvingContent() {
                             <ChatbotWindow
                                 chatHistory={chatHistory}
                                 onClose={() => {
-                                    setShowToggle(false); // hide toggle immediately
+                                    setShowToggle(false);
                                     setIsChatOpen(false);
                                 }}
                                 onSendMessage={sendMessage}

@@ -11,8 +11,8 @@ import {
     useLogger,
     type LogEventInput,
 } from '@/components/logger/LoggerProvider';
+import { useParams, usePathname } from 'next/navigation';
 import { AnalyticsEventMap } from './eventTypes';
-import { usePathname } from 'next/navigation';
 
 type MethodContextValue = {
     methodId?: number;
@@ -34,20 +34,15 @@ type MethodContextValue = {
 
 const MethodContext = createContext<MethodContextValue | undefined>(undefined);
 
-export function MethodProvider({
-    children,
-    methodId,
-    stepId,
-    problemId,
-}: {
-    children: React.ReactNode;
-    methodId?: number;
-    stepId?: number;
-    problemId?: number;
-}) {
+export function MethodProvider({ children }: { children: React.ReactNode }) {
     const logger = useLogger();
     const path = usePathname();
     const lastLoggedPath = useRef<string | null>(null);
+    const params = useParams();
+
+    const methodId = params?.methodId ? Number(params.methodId) : undefined;
+    const problemId = params?.problemId ? Number(params.problemId) : undefined;
+    const stepId = undefined;
 
     const getTrackedLogger = useCallback(
         () => ({
@@ -67,12 +62,7 @@ export function MethodProvider({
                     problemId: input.problemId ?? problemId,
                     stepId: input.stepId ?? stepId,
                 };
-
-                try {
-                    await logger.logEvent(evt);
-                } catch (err) {
-                    console.warn('tracked logEvent failed', err);
-                }
+                await logger.logEvent(evt);
             },
         }),
         [logger, methodId, problemId, stepId],
