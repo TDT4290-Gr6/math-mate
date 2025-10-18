@@ -1,10 +1,10 @@
 import type { IGetProblemsUseCase } from '@/application/use-cases/get-problems.use-case';
 import { IAuthenticationService } from '@/application/services/auth.service.interface';
+import { IGetUserUseCase } from '@/application/use-cases/get-user.use-case';
 import { problemsPresenter } from '../presenters/problems.presenter';
 import { UnauthenticatedError } from '@/entities/errors/auth';
 import { InputParseError } from '@/entities/errors/common';
 import { z } from 'zod';
-import { IGetUserUseCase} from '@/application/use-cases/get-user.use-case';
 
 const inputSchema = z.object({
     offset: z.number().nonnegative(),
@@ -40,9 +40,15 @@ export const getProblemsController =
             throw new InputParseError('Invalid input', { cause: result.error });
         }
 
-        const { offset, limit, subjects} = result.data;
+        const { offset, limit, subjects } = result.data;
 
-        const problems = await getProblemsUseCase(offset, limit,userId, user.score, subjects);
+        const problems = await getProblemsUseCase(
+            offset,
+            limit,
+            userId,
+            user.score,
+            subjects,
+        );
 
         return problemsPresenter(problems);
     };
