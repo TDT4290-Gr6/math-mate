@@ -41,18 +41,17 @@ export default function ProblemPage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const fetchProblems = async (subjects: string[], offset: number): Promise<number> => {
+    const fetchProblems = async (
+        subjects: string[],
+        offset: number,
+    ): Promise<number> => {
         if (isLoading || !hasMore) return 0;
 
         setError(null);
         setIsLoading(true);
-    
+
         try {
-            const newProblems = await getProblems(
-                offset,
-                LIMIT,
-                subjects,
-            );
+            const newProblems = await getProblems(offset, LIMIT, subjects);
 
             if (newProblems.length < LIMIT) {
                 setHasMore(false);
@@ -61,7 +60,7 @@ export default function ProblemPage() {
             if (newProblems.length > 0) {
                 setProblems((prev) => [...prev, ...newProblems]);
             }
-           
+
             return newProblems.length;
         } catch {
             setError('Failed to get problems. Please try again later.');
@@ -102,9 +101,9 @@ export default function ProblemPage() {
 
         const savedSubjects = localStorage.getItem('selectedSubjects');
         const newSubjects = savedSubjects ? JSON.parse(savedSubjects) : [];
-    
+
         setSubjects(newSubjects);
-        fetchProblems(newSubjects, 0)
+        fetchProblems(newSubjects, 0);
     };
 
     return (

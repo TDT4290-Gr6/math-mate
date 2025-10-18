@@ -56,7 +56,9 @@ export default function SubjectSelectPopup({
             : [];
         const subjectsChanged =
             currentSubjectsparse?.length !== initialSubjects?.length ||
-            currentSubjectsparse?.some((s: Subject) => !initialSubjects?.includes(s));
+            currentSubjectsparse?.some(
+                (s: Subject) => !initialSubjects?.includes(s),
+            );
         onSave(subjectsChanged);
         onClose();
     };
