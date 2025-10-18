@@ -20,4 +20,10 @@ export type AnalyticsEventMap = {
     answer_evaluation: { page?: string; correct: boolean };
     rate_difficulty: { page?: string; rating: number };
     select_subject: { page?: string; subjects: Array<string> };
+    next_problem: { page?: string, next_problemId: number };
+    previous_problem: { page?: string, previous_problemId?: number };
+    start_solving: { page?: string }
+    choose_method: { page?: string }
+    solve_yourself: { page?: string }
+    use_step_by_step: { page?: string }
 };

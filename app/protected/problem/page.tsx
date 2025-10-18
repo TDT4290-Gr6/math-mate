@@ -8,6 +8,7 @@ import Header from '@/components/ui/header';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { getProblems } from 'app/actions';
+import { useTrackedLogger } from '@/components/logger/MethodProvider';
 
 /**
  * Problem browsing page component that allows users to navigate through problems,
@@ -20,6 +21,8 @@ export default function ProblemPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [subjects, setSubjects] = useState<string[]>([]);
     const [error, setError] = useState<string | null>(null);
+
+    const tracked = useTrackedLogger();
 
     const [isSubjectSelectOpen, setIsSubjectSelectOpen] = useState(false);
     const openSubjectSelect = () => setIsSubjectSelectOpen(true);
@@ -85,13 +88,38 @@ export default function ProblemPage() {
             // If we already have this problem loaded, just move to it
             setCurrentIndex(nextIndex);
         }
+        void tracked.logEvent({
+            actionName: 'next_problem',
+            problemId: currentProblem.id,
+            payload: { next_problemId: problems[nextIndex].id },
+        }); 
     };
 
     const handlePrevious = () => {
         if (currentIndex > 0) {
-            setCurrentIndex(currentIndex - 1);
+            const prevIndex = currentIndex - 1;
+            const nextProblem = problems[prevIndex];
+
+            setCurrentIndex(prevIndex);
+
+            void tracked.logEvent({
+                actionName: 'previous_problem',
+                problemId: currentProblem.id,
+                payload: {
+                    previous_problemId: nextProblem.id,
+                },
+            });
         }
     };
+
+    const handleStartSolving = () => {
+        router.push(`/protected/methods/${currentProblem.id}`);
+        void tracked.logEvent({
+            actionName: 'start_solving',
+            problemId: currentProblem.id,
+            payload: {}
+        });
+    }
 
     const fetchNewProblems = () => {
         console.log('TODO');
@@ -132,9 +160,7 @@ export default function ProblemPage() {
                 )}
                 <Button
                     variant="secondary"
-                    onClick={() =>
-                        router.push(`/protected/methods/${currentProblem.id}`)
-                    }
+                    onClick={handleStartSolving}
                     disabled={!currentProblem}
                 >
                     Get started solving
