@@ -37,18 +37,19 @@ export default function ProblemPage() {
         const savedSubjects = localStorage.getItem('selectedSubjects');
         const parsedSubjects = savedSubjects ? JSON.parse(savedSubjects) : [];
         setSubjects(parsedSubjects);
-        fetchProblems(parsedSubjects);
+        fetchProblems(parsedSubjects, 0);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const fetchProblems = async (subjects: string[]): Promise<number> => {
+    const fetchProblems = async (subjects: string[], offset: number): Promise<number> => {
         if (isLoading || !hasMore) return 0;
 
         setError(null);
         setIsLoading(true);
+    
         try {
             const newProblems = await getProblems(
-                problems.length,
+                offset,
                 LIMIT,
                 subjects,
             );
@@ -60,6 +61,7 @@ export default function ProblemPage() {
             if (newProblems.length > 0) {
                 setProblems((prev) => [...prev, ...newProblems]);
             }
+           
             return newProblems.length;
         } catch {
             setError('Failed to get problems. Please try again later.');
@@ -75,7 +77,7 @@ export default function ProblemPage() {
         // If we are trying to go beyond what we have loaded, fetch first
         if (nextIndex >= problems.length) {
             if (hasMore && !isLoading) {
-                const fetched = await fetchProblems(subjects);
+                const fetched = await fetchProblems(subjects, problems.length);
                 if (fetched > 0) {
                     setCurrentIndex(nextIndex);
                 }
@@ -94,7 +96,15 @@ export default function ProblemPage() {
     };
 
     const fetchNewProblems = () => {
-        console.log('TODO');
+        setProblems([]);
+        setCurrentIndex(0);
+        setHasMore(true);
+
+        const savedSubjects = localStorage.getItem('selectedSubjects');
+        const newSubjects = savedSubjects ? JSON.parse(savedSubjects) : [];
+    
+        setSubjects(newSubjects);
+        fetchProblems(newSubjects, 0)
     };
 
     return (
