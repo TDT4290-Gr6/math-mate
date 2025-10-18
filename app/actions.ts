@@ -1,6 +1,9 @@
 'use server';
 
-import { SendMessageResult } from '@/application/use-cases/send-chat-message.use-case';
+import {
+    clearConversation,
+    SendMessageResult,
+} from '@/application/use-cases/send-chat-message.use-case';
 import type { Problem } from '@/entities/models/problem';
 import { getInjection } from '@/di/container';
 
@@ -90,12 +93,13 @@ export async function getUserId() {
  * @throws {Error} Throws a generic error if the chat controller fails or the message cannot be sent.
  */
 export async function sendMessageAction(
+    context: string,
     message: string,
 ): Promise<SendMessageResult> {
     try {
         const chatController = getInjection('ISendChatMessageController');
 
-        const reply = await chatController(message);
+        const reply = await chatController(context, message);
         return reply;
     } catch (err: unknown) {
         if (err instanceof Error) {
@@ -111,5 +115,16 @@ export async function sendMessageAction(
                 error: 'Failed to send message. Please try again.',
             };
         }
+    }
+}
+
+export async function clearConversationAction(): Promise<void> {
+    try {
+        const getUserController = getInjection('IGetUserController');
+        const user = await getUserController();
+        clearConversation(user.id);
+    } catch (error) {
+        console.error('Failed to clear conversation:', error);
+        // swallow; cleanup best-effort
     }
 }
