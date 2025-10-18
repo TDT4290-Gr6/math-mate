@@ -1,10 +1,9 @@
 'use client';
 
+import { clearConversation } from '@/application/use-cases/send-chat-message.use-case';
 import { ChatHistory, ChatMessage } from '@/components/chatbot-window';
 import { getUserId, sendMessageAction } from '../actions';
 import { useState, useEffect } from 'react';
-import { clearConversation } from '@/application/use-cases/send-chat-message.use-case';
-
 
 export interface ChatContext {
     problemDescription?: string;
@@ -27,8 +26,6 @@ const createPrivacyMessage = (): ChatMessage => ({
     className:
         'bg-card border border-[var(--accent)] text-[var(--accent)] mx-5',
 });
-
-
 
 /**
  * useChatbot
@@ -103,18 +100,16 @@ export function useChatbot() {
                 \nContext: \n
                 Problem Description: ${chatContext.problemDescription || 'N/A'}`;
         } else {
-            context = 
-                `You will be provided with additional context about the user's current problem, which method has been selected (if any),
+            context = `You will be provided with additional context about the user's current problem, which method has been selected (if any),
                 and any steps they have taken so far. You should assume that the user is on the step indicated by "current step".
                 Tailor your responses based on this context to best assist the user in progressing to the next step and ultimately solving their math problem.
                 \nContext: \n
                 Problem Description: ${chatContext.problemDescription || 'N/A'}, 
                 Method Title: ${chatContext.methodTitle || 'N/A'}, 
                 Method Description: ${chatContext.methodDescription || 'N/A'}, 
-                Steps: ${chatContext.steps?.map(step => `\n  Step ${step.stepNumber}: ${step.content}`).join('') || 'N/A'}, 
+                Steps: ${chatContext.steps?.map((step) => `\n  Step ${step.stepNumber}: ${step.content}`).join('') || 'N/A'}, 
                 Current Step: ${chatContext.currentStep || 'N/A'}`;
         }
-        
 
         setIsLoading(true);
         try {

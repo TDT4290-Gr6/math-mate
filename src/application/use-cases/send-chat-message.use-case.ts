@@ -65,10 +65,12 @@ export const sendChatMessageUseCase = (chatService: IChatService) => {
         message: string,
     ): Promise<SendMessageResult> => {
         let conversation = conversationStore.get(userID);
-        let systemPromptWithContext = systemPrompt + context + "\n";
+        let systemPromptWithContext = systemPrompt + context + '\n';
 
         if (!conversation) {
-            conversation = [{ role: 'system', content: systemPromptWithContext }];
+            conversation = [
+                { role: 'system', content: systemPromptWithContext },
+            ];
             conversationStore.set(userID, conversation);
         } else if (conversation[0].content !== systemPromptWithContext) {
             // Update system prompt if context has changed
