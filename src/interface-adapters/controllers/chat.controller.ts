@@ -32,7 +32,10 @@ export const sendChatMessageController = (
     authService: IAuthenticationService,
     sendChatUseCase: ISendChatMessageUseCase,
 ) => {
-    return async (context: string, message: string): Promise<SendMessageResult> => {
+    return async (
+        context: string,
+        message: string,
+    ): Promise<SendMessageResult> => {
         const isAuthenticated = await authService.isAuthenticated();
         if (!isAuthenticated) {
             return { success: false, error: 'User must be logged in.' };

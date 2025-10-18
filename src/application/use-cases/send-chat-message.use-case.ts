@@ -78,7 +78,9 @@ export const sendChatMessageUseCase = (chatService: IChatService) => {
         """`;
 
         if (!conversation) {
-            conversation = [{ role: 'system', content: systemPromptWithContext }];
+            conversation = [
+                { role: 'system', content: systemPromptWithContext },
+            ];
             conversationStore.set(userID, conversation);
         } else if (conversation[0].content !== systemPromptWithContext) {
             // Update system prompt if context has changed

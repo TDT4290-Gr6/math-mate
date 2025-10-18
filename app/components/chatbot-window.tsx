@@ -1,9 +1,9 @@
 import { ChevronDown, SendHorizontal } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { ChatContext } from '../hooks/useChatbot';
+import { Step } from '@/entities/models/step';
 import MessageBubble from './message-bubble';
 import { cn } from '@/lib/utils';
-import { Step } from '@/entities/models/step';
-import { ChatContext } from '../hooks/useChatbot';
 
 export interface ChatMessage {
     chatID: string;
@@ -59,7 +59,6 @@ export default function ChatbotWindow({
 }: ChatbotWindowProps) {
     const [inputValue, setInputValue] = useState('');
     const containerRef = useRef<HTMLDivElement | null>(null);
-
 
     const handleSendMessage = async () => {
         if (inputValue.trim() && onSendMessage && !isLoading) {
