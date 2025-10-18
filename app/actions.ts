@@ -113,3 +113,40 @@ export async function sendMessageAction(
         }
     }
 }
+
+/**
+ * Adds a record for a solved problem.
+ *
+ * @param problemId - The id of the problem that was solved.
+ * @param stepsUsed - The number of solution steps the user used to solve the problem. Should be 0 if user used "Solve on your own".
+ * @param startedSolvingAt - Timestamp indicating when the user started solving the problem.
+ * @param finishedSolvingAt - Optional timestamp indicating when the user finished solving the problem.
+ * @param feedback - Optional numeric difficulty feedback. 1 (easiest) to 5 (hardest).
+ *
+ * @returns A promise that resolves with the value returned with the insertion info from the controller.
+ *
+ * @throws Rethrows any error encountered while retrieving the controller or invoking it. Errors are logged to the console before being rethrown.
+ */
+export async function addSolvedProblem(
+    problemId: number,
+    stepsUsed: number,
+    startedSolvingAt: Date,
+    finishedSolvingAt?: Date,
+    feedback?: number,
+) {
+    try {
+        const addSolvedProblemController = getInjection(
+            'IAddSolvedProblemController',
+        );
+        return await addSolvedProblemController({
+            problemId,
+            stepsUsed,
+            startedSolvingAt,
+            finishedSolvingAt,
+            feedback,
+        });
+    } catch (error) {
+        console.error('Failed to add solved problem:', error);
+        throw error;
+    }
+}
