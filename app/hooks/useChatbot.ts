@@ -1,11 +1,9 @@
 'use client';
 
 import { clearConversation } from '@/application/use-cases/send-chat-message.use-case';
-import { ChatHistory, ChatMessage } from '@/components/chatbot-window';
 import { clearConversationAction, sendMessageAction } from '../actions';
+import { ChatHistory, ChatMessage } from '@/components/chatbot-window';
 import { useState, useEffect } from 'react';
-
-
 
 export interface ChatContext {
     problemDescription?: string;

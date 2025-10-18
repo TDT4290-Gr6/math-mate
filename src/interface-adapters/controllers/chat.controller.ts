@@ -58,9 +58,7 @@ export const sendChatMessageController = (
         }
 
         const sanitizedContext =
-            typeof context === 'string'
-                ? context.trim().slice(0, 4000)
-                : '';
+            typeof context === 'string' ? context.trim().slice(0, 4000) : '';
         return sendChatUseCase(userId!, sanitizedContext, message.trim());
     };
 };

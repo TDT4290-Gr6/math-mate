@@ -1,6 +1,9 @@
 'use server';
 
-import { clearConversation, SendMessageResult } from '@/application/use-cases/send-chat-message.use-case';
+import {
+    clearConversation,
+    SendMessageResult,
+} from '@/application/use-cases/send-chat-message.use-case';
 import type { Problem } from '@/entities/models/problem';
 import { getInjection } from '@/di/container';
 
