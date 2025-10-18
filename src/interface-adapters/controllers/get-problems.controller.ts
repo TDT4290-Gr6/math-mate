@@ -4,6 +4,7 @@ import { problemsPresenter } from '../presenters/problems.presenter';
 import { UnauthenticatedError } from '@/entities/errors/auth';
 import { InputParseError } from '@/entities/errors/common';
 import { z } from 'zod';
+import { IGetUserUseCase} from '@/application/use-cases/get-user.use-case';
 
 const inputSchema = z.object({
     offset: z.number().nonnegative(),
@@ -17,6 +18,7 @@ export type IGetProblemsController = ReturnType<typeof getProblemsController>;
 export const getProblemsController =
     (
         getProblemsUseCase: IGetProblemsUseCase,
+        getUserUseCase: IGetUserUseCase,
         authenticationService: IAuthenticationService,
     ) =>
     async (input: IGetProblemsInput) => {
@@ -25,15 +27,22 @@ export const getProblemsController =
             throw new UnauthenticatedError('User must be logged in.');
         }
 
+        const userId = await authenticationService.getCurrentUserId();
+        if (userId == null)
+            throw new UnauthenticatedError('User id is not set.');
+
+        const user = await getUserUseCase(userId);
+        if (!user) throw new InputParseError('User not found');
+
         const result = inputSchema.safeParse(input);
 
         if (!result.success) {
             throw new InputParseError('Invalid input', { cause: result.error });
         }
 
-        const { offset, limit, subjects } = result.data;
+        const { offset, limit, subjects} = result.data;
 
-        const problems = await getProblemsUseCase(offset, limit, subjects);
+        const problems = await getProblemsUseCase(offset, limit,userId, user.score, subjects);
 
         return problemsPresenter(problems);
     };
