@@ -1,8 +1,7 @@
 'use client';
 
-import { useTrackedLogger } from '@/components/logger/LoggerProvider'; // now your hook handles URL params
+import { useTrackedLogger } from '@/components/logger/LoggerProvider';
 import { useFetchProblem } from 'app/hooks/useFetchProblem';
-import { useChatUILogger } from 'app/hooks/useChatUILogger';
 import ChatbotWindow from '@/components/chatbot-window';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProblemCard from '@/components/ui/problem-card';
@@ -24,7 +23,7 @@ import { cn } from '@/lib/utils';
  * chat state and passes messages to the ChatbotWindow.
  */
 export default function SolvingPage() {
-    const tracked = useTrackedLogger(); // automatically gets problemId/methodId from URL
+    const tracked = useTrackedLogger();
     const params = useParams<{ problemId: string; methodId: string }>();
     const problemId = Number(params.problemId);
     const methodId = Number(params.methodId);
@@ -40,26 +39,6 @@ export default function SolvingPage() {
     const [currentStep, setCurrentStep] = useState(0);
     const method = problem?.methods.find((m) => m.id === methodId);
     const totalSteps = method?.steps?.length ?? 0;
-
-    const { logChatOpen, logChatClose } = useChatUILogger({
-        page: 'solve',
-        problemId,
-        methodId,
-    });
-
-    React.useEffect(() => {
-        const handler = () => {
-            setIsChatOpen((prev) => {
-                const next = !prev;
-                if (next) logChatOpen();
-                else logChatClose();
-                return next;
-            });
-        };
-        window.addEventListener('chat-toggle', handler as EventListener);
-        return () =>
-            window.removeEventListener('chat-toggle', handler as EventListener);
-    }, [logChatOpen, logChatClose]);
 
     const handleNextStep = () => {
         if (currentStep < totalSteps) {
