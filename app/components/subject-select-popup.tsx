@@ -1,3 +1,4 @@
+'use client';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Card, CardContent, CardHeader } from './ui/card';
 import { Subject } from 'app/constants/subjects';

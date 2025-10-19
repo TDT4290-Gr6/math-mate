@@ -81,7 +81,7 @@ export default function ProblemPage() {
                     setCurrentIndex(nextIndex);
                 }
             }
-            // If no more problems to fetch, do nothing (can't go forward), or render a message(TODO)
+            // If no more problems to fetch, do nothing (can't go forward)
         } else {
             // If we already have this problem loaded, just move to it
             setCurrentIndex(nextIndex);
@@ -94,7 +94,7 @@ export default function ProblemPage() {
         }
     };
 
-    const fetchNewProblems = () => {
+    const fetchNewProblems = async () => {
         setProblems([]);
         setCurrentIndex(0);
         setHasMore(true);
@@ -103,7 +103,7 @@ export default function ProblemPage() {
         const newSubjects = savedSubjects ? JSON.parse(savedSubjects) : [];
 
         setSubjects(newSubjects);
-        fetchProblems(newSubjects, 0);
+        await fetchProblems(newSubjects, 0);
     };
 
     return (
