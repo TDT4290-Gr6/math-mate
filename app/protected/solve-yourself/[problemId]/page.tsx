@@ -149,6 +149,7 @@ export default function SolveYourself() {
                             onSendMessage={sendMessage}
                             isLoading={isLoading}
                             error={error ?? undefined}
+                            problemDescription={problem?.problem ?? ''}
                         />
                     </motion.div>
                 ) : (
