@@ -4,7 +4,7 @@ import { ChatHistory, ChatMessage } from '@/components/chatbot-window';
 import { useLogger } from '@/components/logger/LoggerProvider';
 import { sendMessageAction } from '../actions';
 import { useSession } from 'next-auth/react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 // Privacy notice for chat - factory function
 const createPrivacyMessage = (): ChatMessage => ({
@@ -62,6 +62,8 @@ export function useChatbot() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
+    const chatSessionId = useRef(`${Date.now()}${Math.floor(Math.random() * 1e6)}`).current;
+    
     // Automatically clear error after 7 seconds
     useEffect(() => {
         if (!error) return;
@@ -69,19 +71,18 @@ export function useChatbot() {
         return () => clearTimeout(timer);
     }, [error]);
 
+    useEffect(() => {
+  sessionStorage.removeItem('chatSessionId');
+}, []);
+
     /**
      * Sends a user message and updates chat history with user and assistant messages.
      */
-    const sendMessage = async (message: string, problemId?: number) => {
+    const sendMessage = async (message: string) => {
         if (status !== 'authenticated' || !session?.user?.id) {
             setError('You must be signed in to chat.');
             return;
         }
-
-        const chatSessionId =
-            sessionStorage.getItem('chatSessionId') || createNewChatSession();
-
-        const userId = Number(session.user.id);
 
         // Add user message to chat history
         const userMessage: ChatMessage = {
