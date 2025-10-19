@@ -1,6 +1,7 @@
 'use client';
 
 import { useFetchProblem } from 'app/hooks/useFetchProblem';
+import React, { useEffect, useRef, useState } from 'react';
 import ChatbotWindow from '@/components/chatbot-window';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProblemCard from '@/components/ui/problem-card';
@@ -10,7 +11,6 @@ import { useChatbot } from 'app/hooks/useChatbot';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
 import { useParams } from 'next/navigation';
-import React, { useEffect, useRef, useState } from 'react';
 import Steps from '@/components/steps';
 import { cn } from '@/lib/utils';
 
@@ -42,8 +42,7 @@ export default function SolvingPage() {
     const method = problem?.methods.find((m) => m.id === methodId);
     const totalSteps = method?.steps?.length ?? 0;
 
-
-        // Handle drag events
+    // Handle drag events
     const handleMouseDown = () => {
         isDragging.current = true;
     };
@@ -112,14 +111,17 @@ export default function SolvingPage() {
                 }
             />
 
-            <div ref={containerRef} className="relative flex h-full w-full flex-1 overflow-hidden">
+            <div
+                ref={containerRef}
+                className="relative flex h-full w-full flex-1 overflow-hidden"
+            >
                 <div
                     className={cn(
                         'flex h-full flex-col items-center justify-between p-4 transition-all duration-0',
-                        chatClosed && 'mx-auto'
+                        chatClosed && 'mx-auto',
                     )}
                     style={{ width: `${isChatOpen ? dividerPosition : 60}%` }}
-                >   
+                >
                     <div className="h-full w-full flex-1">
                         <Steps
                             steps={method?.steps}
@@ -151,16 +153,18 @@ export default function SolvingPage() {
                 {/* Draggable Divider */}
                 {isChatOpen && (
                     <div
-                        className="absolute top-0 bottom-0 z-20 w-[4px] bg-border cursor-col-resize hover:bg-primary transition-colors"
+                        className="bg-border hover:bg-primary absolute top-0 bottom-0 z-20 w-[4px] cursor-col-resize transition-colors"
                         style={{ left: `${dividerPosition}%` }}
                         onMouseDown={handleMouseDown}
                     />
                 )}
 
-                <AnimatePresence onExitComplete={() => {
-                    setShowToggle(true);
-                    setChatClosed(true);
-                }}>
+                <AnimatePresence
+                    onExitComplete={() => {
+                        setShowToggle(true);
+                        setChatClosed(true);
+                    }}
+                >
                     {isChatOpen && (
                         <motion.div
                             initial={{ opacity: 0, x: 300, y: 200, scale: 0.4 }}
