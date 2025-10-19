@@ -45,7 +45,7 @@ export default function Steps({
             ref={containerRef}
             className="mt-5 flex h-92 flex-col space-y-2 overflow-y-auto rounded-lg"
         >
-            <div className="flex w-full max-w-5xl flex-col px-10 text-sm lg:flex-row">
+            <div className="flex w-full max-w-5xl flex-col text-sm lg:flex-row">
                 <MethodCard
                     title={methodTitle ?? 'Untitled method'}
                     description={

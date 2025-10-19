@@ -10,7 +10,7 @@ import { useChatbot } from 'app/hooks/useChatbot';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
 import { useParams } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Steps from '@/components/steps';
 import { cn } from '@/lib/utils';
 
@@ -26,6 +26,10 @@ export default function SolvingPage() {
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
     const [isAnswerPopupOpen, setIsAnswerPopupOpen] = useState(false);
     const [showToggle, setShowToggle] = useState(true);
+    const [dividerPosition, setDividerPosition] = useState(50);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const isDragging = useRef(false);
+    const [chatClosed, setChatClosed] = useState(!isChatOpen);
 
     const params = useParams<{ problemId: string; methodId: string }>();
     const problemId = Number(params.problemId);
@@ -38,8 +42,39 @@ export default function SolvingPage() {
     const method = problem?.methods.find((m) => m.id === methodId);
     const totalSteps = method?.steps?.length ?? 0;
 
+
+        // Handle drag events
+    const handleMouseDown = () => {
+        isDragging.current = true;
+    };
+
+    const handleMouseUp = () => {
+        isDragging.current = false;
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+        if (!isDragging.current || !containerRef.current) return;
+        const rect = containerRef.current.getBoundingClientRect();
+        const newPosition = ((e.clientX - rect.left) / rect.width) * 100;
+        // Clamp between 30% and 70%
+        setDividerPosition(Math.min(70, Math.max(30, newPosition)));
+    };
+
+    useEffect(() => {
+        window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('mouseup', handleMouseUp);
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('mouseup', handleMouseUp);
+        };
+    }, []);
+
+    useEffect(() => {
+        if (isChatOpen) setChatClosed(false);
+    }, [isChatOpen]);
+
     // Listen for the chat-toggle event
-    React.useEffect(() => {
+    useEffect(() => {
         const handler = () => setIsChatOpen((v) => !v);
         window.addEventListener('chat-toggle', handler as EventListener);
         return () =>
@@ -77,13 +112,14 @@ export default function SolvingPage() {
                 }
             />
 
-            <div className="relative flex h-full w-full flex-1 overflow-hidden">
+            <div ref={containerRef} className="relative flex h-full w-full flex-1 overflow-hidden">
                 <div
                     className={cn(
-                        'flex h-full flex-col items-center justify-between p-4',
-                        isChatOpen ? 'w-1/2' : 'mx-auto w-3/5',
+                        'flex h-full flex-col items-center justify-between p-4 transition-all duration-0',
+                        chatClosed && 'mx-auto'
                     )}
-                >
+                    style={{ width: `${isChatOpen ? dividerPosition : 60}%` }}
+                >   
                     <div className="h-full w-full flex-1">
                         <Steps
                             steps={method?.steps}
@@ -95,7 +131,7 @@ export default function SolvingPage() {
                     <div className="flex-end mt-6 mb-20 flex w-full justify-center gap-10">
                         <Button
                             onClick={() => setIsAnswerPopupOpen(true)}
-                            className="w-1/4 rounded-full"
+                            className="w-40 rounded-full"
                             variant="default"
                         >
                             Go to answer
@@ -103,7 +139,7 @@ export default function SolvingPage() {
                         {currentStep < totalSteps && (
                             <Button
                                 onClick={() => handleNextStep()}
-                                className="w-1/4 rounded-full"
+                                className="w-40 rounded-full"
                                 variant="secondary"
                             >
                                 Next step
@@ -111,17 +147,32 @@ export default function SolvingPage() {
                         )}
                     </div>
                 </div>
+
+                {/* Draggable Divider */}
                 {isChatOpen && (
-                    <div className="bg-border absolute top-0 bottom-0 left-1/2 w-[1px]"></div>
+                    <div
+                        className="absolute top-0 bottom-0 z-20 w-[4px] bg-border cursor-col-resize hover:bg-primary transition-colors"
+                        style={{ left: `${dividerPosition}%` }}
+                        onMouseDown={handleMouseDown}
+                    />
                 )}
-                <AnimatePresence onExitComplete={() => setShowToggle(true)}>
+
+                <AnimatePresence onExitComplete={() => {
+                    setShowToggle(true);
+                    setChatClosed(true);
+                }}>
                     {isChatOpen && (
                         <motion.div
-                            initial={{ opacity: 0, x: 100, y: 180, scale: 0.4 }}
+                            initial={{ opacity: 0, x: 300, y: 200, scale: 0.4 }}
                             animate={{ opacity: 1, x: 0, y: 0, scale: 1 }}
-                            exit={{ opacity: 0, x: 100, y: 180, scale: 0.4 }}
+                            exit={{ opacity: 0, x: 300, y: 200, scale: 0.4 }}
                             transition={{ duration: 0.5, ease: 'easeInOut' }}
-                            className="flex h-full w-1/2 flex-col p-4"
+                            className="flex h-full flex-col p-4"
+                            style={{
+                                width: `${100 - dividerPosition}%`,
+                                position: 'absolute',
+                                left: `${dividerPosition}%`,
+                            }}
                         >
                             <ChatbotWindow
                                 chatHistory={chatHistory}
