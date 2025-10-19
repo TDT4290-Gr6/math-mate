@@ -48,7 +48,7 @@ export default function SolvingPage() {
             document.body.style.userSelect = 'none';
             isDragging.current = true;
         },
-        []
+        [],
     );
 
     const handlePointerUp = useCallback(() => {
@@ -172,21 +172,24 @@ export default function SolvingPage() {
                         onKeyDown={(e) => {
                             switch (e.key) {
                                 case 'ArrowLeft':
-                                setDividerPosition((v) => Math.max(30, v - 2));
-                                e.preventDefault();
-                                break;
+                                    setDividerPosition((v) =>
+                                        Math.max(30, v - 2),
+                                    );
+                                    e.preventDefault();
+                                    break;
                                 case 'ArrowRight':
-                                setDividerPosition((v) => Math.min(70, v + 2));
-                                e.preventDefault();
-                                break;
+                                    setDividerPosition((v) =>
+                                        Math.min(70, v + 2),
+                                    );
+                                    e.preventDefault();
+                                    break;
                             }
-                            }}
-                            onPointerDown={handlePointerDown}
-                            className="bg-border hover:bg-primary focus-visible:bg-primary absolute top-0 bottom-0 z-20 w-[4px] cursor-col-resize transition-colors focus-visible:outline-none"
-                            style={{ left: `${dividerPosition}%` }}
-                        />
-                    )}
-
+                        }}
+                        onPointerDown={handlePointerDown}
+                        className="bg-border hover:bg-primary focus-visible:bg-primary absolute top-0 bottom-0 z-20 w-[4px] cursor-col-resize transition-colors focus-visible:outline-none"
+                        style={{ left: `${dividerPosition}%` }}
+                    />
+                )}
 
                 <AnimatePresence
                     onExitComplete={() => {
