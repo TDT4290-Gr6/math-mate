@@ -1,8 +1,6 @@
-import type {
-    IEventsRepository,
-} from '@/application/repositories/events.repository.interface';
-import { insertEventSchema } from '@/entities/models/event';
+import type { IEventsRepository } from '@/application/repositories/events.repository.interface';
 import type { Event, InsertEvent } from '@/entities/models/event';
+import { insertEventSchema } from '@/entities/models/event';
 
 // Minimal interface for a logger with the methods we use in the codebase.
 // This avoids pulling pino's generic-heavy types into many modules.

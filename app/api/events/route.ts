@@ -1,7 +1,7 @@
 import { getInjection } from '@/di/container';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth'; // adjust path to your NextAuth options
 import { NextResponse } from 'next/server';
+import { authOptions } from '@/lib/auth'; // adjust path to your NextAuth options
 
 interface IEventController {
     handle: (
@@ -12,7 +12,7 @@ interface IEventController {
 
 /**
  * POST /api/events
- * 
+ *
  * Logs a user event (e.g. interactions or analytics).
  * - Requires an authenticated NextAuth session.
  * - Injects `userId` into the controller context.
@@ -44,7 +44,9 @@ export async function POST(request: Request) {
 
         // Function-based controller
         if (typeof createEventController === 'function') {
-            const controllerResult = await createEventController(body, { userId });
+            const controllerResult = await createEventController(body, {
+                userId,
+            });
             if (
                 controllerResult &&
                 typeof controllerResult === 'object' &&
@@ -59,7 +61,8 @@ export async function POST(request: Request) {
         // Object-based controller
         else if (
             createEventController &&
-            typeof (createEventController as IEventController).handle === 'function'
+            typeof (createEventController as IEventController).handle ===
+                'function'
         ) {
             const controllerResult = await (
                 createEventController as IEventController
@@ -86,8 +89,8 @@ export async function POST(request: Request) {
             typeof e?.status === 'number'
                 ? e.status
                 : e?.name === 'InputParseError'
-                ? 400
-                : 500;
+                  ? 400
+                  : 500;
         const message = e?.message ?? 'Unknown error';
         console.error('POST /api/events error:', err);
         return NextResponse.json({ error: message }, { status });

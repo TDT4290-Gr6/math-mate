@@ -159,13 +159,16 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                         type="button"
                         className="bg-sidebar-primary hover:bg-sidebar-accent flex cursor-pointer items-center gap-2 rounded-4xl px-4 py-2"
                         onClick={async () => {
-                            try {  
-                                await tracked.logEvent({ actionName: 'sign_out', payload: {} });  
-                            } finally {  
-                                sessionStorage.removeItem('signInLogged');  
-                                onClose();  
-                                void signOut();  
-                            } 
+                            try {
+                                await tracked.logEvent({
+                                    actionName: 'sign_out',
+                                    payload: {},
+                                });
+                            } finally {
+                                sessionStorage.removeItem('signInLogged');
+                                onClose();
+                                void signOut();
+                            }
                         }}
                     >
                         <UserRound

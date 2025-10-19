@@ -91,7 +91,9 @@ export function useChatbot() {
         }));
 
         // Log user message
-        const safeMsg = message.slice(0, 500).replace(/\b[\w.+-]+@[\w-]+\.[\w.-]+\b/g, '[redacted]'); // cap length and strip emails
+        const safeMsg = message
+            .slice(0, 500)
+            .replace(/\b[\w.+-]+@[\w-]+\.[\w.-]+\b/g, '[redacted]'); // cap length and strip emails
         void logger.logEvent({
             actionName: 'chat_message_sent',
             payload: { chatSessionId, message: safeMsg },

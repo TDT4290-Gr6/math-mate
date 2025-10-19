@@ -19,24 +19,30 @@ const LogEventDTO = z.object({
 export type ICreateEventController = ReturnType<typeof createEventController>;
 
 export const createEventController =
-    (logEventUseCase: ILogEventUseCase) =>  
-    async (raw: unknown, ctx?: { userId?: number }) => { 
+    (logEventUseCase: ILogEventUseCase) =>
+    async (raw: unknown, ctx?: { userId?: number }) => {
         return withRequestLogger(async ({ log }) => {
             const l = log as LoggerLike;
-            // Validate input  
-            const parsed = LogEventDTO.safeParse(raw);  
-            if (!parsed.success) {  
-                l.warn({ raw, err: parsed.error }, 'createEventController: invalid input');  
-                throw new InputParseError('Invalid input data', { cause: parsed.error });  
-            }  
-            const data = parsed.data;  
+            // Validate input
+            const parsed = LogEventDTO.safeParse(raw);
+            if (!parsed.success) {
+                l.warn(
+                    { raw, err: parsed.error },
+                    'createEventController: invalid input',
+                );
+                throw new InputParseError('Invalid input data', {
+                    cause: parsed.error,
+                });
+            }
+            const data = parsed.data;
             // Always trust authenticated server session userId
             if (!ctx?.userId) {
                 l.warn('createEventController: missing session user');
-                throw new InputParseError('Unauthenticated: missing user session');
+                throw new InputParseError(
+                    'Unauthenticated: missing user session',
+                );
             }
             const userId = ctx.userId;
- 
 
             // Ensure that payload is string
             const payloadString =
