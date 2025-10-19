@@ -163,12 +163,7 @@ export default function SolvingPage() {
                 {isChatOpen && (
                     <button
                         type="button"
-                        role="separator"
-                        aria-orientation="vertical"
                         aria-label="Resize chat window"
-                        aria-valuemin={30}
-                        aria-valuemax={70}
-                        aria-valuenow={dividerPosition}
                         onKeyDown={(e) => {
                             switch (e.key) {
                                 case 'ArrowLeft':
