@@ -12,13 +12,31 @@ import SubjectSelect from '@/components/ui/subject-select';
 import CountrySelect from '@/components/country-select';
 import { Button } from '@/components/ui/button';
 import WideLogo from '@/components/wide-logo';
+import { useSession } from 'next-auth/react';
 import Header from '@/components/ui/header';
 import { useRouter } from 'next/navigation';
 import { ChevronRight } from 'lucide-react';
+import { useEffect } from 'react';
 
 export default function StartPage() {
     const tracked = useTrackedLogger();
     const router = useRouter();
+
+    const { data: session, status } = useSession();
+
+    useEffect(() => {
+        if (
+            status === 'authenticated' &&
+            session?.user?.id &&
+            !sessionStorage.getItem('signInLogged')
+        ) {
+            void tracked.logEvent({
+                actionName: 'sign_in',
+                payload: {},
+            });
+            sessionStorage.setItem('signInLogged', 'true'); // mark as logged
+        }
+    }, [status, session, tracked]);
 
     const handleGetStarted = () => {
         router.push('/protected/problem');

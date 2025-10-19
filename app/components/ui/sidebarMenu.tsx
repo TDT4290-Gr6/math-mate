@@ -1,12 +1,13 @@
 'use client';
 
 import { UserRound, Moon, X, LoaderCircle } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Switch } from '@/components/ui/switch';
 import { signOut } from 'next-auth/react';
 import { useTheme } from 'next-themes';
 import { getUserId } from '@/actions';
 import { Button } from './button';
+import { useTrackedLogger } from '../logger/LoggerProvider';
 
 interface SidebarMenuProps {
     onClose: () => void;
@@ -39,6 +40,28 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
     const { theme, setTheme } = useTheme();
 
     const [userId, setUserId] = useState<string | undefined>(undefined);
+
+    const tracked = useTrackedLogger();
+
+    function debounce<Args extends unknown[]>(fn: (...args: Args) => void, delay = 300): (...args: Args) => void {
+        let timeoutId: ReturnType<typeof setTimeout>;
+        return (...args: Args) => {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => fn(...args), delay);
+        };
+    }   
+
+    // Debounced logging function (memoized to avoid recreation)
+    const debouncedLogTheme = useMemo(
+        () =>
+            debounce((newTheme: string) => {
+                void tracked.logEvent({
+                    actionName: 'toggle_theme',
+                    payload: { theme: newTheme },
+                });
+            }, 400),
+        [tracked],
+    );
 
     useEffect(() => {
         let cancelled = false;
@@ -121,9 +144,11 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                         <Switch
                             className="ml-auto h-6 w-10 cursor-pointer p-1"
                             checked={theme === 'dark'}
-                            onCheckedChange={(checked) =>
-                                setTheme(checked ? 'dark' : 'light')
-                            }
+                            onCheckedChange={(checked) => {
+                                const newTheme = checked ? 'dark' : 'light';
+                                setTheme(newTheme);
+                                debouncedLogTheme(newTheme);
+                            }}
                         />
                     </div>
                     {/* Logout button */}
@@ -132,6 +157,11 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                         className="bg-sidebar-primary hover:bg-sidebar-accent flex cursor-pointer items-center gap-2 rounded-4xl px-4 py-2"
                         onClick={() => {
                             signOut();
+                             void tracked.logEvent({
+                                actionName: 'sign_out',
+                                payload: {},
+                            });
+                            sessionStorage.removeItem('signInLogged')
                             onClose();
                         }}
                     >
@@ -152,7 +182,7 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
             </div>
             <div className="mt-4 flex flex-col gap-4 overflow-y-auto">
                 {dummyProblems.map((problem, index) => (
-                    // TODO: Link to the problem
+                    // TODO: Link to the problem and log the event
                     <p
                         key={index}
                         className="text-foreground hover:bg-sidebar-accent h-11 rounded-xl p-2"

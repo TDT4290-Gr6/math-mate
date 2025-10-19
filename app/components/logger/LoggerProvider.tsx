@@ -49,6 +49,9 @@ export function LoggerProvider({ children }: { children: React.ReactNode }) {
                 ? Number(session.user.id)
                 : undefined;
 
+            // Only log if there is a userId
+            if (!userId) return;
+
             // Merge path automatically into payload
             const payload = {
                 ...(typeof input.payload === 'object'
