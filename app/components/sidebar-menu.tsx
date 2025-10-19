@@ -164,14 +164,14 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                         />
                     ))
                 ) : solves.length === 0 ? (
-                    <p className="text-foreground bg-sidebar-primary hover:bg-accent rounded-xl p-2 text-pretty">
+                    <p className="text-sidebar-primary-foreground bg-sidebar-primary hover:bg-accent rounded-xl p-2 text-pretty">
                         No previously solved problems.
                     </p>
                 ) : (
                     solves.map((solve) => (
                         <Link
                             key={solve.id}
-                            className="text-foreground bg-sidebar-primary hover:bg-accent rounded-xl p-2 text-pretty"
+                            className="text-sidebar-primary-foreground bg-sidebar-primary hover:bg-accent rounded-xl p-2 text-pretty"
                             href={`/protected/methods/${solve.problemId}`}
                         >
                             <LaTeXFormattedText text={solve.problemTitle} />
