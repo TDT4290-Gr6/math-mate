@@ -163,13 +163,21 @@ export default function SolvingPage() {
                         aria-valuenow={dividerPosition}
                         tabIndex={0}
                         onKeyDown={(e) => {
-                            if (e.key === 'ArrowLeft') setDividerPosition((v) => Math.max(30, v - 2));
-                            if (e.key === 'ArrowRight') setDividerPosition((v) => Math.min(70, v + 2));
+                            switch (e.key) {
+                            case 'ArrowLeft':
+                                setDividerPosition((v) => Math.max(30, v - 2));
+                                e.preventDefault();
+                                break;
+                            case 'ArrowRight':
+                                setDividerPosition((v) => Math.min(70, v + 2));
+                                e.preventDefault();
+                                break;
+                            }
                         }}
+                        onPointerDown={handlePointerDown}
                         className="bg-border hover:bg-primary absolute top-0 bottom-0 z-20 w-[4px] cursor-col-resize transition-colors"
                         style={{ left: `${dividerPosition}%` }}
-                        onPointerDown={handlePointerDown}
-                    />
+                        />
                 )}
 
                 <AnimatePresence
