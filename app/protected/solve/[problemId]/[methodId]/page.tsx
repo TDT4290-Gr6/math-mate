@@ -159,34 +159,38 @@ export default function SolvingPage() {
                 </div>
 
                 {/* Draggable Divider */}
+                
                 {isChatOpen && (
-                    <span
-                        role="separator"
-                        aria-orientation="vertical"
-                        aria-valuemin={30}
-                        aria-valuemax={70}
-                        aria-valuenow={dividerPosition}
-                        tabIndex={0}
-                        onKeyDown={(e) => {
-                            switch (e.key) {
-                                case 'ArrowLeft':
-                                    setDividerPosition((v) =>
-                                        Math.max(30, v - 2),
-                                    );
-                                    e.preventDefault();
-                                    break;
-                                case 'ArrowRight':
-                                    setDividerPosition((v) =>
-                                        Math.min(70, v + 2),
-                                    );
-                                    e.preventDefault();
-                                    break;
-                            }
-                        }}
-                        onPointerDown={handlePointerDown}
-                        className="bg-border hover:bg-primary absolute top-0 bottom-0 z-20 w-[4px] cursor-col-resize transition-colors"
-                        style={{ left: `${dividerPosition}%` }}
-                    />
+                    <>
+                        {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */}
+                        <span
+                            role="separator"
+                            aria-orientation="vertical"
+                            aria-valuemin={30}
+                            aria-valuemax={70}
+                            aria-valuenow={dividerPosition}
+                            tabIndex={0}
+                            onKeyDown={(e) => {
+                                switch (e.key) {
+                                    case 'ArrowLeft':
+                                        setDividerPosition((v) =>
+                                            Math.max(30, v - 2),
+                                        );
+                                        e.preventDefault();
+                                        break;
+                                    case 'ArrowRight':
+                                        setDividerPosition((v) =>
+                                            Math.min(70, v + 2),
+                                        );
+                                        e.preventDefault();
+                                        break;
+                                }
+                            }}
+                            onPointerDown={handlePointerDown}
+                            className="bg-border hover:bg-primary absolute top-0 bottom-0 z-20 w-[4px] cursor-col-resize transition-colors"
+                            style={{ left: `${dividerPosition}%` }}
+                        />
+                    </>
                 )}
 
                 <AnimatePresence
