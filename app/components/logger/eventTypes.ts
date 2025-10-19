@@ -15,7 +15,7 @@ export type AnalyticsEventMap = {
         reply: string;
     };
     next_step: { page?: string; total_steps: number };
-    go_to_answer: { page?: string; current_step: number };
+    go_to_answer: { page?: string; total_steps: number };
     reveal_answer: { page?: string };
     answer_evaluation: { page?: string; correct: boolean };
     rate_difficulty: { page?: string; rating: number };
@@ -41,4 +41,9 @@ export type AnalyticsEventMap = {
     close_subject_popup: { page?: string };
     open_sidebar: { page?: string };
     close_sidebar: { page?: string };
+    open_answer_popup: { page?: string };
+    close_answer_popup: { page?: string };
+    sign_out: { page?: string };
+    sign_in: { page?: string };
+    toggle_theme: { page?: string; theme: string };
 };

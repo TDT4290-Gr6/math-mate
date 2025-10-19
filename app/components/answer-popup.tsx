@@ -100,6 +100,21 @@ export default function AnswerPopup({
                 payload: { rating },
             });
         }
+        handleClose();
+    }
+
+    function handleOpen() {
+        setStep('reveal');
+        setRating(null);
+        setWasCorrect(false);
+        void tracked.logEvent({ actionName: 'open_answer_popup', payload: {} });
+    }
+
+    function handleClose() {
+        void tracked.logEvent({
+            actionName: 'close_answer_popup',
+            payload: {},
+        });
         onClose?.();
     }
 
@@ -107,7 +122,8 @@ export default function AnswerPopup({
         <Dialog
             open={isOpen}
             onOpenChange={(next) => {
-                if (!next) onClose?.();
+                if (next) handleOpen();
+                else handleClose();
             }}
         >
             <DialogContent

@@ -60,7 +60,7 @@ export default function SubjectSelectPopup({
         void tracker.logEvent({
             actionName: 'save_selected_subjects',
             payload: {
-                subjects: (selectedSubjects ?? []) as string[],
+                subjects: selectedSubjects ?? [],
             },
         });
         onClose();
@@ -72,7 +72,7 @@ export default function SubjectSelectPopup({
         void tracker.logEvent({
             actionName: 'cancel_selected_subjects',
             payload: {
-                initial_subjects: initialSubjects,
+                initial_subjects: initialSubjects ?? [],
             },
         });
         onClose();

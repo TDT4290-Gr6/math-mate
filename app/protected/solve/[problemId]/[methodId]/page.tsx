@@ -56,7 +56,8 @@ export default function SolvingPage() {
         setIsAnswerPopupOpen(true);
         void tracked.logEvent({
             actionName: 'go_to_answer',
-            payload: { current_step: currentStep },
+            stepId: currentStep,
+            payload: { total_steps: totalSteps },
         });
     };
 
