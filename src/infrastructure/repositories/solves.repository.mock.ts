@@ -28,7 +28,14 @@ export class MockSolvesRepository implements ISolvesRepository {
                 b.finishedSolvingAt!.getTime() - a.finishedSolvingAt!.getTime()
             );
         });
-        return userSolves;
+
+        // Return max 1 of each problem
+        const uniqueSolvesMap = new Map<number, Solve>();
+        for (const solve of userSolves)
+            if (!uniqueSolvesMap.has(solve.problemId))
+                uniqueSolvesMap.set(solve.problemId, solve);
+
+        return Array.from(uniqueSolvesMap.values());
     }
 
     async getByProblemId(problemId: number): Promise<Solve[]> {

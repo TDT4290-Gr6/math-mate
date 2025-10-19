@@ -39,6 +39,8 @@ export class SolvesRepository implements ISolvesRepository {
                 where: { userId: userId, finishedSolvingAt: { not: null } },
                 // Latest finished problems first
                 orderBy: { finishedSolvingAt: 'desc' },
+                // Distinct by problemId to get only one solve per problem
+                distinct: ['problemId'],
                 // Include the title of the problem
                 include: { problem: { select: { title: true } } },
             });
@@ -48,7 +50,8 @@ export class SolvesRepository implements ISolvesRepository {
                     problemTitle: solve.problem?.title,
                 } as Solve;
             });
-            return solvesWithTitle as Solve[];
+
+            return solvesWithTitle;
         } catch (error) {
             throw new DatabaseOperationError(
                 'Failed to get latest solves by user ID',
