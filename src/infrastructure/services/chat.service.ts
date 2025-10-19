@@ -3,16 +3,17 @@ import { IChatService } from '@/application/services/chat.service.interface';
 import OpenAI from 'openai';
 
 /**
- * ChatService is responsible for handling communication with the OpenAI Chat API.
+ * ChatService handles communication with the OpenAI Chat Completions API.
  *
- * This service converts the application's ChatMessage objects into the format expected
- * by the OpenAI API and sends them to a specified model (gpt-5-mini). It returns
- * the assistant's textual response to the caller.
+ * This service formats the application's ConversationMessage objects for the OpenAI API,
+ * sends them to the GPT-4o model, and returns the assistant's response.
+ *
+ * GPT-4o is used for its balance of reasoning ability and speed, making it well-suited
+ * for educational and tutoring use cases such as math help.
  *
  * The OpenAI API key must be provided through the `OPENAI_API_KEY` environment variable.
  * If this key is missing, the service will throw an initialization error.
  */
-
 export class ChatService implements IChatService {
     private openai: OpenAI;
 
@@ -32,15 +33,15 @@ export class ChatService implements IChatService {
         }));
 
         try {
-            const response = await this.openai.responses.create({
-                model: 'gpt-5-mini',
-                reasoning: { effort: 'low' },
-                max_output_tokens: 1024,
-                input: openAIMessages,
+            const response = await this.openai.chat.completions.create({
+                model: 'gpt-4o',
+                messages: openAIMessages,
+                temperature: 0.7, // Balanced creativity for tutoring explanations
+                max_tokens: 500,  // Enough space for step-by-step reasoning
             });
-            console.debug('OpenAI responses.create raw response:', response);
 
-            const content = response.output_text ?? 'No response from AI';
+            const content =
+                response.choices[0]?.message?.content ?? 'No response from AI';
 
             return {
                 role: 'assistant',
