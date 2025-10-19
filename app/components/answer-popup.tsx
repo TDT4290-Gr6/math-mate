@@ -97,7 +97,6 @@ export default function AnswerPopup({
     }
 
     async function handleFinalAction(action: 'next' | 'retry') {
-        // TODO: decide whether a user can re-evaluate a problem
         try {
             await addSolvedProblem(
                 problemId,
@@ -105,6 +104,7 @@ export default function AnswerPopup({
                 startedSolvingAt,
                 finishedSolvingAt,
                 selectedDifficulty,
+                wasCorrect,
             );
         } catch (error) {
             console.error('Failed to record solved problem:', error);
