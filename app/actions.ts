@@ -118,6 +118,18 @@ export async function sendMessageAction(
     }
 }
 
+/**
+ * Clears the current user's conversation history.
+ *
+ * This function retrieves the current authenticated user via the injected `IGetUserController`,
+ * then calls `clearConversation` with the user's ID to remove their conversation data.
+ * Any errors encountered during this process are caught and logged to the console.
+ *
+ * @async
+ * @function clearConversationAction
+ * @returns {Promise<void>} A promise that resolves when the conversation has been cleared.
+ * @throws Will log an error to the console if retrieving the user or clearing the conversation fails.
+ */
 export async function clearConversationAction(): Promise<void> {
     try {
         const getUserController = getInjection('IGetUserController');
@@ -125,7 +137,9 @@ export async function clearConversationAction(): Promise<void> {
         clearConversation(user.id);
     } catch (error) {
         console.error('Failed to clear conversation:', error);
-        // swallow; cleanup best-effort
+    }
+}
+
 /**
  * Retrieves the latest solves for the current user.
  *
