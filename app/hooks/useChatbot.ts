@@ -1,6 +1,5 @@
 'use client';
 
-import { clearConversation } from '@/application/use-cases/send-chat-message.use-case';
 import { clearConversationAction, sendMessageAction } from '../actions';
 import { ChatHistory, ChatMessage } from '@/components/chatbot-window';
 import { useState, useEffect } from 'react';

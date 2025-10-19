@@ -1,10 +1,8 @@
 import {
-    ConversationMessage,
     ISendChatMessageUseCase,
     SendMessageResult,
 } from '@/application/use-cases/send-chat-message.use-case';
 import { IAuthenticationService } from '@/application/services/auth.service.interface';
-import { UnauthenticatedError } from '@/entities/errors/auth';
 
 /**
  * The type alias representing the structure of the SendChatMessageController factory.
