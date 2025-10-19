@@ -159,7 +159,7 @@ export default function SolvingPage() {
                 </div>
 
                 {/* Draggable Divider */}
-                
+
                 {isChatOpen && (
                     <>
                         {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */}
