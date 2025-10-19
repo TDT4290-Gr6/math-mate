@@ -1,13 +1,13 @@
 'use client';
 
 import { UserRound, Moon, X, LoaderCircle } from 'lucide-react';
+import { useTrackedLogger } from '../logger/LoggerProvider';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Switch } from '@/components/ui/switch';
 import { signOut } from 'next-auth/react';
 import { useTheme } from 'next-themes';
 import { getUserId } from '@/actions';
 import { Button } from './button';
-import { useTrackedLogger } from '../logger/LoggerProvider';
 
 interface SidebarMenuProps {
     onClose: () => void;
@@ -43,13 +43,16 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
 
     const tracked = useTrackedLogger();
 
-    function debounce<Args extends unknown[]>(fn: (...args: Args) => void, delay = 300): (...args: Args) => void {
+    function debounce<Args extends unknown[]>(
+        fn: (...args: Args) => void,
+        delay = 300,
+    ): (...args: Args) => void {
         let timeoutId: ReturnType<typeof setTimeout>;
         return (...args: Args) => {
             clearTimeout(timeoutId);
             timeoutId = setTimeout(() => fn(...args), delay);
         };
-    }   
+    }
 
     // Debounced logging function (memoized to avoid recreation)
     const debouncedLogTheme = useMemo(
@@ -157,11 +160,11 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                         className="bg-sidebar-primary hover:bg-sidebar-accent flex cursor-pointer items-center gap-2 rounded-4xl px-4 py-2"
                         onClick={() => {
                             signOut();
-                             void tracked.logEvent({
+                            void tracked.logEvent({
                                 actionName: 'sign_out',
                                 payload: {},
                             });
-                            sessionStorage.removeItem('signInLogged')
+                            sessionStorage.removeItem('signInLogged');
                             onClose();
                         }}
                     >
