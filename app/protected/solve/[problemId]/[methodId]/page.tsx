@@ -188,7 +188,7 @@ export default function SolvingPage() {
                                 }
                             }}
                             onPointerDown={handlePointerDown}
-                            className="bg-border hover:bg-primary focus-visible:bg-primary focus-visible:outline-none absolute top-0 bottom-0 z-20 w-[4px] cursor-col-resize transition-colors"
+                            className="bg-border hover:bg-primary focus-visible:bg-primary absolute top-0 bottom-0 z-20 w-[4px] cursor-col-resize transition-colors focus-visible:outline-none"
                             style={{ left: `${dividerPosition}%` }}
                         />
                     </>
