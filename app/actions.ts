@@ -83,10 +83,11 @@ export async function getUserId() {
  *
  * This server-side action performs the following steps:
  * 1. Retrieves the `ISendChatMessageController` instance from the dependency injection container.
- * 2. Calls the controller with the provided message string.
+ * 2. Calls the controller with the provided context and message string.
  * 3. Returns the assistant's response.
  * 4. Catches and logs any errors that occur during the process, then returns a failure result to the caller.
  *
+ * @param {string} context - The problem context (e.g., problem statement, method, steps, current step) to provide to the chatbot.
  * @param {string} message - The user's message to be sent to the chat service.
  * @returns {Promise<SendMessageResult>} - A success object with the assistant's message, or a failure object with an error message.
  *
