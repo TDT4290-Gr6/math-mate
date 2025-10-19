@@ -133,6 +133,7 @@ export async function addSolvedProblem(
     startedSolvingAt: Date,
     finishedSolvingAt?: Date,
     feedback?: number,
+    wasCorrect?: boolean,
 ) {
     try {
         const addSolvedProblemController = getInjection(
@@ -144,6 +145,7 @@ export async function addSolvedProblem(
             startedSolvingAt,
             finishedSolvingAt,
             feedback,
+            wasCorrect,
         });
     } catch (error) {
         console.error('Failed to add solved problem:', error);

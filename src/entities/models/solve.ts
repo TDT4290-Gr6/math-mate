@@ -11,6 +11,7 @@ export const solveSchema = z.object({
     stepsUsed: z.int().min(0),
     finishedSolvingAt: z.date().optional(),
     feedback: z.int().min(1).max(5).optional(),
+    wasCorrect: z.boolean().optional(),
     problemTitle: problemSchema.shape.title.optional(),
 });
 
@@ -24,6 +25,7 @@ export const insertSolveSchema = solveSchema.pick({
     finishedSolvingAt: true,
     stepsUsed: true,
     feedback: true,
+    wasCorrect: true,
 });
 
 export type SolveInsert = z.infer<typeof insertSolveSchema>;

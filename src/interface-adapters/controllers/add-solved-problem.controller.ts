@@ -17,6 +17,7 @@ const inputSchema = insertSolveSchema.pick({
     stepsUsed: true,
     finishedSolvingAt: true,
     feedback: true,
+    wasCorrect: true,
 });
 
 /**
