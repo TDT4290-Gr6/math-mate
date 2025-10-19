@@ -18,6 +18,26 @@ export class MockSolvesRepository implements ISolvesRepository {
         return this._solves.filter((s) => s.userId === userId);
     }
 
+    async getLatestByUserId(userId: number): Promise<Solve[]> {
+        const userSolves = this._solves.filter(
+            (s) => s.userId === userId && s.finishedSolvingAt,
+        );
+        userSolves.sort((a, b) => {
+            return (
+                // We know finishedSolvingAt is defined due to the filter
+                b.finishedSolvingAt!.getTime() - a.finishedSolvingAt!.getTime()
+            );
+        });
+
+        // Return max 1 of each problem
+        const uniqueSolvesMap = new Map<number, Solve>();
+        for (const solve of userSolves)
+            if (!uniqueSolvesMap.has(solve.problemId))
+                uniqueSolvesMap.set(solve.problemId, solve);
+
+        return Array.from(uniqueSolvesMap.values());
+    }
+
     async getByProblemId(problemId: number): Promise<Solve[]> {
         return this._solves.filter((s) => s.problemId === problemId);
     }

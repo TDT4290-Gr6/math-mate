@@ -32,6 +32,36 @@ export class SolvesRepository implements ISolvesRepository {
             );
         }
     }
+    async getLatestByUserId(userId: number): Promise<Solve[]> {
+        try {
+            const solves = await prisma.solves.findMany({
+                // Only retrieve solves that have been finished
+                where: { userId: userId, finishedSolvingAt: { not: null } },
+                // Latest finished problems first
+                orderBy: { finishedSolvingAt: 'desc' },
+                // Distinct by problemId to get only one solve per problem
+                distinct: ['problemId'],
+                // Include the title of the problem
+                include: { problem: { select: { title: true } } },
+            });
+            const solvesWithTitle = solves.map((solve) => {
+                return {
+                    ...solve,
+                    problemTitle: solve.problem?.title,
+                } as Solve;
+            });
+
+            return solvesWithTitle;
+        } catch (error) {
+            throw new DatabaseOperationError(
+                'Failed to get latest solves by user ID',
+                {
+                    cause: error,
+                },
+            );
+        }
+    }
+
     async getByProblemId(problemId: number): Promise<Solve[]> {
         try {
             const solves = await prisma.solves.findMany({

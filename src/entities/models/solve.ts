@@ -11,6 +11,7 @@ export const solveSchema = z.object({
     stepsUsed: z.int().min(0),
     finishedSolvingAt: z.date().optional(),
     feedback: z.int().min(1).max(5).optional(),
+    problemTitle: problemSchema.shape.title.optional(),
 });
 
 export type Solve = z.infer<typeof solveSchema>;
