@@ -141,6 +141,11 @@ export default function SolvingPage() {
                                 onSendMessage={sendMessage}
                                 isLoading={isLoading}
                                 error={error ?? undefined}
+                                problemDescription={problem?.problem ?? ''}
+                                methodTitle={method?.title}
+                                methodDescription={method?.description}
+                                steps={method?.steps}
+                                currentStep={currentStep}
                             />
                         </motion.div>
                     )}

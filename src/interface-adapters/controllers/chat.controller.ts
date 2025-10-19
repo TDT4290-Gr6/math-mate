@@ -1,10 +1,8 @@
 import {
-    ConversationMessage,
     ISendChatMessageUseCase,
     SendMessageResult,
 } from '@/application/use-cases/send-chat-message.use-case';
 import { IAuthenticationService } from '@/application/services/auth.service.interface';
-import { UnauthenticatedError } from '@/entities/errors/auth';
 
 /**
  * The type alias representing the structure of the SendChatMessageController factory.
@@ -32,7 +30,10 @@ export const sendChatMessageController = (
     authService: IAuthenticationService,
     sendChatUseCase: ISendChatMessageUseCase,
 ) => {
-    return async (message: string): Promise<SendMessageResult> => {
+    return async (
+        context: string,
+        message: string,
+    ): Promise<SendMessageResult> => {
         const isAuthenticated = await authService.isAuthenticated();
         if (!isAuthenticated) {
             return { success: false, error: 'User must be logged in.' };
@@ -53,6 +54,9 @@ export const sendChatMessageController = (
                 error: 'Message exceeds maximum length of 2000 characters.',
             };
         }
-        return sendChatUseCase(userId!, message);
+
+        const sanitizedContext =
+            typeof context === 'string' ? context.trim().slice(0, 4000) : '';
+        return sendChatUseCase(userId!, sanitizedContext, message.trim());
     };
 };

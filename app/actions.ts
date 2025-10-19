@@ -1,6 +1,9 @@
 'use server';
 
-import { SendMessageResult } from '@/application/use-cases/send-chat-message.use-case';
+import {
+    clearConversation,
+    SendMessageResult,
+} from '@/application/use-cases/send-chat-message.use-case';
 import type { Problem } from '@/entities/models/problem';
 import { getInjection } from '@/di/container';
 
@@ -80,22 +83,24 @@ export async function getUserId() {
  *
  * This server-side action performs the following steps:
  * 1. Retrieves the `ISendChatMessageController` instance from the dependency injection container.
- * 2. Calls the controller with the provided message string.
+ * 2. Calls the controller with the provided context and message string.
  * 3. Returns the assistant's response.
  * 4. Catches and logs any errors that occur during the process, then returns a failure result to the caller.
  *
+ * @param {string} context - The problem context (e.g., problem statement, method, steps, current step) to provide to the chatbot.
  * @param {string} message - The user's message to be sent to the chat service.
  * @returns {Promise<SendMessageResult>} - A success object with the assistant's message, or a failure object with an error message.
  *
  * @throws {Error} Throws a generic error if the chat controller fails or the message cannot be sent.
  */
 export async function sendMessageAction(
+    context: string,
     message: string,
 ): Promise<SendMessageResult> {
     try {
         const chatController = getInjection('ISendChatMessageController');
 
-        const reply = await chatController(message);
+        const reply = await chatController(context, message);
         return reply;
     } catch (err: unknown) {
         if (err instanceof Error) {
@@ -111,6 +116,28 @@ export async function sendMessageAction(
                 error: 'Failed to send message. Please try again.',
             };
         }
+    }
+}
+
+/**
+ * Clears the current user's conversation history.
+ *
+ * This function retrieves the current authenticated user via the injected `IGetUserController`,
+ * then calls `clearConversation` with the user's ID to remove their conversation data.
+ * Any errors encountered during this process are caught and logged to the console.
+ *
+ * @async
+ * @function clearConversationAction
+ * @returns {Promise<void>} A promise that resolves when the conversation has been cleared.
+ * @throws Will log an error to the console if retrieving the user or clearing the conversation fails.
+ */
+export async function clearConversationAction(): Promise<void> {
+    try {
+        const getUserController = getInjection('IGetUserController');
+        const user = await getUserController();
+        clearConversation(user.id);
+    } catch (error) {
+        console.error('Failed to clear conversation:', error);
     }
 }
 
