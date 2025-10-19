@@ -1,11 +1,11 @@
 'use client';
 
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useFetchProblem } from 'app/hooks/useFetchProblem';
 import ChatbotWindow from '@/components/chatbot-window';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProblemCard from '@/components/ui/problem-card';
 import AnswerPopup from '@/components/answer-popup';
-import { useCallback, useEffect, useRef, useState } from 'react';
 import ChatToggle from '@/components/chat-toggle';
 import { useChatbot } from 'app/hooks/useChatbot';
 import { Button } from '@/components/ui/button';
@@ -42,11 +42,14 @@ export default function SolvingPage() {
     const totalSteps = method?.steps?.length ?? 0;
 
     // Handle drag events (Pointer Events for mouse + touch)
-   const handlePointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-        (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
-        document.body.style.userSelect = 'none';
-        isDragging.current = true;
-    }, []);
+    const handlePointerDown = useCallback(
+        (e: React.PointerEvent<HTMLDivElement>) => {
+            (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
+            document.body.style.userSelect = 'none';
+            isDragging.current = true;
+        },
+        [],
+    );
 
     const handlePointerUp = useCallback(() => {
         isDragging.current = false;
@@ -56,11 +59,11 @@ export default function SolvingPage() {
     const handlePointerMove = useCallback((e: PointerEvent) => {
         if (!isDragging.current || !containerRef.current) return;
         requestAnimationFrame(() => {
-        if (!containerRef.current) return;
-        const rect = containerRef.current.getBoundingClientRect();
-        const x = e.clientX;
-        const pct = ((x - rect.left) / rect.width) * 100;
-        setDividerPosition(Math.min(70, Math.max(30, pct)));
+            if (!containerRef.current) return;
+            const rect = containerRef.current.getBoundingClientRect();
+            const x = e.clientX;
+            const pct = ((x - rect.left) / rect.width) * 100;
+            setDividerPosition(Math.min(70, Math.max(30, pct)));
         });
     }, []);
 
