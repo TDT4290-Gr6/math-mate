@@ -37,7 +37,7 @@ export class ChatService implements IChatService {
                 model: 'gpt-4o',
                 messages: openAIMessages,
                 temperature: 0.7, // Balanced creativity for tutoring explanations
-                max_tokens: 500,  // Enough space for step-by-step reasoning
+                max_tokens: 500, // Enough space for step-by-step reasoning
             });
 
             const content =
