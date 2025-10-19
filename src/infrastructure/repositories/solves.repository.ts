@@ -1,6 +1,7 @@
 import { ISolvesRepository } from '@/application/repositories/solves.repository.interface';
 import { insertSolveSchema, Solve, SolveInsert } from '@/entities/models/solve';
 import { DatabaseOperationError } from '@/entities/errors/common';
+import { ca, tr } from 'zod/v4/locales';
 import { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 
@@ -106,6 +107,10 @@ export class SolvesRepository implements ISolvesRepository {
             const newSolve = await prisma.solves.create({
                 data: { ...parsedSolve, attempts: attemptsUsed + 1 },
             });
+
+            // Recalculate user score after creating a new solve
+            this.updateUserScore(solve.userId);
+
             return newSolve as Solve;
         } catch (error) {
             throw new DatabaseOperationError('Failed to create solve', {
@@ -134,6 +139,38 @@ export class SolvesRepository implements ISolvesRepository {
             return deletedSolve as Solve;
         } catch (error) {
             throw new DatabaseOperationError('Failed to delete solve', {
+                cause: error,
+            });
+        }
+    }
+
+    private async updateUserScore(userId: number): Promise<void> {
+        const score = await this.calculateScore(userId);
+        await prisma.user.update({
+            where: { id: userId },
+            data: { score: score },
+        });
+    }
+
+    private async calculateScore(userId: number): Promise<number> {
+        try {
+            const solvesWithProblem = await prisma.solves.findMany({
+                where: { userId, wasCorrect: true },
+                distinct: ['problemId'],
+                include: { problem: { select: { level: true } } },
+            });
+
+            if (solvesWithProblem.length === 0) return 0;
+
+            const avgLevel =
+                solvesWithProblem.reduce(
+                    (sum, s) => sum + (s.problem?.level ?? 0),
+                    0,
+                ) / solvesWithProblem.length;
+
+            return avgLevel;
+        } catch (error) {
+            throw new DatabaseOperationError('Failed to calculate user score', {
                 cause: error,
             });
         }
