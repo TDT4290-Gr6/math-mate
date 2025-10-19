@@ -13,7 +13,6 @@ import Header from '@/components/ui/header';
 import { useParams } from 'next/navigation';
 import Steps from '@/components/steps';
 import { cn } from '@/lib/utils';
-
 /**
  * SolvingPage
  *
@@ -202,6 +201,11 @@ export default function SolvingPage() {
                                 onSendMessage={sendMessage}
                                 isLoading={isLoading}
                                 error={error ?? undefined}
+                                problemDescription={problem?.problem ?? ''}
+                                methodTitle={method?.title}
+                                methodDescription={method?.description}
+                                steps={method?.steps}
+                                currentStep={currentStep}
                             />
                         </motion.div>
                     )}
