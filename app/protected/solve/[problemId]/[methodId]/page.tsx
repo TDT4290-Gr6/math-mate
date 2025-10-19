@@ -1,11 +1,11 @@
 'use client';
 
 import { useFetchProblem } from 'app/hooks/useFetchProblem';
-import { useEffect, useRef, useState } from 'react';
 import ChatbotWindow from '@/components/chatbot-window';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProblemCard from '@/components/ui/problem-card';
 import AnswerPopup from '@/components/answer-popup';
+import { useEffect, useRef, useState } from 'react';
 import ChatToggle from '@/components/chat-toggle';
 import { useChatbot } from 'app/hooks/useChatbot';
 import { Button } from '@/components/ui/button';
@@ -163,8 +163,10 @@ export default function SolvingPage() {
                         aria-valuenow={dividerPosition}
                         tabIndex={0}
                         onKeyDown={(e) => {
-                            if (e.key === 'ArrowLeft') setDividerPosition((v) => Math.max(30, v - 2));
-                            if (e.key === 'ArrowRight') setDividerPosition((v) => Math.min(70, v + 2));
+                            if (e.key === 'ArrowLeft')
+                                setDividerPosition((v) => Math.max(30, v - 2));
+                            if (e.key === 'ArrowRight')
+                                setDividerPosition((v) => Math.min(70, v + 2));
                         }}
                         className="bg-border hover:bg-primary absolute top-0 bottom-0 z-20 w-[4px] cursor-col-resize transition-colors"
                         style={{ left: `${dividerPosition}%` }}
