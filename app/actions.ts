@@ -113,3 +113,21 @@ export async function sendMessageAction(
         }
     }
 }
+
+/**
+ * Retrieves the latest solves for the current user.
+ *
+ * @returns A promise that resolves with a list of the latest solves for the user.
+ */
+export async function getLatestSolves() {
+    try {
+        const getLatestSolvesController = getInjection(
+            'IGetLatestSolvesController',
+        );
+        const solves = await getLatestSolvesController();
+        return solves;
+    } catch (error) {
+        console.error('Failed to get latest solves:', error);
+        throw error;
+    }
+}
