@@ -1,7 +1,7 @@
 'use client';
 
 import { useFetchProblem } from 'app/hooks/useFetchProblem';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ChatbotWindow from '@/components/chatbot-window';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProblemCard from '@/components/ui/problem-card';
@@ -42,29 +42,32 @@ export default function SolvingPage() {
     const method = problem?.methods.find((m) => m.id === methodId);
     const totalSteps = method?.steps?.length ?? 0;
 
-    // Handle drag events
-    const handleMouseDown = () => {
+    // Handle drag events (Pointer Events for mouse + touch)
+    const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+        (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
+        document.body.style.userSelect = 'none';
         isDragging.current = true;
     };
 
-    const handleMouseUp = () => {
+    const handlePointerUp = () => {
         isDragging.current = false;
+        document.body.style.userSelect = '';
     };
 
-    const handleMouseMove = (e: MouseEvent) => {
+    const handlePointerMove = (e: PointerEvent) => {
         if (!isDragging.current || !containerRef.current) return;
         const rect = containerRef.current.getBoundingClientRect();
-        const newPosition = ((e.clientX - rect.left) / rect.width) * 100;
-        // Clamp between 30% and 70%
-        setDividerPosition(Math.min(70, Math.max(30, newPosition)));
+        const x = e.clientX ?? 0;
+        const pct = ((x - rect.left) / rect.width) * 100;
+        setDividerPosition(Math.min(70, Math.max(30, pct)));
     };
 
     useEffect(() => {
-        window.addEventListener('mousemove', handleMouseMove);
-        window.addEventListener('mouseup', handleMouseUp);
+        window.addEventListener('pointermove', handlePointerMove);
+        window.addEventListener('pointerup', handlePointerUp);
         return () => {
-            window.removeEventListener('mousemove', handleMouseMove);
-            window.removeEventListener('mouseup', handleMouseUp);
+            window.removeEventListener('pointermove', handlePointerMove);
+            window.removeEventListener('pointerup', handlePointerUp);
         };
     }, []);
 
@@ -153,9 +156,19 @@ export default function SolvingPage() {
                 {/* Draggable Divider */}
                 {isChatOpen && (
                     <div
+                        role="separator"
+                        aria-orientation="vertical"
+                        aria-valuemin={30}
+                        aria-valuemax={70}
+                        aria-valuenow={dividerPosition}
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                            if (e.key === 'ArrowLeft') setDividerPosition((v) => Math.max(30, v - 2));
+                            if (e.key === 'ArrowRight') setDividerPosition((v) => Math.min(70, v + 2));
+                        }}
                         className="bg-border hover:bg-primary absolute top-0 bottom-0 z-20 w-[4px] cursor-col-resize transition-colors"
                         style={{ left: `${dividerPosition}%` }}
-                        onMouseDown={handleMouseDown}
+                        onPointerDown={handlePointerDown}
                     />
                 )}
 
