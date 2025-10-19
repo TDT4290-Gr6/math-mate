@@ -8,6 +8,7 @@ import {
     DialogTitle,
 } from './ui/dialog';
 import { LaTeXFormattedText } from './ui/latex-formatted-text';
+import { addSolvedProblem } from '@/actions';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { Button } from './ui/button';
@@ -20,12 +21,18 @@ import Title from './ui/title';
  * @param isOpen: Controls whether the dialog is visible. The parent typically
  *         manages this boolean so it can open/close the popup.
  * @param answer: The answer text to reveal inside the popup.
+ * @param problemId: The ID of the problem being solved, used when recording the solution.
+ * @param startedSolvingAt: Timestamp when the user started solving the problem.
+ * @param stepsUsed: Number of steps the user took to solve the problem.
  * @param onClose: Optional callback invoked when the dialog is requested to close
  *          (either by user action or when the component finishes its flow).
  */
 interface AnswerPopupProps {
     isOpen: boolean;
     answer: string;
+    problemId: number;
+    startedSolvingAt: Date;
+    stepsUsed: number;
     onClose?: () => void;
 }
 
@@ -34,6 +41,9 @@ type Step = 'reveal' | 'confirm' | 'difficulty' | 'done';
 export default function AnswerPopup({
     isOpen,
     answer,
+    problemId,
+    startedSolvingAt,
+    stepsUsed,
     onClose,
 }: AnswerPopupProps) {
     /*
@@ -53,22 +63,28 @@ export default function AnswerPopup({
              through `isOpen`/`onClose` so it can reopen the dialog later.
              */
     const [step, setStep] = useState<Step>('reveal');
-    const [selectedDifficulty, setSelectedDifficulty] = useState<number | null>(
-        null,
-    );
+    const [selectedDifficulty, setSelectedDifficulty] = useState<
+        number | undefined
+    >(undefined);
     const [wasCorrect, setWasCorrect] = useState(false);
+    const [finishedSolvingAt, setFinishedSolvingAt] = useState<
+        Date | undefined
+    >(undefined);
+
     const router = useRouter();
 
     useEffect(() => {
         if (isOpen) {
             setStep('reveal');
-            setSelectedDifficulty(null);
+            setSelectedDifficulty(undefined);
             setWasCorrect(false);
         }
     }, [isOpen]);
 
     function handleReveal() {
         if (step === 'reveal') setStep('confirm');
+        // Treat revealing the answer as finishing the problem attempt
+        setFinishedSolvingAt(new Date());
     }
 
     function handleConfirm(correct: boolean) {
@@ -80,9 +96,20 @@ export default function AnswerPopup({
         setSelectedDifficulty(level);
     }
 
-    function handleFinalAction(action: 'next' | 'retry') {
-        // TODO: handle difficulty rating answer and decide whether a user can re-evaluate a problem
-        console.log({ wasCorrect, selectedDifficulty, action });
+    async function handleFinalAction(action: 'next' | 'retry') {
+        try {
+            await addSolvedProblem(
+                problemId,
+                stepsUsed,
+                startedSolvingAt,
+                finishedSolvingAt,
+                selectedDifficulty,
+                wasCorrect,
+            );
+        } catch (error) {
+            console.error('Failed to record solved problem:', error);
+        }
+
         setStep('done');
         if (action === 'next') {
             router.push('/protected/problem');
@@ -167,7 +194,7 @@ export default function AnswerPopup({
                                             {[1, 2, 3, 4, 5].map((n) => {
                                                 const isActive =
                                                     selectedDifficulty !==
-                                                        null &&
+                                                        undefined &&
                                                     n <= selectedDifficulty;
                                                 return (
                                                     <Button
@@ -231,7 +258,7 @@ export default function AnswerPopup({
                                             variant="default"
                                             className="w-40"
                                             disabled={
-                                                selectedDifficulty === null
+                                                selectedDifficulty === undefined
                                             }
                                             onClick={() =>
                                                 handleFinalAction('retry')
@@ -243,7 +270,7 @@ export default function AnswerPopup({
                                             variant="secondary"
                                             className="w-40"
                                             disabled={
-                                                selectedDifficulty === null
+                                                selectedDifficulty === undefined
                                             }
                                             onClick={() =>
                                                 handleFinalAction('next')

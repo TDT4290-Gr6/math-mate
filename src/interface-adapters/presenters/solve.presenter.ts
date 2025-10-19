@@ -10,5 +10,6 @@ export function solvePresenter(solve: Solve) {
         stepsUsed: solve.stepsUsed,
         finishedSolvingAt: solve.finishedSolvingAt,
         feedback: solve.feedback,
+        wasCorrect: solve.wasCorrect,
     };
 }
