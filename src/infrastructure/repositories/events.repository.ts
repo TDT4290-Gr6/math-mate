@@ -1,8 +1,7 @@
 import type {
-    IEventsRepository,
-    InsertEvent,
+    IEventsRepository
 } from '@/application/repositories/events.repository.interface';
-import type { Event } from '@/entities/models/event';
+import type { Event, InsertEvent} from '@/entities/models/event';
 import { prisma } from '@/lib/prisma';
 
 export class EventsRepository implements IEventsRepository {
@@ -19,7 +18,7 @@ export class EventsRepository implements IEventsRepository {
                 payload: event.payload,
             },
         });
-
+        
         return {
             id: created.id,
             userId: created.userId,

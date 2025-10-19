@@ -76,12 +76,12 @@ export default function SolveYourself() {
     }, [isChatOpen]);
 
     const handleStepByStep = () => {
-        router.push(`/protected/methods/${problem?.id}`);
         void tracked.logEvent({
             actionName: 'use_step_by_step',
             problemId: problemId,
             payload: {},
         });
+        router.push(`/protected/methods/${problem?.id}`);
     };
 
     // Open chat and log

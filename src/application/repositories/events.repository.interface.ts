@@ -1,7 +1,4 @@
-import type { Event, insertEventSchema } from '@/entities/models/event';
-import { z } from 'zod';
-
-export type InsertEvent = z.infer<typeof insertEventSchema>;
+import type { Event, InsertEvent } from '@/entities/models/event';
 
 export interface IEventsRepository {
     create(event: InsertEvent): Promise<Event>;

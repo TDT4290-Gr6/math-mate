@@ -29,7 +29,7 @@ export default function ProblemPage() {
         setIsSubjectSelectOpen(true);
         void tracked.logEvent({
             actionName: 'open_subject_popup',
-            problemId: currentProblem.id,
+            problemId: currentProblem?.id,
             payload: {},
         });
     };
@@ -37,7 +37,7 @@ export default function ProblemPage() {
         setIsSubjectSelectOpen(false);
         void tracked.logEvent({
             actionName: 'close_subject_popup',
-            problemId: currentProblem.id,
+            problemId: currentProblem?.id,
             payload: {},
         });
     };
@@ -127,12 +127,12 @@ export default function ProblemPage() {
     };
 
     const handleStartSolving = () => {
-        router.push(`/protected/methods/${currentProblem.id}`);
         void tracked.logEvent({
             actionName: 'start_solving',
             problemId: currentProblem.id,
             payload: {},
         });
+        router.push(`/protected/methods/${currentProblem.id}`);
     };
 
     const fetchNewProblems = () => {

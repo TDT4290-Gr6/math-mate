@@ -21,22 +21,22 @@ export default function MethodPage() {
     const tracked = useTrackedLogger();
 
     const handleSolve = () => {
-        router.push(`/protected/solve-yourself/${problemId}`);
         void tracked.logEvent({
             actionName: 'solve_yourself',
             problemId: problemId,
             payload: {},
         });
+        router.push(`/protected/solve-yourself/${problemId}`);
     };
 
     const handleChooseMethod = (methodId: number) => {
-        router.push(`/protected/solve/${problemId}/${methodId}`);
         void tracked.logEvent({
             actionName: 'choose_method',
             problemId: problemId,
             methodId: methodId,
             payload: {},
         });
+        router.push(`/protected/solve/${problemId}/${methodId}`);
     };
 
     return (

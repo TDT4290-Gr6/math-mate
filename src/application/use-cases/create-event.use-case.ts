@@ -1,13 +1,12 @@
 import type {
     IEventsRepository,
-    InsertEvent,
 } from '@/application/repositories/events.repository.interface';
 import { insertEventSchema } from '@/entities/models/event';
-import type { Event } from '@/entities/models/event';
+import type { Event, InsertEvent } from '@/entities/models/event';
 
-export type ILogEventUseCase = ReturnType<typeof LogEventUseCase>;
+export type ICreateEventUseCase = ReturnType<typeof CreateEventUseCase>;
 
-export const LogEventUseCase = (eventRepository: IEventsRepository) => ({
+export const CreateEventUseCase = (eventRepository: IEventsRepository) => ({
     async execute(
         input: InsertEvent | Omit<InsertEvent, 'loggedAt'>,
     ): Promise<Event> {

@@ -1,23 +1,50 @@
 import { getInjection } from '@/di/container';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth'; // adjust path to your NextAuth options
 import { NextResponse } from 'next/server';
 
 interface IEventController {
     handle: (
         body: unknown,
+        ctx?: { userId?: number },
     ) => Promise<{ body: unknown; status: number } | unknown>;
 }
 
+/**
+ * POST /api/events
+ * 
+ * Logs a user event (e.g. interactions or analytics).
+ * - Requires an authenticated NextAuth session.
+ * - Injects `userId` into the controller context.
+ * - Delegates to `ICreateEventController` for validation and persistence.
+ */
 export async function POST(request: Request) {
     const body = await request.json().catch(() => null);
 
-    try {
-        const createEventController = getInjection('ICreateEventController');
+    if (typeof body === 'undefined') {
+        return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+    }
 
+    try {
+        // Get authenticated session
+        const session = await getServerSession(authOptions);
+
+        if (!session || !session.user?.id) {
+            return NextResponse.json(
+                { error: 'Unauthenticated: missing user session' },
+                { status: 401 },
+            );
+        }
+
+        const userId = Number(session.user.id);
+
+        // Get controller from DI
+        const createEventController = getInjection('ICreateEventController');
         let result: { body: unknown; status: number };
 
-        // Controller may be a function (HOF) or an object with a .handle method depending on DI wiring
+        // Function-based controller
         if (typeof createEventController === 'function') {
-            const controllerResult = await createEventController(body);
+            const controllerResult = await createEventController(body, { userId });
             if (
                 controllerResult &&
                 typeof controllerResult === 'object' &&
@@ -28,14 +55,16 @@ export async function POST(request: Request) {
             } else {
                 result = { body: controllerResult, status: 200 };
             }
-        } else if (
+        }
+        // Object-based controller
+        else if (
             createEventController &&
-            typeof (createEventController as IEventController).handle ===
-                'function'
+            typeof (createEventController as IEventController).handle === 'function'
         ) {
             const controllerResult = await (
                 createEventController as IEventController
-            ).handle(body);
+            ).handle(body, { userId });
+
             if (
                 controllerResult &&
                 typeof controllerResult === 'object' &&
@@ -52,8 +81,15 @@ export async function POST(request: Request) {
 
         return NextResponse.json(result.body, { status: result.status });
     } catch (err: unknown) {
-        const message = err instanceof Error ? err.message : 'Unknown error';
+        const e = err as { name?: string; message?: string; status?: number };
+        const status =
+            typeof e?.status === 'number'
+                ? e.status
+                : e?.name === 'InputParseError'
+                ? 400
+                : 500;
+        const message = e?.message ?? 'Unknown error';
         console.error('POST /api/events error:', err);
-        return NextResponse.json({ error: message }, { status: 500 });
+        return NextResponse.json({ error: message }, { status });
     }
 }

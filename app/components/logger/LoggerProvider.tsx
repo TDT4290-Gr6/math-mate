@@ -57,7 +57,7 @@ export function LoggerProvider({ children }: { children: React.ReactNode }) {
                 ...(typeof input.payload === 'object'
                     ? input.payload
                     : { value: input.payload }),
-                path: pathname,
+                page: pathname,
             };
 
             const body = {

@@ -17,13 +17,6 @@ const createPrivacyMessage = (): ChatMessage => ({
         'bg-card border border-[var(--accent)] text-[var(--accent)] mx-5',
 });
 
-// Generate or retrieve ephemeral per-chat session ID
-function createNewChatSession(): string {
-    const id = `${Date.now()}${Math.floor(Math.random() * 1e6)}`;
-    sessionStorage.setItem('chatSessionId', id);
-    return id;
-}
-
 /**
  * useChatbot
  *
@@ -98,9 +91,10 @@ export function useChatbot() {
         }));
 
         // Log user message
+        const safeMsg = message.slice(0, 500).replace(/\b[\w.+-]+@[\w-]+\.[\w.-]+\b/g, '[redacted]'); // cap length and strip emails
         void logger.logEvent({
             actionName: 'chat_message_sent',
-            payload: { chatSessionId, message },
+            payload: { chatSessionId, message: safeMsg },
         });
 
         setIsLoading(true);

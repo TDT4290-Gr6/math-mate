@@ -19,23 +19,26 @@ const LogEventDTO = z.object({
 export type ICreateEventController = ReturnType<typeof createEventController>;
 
 export const createEventController =
-    (logEventUseCase: ILogEventUseCase) => async (raw: LoggerLike) => {
+    (logEventUseCase: ILogEventUseCase) =>  
+    async (raw: unknown, ctx?: { userId?: number }) => { 
         return withRequestLogger(async ({ log }) => {
             const l = log as LoggerLike;
-            // Validate input med safeParse (try-catch alternativt)
-            const { data, error } = LogEventDTO.safeParse(raw);
-
-            if (error) {
-                l.warn(
-                    { raw, err: error },
-                    'createEventController: invalid input',
-                );
-                throw new InputParseError('Invalid input data', {
-                    cause: error,
-                });
+            // Validate input  
+            const parsed = LogEventDTO.safeParse(raw);  
+            if (!parsed.success) {  
+                l.warn({ raw, err: parsed.error }, 'createEventController: invalid input');  
+                throw new InputParseError('Invalid input data', { cause: parsed.error });  
+            }  
+            const data = parsed.data;  
+            // Always trust authenticated server session userId
+            if (!ctx?.userId) {
+                l.warn('createEventController: missing session user');
+                throw new InputParseError('Unauthenticated: missing user session');
             }
+            const userId = ctx.userId;
+ 
 
-            // Sørg for at payload er string som forventet
+            // Ensure that payload is string
             const payloadString =
                 typeof data.payload === 'string'
                     ? data.payload
@@ -43,7 +46,7 @@ export const createEventController =
 
             // Verify the user exists to avoid a DB foreign-key error later
             const user = await prisma.user.findUnique({
-                where: { id: data.userId },
+                where: { id: userId },
             });
             if (!user) {
                 l.warn(
@@ -54,15 +57,15 @@ export const createEventController =
             }
 
             l.info(
-                { userId: data.userId, action: data.actionName },
+                { userId, action: data.actionName },
                 'createEventController: request validated',
             );
 
-            // Kall use case med renset data
+            // Call use case with cleaned data
             try {
                 const out = await logEventUseCase.execute(
                     {
-                        userId: data.userId,
+                        userId,
                         sessionId: data.sessionId,
                         actionName: data.actionName,
                         loggedAt: data.loggedAt,
@@ -76,7 +79,7 @@ export const createEventController =
 
                 l.info({ id: out.id }, 'createEventController: event created');
 
-                // Returner formatert respons (kan justeres etter behov)
+                // Return formated response
                 return {
                     status: 201,
                     body: { id: out.id, loggedAt: out.loggedAt },
