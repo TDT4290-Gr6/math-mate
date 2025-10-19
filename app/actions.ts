@@ -152,8 +152,6 @@ export async function addSolvedProblem(
 }
 
 /**
- * Adds a record for a solved problem.
- *
  * Retrieves the latest solves for the current user.
  *
  * @returns A promise that resolves with a list of the latest solves for the user.
