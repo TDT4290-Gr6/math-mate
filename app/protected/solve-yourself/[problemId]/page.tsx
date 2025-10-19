@@ -113,7 +113,9 @@ export default function SolveYourself() {
                     mathProblem={
                         <motion.div
                             layoutId="problem-card"
-                            onLayoutAnimationComplete={() => setIsChatOpen(true)}
+                            onLayoutAnimationComplete={() =>
+                                setIsChatOpen(true)
+                            }
                         >
                             <ProblemCard
                                 description={
@@ -175,7 +177,7 @@ export default function SolveYourself() {
                         />
                     </motion.div>
                 ) : (
-                    <ChatToggle onClick={openChat}/>
+                    <ChatToggle onClick={openChat} />
                 )}
             </AnimatePresence>
 

@@ -1,10 +1,10 @@
 'use client';
 
 import { Subject, SUBJECT_NAMES } from '../../constants/subjects';
+import { useTrackedLogger } from '../logger/LoggerProvider';
 import SubjectCheckbox from '../subject-checkbox';
 import { useLocalStorage } from 'react-use';
 import { useState, useEffect } from 'react';
-import { useTrackedLogger } from '../logger/LoggerProvider';
 
 interface SubjectSelectProps {
     size: 'small' | 'large';
@@ -59,7 +59,6 @@ export default function SubjectSelect({ size }: SubjectSelectProps) {
             },
         });
     }
-
 
     return (
         <>

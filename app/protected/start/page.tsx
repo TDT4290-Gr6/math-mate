@@ -7,26 +7,26 @@ import {
     CardFooter,
     CardHeader,
 } from '@/components/ui/card';
+import { useTrackedLogger } from '@/components/logger/LoggerProvider';
 import SubjectSelect from '@/components/ui/subject-select';
 import CountrySelect from '@/components/country-select';
 import { Button } from '@/components/ui/button';
 import WideLogo from '@/components/wide-logo';
 import Header from '@/components/ui/header';
-import { ChevronRight } from 'lucide-react';
-import { useTrackedLogger } from '@/components/logger/LoggerProvider';
 import { useRouter } from 'next/navigation';
+import { ChevronRight } from 'lucide-react';
 
 export default function StartPage() {
     const tracked = useTrackedLogger();
     const router = useRouter();
 
     const handleGetStarted = () => {
-        router.push("/protected/problem");
+        router.push('/protected/problem');
         void tracked.logEvent({
-            actionName: "start_practicing",
-            payload: {}
-        })
-    }
+            actionName: 'start_practicing',
+            payload: {},
+        });
+    };
     return (
         <>
             <Header
@@ -68,7 +68,7 @@ export default function StartPage() {
                             variant="secondary"
                             className="absolute right-20 -bottom-6 gap-2"
                             onClick={handleGetStarted}
-                        > 
+                        >
                             <span>
                                 Start Practicing{' '}
                                 <ChevronRight className="-mr-1" />

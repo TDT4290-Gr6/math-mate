@@ -1,11 +1,11 @@
 'use client';
+import { useTrackedLogger } from '../logger/LoggerProvider';
 import { useCallback, useEffect, useState } from 'react';
 import SidebarMenu from './sidebarMenu';
 import { Menu } from 'lucide-react';
 import WideLogo from '../wide-logo';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
-import { useTrackedLogger } from '../logger/LoggerProvider';
 
 /**
  * Header component with navigation and optional math problem display.
