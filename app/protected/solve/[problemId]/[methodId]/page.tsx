@@ -125,7 +125,7 @@ export default function SolvingPage() {
             >
                 <div
                     className={cn(
-                        'flex h-full flex-col items-center justify-between p-4 transition-all duration-0',
+                        'flex h-full flex-col items-center justify-between p-4',
                         chatClosed && 'mx-auto',
                     )}
                     style={{ width: `${isChatOpen ? dividerPosition : 60}%` }}
@@ -163,9 +163,10 @@ export default function SolvingPage() {
                 {isChatOpen && (
                     <>
                         {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */}
-                        <span
+                        <div
                             role="separator"
                             aria-orientation="vertical"
+                            aria-label="Resize chat window"
                             aria-valuemin={30}
                             aria-valuemax={70}
                             aria-valuenow={dividerPosition}
@@ -187,7 +188,7 @@ export default function SolvingPage() {
                                 }
                             }}
                             onPointerDown={handlePointerDown}
-                            className="bg-border hover:bg-primary absolute top-0 bottom-0 z-20 w-[4px] cursor-col-resize transition-colors"
+                            className="bg-border hover:bg-primary focus-visible:bg-primary focus-visible:outline-none absolute top-0 bottom-0 z-20 w-[4px] cursor-col-resize transition-colors"
                             style={{ left: `${dividerPosition}%` }}
                         />
                     </>
