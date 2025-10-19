@@ -4,7 +4,6 @@ import { solvePresenter } from '../presenters/solve.presenter';
 import { UnauthenticatedError } from '@/entities/errors/auth';
 import { insertSolveSchema } from '@/entities/models/solve';
 import { InputParseError } from '@/entities/errors/common';
-import { z } from 'zod';
 
 export type IAddSolvedProblemController = ReturnType<
     typeof addSolvedProblemController
@@ -39,9 +38,9 @@ export const addSolvedProblemController =
         authenticationService: IAuthenticationService,
         addSolvedProblemUseCase: IAddSolvedProblemUseCase,
     ) =>
-    async (input: z.infer<typeof inputSchema>) => {
-        const isAuthenticated = await authenticationService.isAuthenticated();
-        if (!isAuthenticated) {
+    async (input: unknown) => {
+        const userId = await authenticationService.getCurrentUserId();
+        if (!userId) {
             throw new UnauthenticatedError('User must be logged in.');
         }
 
@@ -49,11 +48,6 @@ export const addSolvedProblemController =
 
         if (!result.success) {
             throw new InputParseError('Invalid input', { cause: result.error });
-        }
-
-        const userId = await authenticationService.getCurrentUserId();
-        if (!userId) {
-            throw new UnauthenticatedError('User ID not found.');
         }
 
         const solve = await addSolvedProblemUseCase({ ...result.data, userId });
