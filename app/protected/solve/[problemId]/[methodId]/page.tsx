@@ -160,7 +160,7 @@ export default function SolvingPage() {
 
                 {/* Draggable Divider */}
                 {isChatOpen && (
-                    <div
+                    <span
                         role="separator"
                         aria-orientation="vertical"
                         aria-valuemin={30}
