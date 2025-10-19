@@ -26,7 +26,7 @@ export default function SolvingPage() {
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
     const [isAnswerPopupOpen, setIsAnswerPopupOpen] = useState(false);
     const [showToggle, setShowToggle] = useState(true);
-    const [startedSolvingAt] = useState(new Date());
+    const [startedSolvingAt, setStartedSolvingAt] = useState(new Date());
 
     const params = useParams<{ problemId: string; methodId: string }>();
     const problemId = Number(params.problemId);
@@ -53,6 +53,11 @@ export default function SolvingPage() {
         }
     };
 
+    const handlePopUpClose = () => {
+        setIsAnswerPopupOpen(false);
+        setStartedSolvingAt(new Date());
+    };
+
     return (
         <div className="flex min-h-screen w-full flex-col items-center">
             <AnswerPopup
@@ -61,7 +66,7 @@ export default function SolvingPage() {
                 problemId={problemId}
                 startedSolvingAt={startedSolvingAt}
                 stepsUsed={currentStep}
-                onClose={() => setIsAnswerPopupOpen(false)}
+                onClose={handlePopUpClose}
             />
             <Header
                 variant="problem"
