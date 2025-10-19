@@ -2,9 +2,9 @@
 
 import { ChatHistory, ChatMessage } from '@/components/chatbot-window';
 import { useLogger } from '@/components/logger/LoggerProvider';
+import { useState, useEffect, useRef } from 'react';
 import { sendMessageAction } from '../actions';
 import { useSession } from 'next-auth/react';
-import { useState, useEffect, useRef } from 'react';
 
 // Privacy notice for chat - factory function
 const createPrivacyMessage = (): ChatMessage => ({
@@ -62,8 +62,10 @@ export function useChatbot() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const chatSessionId = useRef(`${Date.now()}${Math.floor(Math.random() * 1e6)}`).current;
-    
+    const chatSessionId = useRef(
+        `${Date.now()}${Math.floor(Math.random() * 1e6)}`,
+    ).current;
+
     // Automatically clear error after 7 seconds
     useEffect(() => {
         if (!error) return;
@@ -72,8 +74,8 @@ export function useChatbot() {
     }, [error]);
 
     useEffect(() => {
-  sessionStorage.removeItem('chatSessionId');
-}, []);
+        sessionStorage.removeItem('chatSessionId');
+    }, []);
 
     /**
      * Sends a user message and updates chat history with user and assistant messages.
