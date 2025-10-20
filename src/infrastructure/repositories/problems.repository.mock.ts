@@ -8,20 +8,18 @@ export class MockProblemsRepository implements IProblemsRepository {
         this._problems = [];
     }
 
-    getProblemById(id: number): Promise<Problem> {
-        const problem = this._problems.find((p) => p.id === id);
-        if (!problem) {
-            throw new Error(`Problem with id ${id} not found`);
-        }
-        return Promise.resolve(problem);
-    }
-
     async getProblems(
         offset: number,
         limit: number,
+        id: number,
+        score: number,
         subjects?: string[],
     ): Promise<Problem[]> {
         let filtered = this._problems;
+
+        filtered = filtered.filter(
+            (problem) => problem.level >= Math.floor(score),
+        );
 
         if (subjects?.length) {
             filtered = filtered.filter((problem) =>
@@ -29,5 +27,13 @@ export class MockProblemsRepository implements IProblemsRepository {
             );
         }
         return filtered.slice(offset, offset + limit);
+    }
+
+    getProblemById(id: number): Promise<Problem> {
+        const problem = this._problems.find((p) => p.id === id);
+        if (!problem) {
+            throw new Error(`Problem with id ${id} not found`);
+        }
+        return Promise.resolve(problem);
     }
 }
