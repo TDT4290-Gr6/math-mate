@@ -1,3 +1,4 @@
+'use client';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Card, CardContent, CardHeader } from './ui/card';
 import { Subject } from 'app/constants/subjects';
@@ -50,16 +51,22 @@ export default function SubjectSelectPopup({
 
     // Handle save action: close popup and notify parent of changes
     const handleSave = () => {
+        const selectedSubjectsLs = localStorage.getItem('selectedSubjects');
+        const currentSubjectsparse = selectedSubjectsLs
+            ? JSON.parse(selectedSubjectsLs)
+            : [];
         const subjectsChanged =
-            selectedSubjects?.length !== initialSubjects?.length ||
-            selectedSubjects?.some((s) => !initialSubjects?.includes(s));
+            currentSubjectsparse?.length !== initialSubjects?.length ||
+            currentSubjectsparse?.some(
+                (s: Subject) => !initialSubjects?.includes(s),
+            );
         onSave(subjectsChanged);
         onClose();
     };
 
     // Handle cancel action: restore initial subjects and close popup
     const handleCancel = useCallback(() => {
-        setSelectedSubjects(initialSubjects ?? []);
+        setSelectedSubjects([...initialSubjects]);
         onClose();
     }, [initialSubjects, setSelectedSubjects, onClose]);
 
@@ -68,7 +75,7 @@ export default function SubjectSelectPopup({
             !hasCapturedInitialSubjects.current &&
             selectedSubjects !== undefined
         ) {
-            setInitialSubjects(selectedSubjects);
+            setInitialSubjects([...selectedSubjects]);
             hasCapturedInitialSubjects.current = true;
         }
     }, [selectedSubjects]);
