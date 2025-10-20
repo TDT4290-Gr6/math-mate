@@ -17,7 +17,6 @@ export type LogEventInput<K extends keyof AnalyticsEventMap> = {
     problemId?: number;
     methodId?: number;
     stepId?: number;
-    path?: string;
 };
 
 type LoggerContextValue = {
@@ -89,7 +88,12 @@ export function LoggerProvider({ children }: { children: React.ReactNode }) {
     useEffect(() => {
         if (lastPathRef.current === pathname) return;
         lastPathRef.current = pathname;
-        void logEvent({ actionName: 'page_view', payload: { path: pathname } });
+        void logEvent({
+            actionName: 'page_view',
+            payload: {
+                page: pathname
+            }
+        });
     }, [pathname, logEvent]);
 
     return (
@@ -113,7 +117,6 @@ export function useLogger() {
 export function useTrackedLogger() {
     const logger = useLogger();
     const params = useParams();
-    const pathname = usePathname();
 
     const problemId = params?.problemId ? Number(params.problemId) : undefined;
     const methodId = params?.methodId ? Number(params.methodId) : undefined;
@@ -124,9 +127,8 @@ export function useTrackedLogger() {
                 ...input,
                 problemId: input.problemId ?? problemId,
                 methodId: input.methodId ?? methodId,
-                path: input.path ?? pathname,
             }),
-        [logger, problemId, methodId, pathname],
+        [logger, problemId, methodId],
     );
     return { logEvent };
 }

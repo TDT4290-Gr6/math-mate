@@ -1,5 +1,5 @@
 export type AnalyticsEventMap = {
-    page_view: { path: string };
+    page_view: { page: string };
     submit_country: { countryId: number };
     failed_country_submit: { countryId?: number; error?: string };
     chat_open: { page?: string };
@@ -46,4 +46,5 @@ export type AnalyticsEventMap = {
     sign_out: { page?: string };
     sign_in: { page?: string };
     toggle_theme: { page?: string; theme: string };
+    navigate_previous_solve: { page?: string }
 };

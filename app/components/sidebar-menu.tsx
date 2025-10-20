@@ -9,7 +9,7 @@ import { Switch } from '@/components/ui/switch';
 import { signOut } from 'next-auth/react';
 import { useTheme } from 'next-themes';
 import { Button } from './ui/button';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 interface SidebarMenuProps {
     onClose: () => void;
@@ -48,6 +48,7 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
     const [solvesLoading, setSolvesLoading] = useState(true);
 
     const tracked = useTrackedLogger();
+    const router = useRouter()
 
     function debounce<Args extends unknown[]>(
         fn: (...args: Args) => void,
@@ -72,6 +73,16 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
             }, 400),
         [logEvent],
     );
+
+    const handleNavigateToSolve = (problemId: number) => {
+        void tracked.logEvent({
+            actionName: 'navigate_previous_solve',
+            problemId,
+            payload: {},
+        });
+        router.push(`/protected/methods/${problemId}`)
+    };
+
 
     useEffect(() => {
         let cancelled = false;
@@ -206,13 +217,14 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                     </p>
                 ) : (
                     solves.map((solve) => (
-                        <Link
+                        <Button
                             key={solve.id}
                             className="text-sidebar-primary-foreground bg-sidebar-primary hover:bg-accent rounded-xl p-2 text-pretty"
-                            href={`/protected/methods/${solve.problemId}`}
+                            onClick={() => handleNavigateToSolve(solve.problemId)
+                            }
                         >
                             <LaTeXFormattedText text={solve.problemTitle} />
-                        </Link>
+                        </Button>
                     ))
                 )}
             </div>
