@@ -46,5 +46,5 @@ export type AnalyticsEventMap = {
     sign_out: { page?: string };
     sign_in: { page?: string };
     toggle_theme: { page?: string; theme: string };
-    navigate_previous_solve: { page?: string }
+    navigate_previous_solve: { page?: string };
 };

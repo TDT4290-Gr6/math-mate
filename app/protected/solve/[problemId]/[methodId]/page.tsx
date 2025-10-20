@@ -11,9 +11,9 @@ import { useChatbot } from 'app/hooks/useChatbot';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
 import { useParams } from 'next/navigation';
-import { useState } from 'react';
 import Steps from '@/components/steps';
 import { cn } from '@/lib/utils';
+import { useState } from 'react';
 
 /**
  * SolvingPage
@@ -72,7 +72,7 @@ export default function SolvingPage() {
     const handleCloseChat = () => {
         setIsChatOpen(false);
     };
-    
+
     const handlePopUpClose = () => {
         void tracked.logEvent({ actionName: 'chat_close', payload: {} });
         setIsAnswerPopupOpen(false);
@@ -172,7 +172,9 @@ export default function SolvingPage() {
                         </motion.div>
                     )}
                 </AnimatePresence>
-                {showToggle && !isChatOpen && <ChatToggle onClick={handleOpenChat} />}
+                {showToggle && !isChatOpen && (
+                    <ChatToggle onClick={handleOpenChat} />
+                )}
             </div>
         </div>
     );

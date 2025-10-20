@@ -91,8 +91,8 @@ export function LoggerProvider({ children }: { children: React.ReactNode }) {
         void logEvent({
             actionName: 'page_view',
             payload: {
-                page: pathname
-            }
+                page: pathname,
+            },
         });
     }, [pathname, logEvent]);
 
