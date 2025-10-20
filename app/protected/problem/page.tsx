@@ -94,6 +94,8 @@ export default function ProblemPage() {
     const handlePrevious = () => {
         if (currentIndex > 0) {
             setCurrentIndex(currentIndex - 1);
+        } else {
+            setCurrentIndex(problems.length - 1);
         }
     };
 
