@@ -1,7 +1,6 @@
 import { ISolvesRepository } from '@/application/repositories/solves.repository.interface';
 import { insertSolveSchema, Solve, SolveInsert } from '@/entities/models/solve';
 import { DatabaseOperationError } from '@/entities/errors/common';
-import { ca, tr } from 'zod/v4/locales';
 import { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 
@@ -152,6 +151,23 @@ export class SolvesRepository implements ISolvesRepository {
         });
     }
 
+    /**
+     * Calculates the user's score as the average level of distinct problems the user solved correctly.
+     *
+     * The method:
+     * - Fetches distinct solved problems for the given user where the solve was marked correct.
+     * - Uses the associated problem's `level` value to compute an arithmetic mean.
+     * - Treats a missing (`null`/`undefined`) problem level as `0`.
+     * - Returns `0` when the user has no correct solves.
+     *
+     * Notes:
+     * - Duplicate solves for the same problem are ignored (distinct by `problemId`).
+     * - The result is a plain numeric average (no rounding performed).
+     *
+     * @param userId - The database identifier of the user whose score will be computed.
+     * @returns A promise that resolves to the average problem level (number). Returns `0` if there are no correct distinct solves.
+     * @throws DatabaseOperationError - If the underlying database operation fails; the original error is attached as the `cause`.
+     */
     private async calculateScore(userId: number): Promise<number> {
         try {
             const solvesWithProblem = await prisma.solves.findMany({
