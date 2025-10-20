@@ -108,7 +108,7 @@ export class SolvesRepository implements ISolvesRepository {
             });
 
             // Recalculate user score after creating a new solve
-            this.updateUserScore(solve.userId);
+            await this.updateUserScore(solve.userId);
 
             return newSolve as Solve;
         } catch (error) {
