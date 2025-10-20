@@ -4,7 +4,7 @@ export interface IProblemsRepository {
     getProblems(
         offset: number,
         limit: number,
-        id: number,
+        userId: number,
         score: number,
         subjects?: string[],
     ): Promise<Problem[]>;

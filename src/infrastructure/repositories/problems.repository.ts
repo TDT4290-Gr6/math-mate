@@ -24,7 +24,7 @@ export class ProblemsRepository implements IProblemsRepository {
      *
      * @param offset - The number of problems to skip (used for pagination).
      * @param limit - The number of problems to return (used for pagination).
-     * @param id - The ID of the user requesting problems.
+     * @param userId - The ID of the user requesting problems.
      * @param score - The user's current score, used to determine difficulty level filtering.
      * @param subjects - Optional list of subjects to filter problems by.
      *
@@ -36,13 +36,13 @@ export class ProblemsRepository implements IProblemsRepository {
     async getProblems(
         offset: number,
         limit: number,
-        id: number,
+        userId: number,
         score: number,
         subjects?: string[],
     ): Promise<Problem[]> {
         try {
             const solves = await prisma.solves.findMany({
-                where: { userId: id },
+                where: { userId: userId },
                 select: { problemId: true },
             });
 
