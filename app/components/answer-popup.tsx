@@ -102,8 +102,8 @@ export default function AnswerPopup({
         });
     }
 
-    function handleSetRating(level: number) {
-        setRating(level);
+    function handleDifficulty(level: number) {
+        setSelectedDifficulty(level);
     }
 
     async function handleFinalAction(action: 'next' | 'retry') {
@@ -124,10 +124,10 @@ export default function AnswerPopup({
         if (action === 'next') {
             router.push('/protected/problem');
         }
-        if (rating != null) {
+        if (selectedDifficulty != undefined) {
             void tracked.logEvent({
                 actionName: 'rate_difficulty',
-                payload: { rating },
+                payload: { rating: selectedDifficulty },
             });
         }
         handleClose();
@@ -135,7 +135,7 @@ export default function AnswerPopup({
 
     function handleOpen() {
         setStep('reveal');
-        setRating(null);
+        setSelectedDifficulty(undefined);
         setWasCorrect(false);
         void tracked.logEvent({ actionName: 'open_answer_popup', payload: {} });
     }
@@ -232,7 +232,7 @@ export default function AnswerPopup({
                                                     <Button
                                                         key={n}
                                                         onClick={() =>
-                                                            handleSetRating(n)
+                                                            handleDifficulty(n)
                                                         }
                                                         variant={
                                                             isActive

@@ -11,7 +11,7 @@ import { useChatbot } from 'app/hooks/useChatbot';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
 import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Steps from '@/components/steps';
 import { cn } from '@/lib/utils';
 
@@ -24,7 +24,7 @@ import { cn } from '@/lib/utils';
  */
 export default function SolvingPage() {
     const { chatHistory, sendMessage, isLoading, error } = useChatbot();
-    const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
+    const [isChatOpen, setIsChatOpen] = useState(false);
     const [isAnswerPopupOpen, setIsAnswerPopupOpen] = useState(false);
     const [showToggle, setShowToggle] = useState(true);
     const [startedSolvingAt, setStartedSolvingAt] = useState(new Date());
@@ -34,11 +34,6 @@ export default function SolvingPage() {
     const problemId = Number(params.problemId);
     const methodId = Number(params.methodId);
 
-    const [isChatOpen, setIsChatOpen] = useState(false);
-    const [isAnswerPopupOpen, setIsAnswerPopupOpen] = useState(false);
-    const [showToggle, setShowToggle] = useState(true);
-
-    const { chatHistory, sendMessage, isLoading, error } = useChatbot();
     const { problem, loadingProblem, errorProblem } =
         useFetchProblem(problemId);
 
@@ -68,18 +63,18 @@ export default function SolvingPage() {
     };
 
     // Open chat and log
-    const openChat = () => {
+    const handleOpenChat = () => {
         setIsChatOpen(true);
         void tracked.logEvent({ actionName: 'chat_open', payload: {} });
     };
 
     // Close chat and log
-    const closeChat = () => {
+    const handleCloseChat = () => {
         setIsChatOpen(false);
-        void tracked.logEvent({ actionName: 'chat_close', payload: {} });
     };
-
+    
     const handlePopUpClose = () => {
+        void tracked.logEvent({ actionName: 'chat_close', payload: {} });
         setIsAnswerPopupOpen(false);
         setStartedSolvingAt(new Date());
     };
@@ -163,7 +158,7 @@ export default function SolvingPage() {
                                 onClose={() => {
                                     setShowToggle(false);
                                     setIsChatOpen(false);
-                                    closeChat();
+                                    handleCloseChat();
                                 }}
                                 onSendMessage={sendMessage}
                                 isLoading={isLoading}
@@ -177,7 +172,7 @@ export default function SolvingPage() {
                         </motion.div>
                     )}
                 </AnimatePresence>
-                {showToggle && !isChatOpen && <ChatToggle onClick={openChat} />}
+                {showToggle && !isChatOpen && <ChatToggle onClick={handleOpenChat} />}
             </div>
         </div>
     );

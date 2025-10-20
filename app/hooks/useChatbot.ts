@@ -2,9 +2,8 @@
 
 import { clearConversationAction, sendMessageAction } from '../actions';
 import { ChatHistory, ChatMessage } from '@/components/chatbot-window';
-import { useLogger } from '@/components/logger/LoggerProvider';
+import { useTrackedLogger } from '@/components/logger/LoggerProvider';
 import { useState, useEffect, useRef } from 'react';
-import { useSession } from 'next-auth/react';
 
 export interface ChatContext {
     problemDescription?: string;
@@ -58,8 +57,7 @@ const createPrivacyMessage = (): ChatMessage => ({
  */
 
 export function useChatbot() {
-    const { data: session, status } = useSession();
-    const logger = useLogger();
+    const tracked = useTrackedLogger();
     const [chatHistory, setChatHistory] = useState<ChatHistory>({
         messages: [createPrivacyMessage()],
     });
@@ -119,7 +117,7 @@ export function useChatbot() {
         const safeMsg = message
             .slice(0, 500)
             .replace(/\b[\w.+-]+@[\w-]+\.[\w.-]+\b/g, '[redacted]'); // cap length and strip emails
-        void logger.logEvent({
+        void tracked.logEvent({
             actionName: 'chat_message_sent',
             payload: { chatSessionId, message: safeMsg },
         });
@@ -146,7 +144,7 @@ export function useChatbot() {
             const safeReply = reply.message.content
                 .slice(0, 500)
                 .replace(/\b[\w.+-]+@[\w-]+\.[\w.-]+\b/g, '[redacted]');
-            void logger.logEvent({
+            void tracked.logEvent({
                 actionName: 'chat_message_received',
                 payload: {
                     chatSessionId,

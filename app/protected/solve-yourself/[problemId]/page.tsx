@@ -48,7 +48,6 @@ import React from 'react';
 
 export default function SolveYourself() {
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
-    const [showChat, setShowChat] = useState(false);
     const [startedSolvingAt, setStartedSolvingAt] = useState(new Date());
 
     const params = useParams<{ problemId: string }>();
