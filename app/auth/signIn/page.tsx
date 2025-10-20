@@ -1,14 +1,16 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import type { Provider } from 'next-auth/providers/index';
 import SignInProviders from './SignInProviders';
-import { getProviders } from 'next-auth/react';
+import { authOptions } from '@/lib/auth';
 
 export default async function SignInPage() {
-    const providers = await getProviders();
+    const providers: Provider[] = authOptions.providers;
 
     // serialize providers to a minimal array so we don't pass functions or complex objects
-    const serializedProviders = providers
-        ? Object.values(providers).map((p) => ({ id: p.id, name: p.name }))
-        : null;
+    const serializedProviders = providers.map((p) => ({
+        id: p.id,
+        name: p.name,
+    }));
 
     return (
         <main className="flex justify-center">
