@@ -11,7 +11,6 @@ import { useChatbot } from 'app/hooks/useChatbot';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
 import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import Steps from '@/components/steps';
 import { cn } from '@/lib/utils';
 
