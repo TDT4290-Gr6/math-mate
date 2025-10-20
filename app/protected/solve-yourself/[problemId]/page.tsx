@@ -49,6 +49,8 @@ import React from 'react';
 export default function SolveYourself() {
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
     const [showChat, setShowChat] = useState(false);
+    const [startedSolvingAt, setStartedSolvingAt] = useState(new Date());
+
     const params = useParams<{ problemId: string }>();
     const problemId = Number(params.problemId);
     const { problem, loadingProblem, errorProblem } =
@@ -73,6 +75,11 @@ export default function SolveYourself() {
             window.removeEventListener('chat-toggle', handler as EventListener);
     }, [isChatOpen]);
 
+    const handlePopUpClose = () => {
+        setIsAnswerPopupOpen(false);
+        setStartedSolvingAt(new Date());
+    };
+
     return (
         <motion.div
             className={`${isChatOpen ? '' : 'gap-6'} flex min-h-screen flex-col items-center`}
@@ -82,7 +89,10 @@ export default function SolveYourself() {
             <AnswerPopup
                 isOpen={isAnswerPopupOpen}
                 answer={problem?.solution ?? 'No solution available'}
-                onClose={() => setIsAnswerPopupOpen(false)}
+                problemId={problemId}
+                startedSolvingAt={startedSolvingAt}
+                stepsUsed={0}
+                onClose={handlePopUpClose}
             />
             {isChatOpen ? (
                 <Header

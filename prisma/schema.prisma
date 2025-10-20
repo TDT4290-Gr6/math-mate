@@ -79,6 +79,7 @@ model Solves {
     finishedSolvingAt DateTime? @db.Timestamptz(6)
     stepsUsed         Int
     feedback          Int?
+    wasCorrect        Boolean?
     problem           Problem   @relation(fields: [problemId], references: [id], onDelete: Cascade, map: "solves_problemId_fkey")
     user              User      @relation(fields: [userId], references: [id], onDelete: Cascade, map: "solves_userId_fkey")
 }

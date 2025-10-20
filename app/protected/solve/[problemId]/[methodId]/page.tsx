@@ -11,8 +11,10 @@ import { useChatbot } from 'app/hooks/useChatbot';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
 import { useParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import Steps from '@/components/steps';
 import { cn } from '@/lib/utils';
+
 /**
  * SolvingPage
  *
@@ -29,6 +31,7 @@ export default function SolvingPage() {
     const containerRef = useRef<HTMLDivElement>(null);
     const isDragging = useRef(false);
     const [chatClosed, setChatClosed] = useState(!isChatOpen);
+    const [startedSolvingAt, setStartedSolvingAt] = useState(new Date());
 
     const params = useParams<{ problemId: string; methodId: string }>();
     const problemId = Number(params.problemId);
@@ -94,12 +97,20 @@ export default function SolvingPage() {
         }
     };
 
+    const handlePopUpClose = () => {
+        setIsAnswerPopupOpen(false);
+        setStartedSolvingAt(new Date());
+    };
+
     return (
         <div className="flex min-h-screen w-full flex-col items-center">
             <AnswerPopup
                 isOpen={isAnswerPopupOpen}
                 answer={problem?.solution ?? 'No solution available'}
-                onClose={() => setIsAnswerPopupOpen(false)}
+                problemId={problemId}
+                startedSolvingAt={startedSolvingAt}
+                stepsUsed={currentStep}
+                onClose={handlePopUpClose}
             />
             <Header
                 variant="problem"

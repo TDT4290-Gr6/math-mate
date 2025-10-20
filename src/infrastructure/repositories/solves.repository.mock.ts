@@ -42,11 +42,23 @@ export class MockSolvesRepository implements ISolvesRepository {
         return this._solves.filter((s) => s.problemId === problemId);
     }
 
+    async getAttemptCount(userId: number, problemId: number): Promise<number> {
+        const solves = this._solves.filter(
+            (s) => s.userId === userId && s.problemId === problemId,
+        );
+        return solves.length;
+    }
+
     async createSolve(solve: SolveInsert): Promise<Solve> {
-        const newSolve: Solve = {
+        const attemptsUsed = await this.getAttemptCount(
+            solve.userId,
+            solve.problemId,
+        );
+        const newSolve = {
             id: this._solves.length + 1,
+            attempts: attemptsUsed + 1,
             ...solve,
-        } as Solve;
+        };
         this._solves.push(newSolve);
         return newSolve;
     }
