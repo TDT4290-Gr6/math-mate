@@ -121,14 +121,14 @@ export default function AnswerPopup({
         }
 
         setStep('done');
-        if (action === 'next') {
-            router.push('/protected/problem');
-        }
         if (selectedDifficulty != undefined) {
-            void tracked.logEvent({
+            await tracked.logEvent({
                 actionName: 'rate_difficulty',
                 payload: { rating: selectedDifficulty },
             });
+        }
+        if (action === 'next') {
+            router.push('/protected/problem');
         }
         handleClose();
     }

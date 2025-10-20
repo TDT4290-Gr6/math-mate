@@ -19,6 +19,8 @@ export type AnalyticsEventMap = {
     reveal_answer: { page?: string };
     answer_evaluation: { page?: string; correct: boolean };
     rate_difficulty: { page?: string; rating: number };
+    open_answer_popup: { page?: string };
+    close_answer_popup: { page?: string };
     save_selected_subjects: { page?: string; subjects: Array<string> };
     cancel_selected_subjects: {
         page?: string;
@@ -41,8 +43,6 @@ export type AnalyticsEventMap = {
     close_subject_popup: { page?: string };
     open_sidebar: { page?: string };
     close_sidebar: { page?: string };
-    open_answer_popup: { page?: string };
-    close_answer_popup: { page?: string };
     sign_out: { page?: string };
     sign_in: { page?: string };
     toggle_theme: { page?: string; theme: string };

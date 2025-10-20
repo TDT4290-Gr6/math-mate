@@ -114,10 +114,11 @@ export default function SolvingPage() {
     // Close chat and log
     const handleCloseChat = () => {
         setIsChatOpen(false);
+        void tracked.logEvent({ actionName: 'chat_close', payload: {} });
     };
 
     const handlePopUpClose = () => {
-        void tracked.logEvent({ actionName: 'chat_close', payload: {} });
+        void tracked.logEvent({ actionName: 'close_answer_popup', payload: {} });
         setIsAnswerPopupOpen(false);
         setStartedSolvingAt(new Date());
     };

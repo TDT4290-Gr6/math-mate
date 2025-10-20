@@ -80,7 +80,7 @@ export function CountrySelectDropdown({ setOpen }: CountrySelectDropdownProps) {
                     type: 'manual',
                     message: 'Failed to set country. Please try again later.',
                 });
-                tracked.logEvent({
+                void tracked.logEvent({
                     actionName: 'failed_country_submit',
                     payload: { countryId },
                 });

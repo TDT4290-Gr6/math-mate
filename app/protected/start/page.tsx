@@ -39,11 +39,11 @@ export default function StartPage() {
     }, [status, session, tracked]);
 
     const handleGetStarted = () => {
-        router.push('/protected/problem');
         void tracked.logEvent({
             actionName: 'start_practicing',
             payload: {},
         });
+        router.push('/protected/problem');
     };
     return (
         <>
@@ -82,15 +82,12 @@ export default function StartPage() {
                     </CardContent>
                     <CardFooter>
                         <Button
-                            asChild
                             variant="secondary"
                             className="absolute right-20 -bottom-6 gap-2"
                             onClick={handleGetStarted}
                         >
-                            <span>
-                                Start Practicing{' '}
-                                <ChevronRight className="-mr-1" />
-                            </span>
+                            Start Practicing{' '}
+                            <ChevronRight className="-mr-1" />
                         </Button>
                     </CardFooter>
                 </Card>
