@@ -85,7 +85,7 @@ export default function SolvingPage() {
     }, [isChatOpen]);
 
     const handleNextStep = () => {
-        if (currentStep < totalSteps) {
+        if (currentStep < totalSteps - 1) {
             const nextStep = currentStep + 1;
             setCurrentStep(nextStep);
             void tracked.logEvent({
@@ -181,7 +181,7 @@ export default function SolvingPage() {
                         >
                             Go to answer
                         </Button>
-                        {currentStep < totalSteps && (
+                        {currentStep < totalSteps - 1 && (
                             <Button
                                 onClick={handleNextStep}
                                 className="w-40 rounded-full"
