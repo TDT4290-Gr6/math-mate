@@ -7,6 +7,7 @@
     "build": "next build --turbopack",
     "generate-dataset": "tsx ./scripts/dataset/generate-dataset.ts",
     "start": "next start",
+    "cypress:open": "cypress open",
     "lint": "eslint .",
     "format": "prettier --write ."
   },
@@ -58,6 +59,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cypress": "^15.5.0",
     "dotenv": "^17.2.3",
     "eslint": "^9",
     "eslint-config-next": "15.5.4",
