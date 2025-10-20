@@ -114,11 +114,14 @@ export function useChatbot() {
             }));
 
             // Log assistant response
+            const safeReply = reply.message.content
+                .slice(0, 500)
+                .replace(/\b[\w.+-]+@[\w-]+\.[\w.-]+\b/g, '[redacted]');
             void logger.logEvent({
                 actionName: 'chat_message_received',
                 payload: {
                     chatSessionId,
-                    reply: reply.message.content,
+                    reply: safeReply,
                 },
             });
         } catch (err) {
