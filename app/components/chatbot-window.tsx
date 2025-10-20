@@ -89,7 +89,7 @@ export default function ChatbotWindow({
     }, [chatHistory.messages.length]);
 
     return (
-        <div>
+        <div className="flex w-full flex-col">
             <div className="relative">
                 {onClose && (
                     <ChevronDown
