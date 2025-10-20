@@ -102,25 +102,26 @@ export default function ProblemPage() {
             // If we already have this problem loaded, just move to it
             setCurrentIndex(nextIndex);
         }
+        const nextProblem = problems[nextIndex];
         void tracked.logEvent({
             actionName: 'next_problem',
-            problemId: currentProblem.id,
-            payload: { next_problemId: problems[nextIndex].id },
+            problemId: currentProblem?.id,
+            payload: { next_problemId: nextProblem?.id },
         });
     };
 
     const handlePrevious = () => {
         if (currentIndex > 0) {
             const prevIndex = currentIndex - 1;
-            const nextProblem = problems[prevIndex];
+            const prevProblem = problems[prevIndex];
 
             setCurrentIndex(prevIndex);
 
             void tracked.logEvent({
                 actionName: 'previous_problem',
-                problemId: currentProblem.id,
+                problemId: currentProblem?.id,
                 payload: {
-                    previous_problemId: nextProblem.id,
+                    previous_problemId: prevProblem?.id,
                 },
             });
         }

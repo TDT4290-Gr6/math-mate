@@ -54,16 +54,17 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
         };
     }
 
+    const logEvent = tracked.logEvent;
     // Debounced logging function (memoized to avoid recreation)
     const debouncedLogTheme = useMemo(
         () =>
             debounce((newTheme: string) => {
-                void tracked.logEvent({
+                void logEvent({
                     actionName: 'toggle_theme',
                     payload: { theme: newTheme },
                 });
             }, 400),
-        [tracked],
+        [logEvent],
     );
 
     useEffect(() => {

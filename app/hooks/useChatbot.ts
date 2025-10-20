@@ -66,10 +66,6 @@ export function useChatbot() {
         return () => clearTimeout(timer);
     }, [error]);
 
-    useEffect(() => {
-        sessionStorage.removeItem('chatSessionId');
-    }, []);
-
     /**
      * Sends a user message and updates chat history with user and assistant messages.
      */
