@@ -86,8 +86,7 @@ export default function StartPage() {
                             className="absolute right-20 -bottom-6 gap-2"
                             onClick={handleGetStarted}
                         >
-                            Start Practicing{' '}
-                            <ChevronRight className="-mr-1" />
+                            Start Practicing <ChevronRight className="-mr-1" />
                         </Button>
                     </CardFooter>
                 </Card>
