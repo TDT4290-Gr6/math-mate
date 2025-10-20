@@ -1,5 +1,6 @@
 import type { IGetProblemsUseCase } from '@/application/use-cases/get-problems.use-case';
 import { IAuthenticationService } from '@/application/services/auth.service.interface';
+import { IGetUserUseCase } from '@/application/use-cases/get-user.use-case';
 import { problemsPresenter } from '../presenters/problems.presenter';
 import { UnauthenticatedError } from '@/entities/errors/auth';
 import { InputParseError } from '@/entities/errors/common';
@@ -17,6 +18,7 @@ export type IGetProblemsController = ReturnType<typeof getProblemsController>;
 export const getProblemsController =
     (
         getProblemsUseCase: IGetProblemsUseCase,
+        getUserUseCase: IGetUserUseCase,
         authenticationService: IAuthenticationService,
     ) =>
     async (input: IGetProblemsInput) => {
@@ -24,6 +26,13 @@ export const getProblemsController =
         if (!isAuthenticated) {
             throw new UnauthenticatedError('User must be logged in.');
         }
+
+        const userId = await authenticationService.getCurrentUserId();
+        if (userId == null)
+            throw new UnauthenticatedError('User id is not set.');
+
+        const user = await getUserUseCase(userId);
+        if (!user) throw new InputParseError('User not found');
 
         const result = inputSchema.safeParse(input);
 
@@ -33,7 +42,13 @@ export const getProblemsController =
 
         const { offset, limit, subjects } = result.data;
 
-        const problems = await getProblemsUseCase(offset, limit, subjects);
+        const problems = await getProblemsUseCase(
+            offset,
+            limit,
+            userId,
+            user.score,
+            subjects,
+        );
 
         return problemsPresenter(problems);
     };

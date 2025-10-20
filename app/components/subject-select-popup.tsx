@@ -1,3 +1,4 @@
+'use client';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTrackedLogger } from './logger/LoggerProvider';
 import { Card, CardContent, CardHeader } from './ui/card';
@@ -52,9 +53,15 @@ export default function SubjectSelectPopup({
 
     // Handle save action: close popup and notify parent of changes
     const handleSave = () => {
+        const selectedSubjectsLs = localStorage.getItem('selectedSubjects');
+        const currentSubjectsparse = selectedSubjectsLs
+            ? JSON.parse(selectedSubjectsLs)
+            : [];
         const subjectsChanged =
-            selectedSubjects?.length !== initialSubjects?.length ||
-            selectedSubjects?.some((s) => !initialSubjects?.includes(s));
+            currentSubjectsparse?.length !== initialSubjects?.length ||
+            currentSubjectsparse?.some(
+                (s: Subject) => !initialSubjects?.includes(s),
+            );
         onSave(subjectsChanged);
         // Ensure payload.subjects is always a string[] (fallback to empty array if undefined)
         void tracker.logEvent({
@@ -68,7 +75,7 @@ export default function SubjectSelectPopup({
 
     // Handle cancel action: restore initial subjects and close popup
     const handleCancel = useCallback(() => {
-        setSelectedSubjects(initialSubjects ?? []);
+        setSelectedSubjects([...initialSubjects]);
         void tracker.logEvent({
             actionName: 'cancel_selected_subjects',
             payload: {
@@ -83,7 +90,7 @@ export default function SubjectSelectPopup({
             !hasCapturedInitialSubjects.current &&
             selectedSubjects !== undefined
         ) {
-            setInitialSubjects(selectedSubjects);
+            setInitialSubjects([...selectedSubjects]);
             hasCapturedInitialSubjects.current = true;
         }
     }, [selectedSubjects]);
