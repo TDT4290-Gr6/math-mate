@@ -81,7 +81,10 @@ export default function ProblemPage() {
                     setCurrentIndex(nextIndex);
                 }
             }
-            // If no more problems to fetch, do nothing (can't go forward)
+            // If no more problems to fetch, loop back to start
+            else if (!hasMore) {
+                setCurrentIndex(0);
+            }
         } else {
             // If we already have this problem loaded, just move to it
             setCurrentIndex(nextIndex);
