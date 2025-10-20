@@ -32,6 +32,36 @@ export class SolvesRepository implements ISolvesRepository {
             );
         }
     }
+    async getLatestByUserId(userId: number): Promise<Solve[]> {
+        try {
+            const solves = await prisma.solves.findMany({
+                // Only retrieve solves that have been finished
+                where: { userId: userId, finishedSolvingAt: { not: null } },
+                // Latest finished problems first
+                orderBy: { finishedSolvingAt: 'desc' },
+                // Distinct by problemId to get only one solve per problem
+                distinct: ['problemId'],
+                // Include the title of the problem
+                include: { problem: { select: { title: true } } },
+            });
+            const solvesWithTitle = solves.map((solve) => {
+                return {
+                    ...solve,
+                    problemTitle: solve.problem?.title,
+                } as Solve;
+            });
+
+            return solvesWithTitle;
+        } catch (error) {
+            throw new DatabaseOperationError(
+                'Failed to get latest solves by user ID',
+                {
+                    cause: error,
+                },
+            );
+        }
+    }
+
     async getByProblemId(problemId: number): Promise<Solve[]> {
         try {
             const solves = await prisma.solves.findMany({
@@ -50,22 +80,31 @@ export class SolvesRepository implements ISolvesRepository {
             throw error;
         }
     }
-    async createSolve(solve: SolveInsert): Promise<Solve> {
+    async getAttemptCount(userId: number, problemId: number): Promise<number> {
         try {
-            // check if a solve with the same userId and problemId already exists
-            const attemptsUsed = await prisma.solves.count({
+            const count = await prisma.solves.count({
                 where: {
-                    userId: solve.userId,
-                    problemId: solve.problemId,
+                    userId: userId,
+                    problemId: problemId,
                 },
             });
-            const parsedSolve = insertSolveSchema.parse({
-                ...solve,
-                attempts: attemptsUsed + 1,
+            return count;
+        } catch (error) {
+            throw new DatabaseOperationError('Failed to get attempt count', {
+                cause: error,
             });
+        }
+    }
+    async createSolve(solve: SolveInsert): Promise<Solve> {
+        try {
+            const attemptsUsed = await this.getAttemptCount(
+                solve.userId,
+                solve.problemId,
+            );
+            const parsedSolve = insertSolveSchema.parse(solve);
 
             const newSolve = await prisma.solves.create({
-                data: parsedSolve,
+                data: { ...parsedSolve, attempts: attemptsUsed + 1 },
             });
             return newSolve as Solve;
         } catch (error) {

@@ -148,21 +148,16 @@ export default function ProblemPage() {
                     description={
                         currentProblem?.problem ??
                         (isLoading
-                            ? 'Loading problems...'
+                            ? 'Loading problem...'
                             : 'No problems available')
                     }
                     variant="withButtons"
                     onNext={handleNext}
                     onPrevious={handlePrevious}
+                    onOpenSubjectSelect={openSubjectSelect}
                 />
             </div>
             <div className="mt-4 flex flex-col justify-center gap-12">
-                <button
-                    className="text-opacity-20 cursor-pointer text-sm underline underline-offset-4 opacity-70 hover:opacity-90"
-                    onClick={openSubjectSelect}
-                >
-                    Change subjects?
-                </button>
                 {isSubjectSelectOpen && (
                     <SubjectSelectPopup
                         onClose={closeSubjectSelect}
@@ -175,6 +170,7 @@ export default function ProblemPage() {
                 )}
                 <Button
                     variant="secondary"
+                    className="m-14"
                     onClick={handleStartSolving}
                     disabled={!currentProblem}
                 >

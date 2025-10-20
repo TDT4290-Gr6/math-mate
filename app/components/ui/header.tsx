@@ -1,7 +1,7 @@
 'use client';
 import { useTrackedLogger } from '../logger/LoggerProvider';
 import { useCallback, useEffect, useState } from 'react';
-import SidebarMenu from './sidebarMenu';
+import SidebarMenu from '../sidebar-menu';
 import { Menu } from 'lucide-react';
 import WideLogo from '../wide-logo';
 import { cn } from '@/lib/utils';

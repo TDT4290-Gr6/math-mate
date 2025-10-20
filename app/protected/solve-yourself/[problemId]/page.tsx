@@ -48,6 +48,9 @@ import React from 'react';
 
 export default function SolveYourself() {
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
+    const [showChat, setShowChat] = useState(false);
+    const [startedSolvingAt, setStartedSolvingAt] = useState(new Date());
+
     const params = useParams<{ problemId: string }>();
     const problemId = Number(params.problemId);
     const [isAnswerPopupOpen, setIsAnswerPopupOpen] = useState(false);
@@ -74,6 +77,11 @@ export default function SolveYourself() {
         return () =>
             window.removeEventListener('chat-toggle', handler as EventListener);
     }, [isChatOpen]);
+
+    const handlePopUpClose = () => {
+        setIsAnswerPopupOpen(false);
+        setStartedSolvingAt(new Date());
+    };
 
     const handleStepByStep = () => {
         void tracked.logEvent({
@@ -105,7 +113,10 @@ export default function SolveYourself() {
             <AnswerPopup
                 isOpen={isAnswerPopupOpen}
                 answer={problem?.solution ?? 'No solution available'}
-                onClose={() => setIsAnswerPopupOpen(false)}
+                problemId={problemId}
+                startedSolvingAt={startedSolvingAt}
+                stepsUsed={0}
+                onClose={handlePopUpClose}
             />
             {isChatOpen ? (
                 <Header
@@ -174,6 +185,7 @@ export default function SolveYourself() {
                             onSendMessage={sendMessage}
                             isLoading={isLoading}
                             error={error ?? undefined}
+                            problemDescription={problem?.problem ?? ''}
                         />
                     </motion.div>
                 ) : (

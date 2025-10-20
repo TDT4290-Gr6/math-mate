@@ -18,15 +18,47 @@ export class MockSolvesRepository implements ISolvesRepository {
         return this._solves.filter((s) => s.userId === userId);
     }
 
+    async getLatestByUserId(userId: number): Promise<Solve[]> {
+        const userSolves = this._solves.filter(
+            (s) => s.userId === userId && s.finishedSolvingAt,
+        );
+        userSolves.sort((a, b) => {
+            return (
+                // We know finishedSolvingAt is defined due to the filter
+                b.finishedSolvingAt!.getTime() - a.finishedSolvingAt!.getTime()
+            );
+        });
+
+        // Return max 1 of each problem
+        const uniqueSolvesMap = new Map<number, Solve>();
+        for (const solve of userSolves)
+            if (!uniqueSolvesMap.has(solve.problemId))
+                uniqueSolvesMap.set(solve.problemId, solve);
+
+        return Array.from(uniqueSolvesMap.values());
+    }
+
     async getByProblemId(problemId: number): Promise<Solve[]> {
         return this._solves.filter((s) => s.problemId === problemId);
     }
 
+    async getAttemptCount(userId: number, problemId: number): Promise<number> {
+        const solves = this._solves.filter(
+            (s) => s.userId === userId && s.problemId === problemId,
+        );
+        return solves.length;
+    }
+
     async createSolve(solve: SolveInsert): Promise<Solve> {
-        const newSolve: Solve = {
+        const attemptsUsed = await this.getAttemptCount(
+            solve.userId,
+            solve.problemId,
+        );
+        const newSolve = {
             id: this._solves.length + 1,
+            attempts: attemptsUsed + 1,
             ...solve,
-        } as Solve;
+        };
         this._solves.push(newSolve);
         return newSolve;
     }

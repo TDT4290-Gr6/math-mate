@@ -1,4 +1,5 @@
 import type { IAddSolvedProblemController } from '@/interface-adapters/controllers/add-solved-problem.controller';
+import type { IGetLatestSolvesController } from '@/interface-adapters/controllers/get-latest-solves.controller';
 import type { ICreateCountryController } from '@/interface-adapters/controllers/create-country.controller';
 import type { IGetCountriesController } from '@/interface-adapters/controllers/get-countries.controller';
 import type { IGetProblemsController } from '@/interface-adapters/controllers/get-problems.controller';
@@ -10,6 +11,7 @@ import type { IProblemsRepository } from '@/application/repositories/problems.re
 import type { IAddSolvedProblemUseCase } from '@/application/use-cases/add-solved-problem.use-case';
 import type { ISendChatMessageController } from '@/interface-adapters/controllers/chat.controller';
 import type { ISendChatMessageUseCase } from '@/application/use-cases/send-chat-message.use-case';
+import type { IGetLatestSolvesUseCase } from '@/application/use-cases/get-latest-solves.use-case';
 import type { ISolvesRepository } from '@/application/repositories/solves.repository.interface';
 import type { IEventsRepository } from '@/application/repositories/events.repository.interface';
 import type { IGetUserController } from '@/interface-adapters/controllers/get-user.controller';
@@ -51,6 +53,7 @@ export const DI_SYMBOLS = {
     ISendChatMessageUseCase: Symbol.for('ISendChatMessageUseCase'),
     IGetUserUseCase: Symbol.for('IGetUserUseCase'),
     IAddSolvedProblemUseCase: Symbol.for('IAddSolvedProblemUseCase'),
+    IGetLatestSolvesUseCase: Symbol.for('IGetLatestSolvesUseCase'),
 
     // Controllers
     ICreateCountryController: Symbol.for('ICreateCountryController'),
@@ -63,6 +66,7 @@ export const DI_SYMBOLS = {
     ISendChatMessageController: Symbol.for('ISendChatMessageController'),
     IGetUserController: Symbol.for('IGetUserController'),
     IAddSolvedProblemController: Symbol.for('IAddSolvedProblemController'),
+    IGetLatestSolvesController: Symbol.for('IGetLatestSolvesController'),
 };
 
 export interface DI_RETURN_TYPES {
@@ -89,6 +93,7 @@ export interface DI_RETURN_TYPES {
     ISendChatMessageUseCase: ISendChatMessageUseCase;
     IGetUserUseCase: IGetUserUseCase;
     IAddSolvedProblemUseCase: IAddSolvedProblemUseCase;
+    IGetLatestSolvesUseCase: IGetLatestSolvesUseCase;
 
     // Controllers
     ICreateCountryController: ICreateCountryController;
@@ -101,4 +106,5 @@ export interface DI_RETURN_TYPES {
     ISendChatMessageController: ISendChatMessageController;
     IGetUserController: IGetUserController;
     IAddSolvedProblemController: IAddSolvedProblemController;
+    IGetLatestSolvesController: IGetLatestSolvesController;
 }
