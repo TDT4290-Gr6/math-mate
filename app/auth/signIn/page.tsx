@@ -7,9 +7,10 @@ export default async function SignInPage() {
     const providers: Provider[] = authOptions.providers;
 
     // serialize providers to a minimal array so we don't pass functions or complex objects
-    const serializedProviders = providers
-        ? Object.values(providers).map((p) => ({ id: p.id, name: p.name }))
-        : null;
+    const serializedProviders = providers.map((p) => ({
+        id: p.id,
+        name: p.name,
+    }));
 
     return (
         <main className="flex justify-center">
