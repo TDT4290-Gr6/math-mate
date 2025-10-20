@@ -118,15 +118,15 @@ export function useTrackedLogger() {
     const problemId = params?.problemId ? Number(params.problemId) : undefined;
     const methodId = params?.methodId ? Number(params.methodId) : undefined;
 
-    return {
-        logEvent: <K extends keyof AnalyticsEventMap>(
-            input: LogEventInput<K>,
-        ) =>
+    const logEvent = useCallback(
+        <K extends keyof AnalyticsEventMap>(input: LogEventInput<K>) =>
             logger.logEvent({
                 ...input,
                 problemId: input.problemId ?? problemId,
                 methodId: input.methodId ?? methodId,
                 path: input.path ?? pathname,
             }),
-    };
+        [logger, problemId, methodId, pathname],
+    );
+    return { logEvent };
 }
