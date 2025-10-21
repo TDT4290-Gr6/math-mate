@@ -1,7 +1,7 @@
-import { User } from '@/entities/models/user';
 import { ICountriesRepository } from '../repositories/countries.repository.interface';
 import { IUsersRepository } from '../repositories/users.repository.interface';
 import { InputParseError } from '@/entities/errors/common';
+import { User } from '@/entities/models/user';
 
 export type ISetCountryUseCase = ReturnType<typeof setCountryUseCase>;
 
