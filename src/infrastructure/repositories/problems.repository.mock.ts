@@ -28,7 +28,7 @@ export class MockProblemsRepository implements IProblemsRepository {
             id: 3,
             title: 'Derivative of Polynomial',
             problem: 'Find the derivative of f(x) = 3x³ - 2x² + 5x - 1',
-            solution: "9x² - 4x + 5",
+            solution: '9x² - 4x + 5',
             subject: 'Precalculus',
             level: 3,
             methods: [],
@@ -63,13 +63,13 @@ export class MockProblemsRepository implements IProblemsRepository {
             attempts: 1,
             startedSolvingAt: new Date('2025-10-20T14:20:00Z'),
             stepsUsed: 3,
-            finishedSolvingAt: undefined, 
+            finishedSolvingAt: undefined,
             feedback: undefined,
             wasCorrect: undefined,
             problemTitle: 'Derivative of Polynomial',
         },
     ];
-    
+
     async getProblems(
         offset: number,
         limit: number,
@@ -105,7 +105,9 @@ export class MockProblemsRepository implements IProblemsRepository {
     getProblemById(id: number): Promise<Problem> {
         const problem = this._problems.find((problem) => problem.id === id);
         if (!problem) {
-            throw new DatabaseOperationError(`Problem with id ${id} not found.`);
+            throw new DatabaseOperationError(
+                `Problem with id ${id} not found.`,
+            );
         }
         return Promise.resolve(problem);
     }
