@@ -1,7 +1,7 @@
 import type { IProblemsRepository } from '@/application/repositories/problems.repository.interface';
 import { DatabaseOperationError } from '@/entities/errors/common';
 import type { Problem } from '@/entities/models/problem';
-import { Solve } from '@/entities/models/solve';
+import type { Solve } from '@/entities/models/solve';
 
 export class MockProblemsRepository implements IProblemsRepository {
     private _problems: Problem[] = [
