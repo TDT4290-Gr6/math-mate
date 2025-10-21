@@ -88,20 +88,23 @@ export default function SolvingPage() {
         if (currentStep < totalSteps - 1) {
             const nextStep = currentStep + 1;
             setCurrentStep(nextStep);
+
+            const stepId = method?.steps[nextStep - 1]?.id;
             void tracked.logEvent({
                 actionName: 'next_step',
-                payload: { total_steps: totalSteps },
-                stepId: nextStep,
+                payload: { total_steps: totalSteps, current_step: nextStep },
+                stepId: stepId,
             });
         }
     };
 
     const handleGoToAnswer = () => {
         setIsAnswerPopupOpen(true);
+        const stepId = method?.steps[currentStep - 1]?.id;
         void tracked.logEvent({
             actionName: 'go_to_answer',
-            stepId: currentStep,
-            payload: { total_steps: totalSteps },
+            stepId: stepId,
+            payload: { total_steps: totalSteps, current_step: currentStep },
         });
     };
 
@@ -111,8 +114,8 @@ export default function SolvingPage() {
         void tracked.logEvent({ actionName: 'chat_open', payload: {} });
     };
 
-    // Close chat and log
     const handleCloseChat = () => {
+        setShowToggle(false);
         setIsChatOpen(false);
         void tracked.logEvent({ actionName: 'chat_close', payload: {} });
     };
@@ -242,11 +245,7 @@ export default function SolvingPage() {
                         >
                             <ChatbotWindow
                                 chatHistory={chatHistory}
-                                onClose={() => {
-                                    setShowToggle(false);
-                                    setIsChatOpen(false);
-                                    handleCloseChat();
-                                }}
+                                onClose={handleCloseChat}
                                 onSendMessage={sendMessage}
                                 isLoading={isLoading}
                                 error={error ?? undefined}

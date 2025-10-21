@@ -114,13 +114,17 @@ export function useChatbot() {
         }
 
         // Log user message
-        const safeMsg = message
-            .slice(0, 500)
-            .replace(/\b[\w.+-]+@[\w-]+\.[\w.-]+\b/g, '[redacted]'); // cap length and strip emails
-        void tracked.logEvent({
-            actionName: 'chat_message_sent',
-            payload: { chatSessionId, message: safeMsg },
-        });
+                const safeMsg = message
+                    .slice(0, 500)
+                    .replace(/\b[\w.+-]+@[\w-]+\.[\w.-]+\b/g, '[redacted]'); // cap length and strip emails
+                void tracked.logEvent({
+                    actionName: 'chat_message_sent',
+                    payload: {
+                        chatSessionId,
+                        message: safeMsg,
+                        current_step: chatContext.currentStep ?? -1,
+                    },
+                });
 
         setIsLoading(true);
         try {
@@ -141,16 +145,17 @@ export function useChatbot() {
             }));
 
             // Log assistant response
-            const safeReply = reply.message.content
-                .slice(0, 500)
-                .replace(/\b[\w.+-]+@[\w-]+\.[\w.-]+\b/g, '[redacted]');
-            void tracked.logEvent({
-                actionName: 'chat_message_received',
-                payload: {
-                    chatSessionId,
-                    reply: safeReply,
-                },
-            });
+                        const safeReply = reply.message.content
+                            .slice(0, 500)
+                            .replace(/\b[\w.+-]+@[\w-]+\.[\w.-]+\b/g, '[redacted]');
+                        void tracked.logEvent({
+                            actionName: 'chat_message_received',
+                            payload: {
+                                chatSessionId,
+                                reply: safeReply,
+                                current_step: chatContext.currentStep ?? -1, 
+                            },
+                        });
         } catch (err) {
             console.error('Failed to get response:', err);
             setError('Failed to get response. Please try again.');

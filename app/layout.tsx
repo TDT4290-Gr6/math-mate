@@ -1,6 +1,4 @@
-import { LoggerProvider } from './components/logger/LoggerProvider';
 import { Geist, Geist_Mono } from 'next/font/google';
-import { SessionProvider } from 'next-auth/react';
 import { ThemeProvider } from 'next-themes';
 import type { Metadata } from 'next';
 import Providers from './providers';

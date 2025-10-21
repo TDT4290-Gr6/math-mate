@@ -8,14 +8,16 @@ export type AnalyticsEventMap = {
         page?: string;
         chatSessionId: string;
         message: string;
+        current_step: number;
     };
     chat_message_received: {
         page?: string;
         chatSessionId: string;
         reply: string;
+        current_step: number;
     };
-    next_step: { page?: string; total_steps: number };
-    go_to_answer: { page?: string; total_steps: number };
+    next_step: { page?: string; total_steps: number; current_step: number };
+    go_to_answer: { page?: string; total_steps: number; current_step: number };
     reveal_answer: { page?: string };
     answer_evaluation: { page?: string; correct: boolean };
     rate_difficulty: { page?: string; rating: number };
