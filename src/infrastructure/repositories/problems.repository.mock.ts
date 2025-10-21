@@ -1,4 +1,5 @@
 import type { IProblemsRepository } from '@/application/repositories/problems.repository.interface';
+import { DatabaseOperationError } from '@/entities/errors/common';
 import type { Problem } from '@/entities/models/problem';
 import { Solve } from '@/entities/models/solve';
 
@@ -104,7 +105,7 @@ export class MockProblemsRepository implements IProblemsRepository {
     getProblemById(id: number): Promise<Problem> {
         const problem = this._problems.find((problem) => problem.id === id);
         if (!problem) {
-            throw new Error(`Problem with id ${id} not found.`);
+            throw new DatabaseOperationError(`Problem with id ${id} not found.`);
         }
         return Promise.resolve(problem);
     }
