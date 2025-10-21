@@ -62,7 +62,8 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
     }
 
     const logEvent = tracked.logEvent;
-    // Debounced logging function (memoized to avoid recreation)
+    // Debounced logging function (to prevent event log spamming)
+    // (and memoized to avoid recreation)
     const debouncedLogTheme = useMemo(
         () =>
             debounce((newTheme: string) => {
@@ -74,6 +75,12 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
         [logEvent],
     );
 
+    const handleThemeSwitch = (checked: boolean) => {
+        const newTheme = checked ? 'dark' : 'light';
+        setTheme(newTheme);
+        debouncedLogTheme(newTheme);
+    };
+
     const handleNavigateToSolve = (problemId: number) => {
         void tracked.logEvent({
             actionName: 'navigate_previous_solve',
@@ -81,6 +88,19 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
             payload: {},
         });
         router.push(`/protected/methods/${problemId}`);
+    };
+
+    const handleLogOut = async () => {
+        try {
+            await tracked.logEvent({
+                actionName: 'sign_out',
+                payload: {},
+            });
+        } finally {
+            sessionStorage.removeItem('signInLogged');
+            onClose();
+            void signOut();
+        }
     };
 
     useEffect(() => {
@@ -162,29 +182,14 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                         <Switch
                             className="ml-auto h-6 w-10 cursor-pointer p-1"
                             checked={theme === 'dark'}
-                            onCheckedChange={(checked) => {
-                                const newTheme = checked ? 'dark' : 'light';
-                                setTheme(newTheme);
-                                debouncedLogTheme(newTheme);
-                            }}
+                            onCheckedChange={handleThemeSwitch}
                         />
                     </div>
                     {/* Logout button */}
                     <button
                         type="button"
-                        className="bg-sidebar-primary hover:bg-sidebar-accent flex cursor-pointer items-center gap-2 rounded-4xl px-4 py-2"
-                        onClick={async () => {
-                            try {
-                                await tracked.logEvent({
-                                    actionName: 'sign_out',
-                                    payload: {},
-                                });
-                            } finally {
-                                sessionStorage.removeItem('signInLogged');
-                                onClose();
-                                void signOut();
-                            }
-                        }}
+                        className="bg-sidebar-primary hover:bg-accent flex cursor-pointer items-center gap-2 rounded-4xl px-4 py-2"  
+                        onClick={handleLogOut}
                     >
                         <UserRound
                             size={20}
