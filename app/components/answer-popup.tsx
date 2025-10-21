@@ -149,13 +149,12 @@ export default function AnswerPopup({
     }
 
     useEffect(() => {
-         if (isOpen) {
-             setStep('reveal');
-             setSelectedDifficulty(undefined);
-             setWasCorrect(false);
-         }
-     }, [isOpen]);
-    
+        if (isOpen) {
+            setStep('reveal');
+            setSelectedDifficulty(undefined);
+            setWasCorrect(false);
+        }
+    }, [isOpen]);
 
     return (
         <Dialog
