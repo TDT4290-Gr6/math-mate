@@ -1,11 +1,13 @@
-import { describe, it, beforeEach, expect } from 'vitest';
-import { getInjection } from '@/di/container';
+import { MockAuthenticationService } from '@/infrastructure/services/auth.service.mock';
 import { UnauthenticatedError } from '@/entities/errors/auth';
 import { InputParseError } from '@/entities/errors/common';
-import { MockAuthenticationService } from '@/infrastructure/services/auth.service.mock';
+import { describe, it, beforeEach, expect } from 'vitest';
+import { getInjection } from '@/di/container';
 
 const createCountryController = getInjection('ICreateCountryController');
-const authService = getInjection('IAuthenticationService') as MockAuthenticationService;
+const authService = getInjection(
+    'IAuthenticationService',
+) as MockAuthenticationService;
 
 describe('createCountryController', () => {
     beforeEach(() => {
@@ -33,27 +35,31 @@ describe('createCountryController', () => {
         });
     });
 
-     describe('input validation', () => {
+    describe('input validation', () => {
         it('throws InputParseError for empty name', async () => {
             await expect(
                 createCountryController({ name: '' }),
             ).rejects.toBeInstanceOf(InputParseError);
         });
 
-         it('throws InputParseError for invalid characters in name', async () => {
+        it('throws InputParseError for invalid characters in name', async () => {
             await expect(
-             createCountryController({ name: 'N0rw@y!' }),
+                createCountryController({ name: 'N0rw@y!' }),
             ).rejects.toBeInstanceOf(InputParseError);
         });
 
         it('throws InputParseError for missing name field', async () => {
             // @ts-expect-error – testing invalid structure intentionally
-            await expect(createCountryController({})).rejects.toBeInstanceOf(InputParseError);
+            await expect(createCountryController({})).rejects.toBeInstanceOf(
+                InputParseError,
+            );
         });
 
         it('throws InputParseError for invalid name type', async () => {
             // @ts-expect-error – testing invalid type intentionally
-            await expect(createCountryController({ name: 123 })).rejects.toBeInstanceOf(InputParseError);
+            await expect(
+                createCountryController({ name: 123 }),
+            ).rejects.toBeInstanceOf(InputParseError);
         });
     });
 
@@ -70,4 +76,3 @@ describe('createCountryController', () => {
         });
     });
 });
-
