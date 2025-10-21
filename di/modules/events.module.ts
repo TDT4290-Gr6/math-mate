@@ -1,12 +1,9 @@
-import { createModule } from '@evyweb/ioctopus';
-import { DI_SYMBOLS } from '../types';
-
 import { createEventController } from '@/interface-adapters/controllers/create-event.controller';
-import { LogEventUseCase } from '@/application/use-cases/log-event.use-case';
-
-// TODO: swap these to your real repo when ready
 import { MockEventsRepository } from '@/infrastructure/repositories/events.repository.mock';
 import { EventsRepository } from '@/infrastructure/repositories/events.repository';
+import { LogEventUseCase } from '@/application/use-cases/log-event.use-case';
+import { createModule } from '@evyweb/ioctopus';
+import { DI_SYMBOLS } from '../types';
 
 export function eventsModule() {
     const events = createModule();
@@ -28,6 +25,8 @@ export function eventsModule() {
         .bind(DI_SYMBOLS.ICreateEventController)
         .toHigherOrderFunction(createEventController, [
             DI_SYMBOLS.ILogEventUseCase,
+            DI_SYMBOLS.ILogEventUseCase,
+            DI_SYMBOLS.IAuthenticationService,
         ]);
 
     return events;
