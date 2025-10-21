@@ -53,12 +53,12 @@ export default function Header({
 
     const openSidebar = useCallback(() => {
         setIsOpen((prev) => {
-        if (!prev) {
-            void tracked.logEvent({
-                actionName: 'open_sidebar',
-                payload: {},
-            });
-        }
+            if (!prev) {
+                void tracked.logEvent({
+                    actionName: 'open_sidebar',
+                    payload: {},
+                });
+            }
             return true;
         });
     }, [tracked]);
