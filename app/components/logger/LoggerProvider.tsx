@@ -100,15 +100,17 @@ export function useTrackedLogger() {
     const logger = useLogger();
     const params = useParams();
 
-    const parseNumericParam = (value: string | string[] | undefined): number | undefined => {  
-        if (!value || Array.isArray(value)) return undefined;  
-        const num = Number(value);  
-        return Number.isNaN(num) ? undefined : num;  
-    }; 
+    const parseNumericParam = (
+        value: string | string[] | undefined,
+    ): number | undefined => {
+        if (!value || Array.isArray(value)) return undefined;
+        const num = Number(value);
+        return Number.isNaN(num) ? undefined : num;
+    };
 
-    const problemId = parseNumericParam(params?.problemId);  
+    const problemId = parseNumericParam(params?.problemId);
     const methodId = parseNumericParam(params?.methodId);
-    
+
     const logEvent = useCallback(
         <K extends keyof AnalyticsEventMap>(input: LogEventInput<K>) =>
             logger.logEvent({

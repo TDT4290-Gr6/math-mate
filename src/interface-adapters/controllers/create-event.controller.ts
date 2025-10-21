@@ -43,18 +43,16 @@ export const createEventController =
                     : JSON.stringify(data.payload);
 
             try {
-                const out = await logEventUseCase.execute(
-                    {
-                        userId,
-                        sessionId: data.sessionId,
-                        actionName: data.actionName,
-                        loggedAt: new Date(),
-                        problemId: data.problemId,
-                        methodId: data.methodId,
-                        stepId: data.stepId,
-                        payload: payloadString,
-                    },
-                );
+                const out = await logEventUseCase.execute({
+                    userId,
+                    sessionId: data.sessionId,
+                    actionName: data.actionName,
+                    loggedAt: new Date(),
+                    problemId: data.problemId,
+                    methodId: data.methodId,
+                    stepId: data.stepId,
+                    payload: payloadString,
+                });
                 return { id: out.id, loggedAt: out.loggedAt };
             } catch (err) {
                 throw err;
