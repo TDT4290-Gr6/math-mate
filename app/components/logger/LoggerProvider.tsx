@@ -36,10 +36,10 @@ function getSessionId(): number {
     sessionStorage.setItem('logSessionId', newId.toString());
     return newId;
 }
+
 export function LoggerProvider({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     const sessionId = useRef(getSessionId());
-
     const logEvent = useCallback(
         async <K extends keyof AnalyticsEventMap>(input: LogEventInput<K>) => {
             // Merge path automatically into payload
@@ -49,7 +49,6 @@ export function LoggerProvider({ children }: { children: React.ReactNode }) {
                     : { value: input.payload }),
                 page: pathname,
             };
-
             try {
                 await saveEvent(
                     sessionId.current,
@@ -101,9 +100,15 @@ export function useTrackedLogger() {
     const logger = useLogger();
     const params = useParams();
 
-    const problemId = params?.problemId ? Number(params.problemId) : undefined;
-    const methodId = params?.methodId ? Number(params.methodId) : undefined;
+    const parseNumericParam = (value: string | string[] | undefined): number | undefined => {  
+        if (!value || Array.isArray(value)) return undefined;  
+        const num = Number(value);  
+        return Number.isNaN(num) ? undefined : num;  
+    }; 
 
+    const problemId = parseNumericParam(params?.problemId);  
+    const methodId = parseNumericParam(params?.methodId);
+    
     const logEvent = useCallback(
         <K extends keyof AnalyticsEventMap>(input: LogEventInput<K>) =>
             logger.logEvent({
