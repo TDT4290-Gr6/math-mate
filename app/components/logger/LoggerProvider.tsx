@@ -9,7 +9,7 @@ import React, {
 } from 'react';
 import { usePathname, useParams } from 'next/navigation';
 import type { AnalyticsEventMap } from './eventTypes';
-import { useSession } from 'next-auth/react';
+import { saveEvent } from '@/actions';
 
 export type LogEventInput<K extends keyof AnalyticsEventMap> = {
     actionName: K;
@@ -36,21 +36,12 @@ function getSessionId(): number {
     sessionStorage.setItem('logSessionId', newId.toString());
     return newId;
 }
-
 export function LoggerProvider({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
-    const { data: session } = useSession();
     const sessionId = useRef(getSessionId());
 
     const logEvent = useCallback(
         async <K extends keyof AnalyticsEventMap>(input: LogEventInput<K>) => {
-            const userId = session?.user?.id
-                ? Number(session.user.id)
-                : undefined;
-
-            // Only log if there is a userId
-            if (!userId) return;
-
             // Merge path automatically into payload
             const payload = {
                 ...(typeof input.payload === 'object'
@@ -59,28 +50,20 @@ export function LoggerProvider({ children }: { children: React.ReactNode }) {
                 page: pathname,
             };
 
-            const body = {
-                userId,
-                sessionId: sessionId.current,
-                actionName: input.actionName,
-                loggedAt: new Date().toISOString(),
-                problemId: input.problemId,
-                methodId: input.methodId,
-                stepId: input.stepId,
-                payload: JSON.stringify(payload),
-            };
-
             try {
-                await fetch('/api/events', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(body),
-                });
+                await saveEvent(
+                    sessionId.current,
+                    input.actionName,
+                    input.problemId,
+                    input.methodId,
+                    input.stepId,
+                    JSON.stringify(payload),
+                );
             } catch (err) {
                 console.warn('logEvent failed', err);
             }
         },
-        [session, pathname],
+        [pathname],
     );
 
     // Automatic page_view logging
