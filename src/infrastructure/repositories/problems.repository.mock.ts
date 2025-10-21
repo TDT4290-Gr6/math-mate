@@ -63,9 +63,9 @@ export class MockProblemsRepository implements IProblemsRepository {
             attempts: 1,
             startedSolvingAt: new Date('2025-10-20T14:20:00Z'),
             stepsUsed: 3,
-            finishedSolvingAt: undefined,
-            feedback: undefined,
-            wasCorrect: undefined,
+            finishedSolvingAt: new Date('2025-10-15T10:50:00Z'),
+            feedback: 3,
+            wasCorrect: false,
             problemTitle: 'Derivative of Polynomial',
         },
     ];
