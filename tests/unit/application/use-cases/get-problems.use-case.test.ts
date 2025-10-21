@@ -52,7 +52,9 @@ describe('getProblemsUseCase', () => {
 
             expect(result).toHaveLength(2);
             expect(result.map((problem) => problem.id)).toEqual([2, 5]);
-            expect(result.every((problem) => problem.subject === 'Geometry')).toBe(true);
+            expect(
+                result.every((problem) => problem.subject === 'Geometry'),
+            ).toBe(true);
         });
 
         it('filters problems by multiple subjects', async () => {
@@ -84,14 +86,18 @@ describe('getProblemsUseCase', () => {
 
             expect(result).toHaveLength(4);
             expect(result.map((problem) => problem.id)).toEqual([1, 2, 3, 5]);
-            expect(result.every((problem) => ![4, 6].includes(problem.id))).toBe(true);
+            expect(
+                result.every((problem) => ![4, 6].includes(problem.id)),
+            ).toBe(true);
         });
 
         it('returns all problems for user with no solved problems', async () => {
             const result = await getProblemsUseCase(0, 10, 2, 0);
 
             expect(result).toHaveLength(6);
-            expect(result.map((problem) => problem.id)).toEqual([1, 2, 3, 4, 5, 6]);
+            expect(result.map((problem) => problem.id)).toEqual([
+                1, 2, 3, 4, 5, 6,
+            ]);
         });
     });
 
