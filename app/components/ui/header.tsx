@@ -52,8 +52,15 @@ export default function Header({
     const tracked = useTrackedLogger();
 
     const openSidebar = useCallback(() => {
-        setIsOpen(true);
-        void tracked.logEvent({ actionName: 'open_sidebar', payload: {} });
+        setIsOpen((prev) => {
+        if (!prev) {
+            void tracked.logEvent({
+                actionName: 'open_sidebar',
+                payload: {},
+            });
+        }
+            return true;
+        });
     }, [tracked]);
 
     const closeSidebar = useCallback(() => {
