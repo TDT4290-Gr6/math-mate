@@ -148,6 +148,15 @@ export default function AnswerPopup({
         onClose?.();
     }
 
+    useEffect(() => {
+         if (isOpen) {
+             setStep('reveal');
+             setSelectedDifficulty(undefined);
+             setWasCorrect(false);
+         }
+     }, [isOpen]);
+    
+
     return (
         <Dialog
             open={isOpen}
@@ -158,7 +167,6 @@ export default function AnswerPopup({
         >
             <DialogContent
                 onInteractOutside={(event) => event.preventDefault()} // prevent click outside
-                onEscapeKeyDown={() => onClose?.()} // allow Escape to close dialog
                 className="px-8 pt-8 pb-4"
             >
                 <DialogHeader>

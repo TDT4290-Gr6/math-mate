@@ -121,10 +121,6 @@ export default function SolvingPage() {
     };
 
     const handlePopUpClose = () => {
-        void tracked.logEvent({
-            actionName: 'close_answer_popup',
-            payload: {},
-        });
         setIsAnswerPopupOpen(false);
         setStartedSolvingAt(new Date());
     };
