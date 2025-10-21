@@ -108,7 +108,14 @@ export class SolvesRepository implements ISolvesRepository {
             });
 
             // Recalculate user score after creating a new solve
-            await this.updateUserScore(solve.userId);
+            try {
+                await this.updateUserScore(solve.userId);
+            } catch (error) {
+                console.warn('Failed to update user score', {
+                    userId: solve.userId,
+                    err: error,
+                });
+            }
 
             return newSolve as Solve;
         } catch (error) {
