@@ -19,7 +19,7 @@ export class MockEventsRepository implements IEventsRepository {
                 loggedAt: createdEvent.loggedAt.toISOString(),
                 id: createdEvent.id,
             },
-            'Event opprettet i MockEventsRepository',
+            'Event created in MockEventsRepository',
         );
         return createdEvent;
     }
