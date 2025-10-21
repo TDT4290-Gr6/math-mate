@@ -106,6 +106,17 @@ export class SolvesRepository implements ISolvesRepository {
             const newSolve = await prisma.solves.create({
                 data: { ...parsedSolve, attempts: attemptsUsed + 1 },
             });
+
+            // Recalculate user score after creating a new solve
+            try {
+                await this.updateUserScore(solve.userId);
+            } catch (error) {
+                console.warn('Failed to update user score', {
+                    userId: solve.userId,
+                    err: error,
+                });
+            }
+
             return newSolve as Solve;
         } catch (error) {
             throw new DatabaseOperationError('Failed to create solve', {
@@ -134,6 +145,55 @@ export class SolvesRepository implements ISolvesRepository {
             return deletedSolve as Solve;
         } catch (error) {
             throw new DatabaseOperationError('Failed to delete solve', {
+                cause: error,
+            });
+        }
+    }
+
+    private async updateUserScore(userId: number): Promise<void> {
+        const score = await this.calculateScore(userId);
+        await prisma.user.update({
+            where: { id: userId },
+            data: { score: score },
+        });
+    }
+
+    /**
+     * Calculates the user's score as the average level of distinct problems the user solved correctly.
+     *
+     * The method:
+     * - Fetches distinct solved problems for the given user where the solve was marked correct.
+     * - Uses the associated problem's `level` value to compute an arithmetic mean.
+     * - Treats a missing (`null`/`undefined`) problem level as `0`.
+     * - Returns `0` when the user has no correct solves.
+     *
+     * Notes:
+     * - Duplicate solves for the same problem are ignored (distinct by `problemId`).
+     * - The result is a plain numeric average (no rounding performed).
+     *
+     * @param userId - The database identifier of the user whose score will be computed.
+     * @returns A promise that resolves to the average problem level (number). Returns `0` if there are no correct distinct solves.
+     * @throws DatabaseOperationError - If the underlying database operation fails; the original error is attached as the `cause`.
+     */
+    private async calculateScore(userId: number): Promise<number> {
+        try {
+            const solvesWithProblem = await prisma.solves.findMany({
+                where: { userId, wasCorrect: true },
+                distinct: ['problemId'],
+                include: { problem: { select: { level: true } } },
+            });
+
+            if (solvesWithProblem.length === 0) return 0;
+
+            const avgLevel =
+                solvesWithProblem.reduce(
+                    (sum, s) => sum + (s.problem?.level ?? 0),
+                    0,
+                ) / solvesWithProblem.length;
+
+            return avgLevel;
+        } catch (error) {
+            throw new DatabaseOperationError('Failed to calculate user score', {
                 cause: error,
             });
         }
