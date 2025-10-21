@@ -67,7 +67,10 @@ export default function Header({
         // Only log a close event if the sidebar was open before this call.
         setIsOpen((prev) => {
             if (prev) {
-                void tracked.logEvent({ actionName: 'close_sidebar', payload: {} });
+                void tracked.logEvent({
+                    actionName: 'close_sidebar',
+                    payload: {},
+                });
             }
             return false;
         });
@@ -81,7 +84,8 @@ export default function Header({
                 target &&
                 (target.closest(
                     'input, textarea, select, [contenteditable="true"], [role="textbox"]',
-                ) || target.closest('[role="dialog"], dialog'))
+                ) ||
+                    target.closest('[role="dialog"], dialog'))
             ) {
                 return;
             }
