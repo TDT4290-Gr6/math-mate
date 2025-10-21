@@ -37,4 +37,3 @@ export class EventsRepository implements IEventsRepository {
         }
     }
 }
-
