@@ -18,6 +18,7 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover';
+import { useTrackedLogger } from './logger/LoggerProvider';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { getCountries, setCountry } from '@/actions';
@@ -40,6 +41,7 @@ export function CountrySelectDropdown({ setOpen }: CountrySelectDropdownProps) {
     const [countries, setCountries] = useState<
         Awaited<ReturnType<typeof getCountries>>
     >([]);
+    const tracked = useTrackedLogger();
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -68,11 +70,19 @@ export function CountrySelectDropdown({ setOpen }: CountrySelectDropdownProps) {
         setCountry(countryId)
             .then((result) => {
                 if (result.success) setOpen(false);
+                void tracked.logEvent({
+                    actionName: 'submit_country',
+                    payload: { countryId },
+                });
             })
             .catch(() => {
                 form.setError('countryId', {
                     type: 'manual',
                     message: 'Failed to set country. Please try again later.',
+                });
+                void tracked.logEvent({
+                    actionName: 'failed_country_submit',
+                    payload: { countryId },
                 });
             });
     }

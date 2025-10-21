@@ -1,3 +1,5 @@
+'use client';
+
 import { LaTeXFormattedText } from './ui/latex-formatted-text';
 import type { Step } from '@/entities/models/step';
 import MethodCard from './ui/method-card';
@@ -33,10 +35,10 @@ export default function Steps({
     const visibleSteps: Step[] = steps?.slice(0, currentStep) ?? [];
     const containerRef = useRef<HTMLDivElement | null>(null);
 
+    // scroll when new steps appear
     useEffect(() => {
         const el = containerRef.current;
         if (!el) return;
-        // Scroll to bottom when adding new steps
         el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
     }, [visibleSteps.length]);
 
@@ -55,6 +57,7 @@ export default function Steps({
                     disableButton={true}
                 />
             </div>
+
             {visibleSteps.map((step, index) => (
                 <div key={step.id} className="p-2">
                     <h3 className="flex flex-row text-lg font-semibold">
