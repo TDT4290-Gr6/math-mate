@@ -198,41 +198,39 @@ export async function getLatestSolves() {
     }
 }
 
-/**  
- * Saves an event by invoking the injected createEvent controller.  
- *  
- * @param sessionId - Numeric identifier for the current session.  
- * @param actionName - Name of the action being recorded (e.g., "chat_message_sent").  
- * @param problemId - Optional identifier for the related problem, if applicable.  
- * @param methodId - Optional identifier for the selected method, if applicable.  
- * @param stepId - Optional identifier for the step within a method/problem, if applicable.  
- * @param payload - Arbitrary string payload (e.g., serialized JSON) containing event details.  
- *  
- * @returns A promise that resolves with the id and loggedAt timestamp of the created event.  
- */  
-export async function saveEvent(  
-    sessionId: number,  
-    actionName: string,  
-    problemId: number | undefined,  
-    methodId: number | undefined,  
-    stepId: number | undefined,  
-    payload: string,  
-) {  
-    try {  
-        const createEventController = getInjection('ICreateEventController');  
-        const response = await createEventController({  
-            sessionId,  
-            actionName,  
-            problemId,  
-            methodId,  
-            stepId,  
-            payload,  
-        });  
-        return response;  
-    } catch (error) {  
-        console.error('Failed to log event:', error);  
-        throw error;  
-    }  
-}  
-
-
+/**
+ * Saves an event by invoking the injected createEvent controller.
+ *
+ * @param sessionId - Numeric identifier for the current session.
+ * @param actionName - Name of the action being recorded (e.g., "chat_message_sent").
+ * @param problemId - Optional identifier for the related problem, if applicable.
+ * @param methodId - Optional identifier for the selected method, if applicable.
+ * @param stepId - Optional identifier for the step within a method/problem, if applicable.
+ * @param payload - Arbitrary string payload (e.g., serialized JSON) containing event details.
+ *
+ * @returns A promise that resolves with the id and loggedAt timestamp of the created event.
+ */
+export async function saveEvent(
+    sessionId: number,
+    actionName: string,
+    problemId: number | undefined,
+    methodId: number | undefined,
+    stepId: number | undefined,
+    payload: string,
+) {
+    try {
+        const createEventController = getInjection('ICreateEventController');
+        const response = await createEventController({
+            sessionId,
+            actionName,
+            problemId,
+            methodId,
+            stepId,
+            payload,
+        });
+        return response;
+    } catch (error) {
+        console.error('Failed to log event:', error);
+        throw error;
+    }
+}
