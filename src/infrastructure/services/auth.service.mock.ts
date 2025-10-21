@@ -2,11 +2,15 @@ import type { IAuthenticationService } from '@/application/services/auth.service
 
 export class MockAuthenticationService implements IAuthenticationService {
     private userId: number | null = 1;
-    private authenticated: boolean = true;
+    private authenticated: boolean = false;
 
-    constructor(authenticated: boolean = true, userId: number | null = 1) {
+    constructor(authenticated: boolean = false, userId: number | null = 1) {
         this.authenticated = authenticated;
         this.userId = userId;
+    }
+
+    setAuthenticated(authenticated: boolean): void {
+        this.authenticated = authenticated;
     }
 
     async getCurrentUserId(): Promise<number | null> {
