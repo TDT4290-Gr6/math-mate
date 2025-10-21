@@ -102,13 +102,13 @@ export class MockProblemsRepository implements IProblemsRepository {
         return filtered.slice(offset, offset + limit);
     }
 
-    getProblemById(id: number): Promise<Problem> {
+    async getProblemById(id: number): Promise<Problem> {
         const problem = this._problems.find((problem) => problem.id === id);
         if (!problem) {
             throw new DatabaseOperationError(
                 `Problem with id ${id} not found.`,
             );
         }
-        return Promise.resolve(problem);
+        return problem;
     }
 }
