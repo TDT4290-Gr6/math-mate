@@ -1,10 +1,10 @@
-import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import { defineConfig } from 'vite';
 
- export default defineConfig({
-   plugins: [tsconfigPaths()],
-   test: {
-     globals: true,
-    environment: 'node',
-   },
+export default defineConfig({
+    plugins: [tsconfigPaths()],
+    test: {
+        globals: true,
+        environment: 'node',
+    },
 });
