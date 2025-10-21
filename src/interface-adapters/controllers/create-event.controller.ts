@@ -1,7 +1,6 @@
 import type { IAuthenticationService } from '@/application/services/auth.service.interface';
 import { withRequestLogger } from '@/infrastructure/services/logging/request-logger';
 import { ILogEventUseCase } from '@/application/use-cases/log-event.use-case';
-import type { LoggerLike } from '@/application/use-cases/log-event.use-case';
 import { UnauthenticatedError } from '@/entities/errors/auth';
 import { InputParseError } from '@/entities/errors/common';
 import { z } from 'zod';
@@ -23,15 +22,10 @@ export const createEventController =
         authenticationService: IAuthenticationService,
     ) =>
     async (raw: unknown) => {
-        return withRequestLogger(async ({ log }) => {
-            const l = log as LoggerLike;
+        return withRequestLogger(async () => {
             // Validate input
             const parsed = LogEventDTO.safeParse(raw);
             if (!parsed.success) {
-                l.warn(
-                    { raw, err: parsed.error },
-                    'createEventController: invalid input',
-                );
                 throw new InputParseError('Invalid input data', {
                     cause: parsed.error,
                 });
@@ -48,12 +42,6 @@ export const createEventController =
                     ? data.payload
                     : JSON.stringify(data.payload);
 
-            l.info(
-                { userId, action: data.actionName },
-                'createEventController: request validated',
-            );
-
-            // Call use case with cleaned data
             try {
                 const out = await logEventUseCase.execute(
                     {
@@ -66,17 +54,9 @@ export const createEventController =
                         stepId: data.stepId,
                         payload: payloadString,
                     },
-                    { log: l },
                 );
-
-                l.info({ id: out.id }, 'createEventController: event created');
-
                 return { id: out.id, loggedAt: out.loggedAt };
             } catch (err) {
-                l.error(
-                    { err },
-                    'createEventController: failed to create event',
-                );
                 throw err;
             }
         });

@@ -25,7 +25,6 @@ export function eventsModule() {
         .bind(DI_SYMBOLS.ICreateEventController)
         .toHigherOrderFunction(createEventController, [
             DI_SYMBOLS.ILogEventUseCase,
-            DI_SYMBOLS.ILogEventUseCase,
             DI_SYMBOLS.IAuthenticationService,
         ]);
 
