@@ -57,18 +57,24 @@ export default function Header({
     }, [tracked]);
 
     const closeSidebar = useCallback(() => {
-        setIsOpen(false);
-        void tracked.logEvent({ actionName: 'close_sidebar', payload: {} });
+        // Only log a close event if the sidebar was open before this call.
+        setIsOpen((prev) => {
+            if (prev) {
+                void tracked.logEvent({ actionName: 'close_sidebar', payload: {} });
+            }
+            return false;
+        });
     }, [tracked]);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             const target = e.target as HTMLElement | null;
+            // Ignore key events when focus is inside form controls or dialogs
             if (
                 target &&
-                target.closest(
+                (target.closest(
                     'input, textarea, select, [contenteditable="true"], [role="textbox"]',
-                )
+                ) || target.closest('[role="dialog"], dialog'))
             ) {
                 return;
             }
