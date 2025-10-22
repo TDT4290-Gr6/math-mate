@@ -2,7 +2,8 @@
 
 import { clearConversationAction, sendMessageAction } from '../actions';
 import { ChatHistory, ChatMessage } from '@/components/chatbot-window';
-import { useState, useEffect } from 'react';
+import { useTrackedLogger } from '@/components/logger/LoggerProvider';
+import { useState, useEffect, useRef } from 'react';
 
 export interface ChatContext {
     problemDescription?: string;
@@ -56,11 +57,16 @@ const createPrivacyMessage = (): ChatMessage => ({
  */
 
 export function useChatbot() {
+    const tracked = useTrackedLogger();
     const [chatHistory, setChatHistory] = useState<ChatHistory>({
         messages: [createPrivacyMessage()],
     });
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
+    const chatSessionId = useRef(
+        `${Date.now()}${Math.floor(Math.random() * 1e6)}`,
+    ).current;
 
     // Automatically clear error after 7 seconds
     useEffect(() => {
@@ -107,6 +113,19 @@ export function useChatbot() {
                 Current Step: ${chatContext.currentStep || 'N/A'}`;
         }
 
+        // Log user message
+        const safeMsg = message
+            .slice(0, 500)
+            .replace(/\b[\w.+-]+@[\w-]+\.[\w.-]+\b/g, '[redacted]'); // cap length and strip emails
+        void tracked.logEvent({
+            actionName: 'chat_message_sent',
+            payload: {
+                chatSessionId,
+                message: safeMsg,
+                current_step: chatContext.currentStep ?? -1,
+            },
+        });
+
         setIsLoading(true);
         try {
             const reply = await sendMessageAction(context, message);
@@ -114,6 +133,7 @@ export function useChatbot() {
                 setError(reply.error);
                 return;
             }
+
             const assistantMessage: ChatMessage = {
                 chatID: `assistant-${Date.now()}`,
                 sender: 'assistant',
@@ -123,6 +143,19 @@ export function useChatbot() {
             setChatHistory((prev) => ({
                 messages: [...prev.messages, assistantMessage],
             }));
+
+            // Log assistant response
+            const safeReply = reply.message.content
+                .slice(0, 500)
+                .replace(/\b[\w.+-]+@[\w-]+\.[\w.-]+\b/g, '[redacted]');
+            void tracked.logEvent({
+                actionName: 'chat_message_received',
+                payload: {
+                    chatSessionId,
+                    reply: safeReply,
+                    current_step: chatContext.currentStep ?? -1,
+                },
+            });
         } catch (err) {
             console.error('Failed to get response:', err);
             setError('Failed to get response. Please try again.');

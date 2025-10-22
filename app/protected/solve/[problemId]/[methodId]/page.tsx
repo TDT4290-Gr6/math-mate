@@ -1,5 +1,6 @@
 'use client';
 
+import { useTrackedLogger } from '@/components/logger/LoggerProvider';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useFetchProblem } from 'app/hooks/useFetchProblem';
 import ChatbotWindow from '@/components/chatbot-window';
@@ -23,7 +24,7 @@ import { cn } from '@/lib/utils';
  */
 export default function SolvingPage() {
     const { chatHistory, sendMessage, isLoading, error } = useChatbot();
-    const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
+    const [isChatOpen, setIsChatOpen] = useState(false);
     const [isAnswerPopupOpen, setIsAnswerPopupOpen] = useState(false);
     const [showToggle, setShowToggle] = useState(true);
     const [dividerPosition, setDividerPosition] = useState(50);
@@ -32,14 +33,15 @@ export default function SolvingPage() {
     const [chatClosed, setChatClosed] = useState(!isChatOpen);
     const [startedSolvingAt, setStartedSolvingAt] = useState(new Date());
 
+    const tracked = useTrackedLogger();
     const params = useParams<{ problemId: string; methodId: string }>();
     const problemId = Number(params.problemId);
     const methodId = Number(params.methodId);
+
     const { problem, loadingProblem, errorProblem } =
         useFetchProblem(problemId);
 
-    const [currentStep, setCurrentStep] = useState(1);
-
+    const [currentStep, setCurrentStep] = useState(0);
     const method = problem?.methods.find((m) => m.id === methodId);
     const totalSteps = method?.steps?.length ?? 0;
 
@@ -82,18 +84,40 @@ export default function SolvingPage() {
         if (isChatOpen) setChatClosed(false);
     }, [isChatOpen]);
 
-    // Listen for the chat-toggle event
-    useEffect(() => {
-        const handler = () => setIsChatOpen((v) => !v);
-        window.addEventListener('chat-toggle', handler as EventListener);
-        return () =>
-            window.removeEventListener('chat-toggle', handler as EventListener);
-    }, []);
-
     const handleNextStep = () => {
         if (currentStep < totalSteps - 1) {
-            setCurrentStep((prev) => prev + 1);
+            const nextStep = currentStep + 1;
+            setCurrentStep(nextStep);
+
+            const stepId = method?.steps[nextStep - 1]?.id;
+            void tracked.logEvent({
+                actionName: 'next_step',
+                payload: { total_steps: totalSteps, current_step: nextStep },
+                stepId: stepId,
+            });
         }
+    };
+
+    const handleGoToAnswer = () => {
+        setIsAnswerPopupOpen(true);
+        const stepId = method?.steps[currentStep - 1]?.id;
+        void tracked.logEvent({
+            actionName: 'go_to_answer',
+            stepId: stepId,
+            payload: { total_steps: totalSteps, current_step: currentStep },
+        });
+    };
+
+    // Open chat and log
+    const handleOpenChat = () => {
+        setIsChatOpen(true);
+        void tracked.logEvent({ actionName: 'chat_open', payload: {} });
+    };
+
+    const handleCloseChat = () => {
+        setShowToggle(false);
+        setIsChatOpen(false);
+        void tracked.logEvent({ actionName: 'chat_close', payload: {} });
     };
 
     const handlePopUpClose = () => {
@@ -150,15 +174,15 @@ export default function SolvingPage() {
                     </div>
                     <div className="flex-end mt-6 mb-20 flex w-full justify-center gap-10">
                         <Button
-                            onClick={() => setIsAnswerPopupOpen(true)}
+                            onClick={handleGoToAnswer}
                             className="w-40 rounded-full"
                             variant="default"
                         >
                             Go to answer
                         </Button>
-                        {currentStep < totalSteps && (
+                        {currentStep < totalSteps - 1 && (
                             <Button
-                                onClick={() => handleNextStep()}
+                                onClick={handleNextStep}
                                 className="w-40 rounded-full"
                                 variant="secondary"
                             >
@@ -217,10 +241,7 @@ export default function SolvingPage() {
                         >
                             <ChatbotWindow
                                 chatHistory={chatHistory}
-                                onClose={() => {
-                                    setShowToggle(false); // hide toggle immediately
-                                    setIsChatOpen(false);
-                                }}
+                                onClose={handleCloseChat}
                                 onSendMessage={sendMessage}
                                 isLoading={isLoading}
                                 error={error ?? undefined}
@@ -233,7 +254,9 @@ export default function SolvingPage() {
                         </motion.div>
                     )}
                 </AnimatePresence>
-                {showToggle && !isChatOpen && <ChatToggle />}
+                {showToggle && !isChatOpen && (
+                    <ChatToggle onClick={handleOpenChat} />
+                )}
             </div>
         </div>
     );

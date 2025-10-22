@@ -1,5 +1,6 @@
 'use client';
 
+import { useTrackedLogger } from '@/components/logger/LoggerProvider';
 import { useFetchProblem } from 'app/hooks/useFetchProblem';
 import ProblemCard from '@/components/ui/problem-card';
 import { useParams, useRouter } from 'next/navigation';
@@ -17,6 +18,27 @@ export default function MethodPage() {
     const { problem, loadingProblem, errorProblem } =
         useFetchProblem(problemId);
     const router = useRouter();
+    const tracked = useTrackedLogger();
+
+    const handleSolve = () => {
+        void tracked.logEvent({
+            actionName: 'solve_yourself',
+            problemId: problemId,
+            payload: {},
+        });
+        router.push(`/protected/solve-yourself/${problemId}`);
+    };
+
+    const handleChooseMethod = (methodId: number) => {
+        void tracked.logEvent({
+            actionName: 'choose_method',
+            problemId: problemId,
+            methodId: methodId,
+            payload: {},
+        });
+        router.push(`/protected/solve/${problemId}/${methodId}`);
+    };
+
     return (
         <div className="flex min-h-screen flex-col items-center gap-6">
             <Header
@@ -57,11 +79,7 @@ export default function MethodPage() {
                         title={method.title}
                         description={method.description}
                         buttonText="Get Started"
-                        onButtonClick={() =>
-                            router.push(
-                                `/protected/solve/${problemId}/${method.id}`,
-                            )
-                        }
+                        onButtonClick={() => handleChooseMethod(method.id)}
                         methodNumber={index + 1}
                     />
                 ))}
@@ -70,9 +88,7 @@ export default function MethodPage() {
                 <p className="pb-4">or</p>
                 <Button
                     className="mb-20 w-48 bg-[var(--accent)]"
-                    onClick={() =>
-                        router.push(`/protected/solve-yourself/${problemId}`)
-                    }
+                    onClick={handleSolve}
                     disabled={!Number.isFinite(problemId)}
                 >
                     Solve on your own

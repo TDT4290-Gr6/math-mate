@@ -1,5 +1,6 @@
 'use client';
 
+import { useTrackedLogger } from '@/components/logger/LoggerProvider';
 import SubjectSelectPopup from '@/components/subject-select-popup';
 import type { Problem } from '@/entities/models/problem';
 import ProblemCard from '@/components/ui/problem-card';
@@ -21,9 +22,25 @@ export default function ProblemPage() {
     const [subjects, setSubjects] = useState<string[]>([]);
     const [error, setError] = useState<string | null>(null);
 
+    const tracked = useTrackedLogger();
+
     const [isSubjectSelectOpen, setIsSubjectSelectOpen] = useState(false);
-    const openSubjectSelect = () => setIsSubjectSelectOpen(true);
-    const closeSubjectSelect = () => setIsSubjectSelectOpen(false);
+    const openSubjectSelect = () => {
+        setIsSubjectSelectOpen(true);
+        void tracked.logEvent({
+            actionName: 'open_subject_popup',
+            problemId: currentProblem?.id,
+            payload: {},
+        });
+    };
+    const closeSubjectSelect = () => {
+        setIsSubjectSelectOpen(false);
+        void tracked.logEvent({
+            actionName: 'close_subject_popup',
+            problemId: currentProblem?.id,
+            payload: {},
+        });
+    };
 
     const router = useRouter();
     const currentProblem = problems[currentIndex];
@@ -89,14 +106,38 @@ export default function ProblemPage() {
             // If we already have this problem loaded, just move to it
             setCurrentIndex(nextIndex);
         }
+        const nextProblem = problems[nextIndex];
+        void tracked.logEvent({
+            actionName: 'next_problem',
+            problemId: currentProblem?.id,
+            payload: { next_problemId: nextProblem?.id },
+        });
     };
 
     const handlePrevious = () => {
         if (currentIndex > 0) {
-            setCurrentIndex(currentIndex - 1);
-        } else {
-            setCurrentIndex(problems.length - 1);
+            const prevIndex = currentIndex - 1;
+            const prevProblem = problems[prevIndex];
+
+            setCurrentIndex(prevIndex);
+
+            void tracked.logEvent({
+                actionName: 'previous_problem',
+                problemId: currentProblem?.id,
+                payload: {
+                    previous_problemId: prevProblem?.id,
+                },
+            });
         }
+    };
+
+    const handleStartSolving = () => {
+        void tracked.logEvent({
+            actionName: 'start_solving',
+            problemId: currentProblem.id,
+            payload: {},
+        });
+        router.push(`/protected/methods/${currentProblem.id}`);
     };
 
     const fetchNewProblems = async () => {
@@ -142,9 +183,7 @@ export default function ProblemPage() {
                 <Button
                     variant="secondary"
                     className="m-14"
-                    onClick={() =>
-                        router.push(`/protected/methods/${currentProblem.id}`)
-                    }
+                    onClick={handleStartSolving}
                     disabled={!currentProblem}
                 >
                     Get started solving

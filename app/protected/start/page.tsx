@@ -7,15 +7,44 @@ import {
     CardFooter,
     CardHeader,
 } from '@/components/ui/card';
+import { useTrackedLogger } from '@/components/logger/LoggerProvider';
 import SubjectSelect from '@/components/ui/subject-select';
 import CountrySelect from '@/components/country-select';
 import { Button } from '@/components/ui/button';
 import WideLogo from '@/components/wide-logo';
+import { useSession } from 'next-auth/react';
 import Header from '@/components/ui/header';
+import { useRouter } from 'next/navigation';
 import { ChevronRight } from 'lucide-react';
-import Link from 'next/link';
+import { useEffect } from 'react';
 
 export default function StartPage() {
+    const tracked = useTrackedLogger();
+    const router = useRouter();
+
+    const { data: session, status } = useSession();
+
+    useEffect(() => {
+        if (
+            status === 'authenticated' &&
+            session?.user?.id &&
+            !sessionStorage.getItem('signInLogged')
+        ) {
+            void tracked.logEvent({
+                actionName: 'sign_in',
+                payload: {},
+            });
+            sessionStorage.setItem('signInLogged', 'true'); // mark as logged
+        }
+    }, [status, session, tracked]);
+
+    const handleGetStarted = () => {
+        void tracked.logEvent({
+            actionName: 'start_practicing',
+            payload: {},
+        });
+        router.push('/protected/problem');
+    };
     return (
         <>
             <Header
@@ -53,14 +82,11 @@ export default function StartPage() {
                     </CardContent>
                     <CardFooter>
                         <Button
-                            asChild
                             variant="secondary"
                             className="absolute right-20 -bottom-6 gap-2"
+                            onClick={handleGetStarted}
                         >
-                            <Link href="/protected/problem">
-                                Start Practicing{' '}
-                                <ChevronRight className="-mr-1" />
-                            </Link>
+                            Start Practicing <ChevronRight className="-mr-1" />
                         </Button>
                     </CardFooter>
                 </Card>

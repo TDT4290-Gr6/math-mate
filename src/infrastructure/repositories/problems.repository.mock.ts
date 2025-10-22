@@ -1,12 +1,95 @@
 import type { IProblemsRepository } from '@/application/repositories/problems.repository.interface';
+import { DatabaseOperationError } from '@/entities/errors/common';
 import type { Problem } from '@/entities/models/problem';
+import type { Solve } from '@/entities/models/solve';
 
 export class MockProblemsRepository implements IProblemsRepository {
     private _problems: Problem[];
 
     constructor() {
-        this._problems = [];
+        this._problems = [
+            {
+                id: 1,
+                title: 'Quadratic Equation',
+                problem: 'Solve for x: 2x² + 5x - 3 = 0',
+                solution: 'x = 0.5 or x = -3',
+                subject: 'Algebra',
+                level: 2,
+                methods: [],
+            },
+            {
+                id: 2,
+                title: 'Right Triangle',
+                problem:
+                    'Find the length of the hypotenuse of a right triangle with legs of length 3 and 4.',
+                solution: '5',
+                subject: 'Geometry',
+                level: 1,
+                methods: [],
+            },
+            {
+                id: 3,
+                title: 'Derivative of Polynomial',
+                problem: 'Find the derivative of f(x) = 3x³ - 2x² + 5x - 1',
+                solution: '9x² - 4x + 5',
+                subject: 'Precalculus',
+                level: 3,
+                methods: [],
+            },
+            {
+                id: 4,
+                problem: 'What is the sum of angles in a triangle?',
+                solution: '180 degrees',
+                subject: 'Geometry',
+                level: 1,
+                methods: [],
+            },
+            {
+                id: 5,
+                problem:
+                    'Find the area of a rectangle with length 8 cm and width 3 cm.',
+                solution: '24 cm²',
+                subject: 'Geometry',
+                level: 2,
+                methods: [],
+            },
+            {
+                id: 6,
+                problem: 'Solve for x: 2x + 5 = 13',
+                solution: 'x = 4',
+                subject: 'Algebra',
+                level: 1,
+                methods: [],
+            },
+        ];
     }
+
+    private _solves: Solve[] = [
+        {
+            id: 1,
+            userId: 1,
+            problemId: 4,
+            attempts: 2,
+            startedSolvingAt: new Date('2025-10-15T10:30:00Z'),
+            stepsUsed: 5,
+            finishedSolvingAt: new Date('2025-10-15T10:45:00Z'),
+            feedback: 4,
+            wasCorrect: true,
+            problemTitle: 'What is the sum of angles in a triangle?',
+        },
+        {
+            id: 2,
+            userId: 1,
+            problemId: 6,
+            attempts: 1,
+            startedSolvingAt: new Date('2025-10-15T14:20:00Z'),
+            stepsUsed: 3,
+            finishedSolvingAt: new Date('2025-10-15T14:30:00Z'),
+            feedback: 3,
+            wasCorrect: false,
+            problemTitle: 'Derivative of Polynomial',
+        },
+    ];
 
     async getProblems(
         offset: number,
@@ -15,9 +98,11 @@ export class MockProblemsRepository implements IProblemsRepository {
         score: number,
         subjects?: string[],
     ): Promise<Problem[]> {
-        let filtered = this._problems;
+        const solvedProblemIds = this._solves
+            .filter((s) => s.userId === id)
+            .map((s) => s.problemId);
 
-        filtered = filtered.filter(
+        let filtered = this._problems.filter(
             (problem) => problem.level >= Math.floor(score),
         );
 
@@ -26,14 +111,25 @@ export class MockProblemsRepository implements IProblemsRepository {
                 subjects.includes(problem.subject),
             );
         }
+
+        if (solvedProblemIds.length > 0) {
+            filtered = filtered.filter(
+                (problem) => !solvedProblemIds.includes(problem.id),
+            );
+        }
+
+        filtered.sort((a, b) => a.id - b.id);
+
         return filtered.slice(offset, offset + limit);
     }
 
-    getProblemById(id: number): Promise<Problem> {
-        const problem = this._problems.find((p) => p.id === id);
+    async getProblemById(id: number): Promise<Problem> {
+        const problem = this._problems.find((problem) => problem.id === id);
         if (!problem) {
-            throw new Error(`Problem with id ${id} not found`);
+            throw new DatabaseOperationError(
+                `Problem with id ${id} not found.`,
+            );
         }
-        return Promise.resolve(problem);
+        return problem;
     }
 }

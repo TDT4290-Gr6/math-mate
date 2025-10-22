@@ -8,6 +8,7 @@ import {
     DialogTitle,
 } from './ui/dialog';
 import { LaTeXFormattedText } from './ui/latex-formatted-text';
+import { useTrackedLogger } from './logger/LoggerProvider';
 import { addSolvedProblem } from '@/actions';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
@@ -72,6 +73,7 @@ export default function AnswerPopup({
     >(undefined);
 
     const router = useRouter();
+    const tracked = useTrackedLogger();
 
     useEffect(() => {
         if (isOpen) {
@@ -85,14 +87,22 @@ export default function AnswerPopup({
         if (step === 'reveal') setStep('confirm');
         // Treat revealing the answer as finishing the problem attempt
         setFinishedSolvingAt(new Date());
+        void tracked.logEvent({
+            actionName: 'reveal_answer',
+            payload: {},
+        });
     }
 
     function handleConfirm(correct: boolean) {
         setWasCorrect(correct);
         setStep('difficulty');
+        void tracked.logEvent({
+            actionName: 'answer_evaluation',
+            payload: { correct },
+        });
     }
 
-    function handleSelectDifficulty(level: number) {
+    function handleDifficulty(level: number) {
         setSelectedDifficulty(level);
     }
 
@@ -111,22 +121,51 @@ export default function AnswerPopup({
         }
 
         setStep('done');
+        if (selectedDifficulty != undefined) {
+            await tracked.logEvent({
+                actionName: 'rate_difficulty',
+                payload: { rating: selectedDifficulty },
+            });
+        }
         if (action === 'next') {
             router.push('/protected/problem');
         }
+        handleClose();
+    }
+
+    function handleOpen() {
+        setStep('reveal');
+        setSelectedDifficulty(undefined);
+        setWasCorrect(false);
+        void tracked.logEvent({ actionName: 'open_answer_popup', payload: {} });
+    }
+
+    function handleClose() {
+        void tracked.logEvent({
+            actionName: 'close_answer_popup',
+            payload: {},
+        });
         onClose?.();
     }
+
+    useEffect(() => {
+        if (isOpen) {
+            setStep('reveal');
+            setSelectedDifficulty(undefined);
+            setWasCorrect(false);
+        }
+    }, [isOpen]);
 
     return (
         <Dialog
             open={isOpen}
             onOpenChange={(next) => {
-                if (!next) onClose?.();
+                if (next) handleOpen();
+                else handleClose();
             }}
         >
             <DialogContent
                 onInteractOutside={(event) => event.preventDefault()} // prevent click outside
-                onEscapeKeyDown={() => onClose?.()} // allow Escape to close dialog
                 className="px-8 pt-8 pb-4"
             >
                 <DialogHeader>
@@ -200,9 +239,7 @@ export default function AnswerPopup({
                                                     <Button
                                                         key={n}
                                                         onClick={() =>
-                                                            handleSelectDifficulty(
-                                                                n,
-                                                            )
+                                                            handleDifficulty(n)
                                                         }
                                                         variant={
                                                             isActive
