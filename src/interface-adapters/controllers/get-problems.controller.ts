@@ -7,8 +7,8 @@ import { InputParseError } from '@/entities/errors/common';
 import { z } from 'zod';
 
 const inputSchema = z.object({
-    offset: z.number().nonnegative(),
-    limit: z.number().positive().max(100),
+    offset: z.int().nonnegative(),
+    limit: z.int().positive().max(100),
     subjects: z.array(z.string()).optional(),
 });
 
