@@ -121,7 +121,7 @@ describe('getProblemsController', () => {
                 getProblemsController({ offset: 0, limit: null }),
             ).rejects.toBeInstanceOf(InputParseError);
         });
-        
+
         it('throws InputParseError for subjects as number', async () => {
             await expect(
                 // @ts-expect-error Testing invalid input
