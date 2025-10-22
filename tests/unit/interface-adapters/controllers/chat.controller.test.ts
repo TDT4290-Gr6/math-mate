@@ -143,7 +143,7 @@ describe('sendChatMessageController', () => {
             }
         });
 
-        it('handles non-string context (number) by converting to empty string', async () => {
+        it('handles non-string context (number)', async () => {
             // @ts-expect-error Testing invalid input
             const result = await sendChatMessageController(123, 'Hello');
 
