@@ -15,3 +15,8 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands';
+
+// Remove Cypress test users from database after all tests have run
+after(() => {
+    cy.task('deleteCypressUsers');
+});
