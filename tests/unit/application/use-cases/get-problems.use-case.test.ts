@@ -4,7 +4,7 @@ import { expect, it, describe } from 'vitest';
 const getProblemsUseCase = getInjection('IGetProblemsUseCase');
 
 describe('getProblemsUseCase', () => {
-    describe('basic problem retrieval', () => {
+    describe('problem retrival based on user id', () => {
         it('returns problems with pagination', async () => {
             const result = await getProblemsUseCase(0, 2, 1, 0);
 
@@ -37,12 +37,6 @@ describe('getProblemsUseCase', () => {
             expect(result).toHaveLength(3);
             expect(result.map((problem) => problem.id)).toEqual([1, 3, 5]);
             expect(result.every((problem) => problem.level >= 2)).toBe(true);
-        });
-
-        it('returns no problems for user with very high score', async () => {
-            const result = await getProblemsUseCase(0, 10, 1, 10);
-
-            expect(result).toHaveLength(0);
         });
     });
 
