@@ -7,9 +7,10 @@
     "build": "next build --turbopack",
     "generate-dataset": "tsx ./scripts/dataset/generate-dataset.ts",
     "start": "next start",
-    "build:cypress": "cross-env CYPRESS_TESTING=true next build --turbopack",
-    "start:cypress": "cross-env CYPRESS_TESTING=true next start",
-    "cypress:open": "cypress open",
+    "e2e:build": "cross-env CYPRESS_TESTING=true next build --turbopack",
+    "e2e:start": "cross-env CYPRESS_TESTING=true next start -p 3000",
+    "e2e:run": "cypress run",
+    "e2e:open": "cypress open",
     "lint": "eslint .",
     "format": "prettier --write ."
   },
