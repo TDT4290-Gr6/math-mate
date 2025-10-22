@@ -40,10 +40,15 @@ if (process.env.CYPRESS_TESTING === 'true') {
             async authorize(credentials) {
                 if (!credentials) return null;
 
-                return {
-                    // This id is what will be called uuid in the signInController and in the DB
-                    id: credentials.id || 'cypress-test-user',
-                };
+                // Validate id/uuid starts with 'cypress'
+                if (!credentials.id?.startsWith('cypress')) {
+                    throw new Error(
+                        "Credentials id/uuid must start with 'cypress'. Got: " +
+                            credentials.id,
+                    );
+                }
+
+                return { id: credentials.id };
             },
         }),
     );

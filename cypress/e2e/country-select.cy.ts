@@ -1,17 +1,8 @@
 /// <reference types="cypress" />
 
 describe('country select', () => {
-    it('displays country options', () => {
-        cy.login('cypress-country-select');
-        cy.visit('/');
-        cy.contains('Country of residence:').should('be.visible');
-        cy.get('button')
-            .contains('Select country')
-            .should('be.visible')
-            .click();
-        cy.get('[data-slot="command-item"]')
-            .contains('Norway')
-            .should('be.visible');
+    beforeEach(() => {
+        cy.clearCookies();
     });
 
     it('allows selecting a country', () => {
