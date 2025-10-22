@@ -18,24 +18,28 @@ Cypress.Commands.add('login', (uuid) => {
         );
     }
 
-    cy.visit('/auth/signIn');
+    // Use a session such that the session (cookies/session storage/local storage)
+    // is preserved across requests (with the same uuid)
+    cy.session(uuid, () => {
+        cy.visit('/auth/signIn');
 
-    cy.request('/api/auth/csrf').then((response) => {
-        const csrfToken = response.body.csrfToken;
+        cy.request('/api/auth/csrf').then((response) => {
+            const csrfToken = response.body.csrfToken;
 
-        const credentials = {
-            id: uuid,
-            csrfToken: csrfToken,
-        };
+            const credentials = {
+                id: uuid,
+                csrfToken: csrfToken,
+            };
 
-        cy.request({
-            method: 'POST',
-            url: '/api/auth/callback/cypress',
-            form: true,
-            body: credentials,
+            cy.request({
+                method: 'POST',
+                url: '/api/auth/callback/cypress',
+                form: true,
+                body: credentials,
+            });
+
+            cy.visit('/');
+            cy.getCookie('next-auth.session-token').should('exist');
         });
-
-        cy.visit('/');
-        cy.getCookie('next-auth.session-token').should('exist');
     });
 });
