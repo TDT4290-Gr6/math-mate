@@ -9,8 +9,8 @@ const countriesRepo = getInjection(
 
 describe('getCountriesUseCase', () => {
     beforeEach(async () => {
-        // Nullstill og legg til standard testdata
-        countriesRepo['_countries'] = [];
+        // Reset and add standard test data
+        countriesRepo.reset();
         await countriesRepo.createCountry({ name: 'Norway' });
         await countriesRepo.createCountry({ name: 'India' });
     });
@@ -27,7 +27,7 @@ describe('getCountriesUseCase', () => {
         });
 
         it('returns empty array when no countries exist', async () => {
-            countriesRepo['_countries'] = [];
+            countriesRepo.reset();
 
             const result = await getCountriesUseCase();
 
@@ -50,27 +50,6 @@ describe('getCountriesUseCase', () => {
 
             expect(country).toHaveProperty('id');
             expect(country).toHaveProperty('name');
-        });
-
-        it('throws if a country is missing required fields (simulated)', async () => {
-            countriesRepo['_countries'] = [
-                // @ts-expect-error intentional malformed data for test
-                { id: 1 }, // missing name
-                // @ts-expect-error intentional malformed data for test
-                { name: 'Norway' }, // missing id
-            ];
-
-            const result = await getCountriesUseCase();
-
-            // Verify that the countries are not correct (missing)
-            for (const country of result) {
-                expect(country).not.toEqual(
-                    expect.objectContaining({
-                        id: expect.any(Number),
-                        name: expect.any(String),
-                    }),
-                );
-            }
         });
     });
 });

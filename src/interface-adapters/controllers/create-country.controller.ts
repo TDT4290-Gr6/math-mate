@@ -10,8 +10,8 @@ const inputSchema = z.object({
         .string()
         .min(1)
         .regex(
-            /^[A-Za-z\s-]+$/,
-            'Country name must contain only letters, spaces, or hyphens',
+            /^[\p{L}\s'-]+$/u,
+            'Country name must contain only letters, spaces, hyphens, or apostrophes',
         ),
 });
 

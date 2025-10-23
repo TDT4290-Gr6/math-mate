@@ -21,8 +21,8 @@ describe('setCountryController', () => {
         authService.setCurrentUserId(1);
 
         // Reset and prepare test state
-        countriesRepo['_countries'] = [];
-        usersRepo['_users'] = [];
+        countriesRepo.reset();
+        usersRepo.reset();
 
         // Create valid user and country to avoid use case errors
         await usersRepo.createUser({ uuid: 'user-uuid-1' });
@@ -48,9 +48,15 @@ describe('setCountryController', () => {
     });
 
     describe('input validation', () => {
-        it('throws InputParseError for negative countryId', async () => {
+        it('throws InputParseError for negative countryId (must be > 0)', async () => {
             await expect(
                 setCountryController({ countryId: -1 }),
+            ).rejects.toBeInstanceOf(InputParseError);
+        });
+
+        it('throws InputParseError for countryId = 0 (must be > 0)', async () => {
+            await expect(
+                setCountryController({ countryId: 0 }),
             ).rejects.toBeInstanceOf(InputParseError);
         });
 
@@ -66,6 +72,9 @@ describe('setCountryController', () => {
             const result = await setCountryController({ countryId: 1 });
 
             expect(result).toMatchObject({ success: true });
+
+            const updatedUser = await usersRepo.getUserById(1);
+            expect(updatedUser?.countryId).toBe(1);
         });
     });
 });

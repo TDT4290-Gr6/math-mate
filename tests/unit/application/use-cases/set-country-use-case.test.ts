@@ -1,11 +1,12 @@
 import { InputParseError } from '@/entities/errors/common';
 import { getInjection } from '@/di/container';
-import { it, expect } from 'vitest';
+import { describe, it, expect } from 'vitest';
 
 const signInUseCase = getInjection('ISignInUseCase');
 const createCountryUseCase = getInjection('ICreateCountryUseCase');
 const setCountryUseCase = getInjection('ISetCountryUseCase');
 
+describe('setCountryUseCase', () => {
 it('sets country for authenticated user', async () => {
     const user = await signInUseCase('user-uuid-1');
     const country = await createCountryUseCase('Norway');
@@ -32,4 +33,5 @@ it('throws InputParseError when user does not exist', async () => {
     await expect(setCountryUseCase(999, country.id)).rejects.toThrow(
         InputParseError,
     );
+    });
 });

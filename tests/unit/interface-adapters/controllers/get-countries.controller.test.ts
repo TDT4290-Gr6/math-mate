@@ -15,7 +15,7 @@ const countriesRepo = getInjection(
 describe('getCountriesController', () => {
     beforeEach(async () => {
         authService.setAuthenticated(true);
-        countriesRepo['_countries'] = [];
+        countriesRepo.reset();
 
         await countriesRepo.createCountry({ name: 'Norway' });
         await countriesRepo.createCountry({ name: 'India' });
@@ -46,7 +46,7 @@ describe('getCountriesController', () => {
 
             expect(result).toHaveLength(2);
 
-            // Verify fomat of each country
+            // Verify format of each country
             expect(result[0]).toMatchObject({
                 id: expect.any(Number),
                 name: 'Norway',
@@ -58,8 +58,8 @@ describe('getCountriesController', () => {
         });
 
         it('returns an empty array when no countries exist', async () => {
-            // Remove countries from repp
-            countriesRepo['_countries'] = [];
+            // Remove countries from repo
+            countriesRepo.reset();
 
             const result = await getCountriesController();
 
