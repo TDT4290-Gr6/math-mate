@@ -1,8 +1,8 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import type { Provider } from 'next-auth/providers/index';
 import SignInProviders from './SignInProviders';
-import { authOptions } from '@/lib/auth';
 import Title from '@/components/ui/title';
+import { authOptions } from '@/lib/auth';
 
 export default async function SignInPage() {
     const providers: Provider[] = authOptions.providers;
@@ -24,9 +24,8 @@ export default async function SignInPage() {
                                 Log in with one of these social accounts:
                             </p>
                         </CardHeader>
-                        
+
                         <CardContent className="flex flex-col items-center gap-4">
-                            
                             <SignInProviders providers={serializedProviders} />
                         </CardContent>
                     </Card>
