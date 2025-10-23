@@ -1,7 +1,5 @@
-import {
-    InputParseError,
-} from '@/entities/errors/common';
 import { MockAuthenticationService } from '@/infrastructure/services/auth.service.mock';
+import { InputParseError } from '@/entities/errors/common';
 import { UnauthenticatedError } from '@/entities/errors/auth';
 import { expect, it, describe, beforeEach } from 'vitest';
 import { getInjection } from '@/di/container';
