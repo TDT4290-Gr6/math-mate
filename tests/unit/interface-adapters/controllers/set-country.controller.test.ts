@@ -63,10 +63,8 @@ describe('setCountryController', () => {
 
     describe('country setting', () => {
         it('returns success when authenticated user sets an existing country', async () => {
-            // Arrange
             const result = await setCountryController({ countryId: 1 });
 
-            // Assert
             expect(result).toMatchObject({ success: true });
         });
     });

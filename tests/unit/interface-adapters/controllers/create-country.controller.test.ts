@@ -54,6 +54,13 @@ describe('createCountryController', () => {
                 InputParseError,
             );
         });
+
+        it('throws InputParseError for numbers as input', async () => {
+            // @ts-expect-error – testing invalid structure intentionally
+            await expect(createCountryController(124)).rejects.toBeInstanceOf(
+                InputParseError,
+            );
+        });
     });
 
     describe('country creation', () => {
