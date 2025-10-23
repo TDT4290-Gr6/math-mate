@@ -7,31 +7,31 @@ const createCountryUseCase = getInjection('ICreateCountryUseCase');
 const setCountryUseCase = getInjection('ISetCountryUseCase');
 
 describe('setCountryUseCase', () => {
-it('sets country for authenticated user', async () => {
-    const user = await signInUseCase('user-uuid-1');
-    const country = await createCountryUseCase('Norway');
+    it('sets country for authenticated user', async () => {
+        const user = await signInUseCase('user-uuid-1');
+        const country = await createCountryUseCase('Norway');
 
-    await expect(setCountryUseCase(user.id, country.id)).resolves.toMatchObject(
-        {
+        await expect(
+            setCountryUseCase(user.id, country.id),
+        ).resolves.toMatchObject({
             id: user.id,
             countryId: country.id,
-        },
-    );
-});
+        });
+    });
 
-it('throws InputParseError when country does not exist', async () => {
-    const user = await signInUseCase('user-uuid-1');
+    it('throws InputParseError when country does not exist', async () => {
+        const user = await signInUseCase('user-uuid-1');
 
-    await expect(setCountryUseCase(user.id, 999)).rejects.toThrow(
-        InputParseError,
-    );
-});
+        await expect(setCountryUseCase(user.id, 999)).rejects.toThrow(
+            InputParseError,
+        );
+    });
 
-it('throws InputParseError when user does not exist', async () => {
-    const country = await createCountryUseCase('India');
+    it('throws InputParseError when user does not exist', async () => {
+        const country = await createCountryUseCase('India');
 
-    await expect(setCountryUseCase(999, country.id)).rejects.toThrow(
-        InputParseError,
-    );
+        await expect(setCountryUseCase(999, country.id)).rejects.toThrow(
+            InputParseError,
+        );
     });
 });
