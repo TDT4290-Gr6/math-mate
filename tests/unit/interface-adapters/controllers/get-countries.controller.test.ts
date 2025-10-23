@@ -21,17 +21,17 @@ describe('getCountriesController', () => {
         await countriesRepo.createCountry({ name: 'India' });
     });
 
-  describe('authentication', () => {
-    it('throws an UnauthenticatedError if the user is not authenticated/logged in', async () => {
-      authService.setAuthenticated(false);
+    describe('authentication', () => {
+        it('throws an UnauthenticatedError if the user is not authenticated/logged in', async () => {
+            authService.setAuthenticated(false);
 
             await expect(getCountriesController()).rejects.toBeInstanceOf(
                 UnauthenticatedError,
             );
         });
 
-    it('returns countries when the user is authenticated ', async () => {
-      const result = await getCountriesController();
+        it('returns countries when the user is authenticated ', async () => {
+            const result = await getCountriesController();
 
             expect(result).toMatchObject([
                 { id: 1, name: 'Norway' },
@@ -40,9 +40,9 @@ describe('getCountriesController', () => {
         });
     });
 
-  describe('country retrieval and output formatting', () => {
-    it('returns all countries with correct structure', async () => {
-      const result = await getCountriesController();
+    describe('country retrieval and output formatting', () => {
+        it('returns all countries with correct structure', async () => {
+            const result = await getCountriesController();
 
             expect(result).toHaveLength(2);
 
@@ -57,23 +57,23 @@ describe('getCountriesController', () => {
             });
         });
 
-    it('returns an empty array when no countries exist', async () => {
-      // Remove countries from repp
-      countriesRepo['_countries'] = [];
+        it('returns an empty array when no countries exist', async () => {
+            // Remove countries from repp
+            countriesRepo['_countries'] = [];
 
             const result = await getCountriesController();
 
-      expect(result).toEqual([]);
-    });
+            expect(result).toEqual([]);
+        });
 
-    it('ensures returned countries follow the expected format', async () => {
-      const result = await getCountriesController();
+        it('ensures returned countries follow the expected format', async () => {
+            const result = await getCountriesController();
 
-      for (const country of result) {
-        expect(Object.keys(country).sort()).toEqual(['id', 'name']);
-        expect(typeof country.id).toBe('number');
-        expect(typeof country.name).toBe('string');
-      }
+            for (const country of result) {
+                expect(Object.keys(country).sort()).toEqual(['id', 'name']);
+                expect(typeof country.id).toBe('number');
+                expect(typeof country.name).toBe('string');
+            }
+        });
     });
-  });
 });
