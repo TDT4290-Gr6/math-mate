@@ -13,6 +13,10 @@ export class MockAuthenticationService implements IAuthenticationService {
         this.authenticated = authenticated;
     }
 
+    setCurrentUserId(userId: number | null): void {
+        this.userId = userId;
+    }
+
     async getCurrentUserId(): Promise<number | null> {
         return this.userId;
     }

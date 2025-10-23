@@ -5,7 +5,7 @@ import { InputParseError } from '@/entities/errors/common';
 import { z } from 'zod';
 export type ISetCountryController = ReturnType<typeof setCountryController>;
 
-const inputSchema = z.object({ countryId: z.int() });
+const inputSchema = z.object({ countryId: z.int().nonnegative()});
 
 export const setCountryController =
     (
