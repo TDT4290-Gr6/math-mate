@@ -23,7 +23,6 @@ it('sets country for authenticated user', async () => {
 it('throws InputParseError when country does not exist', async () => {
     // arrange
     const user = await signInUseCase('user-uuid-1');
-    const country = await createCountryUseCase('Norway');
 
     // act + assert
     await expect(setCountryUseCase(user.id, 999)).rejects.toThrow(
@@ -34,7 +33,6 @@ it('throws InputParseError when country does not exist', async () => {
 it('throws InputParseError when user does not exist', async () => {
     // arrange
     const country = await createCountryUseCase('India');
-    const user = await signInUseCase('user-uuid-1');
 
     // act + assert
     await expect(setCountryUseCase(999, country.id)).rejects.toThrow(

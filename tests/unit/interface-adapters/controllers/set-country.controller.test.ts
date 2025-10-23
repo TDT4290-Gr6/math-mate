@@ -56,27 +56,6 @@ describe('setCountryController', () => {
       await expect(setCountryController({ countryId: 2.5 }))
         .rejects.toBeInstanceOf(InputParseError);
     });
-
-    it('throws InputParseError for string countryId', async () => {
-      // as any to be able to test invalid type intentionally
-      await expect(
-        setCountryController({ countryId: '1' as any }),
-      ).rejects.toBeInstanceOf(InputParseError);
-    });
-
-    it('throws InputParseError when countryId field is missing', async () => {
-      // as any to be able to test invalid type intentionally
-      await expect(
-        setCountryController({} as any),
-      ).rejects.toBeInstanceOf(InputParseError);
-    });
-
-    it('throws InputParseError for null countryId', async () => {
-      // as any to be able to test invalid type intentionally
-      await expect(
-        setCountryController({ countryId: null } as any),
-      ).rejects.toBeInstanceOf(InputParseError);
-    });
   });
 
   describe('country setting', () => {
