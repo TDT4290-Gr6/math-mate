@@ -54,11 +54,12 @@ describe('setCountryController', () => {
             ).rejects.toBeInstanceOf(InputParseError);
         });
 
-    it('throws InputParseError for countryId not being an integer', async () => {
-      await expect(setCountryController({ countryId: 2.5 }))
-        .rejects.toBeInstanceOf(InputParseError);
+        it('throws InputParseError for countryId not being an integer', async () => {
+            await expect(
+                setCountryController({ countryId: 2.5 }),
+            ).rejects.toBeInstanceOf(InputParseError);
+        });
     });
-  });
 
     describe('country setting', () => {
         it('returns success when authenticated user sets an existing country', async () => {
