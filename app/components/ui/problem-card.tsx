@@ -70,18 +70,17 @@ export default function ProblemCard({
                         disabled={!onPrevious}
                         size="lg"
                     >
-                        <div className="flex flex-row items-center gap-2">
+                        <div className="flex flex-row items-center gap-2 px-2">
                             <ChevronLeft className="mt-1 h-4 w-4" />
                             Previous problem
                         </div>
                     </Button>
                     <Button
-                        variant="secondary"
                         onClick={onNext}
                         disabled={!onNext}
                         size="lg"
                     >
-                        <div className="flex flex-row items-center gap-2">
+                        <div className="flex flex-row items-center gap-2 px-2">
                             Another problem
                             <ChevronRight className="mt-1 h-4 w-4" />
                         </div>
