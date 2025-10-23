@@ -1,3 +1,5 @@
+import CredentialsProvider from 'next-auth/providers/credentials';
+import type { Provider } from 'next-auth/providers/index';
 import GoogleProvider from 'next-auth/providers/google';
 import GithubProvider from 'next-auth/providers/github';
 import { getInjection } from '@/di/container';
@@ -15,6 +17,43 @@ if (!process.env.NEXT_AUTH_GOOGLE_ID || !process.env.NEXT_AUTH_GOOGLE_SECRET) {
     );
 }
 
+const providers: Provider[] = [
+    GithubProvider({
+        clientId: process.env.NEXT_AUTH_GITHUB_ID!,
+        clientSecret: process.env.NEXT_AUTH_GITHUB_SECRET!,
+    }),
+    GoogleProvider({
+        clientId: process.env.NEXT_AUTH_GOOGLE_ID!,
+        clientSecret: process.env.NEXT_AUTH_GOOGLE_SECRET!,
+    }),
+];
+
+// Make sure CYPRESS_TESTING is NOT 'true' in production
+if (process.env.CYPRESS_TESTING === 'true') {
+    providers.push(
+        CredentialsProvider({
+            id: 'cypress',
+            name: 'Cypress',
+            credentials: {
+                id: { label: 'ID', type: 'text' },
+            },
+            async authorize(credentials) {
+                if (!credentials) return null;
+
+                // Validate id/uuid starts with 'cypress'
+                if (!credentials.id?.startsWith('cypress')) {
+                    throw new Error(
+                        "Credentials id/uuid must start with 'cypress'. Got: " +
+                            credentials.id,
+                    );
+                }
+
+                return { id: credentials.id };
+            },
+        }),
+    );
+}
+
 /**
  * NextAuth.js configuration options for authentication.
  *
@@ -29,17 +68,7 @@ if (!process.env.NEXT_AUTH_GOOGLE_ID || !process.env.NEXT_AUTH_GOOGLE_SECRET) {
  * @see {@link https://next-auth.js.org/configuration/options}
  */
 export const authOptions: NextAuthOptions = {
-    providers: [
-        GithubProvider({
-            clientId: process.env.NEXT_AUTH_GITHUB_ID,
-            clientSecret: process.env.NEXT_AUTH_GITHUB_SECRET,
-        }),
-        GoogleProvider({
-            clientId: process.env.NEXT_AUTH_GOOGLE_ID,
-            clientSecret: process.env.NEXT_AUTH_GOOGLE_SECRET,
-        }),
-        // ...add more providers here
-    ],
+    providers,
     pages: {
         signIn: '/auth/signIn', // custom sign-in page
     },
