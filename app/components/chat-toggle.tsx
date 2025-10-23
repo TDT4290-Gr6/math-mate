@@ -23,7 +23,11 @@ export default function ChatToggle({ onClick }: ChatToggleProps) {
     }, []); // the dependency is empty because we only want it to run once per mount
 
     return (
-        <Tooltip open={openTooltip} defaultOpen={true} onOpenChange={setOpenTooltip}>
+        <Tooltip
+            open={openTooltip}
+            defaultOpen={true}
+            onOpenChange={setOpenTooltip}
+        >
             <TooltipTrigger asChild>
                 <Button
                     aria-label="Open chat"
