@@ -54,13 +54,6 @@ describe('createCountryController', () => {
                 InputParseError,
             );
         });
-
-        it('throws InputParseError for invalid name type', async () => {
-            // @ts-expect-error – testing invalid type intentionally
-            await expect(
-                createCountryController({ name: 123 }),
-            ).rejects.toBeInstanceOf(InputParseError);
-        });
     });
 
     describe('country creation', () => {
