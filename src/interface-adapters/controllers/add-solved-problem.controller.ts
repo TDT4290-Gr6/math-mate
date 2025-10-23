@@ -39,9 +39,13 @@ export const addSolvedProblemController =
         addSolvedProblemUseCase: IAddSolvedProblemUseCase,
     ) =>
     async (input: unknown) => {
+        const isAuthenticated = await authenticationService.isAuthenticated();
+        if (!isAuthenticated)
+            throw new UnauthenticatedError('User must be logged in.');
+
         const userId = await authenticationService.getCurrentUserId();
         if (!userId) {
-            throw new UnauthenticatedError('User must be logged in.');
+            throw new UnauthenticatedError('User id does not exist');
         }
 
         const result = inputSchema.safeParse(input);
