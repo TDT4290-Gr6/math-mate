@@ -4,44 +4,65 @@ import type { Problem } from '@/entities/models/problem';
 import type { Solve } from '@/entities/models/solve';
 
 export class MockProblemsRepository implements IProblemsRepository {
-    private _problems: Problem[] = [
-        {
-            id: 1,
-            title: 'Quadratic Equation',
-            problem: 'Solve for x: 2x² + 5x - 3 = 0',
-            solution: 'x = 0.5 or x = -3',
-            subject: 'Algebra',
-            level: 2,
-            methods: [],
-        },
-        {
-            id: 2,
-            title: 'Right Triangle',
-            problem:
-                'Find the length of the hypotenuse of a right triangle with legs of length 3 and 4.',
-            solution: '5',
-            subject: 'Geometry',
-            level: 1,
-            methods: [],
-        },
-        {
-            id: 3,
-            title: 'Derivative of Polynomial',
-            problem: 'Find the derivative of f(x) = 3x³ - 2x² + 5x - 1',
-            solution: '9x² - 4x + 5',
-            subject: 'Precalculus',
-            level: 3,
-            methods: [],
-        },
-        {
-            id: 4,
-            problem: 'What is the sum of angles in a triangle?',
-            solution: '180 degrees',
-            subject: 'Geometry',
-            level: 1,
-            methods: [],
-        },
-    ];
+    private _problems: Problem[];
+
+    constructor() {
+        this._problems = [
+            {
+                id: 1,
+                title: 'Quadratic Equation',
+                problem: 'Solve for x: 2x² + 5x - 3 = 0',
+                solution: 'x = 0.5 or x = -3',
+                subject: 'Algebra',
+                level: 2,
+                methods: [],
+            },
+            {
+                id: 2,
+                title: 'Right Triangle',
+                problem:
+                    'Find the length of the hypotenuse of a right triangle with legs of length 3 and 4.',
+                solution: '5',
+                subject: 'Geometry',
+                level: 1,
+                methods: [],
+            },
+            {
+                id: 3,
+                title: 'Derivative of Polynomial',
+                problem: 'Find the derivative of f(x) = 3x³ - 2x² + 5x - 1',
+                solution: '9x² - 4x + 5',
+                subject: 'Precalculus',
+                level: 3,
+                methods: [],
+            },
+            {
+                id: 4,
+                problem: 'What is the sum of angles in a triangle?',
+                solution: '180 degrees',
+                subject: 'Geometry',
+                level: 1,
+                methods: [],
+            },
+            {
+                id: 5,
+                problem:
+                    'Find the area of a rectangle with length 8 cm and width 3 cm.',
+                solution: '24 cm²',
+                subject: 'Geometry',
+                level: 2,
+                methods: [],
+            },
+            {
+                id: 6,
+                problem: 'Solve for x: 2x + 5 = 13',
+                solution: 'x = 4',
+                subject: 'Algebra',
+                level: 1,
+                methods: [],
+            },
+        ];
+    }
 
     private _solves: Solve[] = [
         {
@@ -59,7 +80,7 @@ export class MockProblemsRepository implements IProblemsRepository {
         {
             id: 2,
             userId: 1,
-            problemId: 3,
+            problemId: 6,
             attempts: 1,
             startedSolvingAt: new Date('2025-10-15T14:20:00Z'),
             stepsUsed: 3,

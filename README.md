@@ -18,6 +18,29 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
+## Testing
+
+### End-to-end tests
+
+End-to-end tests are written using Cypress. The server has a dedicated mode for e2e testing, where authentication can be bypassed. To run the e2e tests, first build and start the server in e2e mode:
+
+```bash
+npm run e2e:build
+npm run e2e:start
+```
+
+Then, in another terminal, either run the tests in headless mode:
+
+```bash
+npm run e2e:run
+```
+
+Or open the Cypress Test Runner:
+
+```bash
+npm run e2e:open
+```
+
 ## Contributing
 
 We follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) for all commit messages.

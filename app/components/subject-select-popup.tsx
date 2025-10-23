@@ -1,5 +1,6 @@
 'use client';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useTrackedLogger } from './logger/LoggerProvider';
 import { Card, CardContent, CardHeader } from './ui/card';
 import { Subject } from 'app/constants/subjects';
 import SubjectSelect from './ui/subject-select';
@@ -48,6 +49,7 @@ export default function SubjectSelectPopup({
     const [initialSubjects, setInitialSubjects] = useState<Subject[]>([]);
     const hasCapturedInitialSubjects = useRef(false);
     const cardRef = useRef<HTMLDivElement>(null);
+    const tracker = useTrackedLogger();
 
     // Handle save action: close popup and notify parent of changes
     const handleSave = () => {
@@ -61,14 +63,27 @@ export default function SubjectSelectPopup({
                 (s: Subject) => !initialSubjects?.includes(s),
             );
         onSave(subjectsChanged);
+        // Ensure payload.subjects is always a string[] (fallback to empty array if undefined)
+        void tracker.logEvent({
+            actionName: 'save_selected_subjects',
+            payload: {
+                subjects: selectedSubjects ?? [],
+            },
+        });
         onClose();
     };
 
     // Handle cancel action: restore initial subjects and close popup
     const handleCancel = useCallback(() => {
         setSelectedSubjects([...initialSubjects]);
+        void tracker.logEvent({
+            actionName: 'cancel_selected_subjects',
+            payload: {
+                initial_subjects: initialSubjects ?? [],
+            },
+        });
         onClose();
-    }, [initialSubjects, setSelectedSubjects, onClose]);
+    }, [setSelectedSubjects, initialSubjects, tracker, onClose]);
 
     useEffect(() => {
         if (

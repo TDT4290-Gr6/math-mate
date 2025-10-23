@@ -2,13 +2,14 @@
 
 import { UserRound, Moon, X, LoaderCircle } from 'lucide-react';
 import { LaTeXFormattedText } from './ui/latex-formatted-text';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useTrackedLogger } from './logger/LoggerProvider';
 import { getLatestSolves, getUserId } from '@/actions';
 import { Switch } from '@/components/ui/switch';
-import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { signOut } from 'next-auth/react';
 import { useTheme } from 'next-themes';
 import { Button } from './ui/button';
-import Link from 'next/link';
 
 interface SidebarMenuProps {
     onClose: () => void;
@@ -45,6 +46,62 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
         Awaited<ReturnType<typeof getLatestSolves>>
     >([]);
     const [solvesLoading, setSolvesLoading] = useState(true);
+
+    const tracked = useTrackedLogger();
+    const router = useRouter();
+
+    function debounce<Args extends unknown[]>(
+        fn: (...args: Args) => void,
+        delay = 300,
+    ): (...args: Args) => void {
+        let timeoutId: ReturnType<typeof setTimeout>;
+        return (...args: Args) => {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => fn(...args), delay);
+        };
+    }
+
+    const logEvent = tracked.logEvent;
+    // Debounced logging function (to prevent event log spamming)
+    // (and memoized to avoid recreation)
+    const debouncedLogTheme = useMemo(
+        () =>
+            debounce((newTheme: string) => {
+                void logEvent({
+                    actionName: 'toggle_theme',
+                    payload: { theme: newTheme },
+                });
+            }, 400),
+        [logEvent],
+    );
+
+    const handleThemeSwitch = (checked: boolean) => {
+        const newTheme = checked ? 'dark' : 'light';
+        setTheme(newTheme);
+        debouncedLogTheme(newTheme);
+    };
+
+    const handleNavigateToSolve = (problemId: number) => {
+        void tracked.logEvent({
+            actionName: 'navigate_previous_solve',
+            problemId,
+            payload: {},
+        });
+        router.push(`/protected/methods/${problemId}`);
+    };
+
+    const handleLogOut = async () => {
+        try {
+            await tracked.logEvent({
+                actionName: 'sign_out',
+                payload: {},
+            });
+        } finally {
+            sessionStorage.removeItem('signInLogged');
+            onClose();
+            void signOut();
+        }
+    };
 
     useEffect(() => {
         let cancelled = false;
@@ -125,19 +182,14 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                         <Switch
                             className="ml-auto h-6 w-10 cursor-pointer p-1"
                             checked={theme === 'dark'}
-                            onCheckedChange={(checked) =>
-                                setTheme(checked ? 'dark' : 'light')
-                            }
+                            onCheckedChange={handleThemeSwitch}
                         />
                     </div>
                     {/* Logout button */}
                     <button
                         type="button"
-                        className="bg-sidebar-primary hover:bg-sidebar-accent flex cursor-pointer items-center gap-2 rounded-4xl px-4 py-2"
-                        onClick={() => {
-                            signOut();
-                            onClose();
-                        }}
+                        className="bg-sidebar-primary hover:bg-accent flex cursor-pointer items-center gap-2 rounded-4xl px-4 py-2"
+                        onClick={handleLogOut}
                     >
                         <UserRound
                             size={20}
@@ -169,13 +221,15 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                     </p>
                 ) : (
                     solves.map((solve) => (
-                        <Link
+                        <Button
                             key={solve.id}
                             className="text-sidebar-primary-foreground bg-sidebar-primary hover:bg-accent rounded-xl p-2 text-pretty"
-                            href={`/protected/methods/${solve.problemId}`}
+                            onClick={() =>
+                                handleNavigateToSolve(solve.problemId)
+                            }
                         >
                             <LaTeXFormattedText text={solve.problemTitle} />
-                        </Link>
+                        </Button>
                     ))
                 )}
             </div>

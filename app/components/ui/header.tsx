@@ -1,5 +1,6 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useTrackedLogger } from '../logger/LoggerProvider';
+import { useCallback, useEffect, useState } from 'react';
 import SidebarMenu from '../sidebar-menu';
 import { Menu } from 'lucide-react';
 import WideLogo from '../wide-logo';
@@ -48,29 +49,57 @@ export default function Header({
     showLogo = true,
 }: HeaderProps) {
     const [isOpen, setIsOpen] = useState(false);
+    const tracked = useTrackedLogger();
+
+    const openSidebar = useCallback(() => {
+        setIsOpen((prev) => {
+            if (!prev) {
+                void tracked.logEvent({
+                    actionName: 'open_sidebar',
+                    payload: {},
+                });
+            }
+            return true;
+        });
+    }, [tracked]);
+
+    const closeSidebar = useCallback(() => {
+        // Only log a close event if the sidebar was open before this call.
+        setIsOpen((prev) => {
+            if (prev) {
+                void tracked.logEvent({
+                    actionName: 'close_sidebar',
+                    payload: {},
+                });
+            }
+            return false;
+        });
+    }, [tracked]);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             const target = e.target as HTMLElement | null;
+            // Ignore key events when focus is inside form controls or dialogs
             if (
                 target &&
-                target.closest(
+                (target.closest(
                     'input, textarea, select, [contenteditable="true"], [role="textbox"]',
-                )
+                ) ||
+                    target.closest('[role="dialog"], dialog'))
             ) {
                 return;
             }
             if (e.key === 'e') {
-                setIsOpen(true); // open menu
+                openSidebar(); // open menu
             } else if (e.key === 'Escape') {
-                setIsOpen(false); // close menu
+                closeSidebar(); // close menu
             }
         };
 
         window.addEventListener('keydown', handleKeyDown);
 
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, []);
+    }, [closeSidebar, openSidebar]);
 
     return (
         <div
@@ -104,14 +133,14 @@ export default function Header({
                     className="flex size-10 cursor-pointer items-center justify-center"
                     aria-haspopup="dialog"
                     aria-expanded={isOpen}
-                    onClick={() => setIsOpen(true)}
+                    onClick={openSidebar}
                 >
                     <Menu size={36} />
                 </button>
             </div>
 
             {/* Sidebar overlay */}
-            {isOpen && <SidebarMenu onClose={() => setIsOpen(false)} />}
+            {isOpen && <SidebarMenu onClose={closeSidebar} />}
         </div>
     );
 }
