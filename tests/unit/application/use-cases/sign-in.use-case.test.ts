@@ -6,7 +6,7 @@ const signInUseCase = getInjection('ISignInUseCase');
 describe('signInUseCase', () => {
     describe('user retrieval', () => {
         it('creates new user when uuid does not exist', async () => {
-            const newUuid = 'new-user-uuid' ;
+            const newUuid = 'new-user-uuid';
             const result = await signInUseCase(newUuid);
 
             expect(result).toMatchObject({
