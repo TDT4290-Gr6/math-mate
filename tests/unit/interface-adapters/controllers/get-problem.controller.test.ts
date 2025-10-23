@@ -53,6 +53,27 @@ describe('getProblemController', () => {
                 getProblemController({ problemId: 1.5 }),
             ).rejects.toBeInstanceOf(InputParseError);
         });
+
+        it('throws InputParseError for string problemId', async () => {
+            await expect(
+                // @ts-expect-error Testing invalid input
+                getProblemController({ problemId: '1' }),
+            ).rejects.toBeInstanceOf(InputParseError);
+        });
+
+        it('throws InputParseError for null problemId', async () => {
+            await expect(
+                // @ts-expect-error Testing invalid input
+                getProblemController({ problemId: null }),
+            ).rejects.toBeInstanceOf(InputParseError);
+        });
+
+        it('throws InputParseError for undefined problemId', async () => {
+            await expect(
+                // @ts-expect-error Testing invalid input
+                getProblemController({ problemId: undefined }),
+            ).rejects.toBeInstanceOf(InputParseError);
+        });
     });
 
     describe('problem retrieval', () => {
