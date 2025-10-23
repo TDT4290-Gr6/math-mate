@@ -17,13 +17,13 @@ describe('signInUseCase', () => {
         });
 
         it('fetches the exsiting user when uuid exist', async () => {
-            const newUuid = 'new-user-uuid';
-            const result = await signInUseCase(newUuid);
+            const existingUuid = '123e4567-e89b-12d3-a456-426614174000';
+            const result = await signInUseCase(existingUuid);
 
             expect(result).toMatchObject({
-                id: 2,
-                uuid: newUuid,
-                score: 0,
+                id: 1,
+                uuid: existingUuid,
+                score: 2,
             });
         });
     });
