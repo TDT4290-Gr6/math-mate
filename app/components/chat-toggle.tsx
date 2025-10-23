@@ -20,7 +20,7 @@ export default function ChatToggle({ onClick }: ChatToggleProps) {
         return () => {
             if (t) clearTimeout(t);
         };
-    }, []); // the dependency is empty because we only want it to run pne per mount
+    }, []); // the dependency is empty because we only want it to run once per mount
 
     return (
         <Tooltip open={openTooltip} defaultOpen={true} onOpenChange={setOpenTooltip}>
