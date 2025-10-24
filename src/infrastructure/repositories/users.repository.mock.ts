@@ -140,6 +140,6 @@ export class MockUsersRepository implements IUsersRepository {
                 score: 2,
             },
         ];
-         this._nextId = 2; 
+        this._nextId = 2;
     }
 }
