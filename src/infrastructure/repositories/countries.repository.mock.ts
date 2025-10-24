@@ -23,7 +23,7 @@ export class MockCountriesRepository implements ICountriesRepository {
         const country = this._countries.find((c) => c.id === id);
         return country || null;
     }
-     
+
     /**
      * Resets the in-memory store — useful for tests
      * or when re-seeding mock data.
@@ -31,6 +31,4 @@ export class MockCountriesRepository implements ICountriesRepository {
     reset(): void {
         this._countries = [];
     }
-    
-
 }

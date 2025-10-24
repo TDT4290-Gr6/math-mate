@@ -130,7 +130,7 @@ export class MockUsersRepository implements IUsersRepository {
      * Resets the in-memory users repository to its intital state.
      *
      * Primarily used in tests to ensure a clean state between test cases.
-     * 
+     *
      */
     reset(): void {
         this._users = [
