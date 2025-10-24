@@ -12,6 +12,7 @@ import { UserInsert, User } from '@/entities/models/user';
  */
 export class MockUsersRepository implements IUsersRepository {
     private _users: User[];
+    private _nextId: number;
 
     constructor() {
         this._users = [
@@ -21,6 +22,7 @@ export class MockUsersRepository implements IUsersRepository {
                 score: 2,
             },
         ];
+        this._nextId = 2;
     }
 
     /**
@@ -44,7 +46,7 @@ export class MockUsersRepository implements IUsersRepository {
         }
 
         const newUser: User = {
-            id: this._users.length + 1,
+            id: this._nextId++,
             ...user,
             score: 0,
         };
@@ -122,5 +124,22 @@ export class MockUsersRepository implements IUsersRepository {
         }
         user.countryId = countryId;
         return Promise.resolve(user);
+    }
+
+    /**
+     * Resets the in-memory users repository to its intital state.
+     *
+     * Primarily used in tests to ensure a clean state between test cases.
+     *
+     */
+    reset(): void {
+        this._users = [
+            {
+                id: 1,
+                uuid: '123e4567-e89b-12d3-a456-426614174000',
+                score: 2,
+            },
+        ];
+        this._nextId = 2;
     }
 }

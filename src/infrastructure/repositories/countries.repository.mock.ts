@@ -1,5 +1,5 @@
-import { ICountriesRepository } from '../../application/repositories/countries.repository.interface';
-import { CountryInsert, Country } from '../../entities/models/country';
+import { ICountriesRepository } from '@/application/repositories/countries.repository.interface';
+import { CountryInsert, Country } from '@/entities/models/country';
 
 export class MockCountriesRepository implements ICountriesRepository {
     private _countries: Country[];
@@ -22,5 +22,13 @@ export class MockCountriesRepository implements ICountriesRepository {
     async getCountryById(id: number): Promise<Country | null> {
         const country = this._countries.find((c) => c.id === id);
         return country || null;
+    }
+
+    /**
+     * Resets the in-memory store — useful for tests
+     * or when re-seeding mock data.
+     */
+    reset(): void {
+        this._countries = [];
     }
 }

@@ -5,7 +5,15 @@ import { UnauthenticatedError } from '@/entities/errors/auth';
 import { InputParseError } from '@/entities/errors/common';
 import { z } from 'zod';
 
-const inputSchema = z.object({ name: z.string().min(1) });
+const inputSchema = z.object({
+    name: z
+        .string()
+        .min(1)
+        .regex(
+            /^[\p{L}\s'-]+$/u,
+            'Country name must contain only letters, spaces, hyphens, or apostrophes',
+        ),
+});
 
 export type ICreateCountryController = ReturnType<
     typeof createCountryController

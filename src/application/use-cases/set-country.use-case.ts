@@ -1,6 +1,7 @@
 import { ICountriesRepository } from '../repositories/countries.repository.interface';
 import { IUsersRepository } from '../repositories/users.repository.interface';
 import { InputParseError } from '@/entities/errors/common';
+import { User } from '@/entities/models/user';
 
 export type ISetCountryUseCase = ReturnType<typeof setCountryUseCase>;
 
@@ -9,7 +10,7 @@ export const setCountryUseCase =
         userRepository: IUsersRepository,
         countriesRepository: ICountriesRepository,
     ) =>
-    async (id: number, countryId: number): Promise<void> => {
+    async (id: number, countryId: number): Promise<User> => {
         const country = await countriesRepository.getCountryById(countryId); // ensure country exists
         if (!country) {
             throw new InputParseError('Country not found');
@@ -20,5 +21,5 @@ export const setCountryUseCase =
             throw new InputParseError('User not found');
         }
 
-        await userRepository.addCountryToUser(id, countryId);
+        return await userRepository.addCountryToUser(id, countryId);
     };
