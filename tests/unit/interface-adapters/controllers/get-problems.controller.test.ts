@@ -93,5 +93,40 @@ describe('getProblemsController', () => {
 
             expect(Array.isArray(result)).toBe(true);
         });
+
+        it('throws InputParseError for string offset', async () => {
+            await expect(
+                // @ts-expect-error Testing invalid input
+                getProblemsController({ offset: '0', limit: 10 }),
+            ).rejects.toBeInstanceOf(InputParseError);
+        });
+
+        it('throws InputParseError for null offset', async () => {
+            await expect(
+                // @ts-expect-error Testing invalid input
+                getProblemsController({ offset: null, limit: 10 }),
+            ).rejects.toBeInstanceOf(InputParseError);
+        });
+
+        it('throws InputParseError for string limit', async () => {
+            await expect(
+                // @ts-expect-error Testing invalid input
+                getProblemsController({ offset: 0, limit: '10' }),
+            ).rejects.toBeInstanceOf(InputParseError);
+        });
+
+        it('throws InputParseError for null limit', async () => {
+            await expect(
+                // @ts-expect-error Testing invalid input
+                getProblemsController({ offset: 0, limit: null }),
+            ).rejects.toBeInstanceOf(InputParseError);
+        });
+
+        it('throws InputParseError for subjects as number', async () => {
+            await expect(
+                // @ts-expect-error Testing invalid input
+                getProblemsController({ offset: 0, limit: 10, subjects: 123 }),
+            ).rejects.toBeInstanceOf(InputParseError);
+        });
     });
 });
