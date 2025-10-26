@@ -4,7 +4,8 @@ import { Button } from '@/components/ui/button';
 import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
 import { signIn } from 'next-auth/react';
-import { JSX } from 'react';
+import { cn } from '@/lib/utils';
+import type { JSX } from 'react';
 
 type Provider = {
     id: string;
@@ -39,14 +40,17 @@ export default function SignInProviders({
             {providers.map((provider) => (
                 <Button
                     key={provider.id}
-                    className={`flex w-60 items-center justify-center gap-4 font-semibold ${providerConfig[provider.id].color}`}
+                    className={cn(
+                        'flex w-60 items-center justify-center gap-4 font-semibold',
+                        providerConfig[provider.id]?.color,
+                    )}
                     onClick={() => {
                         signIn(provider.id, {
                             callbackUrl: '/protected/start',
                         });
                     }}
                 >
-                    {providerConfig[provider.id].icon}
+                    {providerConfig[provider.id]?.icon}
                     {provider.name}
                 </Button>
             ))}
