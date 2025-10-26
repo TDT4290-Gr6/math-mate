@@ -11,6 +11,7 @@ interface ProblemProps {
     onNext?: () => void;
     onPrevious?: () => void;
     onOpenSubjectSelect?: () => void;
+    hidePrevious?: boolean;
 }
 
 /**
@@ -29,6 +30,7 @@ export default function ProblemCard({
     onNext,
     onPrevious,
     onOpenSubjectSelect: openSubjectSelect,
+    hidePrevious = false,
 }: ProblemProps) {
     const isLoading = description === 'Loading problem...';
 
@@ -69,8 +71,11 @@ export default function ProblemCard({
                         onClick={onPrevious}
                         disabled={!onPrevious}
                         size="lg"
+                        className={`${hidePrevious ? 'invisible' : ''}`}
                     >
-                        <div className="flex flex-row items-center gap-2 px-2">
+                        <div
+                            className={`flex flex-row items-center gap-2 px-2`}
+                        >
                             <ChevronLeft className="mt-1 h-4 w-4" />
                             Previous problem
                         </div>
