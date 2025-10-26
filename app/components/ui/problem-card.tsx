@@ -73,7 +73,9 @@ export default function ProblemCard({
                         size="lg"
                         className={`${hidePrevious ? 'invisible' : ''}`}
                     >
-                        <div className={`flex flex-row items-center gap-2 px-2`}>
+                        <div
+                            className={`flex flex-row items-center gap-2 px-2`}
+                        >
                             <ChevronLeft className="mt-1 h-4 w-4" />
                             Previous problem
                         </div>
