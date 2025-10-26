@@ -12,7 +12,7 @@
 
 Cypress.Commands.add('login', (uuid) => {
     if (uuid === undefined) {
-        uuid = `cypress-${Date.now()}`;
+        uuid = `cypress-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
     }
 
     // Ensure that the uuid starts with 'cypress' to identify test users
@@ -39,8 +39,6 @@ Cypress.Commands.add('login', (uuid) => {
                 form: true,
                 body: credentials,
             });
-
-            cy.wait(1000); // Wait for a second to ensure the session is established
 
             cy.visit('/');
             cy.getCookie('next-auth.session-token').should('exist');
