@@ -4,10 +4,10 @@ import { useTrackedLogger } from '@/components/logger/LoggerProvider';
 import SubjectSelectPopup from '@/components/subject-select-popup';
 import type { Problem } from '@/entities/models/problem';
 import ProblemCard from '@/components/ui/problem-card';
-import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { getProblems } from 'app/actions';
 
 /**
