@@ -11,12 +11,10 @@ describe('logEventUseCase', () => {
     });
 
     it('creates and stores an event successfully', async () => {
-        const now = new Date('2025-10-21T12:00:00Z');
         const result = await logEventUseCase.execute({
             userId: 1,
             sessionId: 100,
             actionName: 'SOLVE_PROBLEM',
-            loggedAt: now,
             payload: '{"attempt":1}',
         });
 
@@ -25,7 +23,6 @@ describe('logEventUseCase', () => {
             userId: 1,
             sessionId: 100,
             actionName: 'SOLVE_PROBLEM',
-            loggedAt: now,
         });
 
         const allEvents = await eventsRepo.getAll();
