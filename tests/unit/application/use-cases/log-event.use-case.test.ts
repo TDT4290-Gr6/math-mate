@@ -1,6 +1,6 @@
+import { MockEventsRepository } from '@/infrastructure/repositories/events.repository.mock';
 import { describe, it, beforeEach, expect } from 'vitest';
 import { getInjection } from '@/di/container';
-import { MockEventsRepository } from '@/infrastructure/repositories/events.repository.mock';
 
 const logEventUseCase = getInjection('ILogEventUseCase');
 const eventsRepo = getInjection('IEventsRepository') as MockEventsRepository;
@@ -46,7 +46,9 @@ describe('logEventUseCase', () => {
 
         expect(result.loggedAt).toBeInstanceOf(Date);
         // Check that loggedAt was set between start and end of test
-        expect(result.loggedAt.getTime()).toBeGreaterThanOrEqual(before.getTime());
+        expect(result.loggedAt.getTime()).toBeGreaterThanOrEqual(
+            before.getTime(),
+        );
         expect(result.loggedAt.getTime()).toBeLessThanOrEqual(after.getTime());
 
         const all = await eventsRepo.getAll();
@@ -73,5 +75,3 @@ describe('logEventUseCase', () => {
         expect(result.loggedAt).toEqual(customDate);
     });
 });
-
-  
