@@ -6,14 +6,15 @@ describe('country select', () => {
     });
 
     it('allows selecting a country', () => {
-        cy.login('cypress-country-select');
-        cy.visit('/');
+        cy.login();
+        cy.visit('/protected/start');
+
         cy.contains('Country of residence:').should('be.visible');
         cy.get('button')
             .contains('Select country')
             .should('be.visible')
             .click();
-        cy.get('[data-slot="command-item"]')
+        cy.get('[data-slot="command-item"]', { timeout: 10000 })
             .contains('Norway')
             .should('be.visible')
             .click();

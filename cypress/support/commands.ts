@@ -11,6 +11,10 @@
 // ***********************************************
 
 Cypress.Commands.add('login', (uuid) => {
+    if (uuid === undefined) {
+        uuid = `cypress-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+    }
+
     // Ensure that the uuid starts with 'cypress' to identify test users
     if (!uuid.startsWith('cypress')) {
         throw new Error(
@@ -18,26 +22,26 @@ Cypress.Commands.add('login', (uuid) => {
         );
     }
 
-    cy.visit('/auth/signIn');
+    cy.session(uuid, () => {
+        cy.visit('/auth/signIn');
 
-    cy.request('/api/auth/csrf').then((response) => {
-        const csrfToken = response.body.csrfToken;
+        cy.request('/api/auth/csrf').then((response) => {
+            const csrfToken = response.body.csrfToken;
 
-        const credentials = {
-            id: uuid,
-            csrfToken: csrfToken,
-        };
+            const credentials = {
+                id: uuid,
+                csrfToken: csrfToken,
+            };
 
-        cy.request({
-            method: 'POST',
-            url: '/api/auth/callback/cypress',
-            form: true,
-            body: credentials,
+            cy.request({
+                method: 'POST',
+                url: '/api/auth/callback/cypress',
+                form: true,
+                body: credentials,
+            });
+
+            cy.visit('/');
+            cy.getCookie('next-auth.session-token').should('exist');
         });
-
-        cy.wait(1000); // Wait for a second to ensure the session is established
-
-        cy.visit('/');
-        cy.getCookie('next-auth.session-token').should('exist');
     });
 });
