@@ -7,7 +7,7 @@ import ProblemCard from '@/components/ui/problem-card';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/ui/header';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import { getProblems } from 'app/actions';
 
 /**
@@ -21,6 +21,7 @@ export default function ProblemPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [subjects, setSubjects] = useState<string[]>([]);
     const [error, setError] = useState<string | null>(null);
+    const [hidePrevious, setHidePrevious] = useState(false);
 
     const tracked = useTrackedLogger();
 
@@ -57,6 +58,11 @@ export default function ProblemPage() {
         fetchProblems(parsedSubjects, 0);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => {
+        setHidePrevious(currentIndex === 0);
+    }, [currentIndex]);
+
 
     const fetchProblems = async (
         subjects: string[],
@@ -167,6 +173,7 @@ export default function ProblemPage() {
                     onNext={handleNext}
                     onPrevious={handlePrevious}
                     onOpenSubjectSelect={openSubjectSelect}
+                    hidePrevious={hidePrevious}
                 />
             </div>
             <div className="mt-4 flex flex-col justify-center gap-12">
