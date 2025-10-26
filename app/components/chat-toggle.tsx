@@ -20,6 +20,7 @@ export default function ChatToggle({ onClick }: ChatToggleProps) {
         return () => {
             if (t) clearTimeout(t);
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []); // the dependency is empty because we only want it to run once per mount
 
     return (
