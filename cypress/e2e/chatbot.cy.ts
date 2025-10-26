@@ -15,7 +15,10 @@ describe('chatbot UI (mocked)', () => {
                 if (!res.body) {
                     // wait briefly and re-request session
                     cy.wait(1000);
-                    cy.request({ url: '/api/auth/session', failOnStatusCode: false })
+                    cy.request({
+                        url: '/api/auth/session',
+                        failOnStatusCode: false,
+                    })
                         .its('body')
                         .should('not.be.null');
                 } else {
@@ -33,12 +36,18 @@ describe('chatbot UI (mocked)', () => {
                 cy.contains('button', 'Select country').click();
                 cy.get('[data-slot="command-item"]').contains('Norway').click();
                 cy.contains('button', 'Submit').click();
-                cy.get('body', { timeout: 5000 }).should('not.have.attr', 'data-scroll-locked', '1');
+                cy.get('body', { timeout: 5000 }).should(
+                    'not.have.attr',
+                    'data-scroll-locked',
+                    '1',
+                );
             }
         });
 
         // Go to solving page
-        cy.contains('button', 'Get started solving').should('be.visible').click();
+        cy.contains('button', 'Get started solving')
+            .should('be.visible')
+            .click();
 
         // Choose the first method on the methods page
         cy.url({ timeout: 10000 }).should('include', '/protected/methods');
@@ -56,7 +65,10 @@ describe('chatbot UI (mocked)', () => {
         cy.window().then((win) => {
             // @ts-expect-error - test-only property
             win.__CYPRESS_CHAT_MOCKS = [
-                { match: '2+2', reply: 'Have you tried counting your fingers?' },
+                {
+                    match: '2+2',
+                    reply: 'Have you tried counting your fingers?',
+                },
             ];
         });
 
@@ -72,11 +84,18 @@ describe('chatbot UI (mocked)', () => {
             const targetUrl = String(i.request.url || '');
             cy.intercept('POST', targetUrl, {
                 statusCode: 200,
-                body: { success: true, message: { content: 'Have you tried counting your fingers?' } },
+                body: {
+                    success: true,
+                    message: {
+                        content: 'Have you tried counting your fingers?',
+                    },
+                },
             }).as('chatStubExact');
 
             // Send the message again so it hits our exact stubbed endpoint
-            cy.get('input[placeholder="Ask a question..."]').type('what is 2+2{enter}');
+            cy.get('input[placeholder="Ask a question..."]').type(
+                'what is 2+2{enter}',
+            );
 
             // Wait for the exact stub to be used
             cy.wait('@chatStubExact', { timeout: 5000 }).then(() => {
@@ -85,22 +104,32 @@ describe('chatbot UI (mocked)', () => {
         });
 
         // The assistant reply should appear (from our stub) — give it up to 5s
-        cy.contains('Have you tried counting your fingers?', { timeout: 5000 }).should('be.visible');
+        cy.contains('Have you tried counting your fingers?', {
+            timeout: 5000,
+        }).should('be.visible');
 
         // Close the chatbot (click the chevron down inside the chat window)
         // the chevron SVG has class 'cursor-pointer' in the component
         cy.get('svg.cursor-pointer', { timeout: 2000 }).first().click();
 
         // Ensure the chat input is gone (chat closed) before moving on
-        cy.get('input[placeholder="Ask a question..."]', { timeout: 5000 }).should('not.exist');
+        cy.get('input[placeholder="Ask a question..."]', {
+            timeout: 5000,
+        }).should('not.exist');
 
         // See the next step of the problem by clicking Next step
-        cy.contains('button', 'Next step', { timeout: 5000 }).should('be.visible').click();
+        cy.contains('button', 'Next step', { timeout: 5000 })
+            .should('be.visible')
+            .click();
         cy.contains('Step 2', { timeout: 5000 }).should('be.visible');
 
         // Reopen the chatbot and verify the previous conversation is still present
-        cy.get('button[aria-label="Open chat"]', { timeout: 5000 }).should('be.visible').click();
+        cy.get('button[aria-label="Open chat"]', { timeout: 5000 })
+            .should('be.visible')
+            .click();
         cy.contains('what is 2+2', { timeout: 5000 }).should('be.visible');
-        cy.contains('Have you tried counting your fingers?', { timeout: 5000 }).should('be.visible');
+        cy.contains('Have you tried counting your fingers?', {
+            timeout: 5000,
+        }).should('be.visible');
     });
 });

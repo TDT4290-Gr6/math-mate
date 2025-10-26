@@ -135,15 +135,22 @@ export function useChatbot() {
                 // Access window in a safe way (only in browser)
                 if (typeof window !== 'undefined') {
                     const win = window as unknown as Record<string, unknown> & {
-                        __CYPRESS_CHAT_MOCKS?: Array<{ match: string | RegExp; reply: string }>;
+                        __CYPRESS_CHAT_MOCKS?: Array<{
+                            match: string | RegExp;
+                            reply: string;
+                        }>;
                     };
                     const mocks = win.__CYPRESS_CHAT_MOCKS;
                     if (Array.isArray(mocks) && mocks.length > 0) {
                         const body = message;
                         // find first mock that matches the message
                         const found = mocks.find((m) => {
-                            if (m.match instanceof RegExp) return m.match.test(body);
-                            return String(m.match).includes(body) || body.includes(String(m.match));
+                            if (m.match instanceof RegExp)
+                                return m.match.test(body);
+                            return (
+                                String(m.match).includes(body) ||
+                                body.includes(String(m.match))
+                            );
                         });
                         if (found) {
                             // simulate small delay like a network call
@@ -155,7 +162,9 @@ export function useChatbot() {
                                 content: found.reply,
                                 timestamp: new Date(),
                             };
-                            setChatHistory((prev) => ({ messages: [...prev.messages, assistantMessage] }));
+                            setChatHistory((prev) => ({
+                                messages: [...prev.messages, assistantMessage],
+                            }));
                             setIsLoading(false);
                             return;
                         }
@@ -163,7 +172,10 @@ export function useChatbot() {
                 }
             } catch (err) {
                 // ignore mock handling errors and fall back to real network call
-                console.warn('Chat mock handling failed, falling back to real chat:', err);
+                console.warn(
+                    'Chat mock handling failed, falling back to real chat:',
+                    err,
+                );
             }
 
             const reply = await sendMessageAction(context, message);
