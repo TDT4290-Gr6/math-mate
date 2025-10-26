@@ -10,14 +10,17 @@ describe('start to problem flow', () => {
         cy.visit('/protected/start');
 
         // Verify the start page content is visible
-        cy.contains('Choose which categories of math you want to work with:').should('be.visible');
+        cy.contains(
+            'Choose which categories of math you want to work with:',
+        ).should('be.visible');
 
         // Select a subject (Algebra) and ensure it is saved to localStorage
         cy.contains('label', 'Algebra').should('be.visible').click();
 
         cy.window().then((win) => {
             const raw = win.localStorage.getItem('selectedSubjects');
-            if (!raw) throw new Error('selectedSubjects not set in localStorage');
+            if (!raw)
+                throw new Error('selectedSubjects not set in localStorage');
             const parsed = JSON.parse(raw as string);
             expect(parsed).to.include('Algebra');
         });
@@ -28,18 +31,31 @@ describe('start to problem flow', () => {
         cy.get('body').then(($body) => {
             // jQuery :contains works here to detect the button text without failing
             if ($body.find('button:contains("Select country")').length) {
-                cy.contains('button', 'Select country').should('be.visible').click();
-                cy.get('[data-slot="command-item"]').contains('Norway').should('be.visible').click();
+                cy.contains('button', 'Select country')
+                    .should('be.visible')
+                    .click();
+                cy.get('[data-slot="command-item"]')
+                    .contains('Norway')
+                    .should('be.visible')
+                    .click();
                 cy.contains('button', 'Submit').should('be.visible').click();
                 // wait for the overlay/scroll-lock to be removed after submit
-                cy.get('body', { timeout: 5000 }).should('not.have.attr', 'data-scroll-locked', '1');
+                cy.get('body', { timeout: 5000 }).should(
+                    'not.have.attr',
+                    'data-scroll-locked',
+                    '1',
+                );
             }
         });
 
         // Start practicing and ensure we navigate to the problems page
         // Wait until any global scroll-lock / focus trap is released (some modals add
         // `pointer-events: none` on <body>, which blocks clicks). Give it up to 10s.
-        cy.get('body', { timeout: 10000 }).should('not.have.css', 'pointer-events', 'none');
+        cy.get('body', { timeout: 10000 }).should(
+            'not.have.css',
+            'pointer-events',
+            'none',
+        );
 
         // As an extra safety, send Escape to close stray dialogs (no-op if none open)
         cy.get('body').type('{esc}');
@@ -59,7 +75,9 @@ describe('start to problem flow', () => {
         cy.wait(1000);
 
         // Start solving the currently shown problem
-        cy.contains('button', 'Get started solving').should('be.visible').click();
+        cy.contains('button', 'Get started solving')
+            .should('be.visible')
+            .click();
         cy.wait(500);
         // On methods page: choose method 2 (the second "Get Started" button)
         cy.url({ timeout: 10000 }).should('include', '/protected/methods');
@@ -94,13 +112,17 @@ describe('start to problem flow', () => {
         // Reveal the answer and give feedback
         cy.contains('button', 'Go to answer').should('be.visible').click();
         cy.wait(500);
-        cy.contains('button', 'Click to reveal answer').should('be.visible').click();
+        cy.contains('button', 'Click to reveal answer')
+            .should('be.visible')
+            .click();
         cy.wait(500);
         // Confirm whether the user arrived at the correct answer (choose Yes)
         cy.contains('button', 'Yes').should('be.visible').click();
         cy.wait(500);
         // Rate difficulty as 3
-        cy.get('button[aria-label="Rate difficulty 3"]').should('be.visible').click();
+        cy.get('button[aria-label="Rate difficulty 3"]')
+            .should('be.visible')
+            .click();
         // Finish by going to the next question
         cy.contains('button', 'Next question').should('be.visible').click();
     });
