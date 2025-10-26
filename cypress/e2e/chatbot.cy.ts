@@ -15,7 +15,10 @@ describe('chatbot UI (mocked)', () => {
                 if (!res.body) {
                     // wait briefly and re-request session
                     cy.wait(1000);
-                    cy.request({ url: '/api/auth/session', failOnStatusCode: false })
+                    cy.request({
+                        url: '/api/auth/session',
+                        failOnStatusCode: false,
+                    })
                         .its('body')
                         .should('not.be.null');
                 } else {
@@ -33,12 +36,18 @@ describe('chatbot UI (mocked)', () => {
                 cy.contains('button', 'Select country').click();
                 cy.get('[data-slot="command-item"]').contains('Norway').click();
                 cy.contains('button', 'Submit').click();
-                cy.get('body', { timeout: 5000 }).should('not.have.attr', 'data-scroll-locked', '1');
+                cy.get('body', { timeout: 5000 }).should(
+                    'not.have.attr',
+                    'data-scroll-locked',
+                    '1',
+                );
             }
         });
 
         // Go to solving page
-        cy.contains('button', 'Get started solving').should('be.visible').click();
+        cy.contains('button', 'Get started solving')
+            .should('be.visible')
+            .click();
 
         // Choose the first method on the methods page
         cy.url({ timeout: 10000 }).should('include', '/protected/methods');
@@ -56,7 +65,10 @@ describe('chatbot UI (mocked)', () => {
         cy.window().then((win) => {
             // @ts-expect-error - test-only property
             win.__CYPRESS_CHAT_MOCKS = [
-                { match: '2+2', reply: 'Have you tried counting your fingers?' },
+                {
+                    match: '2+2',
+                    reply: 'Have you tried counting your fingers?',
+                },
             ];
         });
 
