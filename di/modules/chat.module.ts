@@ -25,7 +25,10 @@ export const chatModule = () => {
     const chatModule = createModule();
 
     // Bind ChatService
-    if (process.env.NODE_ENV === 'test') {
+    if (
+        process.env.NODE_ENV === 'test' ||
+        process.env.CYPRESS_TESTING === 'true'
+    ) {
         chatModule.bind(DI_SYMBOLS.IChatService).toClass(MockChatService);
     } else {
         chatModule.bind(DI_SYMBOLS.IChatService).toClass(ChatService);
