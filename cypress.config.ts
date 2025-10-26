@@ -5,14 +5,21 @@ export default defineConfig({
     e2e: {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         setupNodeEvents(on, config) {
-            on('task', {
-                async deleteCypressUsers() {
+            on('after:run', async () => {
+                try {
                     console.log('Deleting Cypress test users...');
-                    await prisma.user.deleteMany({
+                    const result = await prisma.user.deleteMany({
                         where: { uuid: { startsWith: 'cypress' } },
                     });
-                    return null;
-                },
+                    console.log(
+                        `Successfully deleted ${result.count} Cypress test user(s).`,
+                    );
+                } catch (error) {
+                    console.error(
+                        'Failed to delete Cypress test users:',
+                        error,
+                    );
+                }
             });
         },
         baseUrl: 'http://localhost:3000',
