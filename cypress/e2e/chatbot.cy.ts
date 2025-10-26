@@ -77,33 +77,40 @@ describe('chatbot UI (mocked)', () => {
             .should('be.visible')
             .type('what is 2+2{enter}');
 
-    // The chat hook uses the injected window mock; for robustness we assert
-    // that the test-mode mock was installed on window rather than depending
-    // on a specific reply string. This avoids brittle expectations if the
-    // mocked text changes.
-    cy.window().its('__CYPRESS_CHAT_MOCKS').should('exist').and('be.an', 'array');
-    // Wait a short moment for the client hook to (optionally) process the message
-    // and at minimum for the user message to appear in the UI.
-    cy.wait(200);
-    cy.contains('what is 2+2', { timeout: 5000 }).should('be.visible');
+        // The chat hook uses the injected window mock; for robustness we assert
+        // that the test-mode mock was installed on window rather than depending
+        // on a specific reply string. This avoids brittle expectations if the
+        // mocked text changes.
+        cy.window()
+            .its('__CYPRESS_CHAT_MOCKS')
+            .should('exist')
+            .and('be.an', 'array');
+        // Wait a short moment for the client hook to (optionally) process the message
+        // and at minimum for the user message to appear in the UI.
+        cy.wait(200);
+        cy.contains('what is 2+2', { timeout: 5000 }).should('be.visible');
 
-    // Close the chatbot (click the chevron down inside the chat window)
-    // the chevron SVG has class 'cursor-pointer' in the component
-    cy.get('svg.cursor-pointer', { timeout: 2000 }).first().click();
+        // Close the chatbot (click the chevron down inside the chat window)
+        // the chevron SVG has class 'cursor-pointer' in the component
+        cy.get('svg.cursor-pointer', { timeout: 2000 }).first().click();
 
-    // Ensure the chat input is gone (chat closed) before moving on
-    cy.get('input[placeholder="Ask a question..."]', { timeout: 5000 }).should('not.exist');
-    cy.contains('button', 'Next step').click();
-    cy.wait(500);
+        // Ensure the chat input is gone (chat closed) before moving on
+        cy.get('input[placeholder="Ask a question..."]', {
+            timeout: 5000,
+        }).should('not.exist');
+        cy.contains('button', 'Next step').click();
+        cy.wait(500);
 
-    // Reopen the chatbot and verify the previous conversation is still present.
-    // We avoid navigating problem steps here to keep this spec focused on
-    // chat behavior and reduce flakiness when run in isolation.
-    cy.get('button[aria-label="Open chat"]', { timeout: 5000 }).should('be.visible').click();
-    cy.contains('what is 2+2', { timeout: 5000 }).should('be.visible');
-    // Instead of asserting a specific assistant reply, verify the test-mode
-    // mock is still present on window (indicates E2E mock is active) and
-    // the conversation preserved the user's message.
-    cy.window().its('__CYPRESS_CHAT_MOCKS').should('exist');
+        // Reopen the chatbot and verify the previous conversation is still present.
+        // We avoid navigating problem steps here to keep this spec focused on
+        // chat behavior and reduce flakiness when run in isolation.
+        cy.get('button[aria-label="Open chat"]', { timeout: 5000 })
+            .should('be.visible')
+            .click();
+        cy.contains('what is 2+2', { timeout: 5000 }).should('be.visible');
+        // Instead of asserting a specific assistant reply, verify the test-mode
+        // mock is still present on window (indicates E2E mock is active) and
+        // the conversation preserved the user's message.
+        cy.window().its('__CYPRESS_CHAT_MOCKS').should('exist');
     });
 });

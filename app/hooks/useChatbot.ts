@@ -128,7 +128,6 @@ export function useChatbot() {
 
         setIsLoading(true);
         try {
-
             const reply = await sendMessageAction(context, message);
             if (!reply.success) {
                 setError(reply.error);
@@ -173,4 +172,3 @@ export function useChatbot() {
         setError,
     };
 }
-
