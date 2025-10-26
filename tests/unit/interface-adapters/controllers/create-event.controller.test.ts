@@ -1,11 +1,13 @@
-import { describe, it, beforeEach, expect} from 'vitest';
-import { getInjection } from '@/di/container';
-import { InputParseError } from '@/entities/errors/common';
-import { MockAuthenticationService } from '@/infrastructure/services/auth.service.mock';
 import { MockEventsRepository } from '@/infrastructure/repositories/events.repository.mock';
+import { MockAuthenticationService } from '@/infrastructure/services/auth.service.mock';
+import { InputParseError } from '@/entities/errors/common';
+import { describe, it, beforeEach, expect } from 'vitest';
+import { getInjection } from '@/di/container';
 
 const createEventController = getInjection('ICreateEventController');
-const authService = getInjection('IAuthenticationService') as MockAuthenticationService;
+const authService = getInjection(
+    'IAuthenticationService',
+) as MockAuthenticationService;
 const eventsRepo = getInjection('IEventsRepository') as MockEventsRepository;
 
 describe('create-event.controller', () => {
@@ -55,7 +57,10 @@ describe('create-event.controller', () => {
 
         it('throws InputParseError when sessionId is a string', async () => {
             await expect(
-                createEventController({ sessionId: '123', actionName: 'CLICK' }),
+                createEventController({
+                    sessionId: '123',
+                    actionName: 'CLICK',
+                }),
             ).rejects.toBeInstanceOf(InputParseError);
         });
 
@@ -63,9 +68,11 @@ describe('create-event.controller', () => {
             const longActionName = 'A'.repeat(101);
 
             await expect(
-                createEventController({ sessionId: 1, actionName: longActionName }),
+                createEventController({
+                    sessionId: 1,
+                    actionName: longActionName,
+                }),
             ).rejects.toBeInstanceOf(InputParseError);
         });
     });
 });
-
