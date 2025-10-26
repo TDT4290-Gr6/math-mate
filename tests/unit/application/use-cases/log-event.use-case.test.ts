@@ -45,7 +45,7 @@ describe('logEventUseCase', () => {
         const after = new Date();
 
         expect(result.loggedAt).toBeInstanceOf(Date);
-        // Check taht loggedAt was set between start and end of test
+        // Check that loggedAt was set between start and end of test
         expect(result.loggedAt.getTime()).toBeGreaterThanOrEqual(before.getTime());
         expect(result.loggedAt.getTime()).toBeLessThanOrEqual(after.getTime());
 

@@ -1,4 +1,4 @@
-import { describe, it, beforeEach, expect} from 'vitest';
+import { describe, it, beforeEach, expect } from 'vitest';
 import { getInjection } from '@/di/container';
 import { InputParseError } from '@/entities/errors/common';
 import { MockAuthenticationService } from '@/infrastructure/services/auth.service.mock';
@@ -66,6 +66,24 @@ describe('create-event.controller', () => {
                 createEventController({ sessionId: 1, actionName: longActionName }),
             ).rejects.toBeInstanceOf(InputParseError);
         });
+
+        it('creates an event successfully with valid input', async () => {
+            const result = await createEventController({
+                sessionId: 1,
+                actionName: 'CLICK',
+                problemId: 5,
+                payload:  '{"key":"value"}',
+            });
+
+            expect(result).toBeDefined();
+            expect(result).toHaveProperty('id');
+            expect(result).toHaveProperty('loggedAt');
+            expect(result?.loggedAt).toBeInstanceOf(Date);
+
+            const allEvents = await eventsRepo.getAll();
+            expect(allEvents).toHaveLength(1);
+        });
     });
+
 });
 
