@@ -5,6 +5,10 @@
 First, run the development server:
 
 ```bash
+npm install
+# then:
+npx prisma generate
+# then:
 npm run dev
 # or
 yarn dev
