@@ -91,3 +91,21 @@ You can get a OpenAI API key by creating a new API key on the [OpenAI platform](
 ### Gemini API key
 
 You can get a Gemini API key by creating a new project in the [Gemini AI Studio](https://aistudio.google.com/api-keys). Environment variable name: `GEMINI_TOKEN`.
+
+## Deployment
+
+When deploying to production, there are some environment variables that need to be set. Especially important for production, is to set the `NEXTAUTH_URL` variable to the URL of your deployed application, e.g. `https://mathmate.example.com` (if not set, it will default to `http://localhost:3000`).
+
+### Docker
+
+The application can be run using Docker. To build and start the application using Docker Compose, run the following command:
+
+```bash
+docker compose up --build -d
+```
+
+Stopping the application can be done using:
+
+```bash
+docker compose down
+```
