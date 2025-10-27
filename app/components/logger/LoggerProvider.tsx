@@ -113,11 +113,13 @@ export function useTrackedLogger() {
 
     const logEvent = useCallback(
         <K extends keyof AnalyticsEventMap>(input: LogEventInput<K>) =>
-            logger.logEvent({
-                ...input,
-                problemId: input.problemId ?? problemId,
-                methodId: input.methodId ?? methodId,
-            }),
+            setTimeout(() => {
+                logger.logEvent({
+                    ...input,
+                    problemId: input.problemId ?? problemId,
+                    methodId: input.methodId ?? methodId,
+                });
+            }, 0),
         [logger, problemId, methodId],
     );
     return { logEvent };
