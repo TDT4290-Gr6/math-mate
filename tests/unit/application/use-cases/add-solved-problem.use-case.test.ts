@@ -5,7 +5,7 @@ const addSolvedProblemUseCase = getInjection('IAddSolvedProblemUseCase');
 
 describe('addSolvedProblemUseCase', () => {
     describe('successful solve creation', () => {
-        it('creates solve for user', async () => {
+        it('creates solve for user with all possible parameters', async () => {
             const validInput = {
                 userId: 1,
                 problemId: 1,
@@ -31,7 +31,7 @@ describe('addSolvedProblemUseCase', () => {
             });
         });
 
-        it('creates solve with minimal required fields', async () => {
+        it('creates solve with minimal parameters', async () => {
             const minimalInput = {
                 userId: 1,
                 problemId: 2,

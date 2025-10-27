@@ -1,6 +1,6 @@
 import { MockAuthenticationService } from '@/infrastructure/services/auth.service.mock';
-import { InputParseError } from '@/entities/errors/common';
 import { UnauthenticatedError } from '@/entities/errors/auth';
+import { InputParseError } from '@/entities/errors/common';
 import { expect, it, describe, beforeEach } from 'vitest';
 import { getInjection } from '@/di/container';
 
@@ -15,7 +15,7 @@ describe('addSolvedProblemController', () => {
     });
 
     describe('authentication', () => {
-        it('throws for unauthenticated user', async () => {
+        it('throws UnauthenticatedError for unauthenticated user', async () => {
             authService.setAuthenticated(false);
 
             const validInput = {
