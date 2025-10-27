@@ -113,13 +113,20 @@ export function useTrackedLogger() {
 
     const logEvent = useCallback(
         <K extends keyof AnalyticsEventMap>(input: LogEventInput<K>) =>
-            setTimeout(() => {
-                logger.logEvent({
-                    ...input,
-                    problemId: input.problemId ?? problemId,
-                    methodId: input.methodId ?? methodId,
-                });
-            }, 0),
+            new Promise<void>((resolve) => {
+                setTimeout(() => {
+                    logger
+                        .logEvent({
+                            ...input,
+                            problemId: input.problemId ?? problemId,
+                            methodId: input.methodId ?? methodId,
+                        })
+                        .then(resolve, (err) => {
+                            console.warn('Deferred logEvent failed', err);
+                            resolve();
+                        });
+                }, 0);
+            }),
         [logger, problemId, methodId],
     );
     return { logEvent };
