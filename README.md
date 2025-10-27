@@ -69,6 +69,16 @@ For a practical reference, see this example of [Clean Architecture in Next.js](h
 - eslint/prettier
 - ioctopus (for di)
 
+## Prisma
+
+Prisma is the project's ORM and database toolkit. It generates a type-safe database client from the schema and provides a convenient query API (via the generated Prisma Client) used throughout the app.
+
+After updating the schema or pulling changes, generate the Prisma client with:
+
+```bash
+npx prisma generate
+```
+
 ## Generating methods and steps for a dataset
 
 There is a script in `scripts/dataset/generate-dataset.ts` that can be used to generate methods and steps for a dataset. This script would need to be modified depending on the structure of the dataset, to adhere to the `ProblemInsert` interface in `src/entities/models/problem.ts` (`methods` should be set to an empty array). The methods and steps will be generated when calling `generateMethods` defined in `scripts/dataset/generate-methods.ts`. Note, math problems using asymptote is not currently supported.
