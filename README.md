@@ -71,7 +71,7 @@ npm run e2e:open
 
 Our project uses Vitest as the testing framework for running unit tests.
 
-The unit tests are located in the /test folder and all files follow the naming convention:
+The unit tests are located in the tests/unit/ folder and all files follow the naming convention:
 
 ```bash
 filename.test.ts
