@@ -2,7 +2,7 @@ import { insertMethodSchema, methodSchema } from './method';
 import { z } from 'zod';
 
 export const problemSchema = z.object({
-    id: z.int(),
+    id: z.int().nonnegative(),
     title: z.string().optional(),
     problem: z.string(),
     solution: z.string(),
