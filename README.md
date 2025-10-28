@@ -66,6 +66,19 @@ Or open the Cypress Test Runner:
 ```bash
 npm run e2e:open
 ```
+### Unit tests
+
+Our project uses Vitest as the testing framework for running unit tests.
+
+The unit tests are located in the /test folder and all files follow the naming convention:
+```bash
+filename.test.ts
+```
+To run the unit tests, use:
+```bash
+npm run test
+```
+This command executes Vitest in the console and provides live feedback on test results.
 
 ## Contributing
 
