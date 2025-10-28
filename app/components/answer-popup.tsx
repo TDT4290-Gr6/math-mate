@@ -122,7 +122,7 @@ export default function AnswerPopup({
 
         setStep('done');
         if (selectedDifficulty != undefined) {
-            await tracked.logEvent({
+            void tracked.logEvent({
                 actionName: 'rate_difficulty',
                 payload: { rating: selectedDifficulty },
             });

@@ -90,17 +90,14 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
         router.push(`/protected/methods/${problemId}`);
     };
 
-    const handleLogOut = async () => {
-        try {
-            await tracked.logEvent({
-                actionName: 'sign_out',
-                payload: {},
-            });
-        } finally {
-            sessionStorage.removeItem('signInLogged');
-            onClose();
-            void signOut();
-        }
+    const handleLogOut = () => {
+        void tracked.logEvent({
+            actionName: 'sign_out',
+            payload: {},
+        });
+        sessionStorage.removeItem('signInLogged');
+        onClose();
+        void signOut();
     };
 
     useEffect(() => {
