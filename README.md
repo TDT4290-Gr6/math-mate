@@ -7,7 +7,7 @@ First, run the development server:
 ```bash
 npm install
 # then:
-npx prisma generate
+npm run prisma:generate
 # then:
 npm run dev
 # or
@@ -80,7 +80,7 @@ Prisma is the project's ORM and database toolkit. It generates a type-safe datab
 After updating the schema or pulling changes, generate the Prisma client with:
 
 ```bash
-npx prisma generate
+npm run prisma:generate
 ```
 
 ## Generating methods and steps for a dataset
