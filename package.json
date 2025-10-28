@@ -11,6 +11,7 @@
     "e2e:start": "cross-env CYPRESS_TESTING=true next start -p 3000",
     "e2e:run": "cypress run",
     "e2e:open": "cypress open",
+    "prisma:generate": "prisma generate",
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "vitest"
