@@ -5,6 +5,10 @@
 First, run the development server:
 
 ```bash
+npm install
+# then:
+npm run prisma:generate
+# then:
 npm run dev
 # or
 yarn dev
@@ -90,6 +94,16 @@ For a practical reference, see this example of [Clean Architecture in Next.js](h
 - shadcn
 - eslint/prettier
 - ioctopus (for di)
+
+## Prisma
+
+Prisma is the project's ORM and database toolkit. It generates a type-safe database client from the schema and provides a convenient query API (via the generated Prisma Client) used throughout the app.
+
+After updating the schema or pulling changes, generate the Prisma client with:
+
+```bash
+npm run prisma:generate
+```
 
 ## Generating methods and steps for a dataset
 
