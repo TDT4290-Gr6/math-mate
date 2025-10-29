@@ -87,11 +87,23 @@ This command executes Vitest in the console and provides live feedback on test r
 
 ## Contributing
 
+The main branch is protected. Therefore, please create a branch and a fork and create a pull request.
+The pull request will be automatically reviewed from code rabbit in the first place. After that another developer needs to review the PR to be able to be merged.
+
+### Commit naming
+
 We follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) for all commit messages.
 
 This means each commit message should follow the format `<type>(<optional scope>): <short description> (#issue-number)`.
 
 The main types are `fix` and `feat`, though others like `build`, `chore`, `ci`, `docs`, `style`, `refactor`, `perf` and `test` may also be used.
+
+### Branch naming
+
+The branch naming should be in the following format:
+`<type>/<issue_id>-<short_description>`
+
+The type is the same as from the commit naming.
 
 ## Architecture
 
