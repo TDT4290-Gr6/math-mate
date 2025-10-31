@@ -48,21 +48,30 @@ export class ChatService implements IChatService {
                 content,
             };
         } catch (error: unknown) {
-                console.error('OpenAI API error:', error);
+            console.error('OpenAI API error:', error);
 
-                // Narrow the type safely
-                if (error && typeof error === 'object' && 'code' in error) {
-                    const err = error as { code?: string; status?: number };
-                    if (err.code === 'ENOTFOUND' || err.code === 'ECONNREFUSED' || err.status === 503) {
-                        throw new Error('The AI service is currently offline or unreachable. Please try again later.');
-                    }
-                    if (err.status === 429) {
-                        throw new Error('The AI service is temporarily overloaded. Please wait and try again.');
-                    }
+            // Narrow the type safely
+            if (error && typeof error === 'object' && 'code' in error) {
+                const err = error as { code?: string; status?: number };
+                if (
+                    err.code === 'ENOTFOUND' ||
+                    err.code === 'ECONNREFUSED' ||
+                    err.status === 503
+                ) {
+                    throw new Error(
+                        'The AI service is currently offline or unreachable. Please try again later.',
+                    );
                 }
-
-                throw new Error('Failed to get response from chat service. Please try again.');
+                if (err.status === 429) {
+                    throw new Error(
+                        'The AI service is temporarily overloaded. Please wait and try again.',
+                    );
+                }
             }
-    }   
 
+            throw new Error(
+                'Failed to get response from chat service. Please try again.',
+            );
+        }
+    }
 }
