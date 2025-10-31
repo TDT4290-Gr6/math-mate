@@ -169,64 +169,61 @@ docker compose down
 This project captures user interaction events on the client and persists them server-side.
 
 - Where events originate from the client-side:
-	- `app/components/logger/LoggerProvider.tsx` and the tracking hooks (e.g. `app/hooks/useChatbot.ts`, `app/components/logger/*`). These call the client-side `logEvent` helper which POSTs to the server API.
+    - `app/components/logger/LoggerProvider.tsx` and the tracking hooks (e.g. `app/hooks/useChatbot.ts`, `app/components/logger/*`). These call the client-side `logEvent` helper which POSTs to the server API.
 
 - What is logged (primary fields):
-	- `userId` (number)
-	- `sessionId` (number)
-	- `actionName` (string) — the event name (see the table below)
-	- `loggedAt` (timestamp)
-	- `payload` (string — JSON-serialized extra data)
-	- optional: `problemId`, `methodId`, `stepId`
+    - `userId` (number)
+    - `sessionId` (number)
+    - `actionName` (string) — the event name (see the table below)
+    - `loggedAt` (timestamp)
+    - `payload` (string — JSON-serialized extra data)
+    - optional: `problemId`, `methodId`, `stepId`
 
 - Example event (JSON):
 
-	{
-		"id": 123,
-		"userId": 42,
-		"sessionId": 987654,
-		"actionName": "chat_message_sent",
-		"loggedAt": "2025-10-20 20:28:04.301+00",
-		"payload": "{\"message\":\"Hi\"}",
-		"problemId": 10
-	}
+    {
+    "id": 123,
+    "userId": 42,
+    "sessionId": 987654,
+    "actionName": "chat_message_sent",
+    "loggedAt": "2025-10-20 20:28:04.301+00",
+    "payload": "{\"message\":\"Hi\"}",
+    "problemId": 10
+    }
 
 - The table below lists the action names and the required payload fields
 
-
-
-| Action Name                | Description                                   | Payload Fields                             |
-| -------------------------- | --------------------------------------------- | ------------------------------------------ |
-| `page_view`                | Triggered when a user views a page.           | `page`                                     |
-| `submit_country`           | User submits a selected country.              | `countryId`                                |
-| `failed_country_submit`    | Country submission fails.                     | `countryId`                                |
-| `chat_open`                | Chat window opened.                           | –                                          |
-| `chat_close`               | Chat window closed.                           | –                                          |
-| `chat_message_sent`        | User sends a chat message.                    | `chatSessionId`, `message`, `current_step` |
-| `chat_message_received`    | System sends a chat reply.                    | `chatSessionId`, `reply`, `current_step`   |
-| `next_step`                | User progresses to the next guided step.      | `total_steps`, `current_step`              |
-| `go_to_answer`             | User jumps directly to the answer.            | `total_steps`, `current_step`              |
-| `reveal_answer`            | User reveals the answer.                      | –                                          |
-| `answer_evaluation`        | User submits whether they answered correctly. | `correct`                                  |
-| `rate_difficulty`          | User rates question difficulty.               | `rating`                                   |
-| `open_answer_popup`        | Answer popup opened.                          | –                                          |
-| `close_answer_popup`       | Answer popup closed.                          | –                                          |
-| `save_selected_subjects`   | User saves selected subjects.                 | `subjects`                                 |
-| `cancel_selected_subjects` | User cancels subject selection.               | `initial_subjects`                         |
-| `next_problem`             | Go to next problem.                           | `next_problemId`                           |
-| `previous_problem`         | Return to previous problem.                   | `previous_problemId`                       |
-| `start_solving`            | User starts solving a problem.                | –                                          |
-| `choose_method`            | User selects a problem-solving method.        | –                                          |
-| `solve_yourself`           | User chooses to solve manually.               | –                                          |
-| `use_step_by_step`         | User uses guided step-by-step solving.        | –                                          |
-| `start_practicing`         | User click on start practicing button on start page.            | `subject`, `selected`, `current_selection` |
-| `toggle_subject`           | User toggles a subject.                       | `subject`, `selected`, `current_selection` |
-| `open_subject_popup`       | Subject selection popup opened.               | –                                          |
-| `close_subject_popup`      | Subject selection popup closed.               | –                                          |
-| `open_sidebar`             | Sidebar opened.                               | –                                          |
-| `close_sidebar`            | Sidebar closed.                               | –                                          |
-| `sign_out`                 | User signs out.                               | –                                          |
-| `sign_in`                  | User signs in.                                | –                                          |
-| `toggle_theme`             | User switches light/dark theme.               | `theme`                                    |
-| `navigate_previous_solve`  | User opens a previously solved problem.       | –                                          |
-
+| Action Name                | Description                                          | Payload Fields                             |
+| -------------------------- | ---------------------------------------------------- | ------------------------------------------ |
+| `page_view`                | Triggered when a user views a page.                  | `page`                                     |
+| `submit_country`           | User submits a selected country.                     | `countryId`                                |
+| `failed_country_submit`    | Country submission fails.                            | `countryId`                                |
+| `chat_open`                | Chat window opened.                                  | –                                          |
+| `chat_close`               | Chat window closed.                                  | –                                          |
+| `chat_message_sent`        | User sends a chat message.                           | `chatSessionId`, `message`, `current_step` |
+| `chat_message_received`    | System sends a chat reply.                           | `chatSessionId`, `reply`, `current_step`   |
+| `next_step`                | User progresses to the next guided step.             | `total_steps`, `current_step`              |
+| `go_to_answer`             | User jumps directly to the answer.                   | `total_steps`, `current_step`              |
+| `reveal_answer`            | User reveals the answer.                             | –                                          |
+| `answer_evaluation`        | User submits whether they answered correctly.        | `correct`                                  |
+| `rate_difficulty`          | User rates question difficulty.                      | `rating`                                   |
+| `open_answer_popup`        | Answer popup opened.                                 | –                                          |
+| `close_answer_popup`       | Answer popup closed.                                 | –                                          |
+| `save_selected_subjects`   | User saves selected subjects.                        | `subjects`                                 |
+| `cancel_selected_subjects` | User cancels subject selection.                      | `initial_subjects`                         |
+| `next_problem`             | Go to next problem.                                  | `next_problemId`                           |
+| `previous_problem`         | Return to previous problem.                          | `previous_problemId`                       |
+| `start_solving`            | User starts solving a problem.                       | –                                          |
+| `choose_method`            | User selects a problem-solving method.               | –                                          |
+| `solve_yourself`           | User chooses to solve manually.                      | –                                          |
+| `use_step_by_step`         | User uses guided step-by-step solving.               | –                                          |
+| `start_practicing`         | User click on start practicing button on start page. | `subject`, `selected`, `current_selection` |
+| `toggle_subject`           | User toggles a subject.                              | `subject`, `selected`, `current_selection` |
+| `open_subject_popup`       | Subject selection popup opened.                      | –                                          |
+| `close_subject_popup`      | Subject selection popup closed.                      | –                                          |
+| `open_sidebar`             | Sidebar opened.                                      | –                                          |
+| `close_sidebar`            | Sidebar closed.                                      | –                                          |
+| `sign_out`                 | User signs out.                                      | –                                          |
+| `sign_in`                  | User signs in.                                       | –                                          |
+| `toggle_theme`             | User switches light/dark theme.                      | `theme`                                    |
+| `navigate_previous_solve`  | User opens a previously solved problem.              | –                                          |
