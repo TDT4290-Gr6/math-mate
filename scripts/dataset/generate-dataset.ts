@@ -80,10 +80,24 @@ async function main() {
     for (let i = 0; i < problems.length; i++) {
         const problem = problems[i];
 
-        if (problem.problem.includes('[asy]')) {
-            console.log(
-                `Problem ${i + 1} contains visual elements, skipping...`,
-            );
+        const problematicContents = [
+            '[asy]',
+            'begin{tabular}',
+            'begin{align*}',
+        ];
+
+        if (
+            problematicContents.some((content) =>
+                problem.problem.includes(content),
+            )
+        ) {
+            for (const content of problematicContents) {
+                if (problem.problem.includes(content)) {
+                    console.log(
+                        `Problem ${i + 1} contains "${content}", skipping...`,
+                    );
+                }
+            }
             continue;
         }
 

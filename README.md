@@ -5,6 +5,10 @@
 First, run the development server:
 
 ```bash
+npm install
+# then:
+npm run prisma:generate
+# then:
 npm run dev
 # or
 yarn dev
@@ -17,6 +21,28 @@ bun dev
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+
+## Environment Variables
+
+The following environment variables are required for all development and production environments:
+
+- `NEXT_AUTH_GITHUB_ID` - GitHub OAuth App Client ID (used for GitHub authentication)
+- `NEXT_AUTH_GITHUB_SECRET` - GitHub OAuth App Client Secret (used for GitHub authentication)
+- `NEXT_AUTH_GOOGLE_ID` - Google OAuth App Client ID (used for Google authentication)
+- `NEXT_AUTH_GOOGLE_SECRET` - Google OAuth App Client Secret (used for Google authentication)
+- `AUTH_SECRET` - Secret used to sign and encrypt authentication tokens
+- `DATABASE_URL` - Database connection URL (used by Prisma)
+- `OPENAI_API_KEY` - OpenAI API key (used for generating steps and for the chat feature)
+
+The following environment variable is required for when deploying to production:
+
+- `NEXTAUTH_URL` - The URL of the deployed application (e.g. `https://mathmate.example.com`). Defaults to `http://localhost:3000` if not set.
+
+The following environment variable are optional:
+
+- `GEMINI_TOKEN` - Gemini API key (used for generating steps)
+- `CYPRESS_TESTING` - Set to `true` to have the option to bypass authentication on build for end-to-end testing (IMPORTANT: should only be used in testing environments)
+- `STANDALONE_BUILD` - Set to `true` to enable Next.js standalone build mode (used automatically in Docker deployment)
 
 ## Testing
 
@@ -40,6 +66,24 @@ Or open the Cypress Test Runner:
 ```bash
 npm run e2e:open
 ```
+
+### Unit tests
+
+Our project uses Vitest as the testing framework for running unit tests.
+
+The unit tests are located in the tests/unit/ folder and all files follow the naming convention:
+
+```bash
+filename.test.ts
+```
+
+To run the unit tests, use:
+
+```bash
+npm run test
+```
+
+This command executes Vitest in the console and provides live feedback on test results.
 
 ## Contributing
 
@@ -69,6 +113,16 @@ For a practical reference, see this example of [Clean Architecture in Next.js](h
 - eslint/prettier
 - ioctopus (for di)
 
+## Prisma
+
+Prisma is the project's ORM and database toolkit. It generates a type-safe database client from the schema and provides a convenient query API (via the generated Prisma Client) used throughout the app.
+
+After updating the schema or pulling changes, generate the Prisma client with:
+
+```bash
+npm run prisma:generate
+```
+
 ## Generating methods and steps for a dataset
 
 There is a script in `scripts/dataset/generate-dataset.ts` that can be used to generate methods and steps for a dataset. This script would need to be modified depending on the structure of the dataset, to adhere to the `ProblemInsert` interface in `src/entities/models/problem.ts` (`methods` should be set to an empty array). The methods and steps will be generated when calling `generateMethods` defined in `scripts/dataset/generate-methods.ts`. Note, math problems using asymptote is not currently supported.
@@ -91,3 +145,21 @@ You can get a OpenAI API key by creating a new API key on the [OpenAI platform](
 ### Gemini API key
 
 You can get a Gemini API key by creating a new project in the [Gemini AI Studio](https://aistudio.google.com/api-keys). Environment variable name: `GEMINI_TOKEN`.
+
+## Deployment
+
+When deploying to production, there are some environment variables that need to be set. Especially important for production, is to set the `NEXTAUTH_URL` variable to the URL of your deployed application, e.g. `https://mathmate.example.com` (if not set, it will default to `http://localhost:3000`).
+
+### Docker
+
+The application can be run using Docker. To build and start the application using Docker Compose, run the following command:
+
+```bash
+docker compose up --build -d
+```
+
+Stopping the application can be done using:
+
+```bash
+docker compose down
+```

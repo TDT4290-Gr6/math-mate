@@ -26,6 +26,8 @@ const providers: Provider[] = [
         clientId: process.env.NEXT_AUTH_GOOGLE_ID!,
         clientSecret: process.env.NEXT_AUTH_GOOGLE_SECRET!,
     }),
+    // When adding new providers, make sure to update the providerConfig in
+    // app/auth/signIn/SignInProviders.tsx as well
 ];
 
 // Make sure CYPRESS_TESTING is NOT 'true' in production

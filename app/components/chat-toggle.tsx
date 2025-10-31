@@ -11,14 +11,24 @@ interface ChatToggleProps {
 export default function ChatToggle({ onClick }: ChatToggleProps) {
     const [openTooltip, setOpenTooltip] = React.useState(true);
 
-    // Hide tooltip after 4 seconds
+    // Hide tooltip after 6 seconds
     React.useEffect(() => {
-        const t = setTimeout(() => setOpenTooltip(false), 4000);
-        return () => clearTimeout(t);
-    }, []);
+        let t: NodeJS.Timeout | undefined;
+        if (openTooltip) {
+            t = setTimeout(() => setOpenTooltip(false), 6000);
+        }
+        return () => {
+            if (t) clearTimeout(t);
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []); // the dependency is empty because we only want it to run once per mount
 
     return (
-        <Tooltip open={openTooltip} onOpenChange={setOpenTooltip}>
+        <Tooltip
+            open={openTooltip}
+            defaultOpen={true}
+            onOpenChange={setOpenTooltip}
+        >
             <TooltipTrigger asChild>
                 <Button
                     aria-label="Open chat"
