@@ -47,11 +47,23 @@ export class ChatService implements IChatService {
                 role: 'assistant',
                 content,
             };
-        } catch (error) {
-            console.error('OpenAI API error:', error);
+    } catch (error: any) {
+        console.error('OpenAI API error:', error);
+
+        // handle offline / network issues specifically
+        if (error.code === 'ENOTFOUND' || error.code === 'ECONNREFUSED' || error.status === 503) {
             throw new Error(
-                'Failed to get response from chat service. Please try again.',
+                'The AI service is currently offline or unreachable. Please try again later.'
             );
+        }
+
+        // handle rate limit or timeout
+        if (error.status === 429) {
+            throw new Error('The AI service is temporarily overloaded. Please wait and try again.');
+        }
+
+        // fallback for everything else
+        throw new Error('Failed to get response from chat service. Please try again.');
         }
     }
 }
