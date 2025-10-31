@@ -51,7 +51,11 @@ export class ChatService implements IChatService {
             console.error('OpenAI API error:', error);
 
             // Narrow the type safely
-            if (error && typeof error === 'object' && ('code' in error || 'status' in error)) {
+            if (
+                error &&
+                typeof error === 'object' &&
+                ('code' in error || 'status' in error)
+            ) {
                 const err = error as { code?: string; status?: number };
                 if (
                     err.code === 'ENOTFOUND' ||
