@@ -142,14 +142,30 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                             }
                         >
                             {userId ? (
-                                userId
-                            ) : (
-                                <LoaderCircle
-                                    className="inline animate-spin"
-                                    size={16}
-                                    aria-label="Loading user ID"
+                                <span
                                     role="status"
-                                />
+                                    aria-live="polite"
+                                    aria-label={
+                                        userId === 'Failed to load'
+                                            ? `Error loading user ID: ${userId}`
+                                            : `User ID`
+                                    }
+                                >
+                                    {userId}
+                                </span>
+                            ) : (
+                                <span
+                                    role="status"
+                                    aria-live="polite"
+                                    aria-label="Loading user ID"
+                                >
+                                    <LoaderCircle
+                                        className="inline animate-spin"
+                                        size={16}
+                                        aria-hidden="true"
+                                    />
+                                    <span className="sr-only">Loading</span>
+                                </span>
                             )}
                         </span>
                     </p>
