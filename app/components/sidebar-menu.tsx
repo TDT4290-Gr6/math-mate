@@ -219,38 +219,64 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                         </p>
                     </button>
                 </div>
-
-                {/* Previously solved problems */}
-                <p className="border-b pb-1 font-semibold">
-                    Previously solved problems:
-                </p>
             </div>
             <div className="mt-4 flex flex-col gap-4 overflow-y-auto">
-                {solvesLoading ? (
-                    // Display 10 skeleton loaders while loading
-                    Array.from({ length: 10 }).map((_, index) => (
-                        <div
-                            key={index}
-                            className="bg-sidebar-primary hover:bg-accent h-12 w-full animate-pulse rounded-xl"
-                        />
-                    ))
-                ) : solves.length === 0 ? (
-                    <p className="text-sidebar-primary-foreground bg-sidebar-primary hover:bg-accent rounded-xl p-2 text-pretty">
-                        No previously solved problems.
-                    </p>
-                ) : (
-                    solves.map((solve) => (
-                        <Button
-                            key={solve.id}
+                {/* Previously solved problems */}
+                <h2 className="border-b pb-1 font-semibold">
+                    Previously solved problems:
+                </h2>
+
+                <div
+                    role="region"
+                    aria-label="Previously solved problems list"
+                    aria-live="polite"
+                    aria-busy={solvesLoading}
+                >
+                    {solvesLoading ? (
+                        <>
+                            <span className="sr-only">
+                                Loading previously solved problems
+                            </span>
+                            {/* Display 10 skeleton loaders while loading */}
+                            {Array.from({ length: 10 }).map((_, index) => (
+                                <div
+                                    key={index}
+                                    className="bg-sidebar-primary hover:bg-accent h-12 w-full animate-pulse rounded-xl"
+                                    aria-hidden="true"
+                                />
+                            ))}
+                        </>
+                    ) : solves.length === 0 ? (
+                        <p
                             className="text-sidebar-primary-foreground bg-sidebar-primary hover:bg-accent rounded-xl p-2 text-pretty"
-                            onClick={() =>
-                                handleNavigateToSolve(solve.problemId)
-                            }
+                            role="status"
                         >
-                            <LaTeXFormattedText text={solve.problemTitle} />
-                        </Button>
-                    ))
-                )}
+                            No previously solved problems.
+                        </p>
+                    ) : (
+                        <nav aria-label="Previously solved problems navigation">
+                            <ul className="flex flex-col gap-4">
+                                {solves.map((solve) => (
+                                    <li key={solve.id}>
+                                        <Button
+                                            className="text-sidebar-primary-foreground bg-sidebar-primary hover:bg-accent w-full rounded-xl p-2 text-left text-pretty"
+                                            onClick={() =>
+                                                handleNavigateToSolve(
+                                                    solve.problemId,
+                                                )
+                                            }
+                                            aria-label={`View previously solved problem: ${solve.problemTitle}`}
+                                        >
+                                            <LaTeXFormattedText
+                                                text={solve.problemTitle}
+                                            />
+                                        </Button>
+                                    </li>
+                                ))}
+                            </ul>
+                        </nav>
+                    )}
+                </div>
             </div>
         </div>
     );
