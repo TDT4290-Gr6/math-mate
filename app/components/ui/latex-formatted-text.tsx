@@ -9,10 +9,9 @@ import 'katex/dist/katex.min.css';
 export interface LaTeXFormattedTextProps {
     text?: string;
     className?: string;
-    sanitize?: boolean; // Allow disabling for trusted content
+    sanitize?: boolean;
 }
 
-// helper-function for replacing \[ with $
 function replaceLaTeXBlock(text: string) {
     return text.replace(
         /\\\[\s*([\s\S]*?)\s*\\\]/g,
@@ -20,16 +19,16 @@ function replaceLaTeXBlock(text: string) {
     );
 }
 
-/**
- * `LaTeXFormattedText` is a reusable React component for rendering Markdown content
- * that includes LaTeX math expressions. It supports both inline (`$...$`) and block (`$$...$$`)
- * math formatting using `remark-math` and `rehype-katex`.
- *
- * @param {string} [text] - The Markdown string containing text and optional LaTeX math.
- * @param {string} [className] - Optional Tailwind or CSS class name for styling the container.
- *
- * @returns {JSX.Element | null} Rendered Markdown with LaTeX formatting, or `null` if no text is provided.
- */
+// Extrahiere Klartext-Version für Screenreader
+function extractPlainTextMath(text: string): string {
+    return text
+        .replace(/\$\$(.*?)\$\$/g, (_, math) => ` Formel: ${math} `)
+        .replace(/\$(.*?)\$/g, (_, math) => ` ${math} `)
+        .replace(/<[^>]+>/g, '') // HTML-Tags entfernen
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
 function LaTeXFormattedTextComponent({
     text,
     className,
@@ -37,18 +36,41 @@ function LaTeXFormattedTextComponent({
 }: LaTeXFormattedTextProps) {
     if (!text) return null;
 
+    const processedText = replaceLaTeXBlock(text);
+    const plainTextVersion = extractPlainTextMath(processedText);
+
     return (
         <div className={className}>
-            <ReactMarkdown
-                remarkPlugins={[remarkMath, remarkGfm]}
-                rehypePlugins={[
-                    ...(sanitize ? [rehypeSanitize] : []),
-                    rehypeKatex,
-                ]}
+            {/* Screenreader-Version mit Klartext */}
+            <div
+                className="sr-only"
+                role="article"
+                aria-label="Mathematisches Problem"
+                aria-live="polite"
             >
-                {replaceLaTeXBlock(text)}
-            </ReactMarkdown>
+                {plainTextVersion}
+            </div>
+
+            {/* Visuelle Version mit KaTeX */}
+            <div>
+                <ReactMarkdown
+                    remarkPlugins={[remarkMath, remarkGfm]}
+                    rehypePlugins={[
+                        ...(sanitize ? [rehypeSanitize] : []),
+                        [
+                            rehypeKatex,
+                            {
+                                output: 'htmlAndMathml', // Bessere Screenreader-Unterstützung
+                                throwOnError: false,
+                            },
+                        ],
+                    ]}
+                >
+                    {processedText}
+                </ReactMarkdown>
+            </div>
         </div>
     );
 }
+
 export const LaTeXFormattedText = memo(LaTeXFormattedTextComponent);
