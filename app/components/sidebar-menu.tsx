@@ -188,14 +188,20 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                     <p className="border-b pb-1 font-semibold">Settings:</p>
                     {/* Darkmode toggle */}
                     <div className="bg-sidebar-primary flex items-center justify-around gap-2 rounded-4xl px-4 py-2 text-[var(--sidebar-primary-foreground)]">
-                        <Moon size={20} />
-                        <p className="font-semibold text-[var(--sidebar-primary-foreground)]">
+                        <Moon size={20} aria-hidden="true" />
+                        <label
+                            htmlFor="dark-mode-switch"
+                            className="cursor-pointer font-semibold text-[var(--sidebar-primary-foreground)]"
+                        >
                             Dark mode
-                        </p>
+                        </label>
                         <Switch
+                            id="dark-mode-switch"
                             className="ml-auto h-6 w-10 cursor-pointer p-1"
                             checked={theme === 'dark'}
                             onCheckedChange={handleThemeSwitch}
+                            aria-label="Toggle dark mode"
+                            aria-checked={theme === 'dark'}
                         />
                     </div>
                     {/* Logout button */}
