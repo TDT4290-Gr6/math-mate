@@ -45,14 +45,14 @@ function LaTeXFormattedTextComponent({
             <div
                 className="sr-only"
                 role="article"
-                aria-label="Mathematisches Problem"
+                aria-label="Mathproblem"
                 aria-live="polite"
             >
                 {plainTextVersion}
             </div>
 
             {/* Visuelle Version mit KaTeX */}
-            <div>
+            <div aria-hidden="true">
                 <ReactMarkdown
                     remarkPlugins={[remarkMath, remarkGfm]}
                     rehypePlugins={[
