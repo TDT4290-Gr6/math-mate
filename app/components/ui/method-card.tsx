@@ -1,5 +1,6 @@
 import { LaTeXFormattedText } from './latex-formatted-text';
 import { Button } from '@/components/ui/button';
+import { useState } from 'react';
 import { Card } from './card';
 import Title from './title';
 
@@ -35,8 +36,31 @@ export default function MethodCard({
     disableButton,
     methodNumber,
 }: MethodCardProps) {
+    const [announceContent, setAnnounceContent] = useState(false);
+
+    const handleButtonClick = () => {
+        // Reset and trigger screen reader announcement
+        setAnnounceContent(false);
+        setTimeout(() => {
+            setAnnounceContent(true);
+        }, 10);
+
+        // Call original callback if provided
+        onButtonClick?.();
+    };
+
     return (
         <Card className="relative m-3 w-full gap-2 px-6 pt-4">
+            {/* Screen reader live region for announcements */}
+            <div
+                role="status"
+                aria-live="polite"
+                aria-atomic="true"
+                className="sr-only"
+            >
+                {announceContent && `${title}. ${description}`}
+            </div>
+
             {/* Method number */}
             <Title
                 title={
@@ -46,6 +70,7 @@ export default function MethodCard({
                 }
                 size={20}
             />
+
             {/* Title */}
             <LaTeXFormattedText
                 text={title}
@@ -62,7 +87,8 @@ export default function MethodCard({
                 <div className="absolute right-8 -bottom-5">
                     <Button
                         className="bg-[var(--accent)] px-6 py-2"
-                        onClick={onButtonClick}
+                        onClick={handleButtonClick}
+                        aria-label={`${buttonText}. Method: ${methodNumber ?? ''} Title: ${title}`}
                     >
                         {buttonText}
                     </Button>
