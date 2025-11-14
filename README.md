@@ -105,14 +105,6 @@ This project follows the principles of [Clean Architecture](https://blog.cleanco
 
 For a practical reference, see this example of [Clean Architecture in Next.js](https://github.com/nikolovlazar/nextjs-clean-architecture).
 
-## Used packages
-
-- tailwind
-- prisma
-- shadcn
-- eslint/prettier
-- ioctopus (for di)
-
 ## Prisma
 
 Prisma is the project's ORM and database toolkit. It generates a type-safe database client from the schema and provides a convenient query API (via the generated Prisma Client) used throughout the app.
