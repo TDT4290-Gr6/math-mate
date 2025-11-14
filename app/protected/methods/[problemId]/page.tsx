@@ -60,7 +60,7 @@ export default function MethodPage() {
             />
 
             <div className="px-[15%]">
-                <aside role="note" aria-label="Lösungshilfe">
+                <aside role="note" aria-label="Hint about methods">
                     <p>
                         To help you with the math problem you will be provided a
                         set of methods you can use to solve the problem. You
