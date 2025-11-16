@@ -1,6 +1,7 @@
 import { LaTeXFormattedText } from './latex-formatted-text';
+import { useState, useEffect, useRef } from 'react';
+import { extractPlainTextMath } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
 import { Card } from './card';
 import Title from './title';
 
@@ -37,17 +38,36 @@ export default function MethodCard({
     methodNumber,
 }: MethodCardProps) {
     const [announceContent, setAnnounceContent] = useState(false);
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+    // Cleanup timeout on unmount to prevent "state update on unmounted component" warnings
+    useEffect(() => {
+        return () => {
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
+        };
+    }, []);
 
     const handleButtonClick = () => {
+        // Clear any existing timeout
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+        }
+
         // Reset and trigger screen reader announcement
         setAnnounceContent(false);
-        setTimeout(() => {
+        timeoutRef.current = setTimeout(() => {
             setAnnounceContent(true);
         }, 10);
 
         // Call original callback if provided
         onButtonClick?.();
     };
+
+    // Extract plain text for announcement
+    const plainTitle = extractPlainTextMath(title);
+    const plainDescription = extractPlainTextMath(description);
 
     return (
         <Card className="relative m-3 w-full gap-2 px-6 pt-4">
@@ -58,7 +78,7 @@ export default function MethodCard({
                 aria-atomic="true"
                 className="sr-only"
             >
-                {announceContent && `${title}. ${description}`}
+                {announceContent && `${plainTitle}. ${plainDescription}`}
             </div>
 
             {/* Method number */}
@@ -88,7 +108,7 @@ export default function MethodCard({
                     <Button
                         className="bg-[var(--accent)] px-6 py-2"
                         onClick={handleButtonClick}
-                        aria-label={`${buttonText}. Method: ${methodNumber ?? ''} Title: ${title}`}
+                        aria-label={`${buttonText}. This will re-read: Method ${methodNumber ?? ''} ${plainTitle}`}
                     >
                         {buttonText}
                     </Button>
