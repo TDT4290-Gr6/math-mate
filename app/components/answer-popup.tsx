@@ -9,25 +9,13 @@ import {
 } from './ui/dialog';
 import { LaTeXFormattedText } from './ui/latex-formatted-text';
 import { useTrackedLogger } from './logger/LoggerProvider';
+import { useState, useEffect, useRef } from 'react';
 import { addSolvedProblem } from '@/actions';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
 import { Button } from './ui/button';
 import { cn } from '@/lib/utils';
 import Title from './ui/title';
 
-/**
- * Props for the AnswerPopup component.
- *
- * @param isOpen: Controls whether the dialog is visible. The parent typically
- *         manages this boolean so it can open/close the popup.
- * @param answer: The answer text to reveal inside the popup.
- * @param problemId: The ID of the problem being solved, used when recording the solution.
- * @param startedSolvingAt: Timestamp when the user started solving the problem.
- * @param stepsUsed: Number of steps the user took to solve the problem.
- * @param onClose: Optional callback invoked when the dialog is requested to close
- *          (either by user action or when the component finishes its flow).
- */
 interface AnswerPopupProps {
     isOpen: boolean;
     answer: string;
@@ -39,6 +27,16 @@ interface AnswerPopupProps {
 
 type Step = 'reveal' | 'confirm' | 'difficulty' | 'done';
 
+// Extract plain text for screen readers
+function extractPlainTextMath(text: string): string {
+    return text
+        .replace(/\$\$(.*?)\$\$/g, (_, math) => ` formula: ${math} `)
+        .replace(/\$(.*?)\$/g, (_, math) => ` ${math} `)
+        .replace(/<[^>]+>/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
 export default function AnswerPopup({
     isOpen,
     answer,
@@ -47,22 +45,6 @@ export default function AnswerPopup({
     stepsUsed,
     onClose,
 }: AnswerPopupProps) {
-    /*
-    Flow (step states):
-         - 'reveal': initial state when the popup opens. Shows a single click-to-reveal field.
-             Clicking it advances to 'confirm'. This is a one-way action (not a toggle).
-         - 'confirm': shows the revealed answer and asks the user whether their solution
-             matched (Yes / No). Selecting either sets `wasCorrect` and moves to 'difficulty'.
-         - 'difficulty': user rates how hard the problem was (1..5). The UI highlights
-         ratings cumulatively (buttons 1..N). Once a rating is chosen, the footer
-             shows 'Try again' and 'Next question' actions; selecting one finishes the flow.
-         - 'done': final state after an action; the popup is closed and `onClose` is called.
-
-         Notes:
-         - The component resets to 'reveal' whenever `isOpen` becomes true.
-         - All state transitions are handled locally; the parent controls visibility
-             through `isOpen`/`onClose` so it can reopen the dialog later.
-             */
     const [step, setStep] = useState<Step>('reveal');
     const [selectedDifficulty, setSelectedDifficulty] = useState<
         number | undefined
@@ -71,21 +53,67 @@ export default function AnswerPopup({
     const [finishedSolvingAt, setFinishedSolvingAt] = useState<
         Date | undefined
     >(undefined);
+    const [announcement, setAnnouncement] = useState('');
 
     const router = useRouter();
     const tracked = useTrackedLogger();
+    const revealButtonRef = useRef<HTMLButtonElement>(null);
+    const confirmYesButtonRef = useRef<HTMLButtonElement>(null);
+    const difficultyContainerRef = useRef<HTMLDivElement>(null);
 
+    // Reset state when popup opens - DO NOT announce answer here
     useEffect(() => {
         if (isOpen) {
             setStep('reveal');
             setSelectedDifficulty(undefined);
             setWasCorrect(false);
+            setAnnouncement('');
+
+            // Only announce that popup is open, NOT the answer
+            setTimeout(() => {
+                setAnnouncement(
+                    'Answer popup opened. Press the button to reveal the answer.',
+                );
+            }, 300);
         }
     }, [isOpen]);
 
+    // Handle step changes and focus management
+    useEffect(() => {
+        if (!isOpen) return;
+
+        switch (step) {
+            case 'reveal':
+                // Focus on reveal button, but don't announce answer
+                setTimeout(() => {
+                    revealButtonRef.current?.focus();
+                }, 100);
+                break;
+            case 'confirm':
+                // ONLY NOW announce the answer (after user clicked reveal)
+                setAnnouncement('');
+                setTimeout(() => {
+                    const plainAnswer = extractPlainTextMath(answer);
+                    setAnnouncement(
+                        `Answer revealed: ${plainAnswer}. Did you arrive at the correct answer?`,
+                    );
+                    confirmYesButtonRef.current?.focus();
+                }, 100);
+                break;
+            case 'difficulty':
+                setAnnouncement('');
+                setTimeout(() => {
+                    setAnnouncement(
+                        'How difficult was this question? Rate from 1 (easy) to 5 (hard).',
+                    );
+                    difficultyContainerRef.current?.focus();
+                }, 100);
+                break;
+        }
+    }, [step, isOpen, answer]);
+
     function handleReveal() {
         if (step === 'reveal') setStep('confirm');
-        // Treat revealing the answer as finishing the problem attempt
         setFinishedSolvingAt(new Date());
         void tracked.logEvent({
             actionName: 'reveal_answer',
@@ -96,6 +124,16 @@ export default function AnswerPopup({
     function handleConfirm(correct: boolean) {
         setWasCorrect(correct);
         setStep('difficulty');
+
+        setAnnouncement('');
+        setTimeout(() => {
+            setAnnouncement(
+                correct
+                    ? 'You answered correctly!'
+                    : 'Your answer was incorrect.',
+            );
+        }, 100);
+
         void tracked.logEvent({
             actionName: 'answer_evaluation',
             payload: { correct },
@@ -104,6 +142,15 @@ export default function AnswerPopup({
 
     function handleDifficulty(level: number) {
         setSelectedDifficulty(level);
+
+        setAnnouncement('');
+        setTimeout(() => {
+            const difficultyText =
+                level <= 2 ? 'easy' : level <= 3 ? 'medium' : 'hard';
+            setAnnouncement(
+                `Difficulty rated as ${level} out of 5, ${difficultyText}.`,
+            );
+        }, 100);
     }
 
     async function handleFinalAction(action: 'next' | 'retry') {
@@ -148,14 +195,6 @@ export default function AnswerPopup({
         onClose?.();
     }
 
-    useEffect(() => {
-        if (isOpen) {
-            setStep('reveal');
-            setSelectedDifficulty(undefined);
-            setWasCorrect(false);
-        }
-    }, [isOpen]);
-
     return (
         <Dialog
             open={isOpen}
@@ -165,16 +204,31 @@ export default function AnswerPopup({
             }}
         >
             <DialogContent
-                onInteractOutside={(event) => event.preventDefault()} // prevent click outside
+                onInteractOutside={(event) => event.preventDefault()}
                 className="px-8 pt-8 pb-4"
+                aria-describedby="answer-popup-description"
             >
+                {/* Screen reader announcements - CRITICAL: Only announces after user action */}
+                <div
+                    role="status"
+                    aria-live="polite"
+                    aria-atomic="true"
+                    className="sr-only"
+                >
+                    {announcement}
+                </div>
+
                 <DialogHeader>
                     <DialogTitle>
                         <Title title="Here's the answer:" />
                     </DialogTitle>
                     <DialogDescription asChild>
-                        <div className="flex h-44 w-full flex-col items-center justify-start">
+                        <div
+                            id="answer-popup-description"
+                            className="flex h-44 w-full flex-col items-center justify-start"
+                        >
                             <div className="flex w-3/4 max-w-sm flex-1">
+                                {/* REVEAL STEP */}
                                 {step === 'reveal' && (
                                     <div className="w-full text-center">
                                         <p className="text-[var(--foreground)]">
@@ -182,6 +236,7 @@ export default function AnswerPopup({
                                             solution
                                         </p>
                                         <Button
+                                            ref={revealButtonRef}
                                             tabIndex={0}
                                             onClick={handleReveal}
                                             onKeyDown={(e) => {
@@ -194,18 +249,26 @@ export default function AnswerPopup({
                                                 }
                                             }}
                                             className="my-3 h-12 w-full rounded-md bg-[var(--answer-card)] py-3 text-[var(--secondary-foreground)]"
+                                            aria-label="Click to reveal the answer"
                                         >
                                             Click to reveal answer
                                         </Button>
                                     </div>
                                 )}
+
+                                {/* CONFIRM STEP - Answer is visible but NOT auto-announced */}
                                 {step === 'confirm' && (
                                     <div className="w-full justify-start text-center">
                                         <p className="text-[var(--foreground)]">
                                             Compare it with your work to see how
                                             close you got.
                                         </p>
-                                        <div className="my-3 h-12 rounded-md bg-[var(--answer-card-secondary)] px-4 py-3 text-[var(--secondary-foreground)]">
+                                        <div
+                                            className="my-3 h-12 rounded-md bg-[var(--answer-card-secondary)] px-4 py-3 text-[var(--secondary-foreground)]"
+                                            role="region"
+                                            aria-label="Revealed answer"
+                                            // NO aria-live here - answer is only announced via the announcement state
+                                        >
                                             <LaTeXFormattedText
                                                 text={
                                                     (answer.startsWith('$')
@@ -224,17 +287,63 @@ export default function AnswerPopup({
                                         </p>
                                     </div>
                                 )}
+
+                                {/* DIFFICULTY STEP */}
                                 {step === 'difficulty' && (
                                     <div className="w-full text-center">
-                                        <p className="mb-2 text-sm text-[var(--foreground)]">
+                                        <p
+                                            className="mb-2 text-sm text-[var(--foreground)]"
+                                            id="difficulty-label"
+                                        >
                                             How difficult was this question?
                                         </p>
-                                        <div className="flex items-center justify-between gap-2">
+                                        <div
+                                            ref={difficultyContainerRef}
+                                            className="flex items-center justify-between gap-2"
+                                            role="radiogroup"
+                                            aria-labelledby="difficulty-label"
+                                            tabIndex={0}
+                                            onKeyDown={(e) => {
+                                                if (
+                                                    e.key === 'ArrowLeft' &&
+                                                    selectedDifficulty &&
+                                                    selectedDifficulty > 1
+                                                ) {
+                                                    handleDifficulty(
+                                                        selectedDifficulty - 1,
+                                                    );
+                                                    e.preventDefault();
+                                                } else if (
+                                                    e.key === 'ArrowRight' &&
+                                                    selectedDifficulty &&
+                                                    selectedDifficulty < 5
+                                                ) {
+                                                    handleDifficulty(
+                                                        selectedDifficulty + 1,
+                                                    );
+                                                    e.preventDefault();
+                                                } else if (
+                                                    e.key >= '1' &&
+                                                    e.key <= '5'
+                                                ) {
+                                                    handleDifficulty(
+                                                        parseInt(e.key),
+                                                    );
+                                                    e.preventDefault();
+                                                }
+                                            }}
+                                        >
                                             {[1, 2, 3, 4, 5].map((n) => {
                                                 const isActive =
                                                     selectedDifficulty !==
                                                         undefined &&
                                                     n <= selectedDifficulty;
+                                                const difficultyLabel =
+                                                    n <= 2
+                                                        ? 'easy'
+                                                        : n === 3
+                                                          ? 'medium'
+                                                          : 'hard';
                                                 return (
                                                     <Button
                                                         key={n}
@@ -253,8 +362,13 @@ export default function AnswerPopup({
                                                             n === 5 &&
                                                                 'rounded-r-full',
                                                         )}
-                                                        aria-pressed={isActive}
-                                                        aria-label={`Rate difficulty ${n}`}
+                                                        role="radio"
+                                                        aria-checked={
+                                                            n ===
+                                                            selectedDifficulty
+                                                        }
+                                                        aria-label={`Rate difficulty ${n} out of 5, ${difficultyLabel}`}
+                                                        tabIndex={-1}
                                                     >
                                                         {n}
                                                     </Button>
@@ -262,27 +376,36 @@ export default function AnswerPopup({
                                             })}
                                         </div>
                                         <div className="mb-4 flex flex-row place-content-between px-4 pt-1 text-sm text-[var(--foreground)]">
-                                            <p>Easy</p>
-                                            <p>Medium</p>
-                                            <p>Hard</p>
+                                            <p aria-hidden="true">Easy</p>
+                                            <p aria-hidden="true">Medium</p>
+                                            <p aria-hidden="true">Hard</p>
                                         </div>
                                     </div>
                                 )}
                             </div>
+
+                            {/* ACTION BUTTONS */}
                             <div className="m-3 flex h-12 w-3/4 max-w-sm items-center justify-center">
                                 {step === 'confirm' && (
-                                    <div className="flex gap-4">
+                                    <div
+                                        className="flex gap-4"
+                                        role="group"
+                                        aria-label="Answer confirmation"
+                                    >
                                         <Button
                                             className="w-32"
                                             variant="default"
                                             onClick={() => handleConfirm(false)}
+                                            aria-label="No, my answer was incorrect"
                                         >
                                             No
                                         </Button>
                                         <Button
+                                            ref={confirmYesButtonRef}
                                             className="w-32"
                                             variant="secondary"
                                             onClick={() => handleConfirm(true)}
+                                            aria-label="Yes, my answer was correct"
                                         >
                                             Yes
                                         </Button>
@@ -290,7 +413,11 @@ export default function AnswerPopup({
                                 )}
 
                                 {step === 'difficulty' && (
-                                    <div className="flex gap-4">
+                                    <div
+                                        className="flex gap-4"
+                                        role="group"
+                                        aria-label="Next actions"
+                                    >
                                         <Button
                                             variant="default"
                                             className="w-40"
@@ -300,6 +427,7 @@ export default function AnswerPopup({
                                             onClick={() =>
                                                 handleFinalAction('retry')
                                             }
+                                            aria-label="Try this problem again"
                                         >
                                             Try again
                                         </Button>
@@ -312,6 +440,7 @@ export default function AnswerPopup({
                                             onClick={() =>
                                                 handleFinalAction('next')
                                             }
+                                            aria-label="Move to next question"
                                         >
                                             Next question
                                         </Button>
