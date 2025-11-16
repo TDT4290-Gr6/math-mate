@@ -3,6 +3,7 @@
 import { LaTeXFormattedText } from './ui/latex-formatted-text';
 import { useEffect, useRef, useState } from 'react';
 import type { Step } from '@/entities/models/step';
+import { extractPlainTextMath } from '@/lib/utils';
 import MethodCard from './ui/method-card';
 import { Minus } from 'lucide-react';
 
@@ -40,10 +41,13 @@ export default function Steps({
             const newStep = visibleSteps[visibleSteps.length - 1];
             const stepNumber = visibleSteps.length;
 
+            // Extract plain text for screen reader announcement
+            const plainTextContent = extractPlainTextMath(newStep.content);
+
             // Clear and set announcement to trigger screen reader
             setAnnouncement('');
             setTimeout(() => {
-                setAnnouncement(`Step ${stepNumber}: ${newStep.content}`);
+                setAnnouncement(`Step ${stepNumber}: ${plainTextContent}`);
             }, 100);
         }
 

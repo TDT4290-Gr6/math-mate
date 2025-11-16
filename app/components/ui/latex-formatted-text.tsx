@@ -1,3 +1,4 @@
+import { extractPlainTextMath } from '@/lib/utils';
 import rehypeSanitize from 'rehype-sanitize';
 import ReactMarkdown from 'react-markdown';
 import rehypeKatex from 'rehype-katex';
@@ -17,16 +18,6 @@ function replaceLaTeXBlock(text: string) {
         /\\\[\s*([\s\S]*?)\s*\\\]/g,
         (_, math) => `$$${math.trim()}$$`,
     );
-}
-
-// Extrahiere Klartext-Version für Screenreader
-function extractPlainTextMath(text: string): string {
-    return text
-        .replace(/\$\$(.*?)\$\$/g, (_, math) => ` Formel: ${math} `)
-        .replace(/\$(.*?)\$/g, (_, math) => ` ${math} `)
-        .replace(/<[^>]+>/g, '') // HTML-Tags entfernen
-        .replace(/\s+/g, ' ')
-        .trim();
 }
 
 function LaTeXFormattedTextComponent({
