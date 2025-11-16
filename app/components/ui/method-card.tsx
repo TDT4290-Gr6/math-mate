@@ -108,7 +108,7 @@ export default function MethodCard({
                     <Button
                         className="bg-[var(--accent)] px-6 py-2"
                         onClick={handleButtonClick}
-                        aria-label={`${buttonText}. This will re-read: Method ${methodNumber ?? ''} ${plainTitle}`}
+                        aria-label={`${buttonText} for ${plainTitle}`}
                     >
                         {buttonText}
                     </Button>
