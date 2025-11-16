@@ -9,11 +9,11 @@ import {
 } from './ui/dialog';
 import { LaTeXFormattedText } from './ui/latex-formatted-text';
 import { useTrackedLogger } from './logger/LoggerProvider';
+import { cn, extractPlainTextMath } from '@/lib/utils';
 import { useState, useEffect, useRef } from 'react';
 import { addSolvedProblem } from '@/actions';
 import { useRouter } from 'next/navigation';
 import { Button } from './ui/button';
-import { cn } from '@/lib/utils';
 import Title from './ui/title';
 
 interface AnswerPopupProps {
@@ -26,16 +26,6 @@ interface AnswerPopupProps {
 }
 
 type Step = 'reveal' | 'confirm' | 'difficulty' | 'done';
-
-// Extract plain text for screen readers
-function extractPlainTextMath(text: string): string {
-    return text
-        .replace(/\$\$(.*?)\$\$/g, (_, math) => ` formula: ${math} `)
-        .replace(/\$(.*?)\$/g, (_, math) => ` ${math} `)
-        .replace(/<[^>]+>/g, '')
-        .replace(/\s+/g, ' ')
-        .trim();
-}
 
 export default function AnswerPopup({
     isOpen,
