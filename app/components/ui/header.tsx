@@ -141,7 +141,7 @@ export default function Header({
                     className="flex size-10 cursor-pointer items-center justify-center"
                     aria-haspopup="dialog"
                     aria-expanded={isOpen}
-                    aria-label='Open sidebar menu (press "e" to open, "Escape" to close)'
+                    aria-label="Open sidebar menu"
                     onClick={openSidebar}
                 >
                     <Menu size={36} />
