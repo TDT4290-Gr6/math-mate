@@ -1,9 +1,9 @@
 import { ChevronDown, SendHorizontal } from 'lucide-react';
+import { cn, extractPlainTextMath } from '@/lib/utils';
 import { useEffect, useRef, useState } from 'react';
 import { ChatContext } from '../hooks/useChatbot';
 import { Step } from '@/entities/models/step';
 import MessageBubble from './message-bubble';
-import { cn } from '@/lib/utils';
 
 export interface ChatMessage {
     chatID: string;
@@ -58,7 +58,10 @@ export default function ChatbotWindow({
     problemDescription,
 }: ChatbotWindowProps) {
     const [inputValue, setInputValue] = useState('');
+    const [announcement, setAnnouncement] = useState('');
     const containerRef = useRef<HTMLDivElement | null>(null);
+    const previousMessageCount = useRef(0);
+    const inputRef = useRef<HTMLInputElement>(null);
 
     const handleSendMessage = async () => {
         if (inputValue.trim() && onSendMessage && !isLoading) {
@@ -81,27 +84,81 @@ export default function ChatbotWindow({
         }
     };
 
+    // Scroll to bottom when adding new messages
     useEffect(() => {
         const el = containerRef.current;
         if (!el) return;
-        // Scroll to bottom when adding new messages
         el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
     }, [chatHistory.messages.length]);
 
+    // Announce new assistant messages to screen readers
+    useEffect(() => {
+        const currentMessageCount = chatHistory.messages.length;
+
+        if (currentMessageCount > previousMessageCount.current) {
+            const newMessage = chatHistory.messages[currentMessageCount - 1];
+
+            // Only announce assistant messages (not user's own messages)
+            if (newMessage.sender === 'assistant') {
+                setAnnouncement('');
+                setTimeout(() => {
+                    setAnnouncement(
+                        `Assistant says: ${extractPlainTextMath(newMessage.content)}`,
+                    );
+                }, 100);
+            }
+        }
+
+        previousMessageCount.current = currentMessageCount;
+    }, [chatHistory.messages]);
+
+    // Announce loading state
+    useEffect(() => {
+        if (isLoading) {
+            setAnnouncement('');
+            setTimeout(() => {
+                setAnnouncement('Assistant is typing...');
+            }, 100);
+        }
+    }, [isLoading]);
+
     return (
-        <div className="flex w-full flex-col">
+        <div
+            className="flex w-full flex-col"
+            role="complementary"
+            aria-label="Chat assistant"
+        >
+            {/* Screen reader announcements */}
+            <div
+                role="status"
+                aria-live="polite"
+                aria-atomic="true"
+                className="sr-only"
+            >
+                {announcement}
+            </div>
+
+            {/* Close button */}
             <div className="relative">
                 {onClose && (
-                    <ChevronDown
+                    <button
+                        type="button"
                         onClick={onClose}
-                        strokeWidth={2}
+                        aria-label="Close chat"
                         className="hover:text-accent absolute mt-3 cursor-pointer"
-                    />
+                    >
+                        <ChevronDown strokeWidth={2} />
+                    </button>
                 )}
             </div>
+
+            {/* Chat messages */}
             <div
                 ref={containerRef}
                 className="mt-5 flex h-92 flex-col space-y-2 overflow-y-auto p-2"
+                role="log"
+                aria-label="Chat conversation"
+                aria-live="off" // We handle announcements manually
             >
                 {initialMessage && (
                     <MessageBubble
@@ -113,7 +170,10 @@ export default function ChatbotWindow({
                     <MessageBubble key={msg.chatID} message={msg} />
                 ))}
                 {isLoading && (
-                    <div className="mb-4 flex w-full justify-start">
+                    <div
+                        className="mb-4 flex w-full justify-start"
+                        aria-hidden="true"
+                    >
                         <div className="animate-pulse rounded-lg bg-[var(--loading)] px-4 py-2 text-sm">
                             <div className="flex items-center space-x-1">
                                 <div className="flex space-x-1">
@@ -132,9 +192,22 @@ export default function ChatbotWindow({
                     </div>
                 )}
             </div>
-            <div className="flex w-full rounded-lg px-1">
+
+            {/* Input form */}
+            <form
+                onSubmit={(e) => {
+                    e.preventDefault();
+                    handleSendMessage();
+                }}
+                className="flex w-full rounded-lg px-1"
+            >
                 <div className="relative flex-1">
+                    <label htmlFor="chat-input" className="sr-only">
+                        Ask a question
+                    </label>
                     <input
+                        id="chat-input"
+                        ref={inputRef}
                         type="text"
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
@@ -145,28 +218,43 @@ export default function ChatbotWindow({
                                 ? 'Generating a response...'
                                 : 'Ask a question...'
                         }
+                        aria-describedby={error ? 'chat-error' : undefined}
+                        aria-invalid={error ? 'true' : 'false'}
                         className={cn(
                             'w-full rounded-3xl border border-[var(--border)] bg-[var(--chatbot)] px-4 py-3 pr-12 text-sm shadow-[0_-4px_8px_-1px_rgba(0,0,0,0.1)] transition-opacity',
                             isLoading && 'opacity-50',
                             error && 'border-[var(--destructive)]',
                         )}
                     />
-                    <SendHorizontal
+                    <button
+                        type="submit"
                         onClick={handleSendMessage}
-                        strokeWidth={2.5}
-                        size={20}
+                        disabled={isLoading || !inputValue.trim()}
+                        aria-label="Send message"
                         className={cn(
                             'absolute top-1/2 right-3 -translate-y-1/2 transition-colors',
-                            isLoading
-                                ? 'text-border'
+                            isLoading || !inputValue.trim()
+                                ? 'text-border cursor-not-allowed'
                                 : 'hover:text-accent cursor-pointer',
                         )}
-                    />
+                    >
+                        <SendHorizontal strokeWidth={2.5} size={20} />
+                    </button>
                 </div>
-            </div>
-            <div className="flex min-h-10 w-full items-center justify-center">
-                {' '}
-                {error && <p className="text-[var(--destructive)]">{error}</p>}
+            </form>
+
+            {/* Error display */}
+            <div
+                className="flex min-h-10 w-full items-center justify-center"
+                role="alert"
+                aria-live="assertive"
+                aria-atomic="true"
+            >
+                {error && (
+                    <p id="chat-error" className="text-[var(--destructive)]">
+                        {error}
+                    </p>
+                )}
             </div>
         </div>
     );
