@@ -125,7 +125,6 @@ export default function Header({
                 </Link>
             </div>
             {/* Math problem display */}
-            {/* Math problem display */}
             {variant === 'problem' && (
                 <div
                     className="flex-1"
