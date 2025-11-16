@@ -228,7 +228,7 @@ export default function ChatbotWindow({
                     />
                     <button
                         type="submit"
-                        onClick={handleSendMessage}
+                        // onClick={handleSendMessage}
                         disabled={isLoading || !inputValue.trim()}
                         aria-label="Send message"
                         className={cn(
