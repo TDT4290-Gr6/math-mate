@@ -125,7 +125,16 @@ export default function Header({
                 </Link>
             </div>
             {/* Math problem display */}
-            {variant === 'problem' && mathProblem}
+            {/* Math problem display */}
+            {variant === 'problem' && (
+                <div
+                    className="flex-1"
+                    role="region"
+                    aria-label="Current math problem"
+                >
+                    {mathProblem}
+                </div>
+            )}
             {/* Hamburger menu */}
             <div className="flex w-1/6 justify-end">
                 <button
