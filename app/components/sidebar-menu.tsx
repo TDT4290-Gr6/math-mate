@@ -142,14 +142,30 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                             }
                         >
                             {userId ? (
-                                userId
-                            ) : (
-                                <LoaderCircle
-                                    className="inline animate-spin"
-                                    size={16}
-                                    aria-label="Loading user ID"
+                                <span
                                     role="status"
-                                />
+                                    aria-live="polite"
+                                    aria-label={
+                                        userId === 'Failed to load'
+                                            ? `Error loading user ID: ${userId}`
+                                            : `User ID`
+                                    }
+                                >
+                                    {userId}
+                                </span>
+                            ) : (
+                                <span
+                                    role="status"
+                                    aria-live="polite"
+                                    aria-label="Loading user ID"
+                                >
+                                    <LoaderCircle
+                                        className="inline animate-spin"
+                                        size={16}
+                                        aria-hidden="true"
+                                    />
+                                    <span className="sr-only">Loading</span>
+                                </span>
                             )}
                         </span>
                     </p>
@@ -172,14 +188,20 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                     <p className="border-b pb-1 font-semibold">Settings:</p>
                     {/* Darkmode toggle */}
                     <div className="bg-sidebar-primary flex items-center justify-around gap-2 rounded-4xl px-4 py-2 text-[var(--sidebar-primary-foreground)]">
-                        <Moon size={20} />
-                        <p className="font-semibold text-[var(--sidebar-primary-foreground)]">
+                        <Moon size={20} aria-hidden="true" />
+                        <label
+                            htmlFor="dark-mode-switch"
+                            className="cursor-pointer font-semibold text-[var(--sidebar-primary-foreground)]"
+                        >
                             Dark mode
-                        </p>
+                        </label>
                         <Switch
+                            id="dark-mode-switch"
                             className="ml-auto h-6 w-10 cursor-pointer p-1"
                             checked={theme === 'dark'}
                             onCheckedChange={handleThemeSwitch}
+                            aria-label="Toggle dark mode"
+                            aria-checked={theme === 'dark'}
                         />
                     </div>
                     {/* Logout button */}
@@ -197,38 +219,64 @@ export default function SidebarMenu({ onClose }: SidebarMenuProps) {
                         </p>
                     </button>
                 </div>
-
-                {/* Previously solved problems */}
-                <p className="border-b pb-1 font-semibold">
-                    Previously solved problems:
-                </p>
             </div>
             <div className="mt-4 flex flex-col gap-4 overflow-y-auto">
-                {solvesLoading ? (
-                    // Display 10 skeleton loaders while loading
-                    Array.from({ length: 10 }).map((_, index) => (
-                        <div
-                            key={index}
-                            className="bg-sidebar-primary hover:bg-accent h-12 w-full animate-pulse rounded-xl"
-                        />
-                    ))
-                ) : solves.length === 0 ? (
-                    <p className="text-sidebar-primary-foreground bg-sidebar-primary hover:bg-accent rounded-xl p-2 text-pretty">
-                        No previously solved problems.
-                    </p>
-                ) : (
-                    solves.map((solve) => (
-                        <Button
-                            key={solve.id}
+                {/* Previously solved problems */}
+                <h2 className="border-b pb-1 font-semibold">
+                    Previously solved problems:
+                </h2>
+
+                <div
+                    role="region"
+                    aria-label="Previously solved problems list"
+                    aria-live="polite"
+                    aria-busy={solvesLoading}
+                >
+                    {solvesLoading ? (
+                        <>
+                            <span className="sr-only">
+                                Loading previously solved problems
+                            </span>
+                            {/* Display 10 skeleton loaders while loading */}
+                            {Array.from({ length: 10 }).map((_, index) => (
+                                <div
+                                    key={index}
+                                    className="bg-sidebar-primary hover:bg-accent h-12 w-full animate-pulse rounded-xl"
+                                    aria-hidden="true"
+                                />
+                            ))}
+                        </>
+                    ) : solves.length === 0 ? (
+                        <p
                             className="text-sidebar-primary-foreground bg-sidebar-primary hover:bg-accent rounded-xl p-2 text-pretty"
-                            onClick={() =>
-                                handleNavigateToSolve(solve.problemId)
-                            }
+                            role="status"
                         >
-                            <LaTeXFormattedText text={solve.problemTitle} />
-                        </Button>
-                    ))
-                )}
+                            No previously solved problems.
+                        </p>
+                    ) : (
+                        <nav aria-label="Previously solved problems navigation">
+                            <ul className="flex flex-col gap-4">
+                                {solves.map((solve) => (
+                                    <li key={solve.id}>
+                                        <Button
+                                            className="text-sidebar-primary-foreground bg-sidebar-primary hover:bg-accent w-full rounded-xl p-2 text-left text-pretty"
+                                            onClick={() =>
+                                                handleNavigateToSolve(
+                                                    solve.problemId,
+                                                )
+                                            }
+                                            aria-label={`View previously solved problem: ${solve.problemTitle}`}
+                                        >
+                                            <LaTeXFormattedText
+                                                text={solve.problemTitle}
+                                            />
+                                        </Button>
+                                    </li>
+                                ))}
+                            </ul>
+                        </nav>
+                    )}
+                </div>
             </div>
         </div>
     );

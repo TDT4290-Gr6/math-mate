@@ -1,4 +1,6 @@
 import { LaTeXFormattedText } from './latex-formatted-text';
+import { useState, useEffect, useRef } from 'react';
+import { extractPlainTextMath } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Card } from './card';
 import Title from './title';
@@ -35,8 +37,50 @@ export default function MethodCard({
     disableButton,
     methodNumber,
 }: MethodCardProps) {
+    const [announceContent, setAnnounceContent] = useState(false);
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+    // Cleanup timeout on unmount to prevent "state update on unmounted component" warnings
+    useEffect(() => {
+        return () => {
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
+        };
+    }, []);
+
+    const handleButtonClick = () => {
+        // Clear any existing timeout
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+        }
+
+        // Reset and trigger screen reader announcement
+        setAnnounceContent(false);
+        timeoutRef.current = setTimeout(() => {
+            setAnnounceContent(true);
+        }, 100);
+
+        // Call original callback if provided
+        onButtonClick?.();
+    };
+
+    // Extract plain text for announcement
+    const plainTitle = extractPlainTextMath(title);
+    const plainDescription = extractPlainTextMath(description);
+
     return (
         <Card className="relative m-3 w-full gap-2 px-6 pt-4">
+            {/* Screen reader live region for announcements */}
+            <div
+                role="status"
+                aria-live="polite"
+                aria-atomic="true"
+                className="sr-only"
+            >
+                {announceContent && `${plainTitle}. ${plainDescription}`}
+            </div>
+
             {/* Method number */}
             <Title
                 title={
@@ -46,6 +90,7 @@ export default function MethodCard({
                 }
                 size={20}
             />
+
             {/* Title */}
             <LaTeXFormattedText
                 text={title}
@@ -62,7 +107,8 @@ export default function MethodCard({
                 <div className="absolute right-8 -bottom-5">
                     <Button
                         className="bg-[var(--accent)] px-6 py-2"
-                        onClick={onButtonClick}
+                        onClick={handleButtonClick}
+                        aria-label={`${buttonText} for ${plainTitle}`}
                     >
                         {buttonText}
                     </Button>

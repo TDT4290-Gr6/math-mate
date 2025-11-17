@@ -125,7 +125,15 @@ export default function Header({
                 </Link>
             </div>
             {/* Math problem display */}
-            {variant === 'problem' && mathProblem}
+            {variant === 'problem' && (
+                <div
+                    className="flex-1"
+                    role="region"
+                    aria-label="Current math problem"
+                >
+                    {mathProblem}
+                </div>
+            )}
             {/* Hamburger menu */}
             <div className="flex w-1/6 justify-end">
                 <button
@@ -133,6 +141,7 @@ export default function Header({
                     className="flex size-10 cursor-pointer items-center justify-center"
                     aria-haspopup="dialog"
                     aria-expanded={isOpen}
+                    aria-label="Open sidebar menu"
                     onClick={openSidebar}
                 >
                     <Menu size={36} />
