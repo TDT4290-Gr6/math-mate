@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
 
-// Extrahiere Klartext-Version für Screenreader
+// Extract plain text version for screen readers
 export function extractPlainTextMath(text: string): string {
     return text
         .replace(/\$\$(.*?)\$\$/g, (_, math) => ` Formel: ${math} `)
