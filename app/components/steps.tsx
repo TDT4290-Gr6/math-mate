@@ -1,7 +1,7 @@
 'use client';
 
 import { LaTeXFormattedText } from './ui/latex-formatted-text';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Step } from '@/entities/models/step';
 import { extractPlainTextMath } from '@/lib/utils';
 import MethodCard from './ui/method-card';
@@ -20,7 +20,10 @@ export default function Steps({
     methodTitle,
     methodDescription,
 }: StepsProps) {
-    const visibleSteps: Step[] = steps?.slice(0, currentStep) ?? [];
+    const visibleSteps = useMemo(
+        () => steps?.slice(0, currentStep) ?? [],
+        [steps, currentStep],
+    );
     const containerRef = useRef<HTMLDivElement | null>(null);
     const [announcement, setAnnouncement] = useState('');
     const previousStepCount = useRef(visibleSteps.length);
@@ -52,7 +55,7 @@ export default function Steps({
         }
 
         previousStepCount.current = visibleSteps.length;
-    }, [visibleSteps.length]);
+    }, [visibleSteps]);
 
     return (
         <>
