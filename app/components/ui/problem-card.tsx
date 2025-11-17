@@ -48,7 +48,7 @@ export default function ProblemCard({
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.3, ease: 'easeOut' }}
                     className="justify-left -mt-4 mb-6 flex w-full items-center"
-                    // Für Screen Reader: Announce problem content
+                    // For Screen Reader: Announce problem content
                     role="region"
                     aria-live={variant === 'basic' ? 'polite' : undefined}
                     aria-atomic="true"
