@@ -51,7 +51,7 @@ export default function ProblemCard({
                     // For Screen Reader: Announce problem content
                     role="region"
                     aria-live={variant === 'basic' ? 'polite' : undefined}
-                    aria-atomic="true"
+                    aria-atomic={variant === 'basic' ? 'true' : undefined}
                     aria-label="Math problem"
                 >
                     <LaTeXFormattedText
