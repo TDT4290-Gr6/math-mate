@@ -59,7 +59,7 @@ export default function MethodCard({
         setAnnounceContent(false);
         timeoutRef.current = setTimeout(() => {
             setAnnounceContent(true);
-        }, 10);
+        }, 100);
 
         // Call original callback if provided
         onButtonClick?.();
