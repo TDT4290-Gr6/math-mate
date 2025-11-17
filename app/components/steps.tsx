@@ -14,6 +14,19 @@ interface StepsProps {
     methodDescription: string | undefined;
 }
 
+/**
+ * Steps
+ *
+ * Renders a list of solution steps up to `currentStep` and a MethodCard.
+ * Automatically scrolls to the bottom when new steps are added or
+ * `currentStep` increases so the latest step is visible.
+ *
+ * Props:
+ * @param steps - Array of step objects with id and content
+ * @param currentStep - Number of steps to reveal
+ * @param methodTitle - Title of the solving method
+ * @param methodDescription - Description of the solving method
+ */
 export default function Steps({
     steps,
     currentStep,

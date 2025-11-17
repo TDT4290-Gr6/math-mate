@@ -14,6 +14,16 @@ interface ProblemProps {
     hidePrevious?: boolean;
 }
 
+/**
+ * `ProblemCard` is a reusable component for displaying a math problem.
+ *
+ * It renders the problem description and optionally navigation buttons if `variant` is `'withButtons'`.
+ *
+ * @param description - The problem text to display.
+ * @param variant - The display variant of the card (`'basic'` | `'withButtons'`). Default is `'basic'`.
+ * @param onNext - Callback triggered when the "Another problem" button is clicked (optional).
+ * @param onPrevious - Callback triggered when the "Previous problem" button is clicked (optional).
+ */
 export default function ProblemCard({
     description,
     variant = 'basic',
