@@ -10,7 +10,7 @@ import 'katex/dist/katex.min.css';
 export interface LaTeXFormattedTextProps {
     text?: string;
     className?: string;
-    sanitize?: boolean;  // Allow disabling for trusted content
+    sanitize?: boolean; // Allow disabling for trusted content
 }
 
 function replaceLaTeXBlock(text: string) {
