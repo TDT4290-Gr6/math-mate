@@ -17,8 +17,7 @@
  *
  * Example usage:
  * ```ts
- * import { subjectIcons, Subject } from './subjects';
- * import { Subject } from './constants/subjects';
+ * import { subjectIcons, Subject } from '@/constants/subjects';
  *
  * const icon = subjectIcons['Algebra'];
  * ```
