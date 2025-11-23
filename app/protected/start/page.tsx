@@ -18,6 +18,32 @@ import { useRouter } from 'next/navigation';
 import { ChevronRight } from 'lucide-react';
 import { useEffect } from 'react';
 
+/**
+ * StartPage component
+ *
+ * This is the landing page for authenticated users, guiding them to
+ * start practicing math problems. It integrates country selection,
+ * subject selection, and provides an introduction to the platform.
+ *
+ * Features:
+ * - Displays `CountrySelect` for the user to choose their country.
+ * - Displays `SubjectSelect` allowing users to select math categories
+ *   they want to practice.
+ * - Shows a `WideLogo` and description card introducing the platform.
+ * - Logs a "sign_in" event the first time a user signs in during the session.
+ * - Provides a "Start Practicing" button that:
+ *   - Logs the "start_practicing" event.
+ *   - Navigates the user to the `/protected/problem` page to begin practicing.
+ *
+ * State Management:
+ * - Uses `useSession` to determine authentication status.
+ * - Uses `useTrackedLogger` to track user actions for analytics.
+ *
+ * Layout:
+ * - Fixed header at the top.
+ * - Central card containing the logo, description, subject selection,
+ *   and start button.
+ */
 export default function StartPage() {
     const tracked = useTrackedLogger();
     const router = useRouter();
