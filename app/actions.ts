@@ -7,6 +7,15 @@ import {
 import type { Problem } from '@/entities/models/problem';
 import { getInjection } from '@/di/container';
 
+/**
+ * Retrieves a paginated list of problems filtered by subjects.
+ *
+ * @param offset - The starting index for fetching problems.
+ * @param limit - The maximum number of problems to fetch.
+ * @param subjects - Array of subject names to filter problems by.
+ * @returns A promise that resolves with an array of `Problem` objects.
+ * @throws Logs and rethrows any error encountered while fetching problems.
+ */
 export async function getProblems(
     offset: number,
     limit: number,
@@ -26,6 +35,13 @@ export async function getProblems(
     }
 }
 
+/**
+ * Retrieves a single problem by its ID.
+ *
+ * @param problemId - The ID of the problem to fetch.
+ * @returns A promise that resolves with a `Problem` object.
+ * @throws Logs and rethrows any error encountered while fetching the problem.
+ */
 export async function getProblem(problemId: number): Promise<Problem> {
     try {
         const getProblemController = getInjection('IGetProblemController');
@@ -36,6 +52,12 @@ export async function getProblem(problemId: number): Promise<Problem> {
     }
 }
 
+/**
+ * Retrieves a list of countries available for selection.
+ *
+ * @returns A promise that resolves with an array of country objects.
+ * @throws Logs and rethrows any error encountered while fetching countries.
+ */
 export async function getCountries() {
     try {
         const getCountriesController = getInjection('IGetCountriesController');
@@ -46,6 +68,12 @@ export async function getCountries() {
     }
 }
 
+/**
+ * Retrieves the current user's selected country.
+ *
+ * @returns A promise that resolves with the country ID of the current user.
+ * @throws Logs and rethrows any error encountered while fetching the user's country.
+ */
 export async function getCountry() {
     try {
         const getUserController = getInjection('IGetUserController');
@@ -57,6 +85,13 @@ export async function getCountry() {
     }
 }
 
+/**
+ * Sets the current user's country.
+ *
+ * @param countryId - The ID of the country to set for the user.
+ * @returns A promise that resolves with the updated user or country info.
+ * @throws Logs and rethrows any error encountered while setting the user's country.
+ */
 export async function setCountry(countryId: number) {
     try {
         const setCountryController = getInjection('ISetCountryController');
@@ -67,6 +102,12 @@ export async function setCountry(countryId: number) {
     }
 }
 
+/**
+ * Retrieves the current user's ID.
+ *
+ * @returns A promise that resolves with the user's ID.
+ * @throws Logs and rethrows any error encountered while fetching the user ID.
+ */
 export async function getUserId() {
     try {
         const getUserController = getInjection('IGetUserController');
