@@ -8,6 +8,26 @@ import { getUserUseCase } from '@/application/use-cases/get-user.use-case';
 import { createModule } from '@evyweb/ioctopus';
 import { DI_SYMBOLS } from '../types';
 
+/**
+ * usersModule
+ *
+ * Configures and returns the dependency injection module for user-related functionality.
+ *
+ * - Binds `IUsersRepository` to a mock implementation (`MockUsersRepository`) in test environments,
+ *   or to the real `UsersRepository` in production.
+ * - Binds use cases:
+ *   - `ICreateUserUseCase` → `createUserUseCase` (injects `IUsersRepository`)
+ *   - `ISetCountryUseCase` → `setCountryUseCase` (injects `IUsersRepository` and `ICountriesRepository`)
+ *   - `IGetUserUseCase` → `getUserUseCase` (injects `IUsersRepository`)
+ * - Binds controllers:
+ *   - `ISetCountryController` → `setCountryController` (injects `ISetCountryUseCase` and `IAuthenticationService`)
+ *   - `IGetUserController` → `getUserController` (injects `IGetUserUseCase` and `IAuthenticationService`)
+ *
+ * This module centralizes all dependencies for managing users, including creating users,
+ * retrieving user data, and setting the user's country.
+ *
+ * @returns {Module} The configured DI module for user-related services.
+ */
 export function usersModule() {
     const usersModule = createModule();
 

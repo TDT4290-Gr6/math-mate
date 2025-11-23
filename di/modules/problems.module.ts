@@ -7,6 +7,27 @@ import { getProblemUseCase } from '@/application/use-cases/get-problem.use-case'
 import { createModule } from '@evyweb/ioctopus';
 import { DI_SYMBOLS } from '../types';
 
+/**
+ * problemsModule
+ *
+ * Configures and returns the dependency injection module for problem-related operations.
+ *
+ * - Binds `IProblemsRepository` to a mock implementation (`MockProblemsRepository`) when testing,
+ *   or to the real `ProblemsRepository` in production.
+ * - Binds use cases:
+ *   - `IGetProblemsUseCase` → `getProblemsUseCase` (injects `IProblemsRepository`)
+ *   - `IGetProblemUseCase` → `getProblemUseCase` (injects `IProblemsRepository`)
+ * - Binds controllers:
+ *   - `IGetProblemsController` → `getProblemsController` (injects `IGetProblemsUseCase`,
+ *     `IGetUserUseCase`, `IAuthenticationService`)
+ *   - `IGetProblemController` → `getProblemController` (injects `IGetProblemUseCase`,
+ *     `IAuthenticationService`)
+ *
+ * This module centralizes all dependencies for fetching and managing problems,
+ * enabling consistent access to problem data and user-specific problem operations.
+ *
+ * @returns {Module} The configured DI module for problem-related services.
+ */
 export function problemsModule() {
     const problemsModule = createModule();
 
