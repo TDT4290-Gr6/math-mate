@@ -2,11 +2,11 @@
 
 import { useTrackedLogger } from '@/components/logger/LoggerProvider';
 import { useFetchProblem } from 'app/hooks/useFetchProblem';
-import ProblemCard from '@/components/ui/problem-card';
 import { useParams, useRouter } from 'next/navigation';
-import MethodCard from '@/components/ui/method-card';
+import ProblemCard from '@/components/problem-card';
+import MethodCard from '@/components/method-card';
 import { Button } from '@/components/ui/button';
-import Header from '@/components/ui/header';
+import Header from '@/components/header';
 
 /**
  * MethodPage component

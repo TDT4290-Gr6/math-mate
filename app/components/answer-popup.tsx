@@ -7,14 +7,14 @@ import {
     DialogHeader,
     DialogTitle,
 } from './ui/dialog';
-import { LaTeXFormattedText } from './ui/latex-formatted-text';
+import { LaTeXFormattedText } from './latex-formatted-text';
 import { useTrackedLogger } from './logger/LoggerProvider';
 import { cn, extractPlainTextMath } from '@/lib/utils';
 import { useState, useEffect, useRef } from 'react';
 import { addSolvedProblem } from '@/actions';
 import { useRouter } from 'next/navigation';
 import { Button } from './ui/button';
-import Title from './ui/title';
+import Title from './title';
 
 interface AnswerPopupProps {
     isOpen: boolean;

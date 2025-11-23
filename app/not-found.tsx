@@ -1,7 +1,7 @@
 'use client';
 import { PanelsTopLeft, Search } from 'lucide-react';
 import { Button } from './components/ui/button';
-import Title from './components/ui/title';
+import Title from './components/title';
 import Link from 'next/link';
 
 /**

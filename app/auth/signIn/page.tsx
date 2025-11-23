@@ -1,8 +1,8 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import type { Provider } from 'next-auth/providers/index';
 import SignInProviders from './SignInProviders';
-import Title from '@/components/ui/title';
 import { authOptions } from '@/lib/auth';
+import Title from '@/components/title';
 
 /**
  * Renders the Sign-In page for the application.

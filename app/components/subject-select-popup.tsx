@@ -3,12 +3,12 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTrackedLogger } from './logger/LoggerProvider';
 import { Card, CardContent, CardHeader } from './ui/card';
 import { Subject } from 'app/constants/subjects';
-import SubjectSelect from './ui/subject-select';
+import SubjectSelect from './subject-select';
 import { useLocalStorage } from 'react-use';
 import FocusLock from 'react-focus-lock';
 import { Button } from './ui/button';
 import { X } from 'lucide-react';
-import Title from './ui/title';
+import Title from './title';
 
 interface SubjectSelectPopupProps {
     onClose: () => void;

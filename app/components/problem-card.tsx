@@ -1,8 +1,8 @@
 import { LaTeXFormattedText } from './latex-formatted-text';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Button } from './button';
-import { Card } from './card';
+import { Button } from './ui/button';
+import { Card } from './ui/card';
 import Title from './title';
 
 interface ProblemProps {

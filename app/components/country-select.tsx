@@ -10,7 +10,7 @@ import {
 import { CountrySelectDropdown } from './country-select-dropdown';
 import { useEffect, useState } from 'react';
 import { getCountry } from '@/actions';
-import Title from './ui/title';
+import Title from './title';
 
 /**
  * CountrySelect component

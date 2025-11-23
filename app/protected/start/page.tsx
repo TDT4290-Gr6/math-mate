@@ -8,14 +8,14 @@ import {
     CardHeader,
 } from '@/components/ui/card';
 import { useTrackedLogger } from '@/components/logger/LoggerProvider';
-import SubjectSelect from '@/components/ui/subject-select';
+import SubjectSelect from '@/components/subject-select';
 import CountrySelect from '@/components/country-select';
 import { Button } from '@/components/ui/button';
 import WideLogo from '@/components/wide-logo';
 import { useSession } from 'next-auth/react';
-import Header from '@/components/ui/header';
 import { useRouter } from 'next/navigation';
 import { ChevronRight } from 'lucide-react';
+import Header from '@/components/header';
 import { useEffect } from 'react';
 
 /**

@@ -1,9 +1,9 @@
 'use client';
-import { useTrackedLogger } from '../logger/LoggerProvider';
+import { useTrackedLogger } from './logger/LoggerProvider';
 import { useCallback, useEffect, useState } from 'react';
-import SidebarMenu from '../sidebar-menu';
+import SidebarMenu from './sidebar-menu';
 import { Menu } from 'lucide-react';
-import WideLogo from '../wide-logo';
+import WideLogo from './wide-logo';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 
