@@ -36,6 +36,31 @@ interface CountrySelectDropdownProps {
     setOpen: (open: boolean) => void;
 }
 
+/**
+ * CountrySelectDropdown component
+ *
+ * Renders a form allowing users to select a country from a dropdown
+ * and submit their selection. The component uses React Hook Form for
+ * form state management and validation, Radix UI Popover and Command
+ * components for the dropdown, and integrates with tracked analytics.
+ *
+ * Features:
+ * - Fetches the list of countries asynchronously when mounted.
+ * - Validates that a country is selected before submission.
+ * - Shows error messages if fetching countries or submitting fails.
+ * - Displays a checkmark for the currently selected country.
+ * - Integrates with a logger to track submit attempts and failures.
+ *
+ * Props:
+ * @param setOpen - Callback function to close the parent dropdown or modal
+ *   after a successful selection.
+ *
+ * Example usage:
+ * ```tsx
+ * <CountrySelectDropdown setOpen={() => setDropdownOpen(false)} />
+ * ```
+ */
+
 export function CountrySelectDropdown({ setOpen }: CountrySelectDropdownProps) {
     const [popoverOpen, setPopoverOpen] = useState(false);
     const [countries, setCountries] = useState<

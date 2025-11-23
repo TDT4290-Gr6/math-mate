@@ -27,6 +27,39 @@ interface AnswerPopupProps {
 
 type Step = 'reveal' | 'confirm' | 'difficulty' | 'done';
 
+/**
+ * AnswerPopup component for displaying a problem's answer and capturing user feedback.
+ *
+ * This component guides the user through multiple steps:
+ * 1. **Reveal**: User presses a button to reveal the answer.
+ * 2. **Confirm**: User confirms whether their solution was correct.
+ * 3. **Difficulty**: User rates the difficulty of the problem from 1 (easy) to 5 (hard).
+ * 4. **Done**: Submission is recorded and optionally navigates to the next problem.
+ *
+ * Accessibility features:
+ * - Uses `aria-live` regions to announce actions and results to screen readers.
+ * - Focus is managed for each step to improve keyboard navigation.
+ *
+ * Props:
+ * @param isOpen Whether the popup is currently open.
+ * @param answer The LaTeX-formatted answer to display.
+ * @param problemId The unique ID of the problem.
+ * @param startedSolvingAt Date when the user started solving the problem.
+ * @param stepsUsed Number of steps the user took while solving.
+ * @param onClose Optional callback invoked when the popup is closed.
+ *
+ * Usage example:
+ * ```tsx
+ * <AnswerPopup
+ *   isOpen={showPopup}
+ *   answer="x = 5"
+ *   problemId={123}
+ *   startedSolvingAt={new Date()}
+ *   stepsUsed={3}
+ *   onClose={() => setShowPopup(false)}
+ * />
+ * ```
+ */
 export default function AnswerPopup({
     isOpen,
     answer,

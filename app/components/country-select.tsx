@@ -12,6 +12,24 @@ import { useEffect, useState } from 'react';
 import { getCountry } from '@/actions';
 import Title from './ui/title';
 
+/**
+ * CountrySelect component
+ *
+ * Displays a modal dialog prompting the user to select their country of residence.
+ * This component is typically shown once if the user's country has not yet been set.
+ *
+ * Features:
+ * - Fetches the user's current country using `getCountry` on mount.
+ * - Opens a modal dialog if no country is set.
+ * - Prevents closing the dialog via outside clicks or the Escape key.
+ * - Renders a `CountrySelectDropdown` to allow country selection.
+ * - Displays an error message if fetching the country fails.
+ *
+ * Usage:
+ * ```tsx
+ * <CountrySelect />
+ * ```
+ */
 export default function CountrySelect() {
     const [open, setOpen] = useState(false);
     const [error, setError] = useState<string | null>(null);
