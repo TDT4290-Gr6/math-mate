@@ -17,6 +17,27 @@ if (!process.env.NEXT_AUTH_GOOGLE_ID || !process.env.NEXT_AUTH_GOOGLE_SECRET) {
     );
 }
 
+/**
+ * OAuth and Credentials Providers Configuration
+ *
+ * This file sets up authentication providers and NextAuth.js configuration.
+ *
+ * Providers:
+ * - GitHub: Uses environment variables `NEXT_AUTH_GITHUB_ID` and `NEXT_AUTH_GITHUB_SECRET`.
+ * - Google: Uses environment variables `NEXT_AUTH_GOOGLE_ID` and `NEXT_AUTH_GOOGLE_SECRET`.
+ * - Cypress (Credentials): Only enabled if `CYPRESS_TESTING` is `'true'`. Validates that the credential ID starts with 'cypress'.
+ *
+ * authOptions:
+ * - `providers`: Array of authentication providers.
+ * - `pages.signIn`: Custom sign-in page route.
+ * - `callbacks.signIn`: Calls the injected sign-in controller to create or retrieve a user ID.
+ * - `callbacks.session`: Ensures the session contains the correct user ID from the JWT.
+ * - `callbacks.jwt`: Persists the user ID into the JWT on sign-in.
+ *
+ * @remarks
+ * Ensure environment variables for GitHub and Google are set before starting the app.
+ * For testing with Cypress, set `CYPRESS_TESTING=true`.
+ */
 const providers: Provider[] = [
     GithubProvider({
         clientId: process.env.NEXT_AUTH_GITHUB_ID!,
