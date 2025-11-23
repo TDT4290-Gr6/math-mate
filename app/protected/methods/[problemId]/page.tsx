@@ -2,15 +2,34 @@
 
 import { useTrackedLogger } from '@/components/logger/LoggerProvider';
 import { useFetchProblem } from 'app/hooks/useFetchProblem';
-import ProblemCard from '@/components/ui/problem-card';
 import { useParams, useRouter } from 'next/navigation';
-import MethodCard from '@/components/ui/method-card';
+import ProblemCard from '@/components/problem-card';
+import MethodCard from '@/components/method-card';
 import { Button } from '@/components/ui/button';
-import Header from '@/components/ui/header';
+import Header from '@/components/header';
 
 /**
- * The page component that displays a set of method cards to help solve
- * a math problem. Users can also choose to solve the problem on their own.
+ * MethodPage component
+ *
+ * This page displays a math problem along with a set of method cards
+ * that provide guidance on how to solve it. Users can choose one of
+ * the suggested methods or opt to solve the problem on their own.
+ *
+ * Features:
+ * - Fetches the problem data using `useFetchProblem` based on the
+ *   `problemId` from the URL parameters.
+ * - Displays a `ProblemCard` showing the problem description.
+ * - Renders a set of `MethodCard` components for each available method.
+ * - Provides a button for users to skip methods and solve the problem themselves.
+ * - Tracks user interactions with methods and the "solve yourself" action
+ *   using `useTrackedLogger`.
+ *
+ * Navigation:
+ * - Choosing a method navigates to `/protected/solve/{problemId}/{methodId}`.
+ * - Solving on your own navigates to `/protected/solve-yourself/{problemId}`.
+ *
+ * Accessibility:
+ * - Provides notes and labels for screen readers for hints and problem context.
  */
 export default function MethodPage() {
     const params = useParams<{ problemId: string }>();

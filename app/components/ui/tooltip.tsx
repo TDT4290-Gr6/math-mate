@@ -5,6 +5,16 @@ import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
+/**
+ * Provides context for tooltips using Radix UI's `TooltipPrimitive.Provider`.
+ *
+ * Allows configuring default delay for showing tooltips.
+ *
+ * Accepts all props from `TooltipPrimitive.Provider`.
+ *
+ * @param delayDuration Time in milliseconds to delay showing the tooltip (default: 0).
+ * @param props Other props forwarded to `TooltipPrimitive.Provider`.
+ */
 function TooltipProvider({
     delayDuration = 0,
     ...props
@@ -18,6 +28,15 @@ function TooltipProvider({
     );
 }
 
+/**
+ * Root wrapper for a tooltip.
+ *
+ * Wraps the tooltip in a `TooltipProvider` to manage state and delays.
+ *
+ * Accepts all props from `TooltipPrimitive.Root`.
+ *
+ * @param props Props forwarded to `TooltipPrimitive.Root`.
+ */
 function Tooltip({
     ...props
 }: React.ComponentProps<typeof TooltipPrimitive.Root>) {
@@ -28,12 +47,38 @@ function Tooltip({
     );
 }
 
+/**
+ * Trigger element that shows the tooltip when hovered or focused.
+ *
+ * Accepts all props from `TooltipPrimitive.Trigger`.
+ *
+ * Typically a button, icon, or other interactive element.
+ *
+ * @param props Props forwarded to `TooltipPrimitive.Trigger`.
+ */
 function TooltipTrigger({
     ...props
 }: React.ComponentProps<typeof TooltipPrimitive.Trigger>) {
     return <TooltipPrimitive.Trigger data-slot="tooltip-trigger" {...props} />;
 }
 
+/**
+ * Content of the tooltip.
+ *
+ * Features:
+ * - Positioned relative to the trigger
+ * - Optional offset from the trigger (default: 0)
+ * - Animations for open/close with fade, zoom, and slide effects
+ * - Optional arrow with customizable color (default: foreground color)
+ *
+ * Accepts all props from `TooltipPrimitive.Content`.
+ *
+ * @param className Optional Tailwind classes for styling the tooltip content.
+ * @param sideOffset Distance from the trigger (default: 0).
+ * @param children Tooltip content.
+ * @param arrowColor Optional CSS color for the tooltip arrow (default: 'var(--foreground)').
+ * @param props Other props forwarded to `TooltipPrimitive.Content`.
+ */
 function TooltipContent({
     className,
     sideOffset = 0,

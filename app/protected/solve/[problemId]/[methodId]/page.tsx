@@ -5,22 +5,45 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useFetchProblem } from 'app/hooks/useFetchProblem';
 import ChatbotWindow from '@/components/chatbot-window';
 import { motion, AnimatePresence } from 'framer-motion';
-import ProblemCard from '@/components/ui/problem-card';
+import ProblemCard from '@/components/problem-card';
 import AnswerPopup from '@/components/answer-popup';
 import ChatToggle from '@/components/chat-toggle';
 import { useChatbot } from 'app/hooks/useChatbot';
 import { Button } from '@/components/ui/button';
-import Header from '@/components/ui/header';
 import { useParams } from 'next/navigation';
+import Header from '@/components/header';
 import Steps from '@/components/steps';
 import { cn } from '@/lib/utils';
 
 /**
- * SolvingPage
+ * SolvingPage component
  *
- * High-level page that shows a math question, step-by-step solution
- * guidance and an optional chat helper. Manages step navigation and
- * chat state and passes messages to the ChatbotWindow.
+ * This page provides an interactive interface for solving a math problem
+ * step by step. It integrates problem display, step navigation, answer
+ * review, and an optional AI-powered chat assistant to guide the user.
+ *
+ * Features:
+ * - Fetches the problem and selected method using `useFetchProblem`.
+ * - Displays the problem description at the top via a `ProblemCard`.
+ * - Step navigation using `Steps` component, allowing users to move
+ *   sequentially through the solution steps.
+ * - "Next step" button advances to the next step while logging user activity.
+ * - "Go to answer" button opens an `AnswerPopup` showing the final solution.
+ * - Optional chatbot helper (`ChatbotWindow`) that can be opened, closed,
+ *   and resized via a draggable divider.
+ * - Drag and keyboard support for resizing the chat window.
+ * - Tracks user interactions such as chat open/close, step navigation,
+ *   and answer reveal using `useTrackedLogger`.
+ * - Responsive layout: hides the chat toggle when chat is open and manages
+ *   divider position between problem steps and chat.
+ *
+ * State Management:
+ * - `currentStep`: index of the currently displayed step.
+ * - `isChatOpen`: whether the chat assistant is open.
+ * - `isAnswerPopupOpen`: whether the answer popup is open.
+ * - `dividerPosition`: percentage width of the steps area when chat is open.
+ * - `chatClosed`: internal flag for animation and layout adjustments.
+ * - `startedSolvingAt`: timestamp marking when the user started solving.
  */
 export default function SolvingPage() {
     const { chatHistory, sendMessage, isLoading, error } = useChatbot();

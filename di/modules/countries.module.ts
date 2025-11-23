@@ -7,6 +7,24 @@ import { getCountriesUseCase } from '@/application/use-cases/get-countries.use-c
 import { createModule } from '@evyweb/ioctopus';
 import { DI_SYMBOLS } from '../types';
 
+/**
+ * countriesModule
+ *
+ * Configures and returns the dependency injection module for country-related services.
+ *
+ * - Binds `ICountriesRepository` to a mock implementation (`MockCountriesRepository`) when testing,
+ *   or to the real `CountriesRepository` in production.
+ * - Binds `ICreateCountryController` to `createCountryController`, injecting the `ICreateCountryUseCase`
+ *   and `IAuthenticationService`.
+ * - Binds `IGetCountriesController` to `getCountriesController`, injecting the `IGetCountriesUseCase`
+ *   and `IAuthenticationService`.
+ * - Binds `ICreateCountryUseCase` to `createCountryUseCase`, injecting the `ICountriesRepository`.
+ * - Binds `IGetCountriesUseCase` to `getCountriesUseCase`, injecting the `ICountriesRepository`.
+ *
+ * This module centralizes all dependencies for country management within the application.
+ *
+ * @returns {Module} The configured DI module for country-related services.
+ */
 export function countriesModule() {
     const countriesModule = createModule();
     if (process.env.NODE_ENV === 'test') {

@@ -3,16 +3,41 @@
 import { useTrackedLogger } from '@/components/logger/LoggerProvider';
 import SubjectSelectPopup from '@/components/subject-select-popup';
 import type { Problem } from '@/entities/models/problem';
-import ProblemCard from '@/components/ui/problem-card';
+import ProblemCard from '@/components/problem-card';
 import { Button } from '@/components/ui/button';
-import Header from '@/components/ui/header';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { getProblems } from 'app/actions';
+import Header from '@/components/header';
 
 /**
- * Problem browsing page component that allows users to navigate through problems,
- * select subjects, and begin solving problems.
+ * ProblemPage component
+ *
+ * This page allows users to browse through a list of math problems,
+ * navigate between them, select preferred subjects, and begin solving
+ * problems using the method selection workflow.
+ *
+ * Features:
+ * - Fetches problems in batches using `getProblems`, based on selected subjects.
+ * - Displays the current problem with navigation buttons (next/previous).
+ * - Opens a subject selection popup to filter problems by user-selected subjects.
+ * - Provides a "Get started solving" button to move to the method page for the current problem.
+ * - Handles infinite scrolling / lazy loading of problems and looping when reaching the end.
+ * - Tracks user interactions such as next/previous problem navigation, subject popup usage,
+ *   and starting to solve a problem using `useTrackedLogger`.
+ *
+ * State Management:
+ * - `problems`: array of loaded problems
+ * - `currentIndex`: index of the current problem
+ * - `hasMore`: whether more problems are available for fetching
+ * - `isLoading`: loading state for fetching problems
+ * - `subjects`: selected subjects for filtering problems
+ * - `error`: error message if problem fetching fails
+ * - `hidePrevious`: flag to hide the previous button if on the first problem
+ * - `isSubjectSelectOpen`: controls visibility of the subject selection popup
+ *
+ * Navigation:
+ * - Selecting "Get started solving" navigates to `/protected/methods/{problemId}`.
  */
 export default function ProblemPage() {
     const [problems, setProblems] = useState<Problem[]>([]);

@@ -1,8 +1,8 @@
 'use client';
 
-import { Subject, SUBJECT_NAMES } from '../../constants/subjects';
-import { useTrackedLogger } from '../logger/LoggerProvider';
-import SubjectCheckbox from '../subject-checkbox';
+import { Subject, SUBJECT_NAMES } from '../constants/subjects';
+import { useTrackedLogger } from './logger/LoggerProvider';
+import SubjectCheckbox from './subject-checkbox';
 import { useLocalStorage } from 'react-use';
 import { useState, useEffect } from 'react';
 

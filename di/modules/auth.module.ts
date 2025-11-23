@@ -5,6 +5,20 @@ import { signInUseCase } from '@/application/use-cases/sign-in.use-case';
 import { createModule } from '@evyweb/ioctopus';
 import { DI_SYMBOLS } from '../types';
 
+/**
+ * authModule
+ *
+ * Configures and returns the dependency injection module for authentication-related services.
+ *
+ * - Binds `IAuthenticationService` to a mock implementation during testing (`MockAuthenticationService`)
+ *   or to the production NextAuth implementation (`NextAuthService`) otherwise.
+ * - Binds `ISignInController` to the `signInController` function, injecting `ISignInUseCase`.
+ * - Binds `ISignInUseCase` to the `signInUseCase` function, injecting `IUsersRepository`.
+ *
+ * This module centralizes all authentication dependencies for easy DI management.
+ *
+ * @returns {Module} The configured DI module for authentication.
+ */
 export function authModule() {
     const authModule = createModule();
 

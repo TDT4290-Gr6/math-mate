@@ -7,6 +7,25 @@ import { SolvesRepository } from '@/infrastructure/repositories/solves.repositor
 import { createModule } from '@evyweb/ioctopus';
 import { DI_SYMBOLS } from '../types';
 
+/**
+ * solvesModule
+ *
+ * Configures and returns the dependency injection module for managing problem solves.
+ *
+ * - Binds `ISolvesRepository` to a mock implementation (`MockSolvesRepository`) in test environments,
+ *   or to the real `SolvesRepository` in production.
+ * - Binds use cases:
+ *   - `IAddSolvedProblemUseCase` → `addSolvedProblemUseCase` (injects `IUsersRepository` and `ISolvesRepository`)
+ *   - `IGetLatestSolvesUseCase` → `getLatestSolvesUseCase` (injects `IUsersRepository` and `ISolvesRepository`)
+ * - Binds controllers:
+ *   - `IAddSolvedProblemController` → `addSolvedProblemController` (injects `IAuthenticationService` and `IAddSolvedProblemUseCase`)
+ *   - `IGetLatestSolvesController` → `getLatestSolvesController` (injects `IAuthenticationService` and `IGetLatestSolvesUseCase`)
+ *
+ * This module centralizes all dependencies for recording solves, retrieving latest solves,
+ * and associating them with authenticated users.
+ *
+ * @returns {Module} The configured DI module for solves-related services.
+ */
 export function solvesModule() {
     const solvesModule = createModule();
 

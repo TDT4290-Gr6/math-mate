@@ -42,7 +42,7 @@ function LaTeXFormattedTextComponent({
 
     return (
         <div className={className}>
-            {/* Screenreader-Version mit Klartext */}
+            {/* Screenreader-Version with clear text */}
             <div
                 className="sr-only"
                 role="article"
@@ -52,7 +52,7 @@ function LaTeXFormattedTextComponent({
                 {plainTextVersion}
             </div>
 
-            {/* Visuelle Version mit KaTeX */}
+            {/* Visual Version with KaTeX */}
             <div aria-hidden="true">
                 <ReactMarkdown
                     remarkPlugins={[remarkMath, remarkGfm]}
@@ -61,7 +61,7 @@ function LaTeXFormattedTextComponent({
                         [
                             rehypeKatex,
                             {
-                                output: 'htmlAndMathml', // Bessere Screenreader-Unterstützung
+                                output: 'htmlAndMathml',
                                 throwOnError: false,
                             },
                         ],

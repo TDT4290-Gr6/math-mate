@@ -1,10 +1,10 @@
 'use client';
 
-import { LaTeXFormattedText } from './ui/latex-formatted-text';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { LaTeXFormattedText } from './latex-formatted-text';
 import type { Step } from '@/entities/models/step';
 import { extractPlainTextMath } from '@/lib/utils';
-import MethodCard from './ui/method-card';
+import MethodCard from './method-card';
 import { Minus } from 'lucide-react';
 
 interface StepsProps {

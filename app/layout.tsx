@@ -20,6 +20,16 @@ export const metadata: Metadata = {
     description: 'MathMate — Generative AI and solving math word problems',
 };
 
+/**
+ * RootLayout
+ *
+ * The top-level layout for the application. Sets up global styles, fonts,
+ * and theme handling. Wraps all pages with the ThemeProvider and other
+ * context providers via the `Providers` component.
+ *
+ * @param children - The React nodes representing the page content.
+ * @returns The HTML structure including <html> and <body> tags, with theme and font setup.
+ */
 export default function RootLayout({
     children,
 }: Readonly<{

@@ -15,6 +15,26 @@ const inputSchema = z.object({
 export type IGetProblemsInput = z.infer<typeof inputSchema>;
 export type IGetProblemsController = ReturnType<typeof getProblemsController>;
 
+/**
+ * Factory function that creates the `getProblemsController`.
+ *
+ * @param getProblemsUseCase - Use case responsible for fetching problems with pagination and filtering.
+ * @param getUserUseCase - Use case to retrieve the current user's data (e.g., score).
+ * @param authenticationService - Service to verify if the user is authenticated and obtain their ID.
+ * @returns A controller function that:
+ *   - Validates input parameters (offset, limit, optional subjects),
+ *   - Ensures the user is authenticated,
+ *   - Fetches the current user's data,
+ *   - Retrieves problems according to pagination, subjects, and user score,
+ *   - Formats the problems using the presenter.
+ *
+ * @throws UnauthenticatedError - If the user is not logged in or user ID is not set.
+ * @throws InputParseError - If the input is invalid (e.g., negative offset, excessive limit) or the user is not found.
+ *
+ * @example
+ * const controller = getProblemsController(getProblemsUseCase, getUserUseCase, authService);
+ * const formattedProblems = await controller({ offset: 0, limit: 10, subjects: ['Algebra'] });
+ */
 export const getProblemsController =
     (
         getProblemsUseCase: IGetProblemsUseCase,

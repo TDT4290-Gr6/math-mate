@@ -2,8 +2,19 @@ import type { IEventsRepository } from '@/application/repositories/events.reposi
 import { DatabaseOperationError } from '@/entities/errors/common';
 import type { Event, InsertEvent } from '@/entities/models/event';
 import { prisma } from '@/lib/prisma';
-
+/**
+ * Repository implementation for `Event` entities using Prisma.
+ *
+ * Handles persistence of events in a real database.
+ */
 export class EventsRepository implements IEventsRepository {
+    /**
+     * Creates a new event in the database.
+     *
+     * @param event - The event data to insert.
+     * @returns A promise that resolves to the created `Event`.
+     * @throws {DatabaseOperationError} When database insertion fails.
+     */
     async create(event: InsertEvent): Promise<Event> {
         try {
             const created = await prisma.event.create({

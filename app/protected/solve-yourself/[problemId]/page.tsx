@@ -4,15 +4,15 @@ import { useTrackedLogger } from '@/components/logger/LoggerProvider';
 import { useFetchProblem } from 'app/hooks/useFetchProblem';
 import ChatbotWindow from '@/components/chatbot-window';
 import { motion, AnimatePresence } from 'framer-motion';
-import ProblemCard from '@/components/ui/problem-card';
 import { useParams, useRouter } from 'next/navigation';
+import ProblemCard from '@/components/problem-card';
 import AnswerPopup from '@/components/answer-popup';
 import ChatToggle from '@/components/chat-toggle';
 import { useChatbot } from 'app/hooks/useChatbot';
 import { Button } from '@/components/ui/button';
-import Header from '@/components/ui/header';
 import { useEffect, useState } from 'react';
-import Title from '@/components/ui/title';
+import Header from '@/components/header';
+import Title from '@/components/title';
 import React from 'react';
 
 /**

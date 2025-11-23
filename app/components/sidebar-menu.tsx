@@ -1,7 +1,7 @@
 'use client';
 
 import { UserRound, Moon, X, LoaderCircle } from 'lucide-react';
-import { LaTeXFormattedText } from './ui/latex-formatted-text';
+import { LaTeXFormattedText } from './latex-formatted-text';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTrackedLogger } from './logger/LoggerProvider';
 import { getLatestSolves, getUserId } from '@/actions';

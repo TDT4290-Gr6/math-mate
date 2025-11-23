@@ -19,6 +19,21 @@ export type ICreateCountryController = ReturnType<
     typeof createCountryController
 >;
 
+/**
+ * Factory function that creates the `createCountryController`.
+ *
+ * @param createCountryUseCase - The use case responsible for creating a new country.
+ * @param authenticationService - Service used to verify the current user's authentication status.
+ * @returns A controller function that accepts input, validates it, checks authentication,
+ *          invokes the use case, and returns a formatted response.
+ *
+ * @throws UnauthenticatedError - If the user is not authenticated.
+ * @throws InputParseError - If the input fails validation.
+ *
+ * @example
+ * const controller = createCountryController(createCountryUseCase, authService);
+ * const response = await controller({ name: 'Germany' });
+ */
 export const createCountryController =
     (
         createCountryUseCase: ICreateCountryUseCase,

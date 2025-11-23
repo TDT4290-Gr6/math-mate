@@ -10,6 +10,27 @@ type WideLogoProps = {
     variant?: 'background' | 'card';
 };
 
+/**
+ * WideLogo component
+ *
+ * Renders a wide SVG logo for the application. The logo includes a circular
+ * background and stylized text. The fill color of the circle can be customized
+ * via the `variant` prop.
+ *
+ * Props:
+ * @param className - Optional additional CSS classes to apply to the SVG element.
+ * @param variant - Circle color variant:
+ *   - 'background': uses `fill-background`
+ *   - 'card': uses `fill-card` (default)
+ *
+ * Accessibility:
+ * - The SVG is marked as `aria-hidden="true"` since it is decorative.
+ *
+ * Usage:
+ * ```tsx
+ * <WideLogo className="h-12 w-auto" variant="background" />
+ * ```
+ */
 export default function WideLogo({
     className,
     variant = 'card',

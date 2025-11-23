@@ -8,6 +8,25 @@ interface ChatToggleProps {
     onClick?: () => void;
 }
 
+/**
+ * ChatToggle component displays a floating chat button with an optional tooltip.
+ *
+ * Features:
+ * - Shows a tooltip explaining the chat functionality when the component first mounts.
+ * - Tooltip automatically hides after 6 seconds.
+ * - Clicking the button triggers the optional `onClick` callback.
+ *
+ * Props:
+ * @param onClick Optional callback function called when the chat button is clicked.
+ *
+ * Accessibility:
+ * - The button has `aria-label="Open chat"` for screen readers.
+ *
+ * Usage example:
+ * ```tsx
+ * <ChatToggle onClick={() => openChatWindow()} />
+ * ```
+ */
 export default function ChatToggle({ onClick }: ChatToggleProps) {
     const [openTooltip, setOpenTooltip] = React.useState(true);
 

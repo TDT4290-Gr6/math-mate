@@ -1,3 +1,24 @@
+/**
+ * Dependency Injection Symbols and Return Types
+ *
+ * This file defines all the symbols used for dependency injection (DI) in the application,
+ * along with their corresponding TypeScript return types.
+ *
+ * DI_SYMBOLS:
+ * - A mapping from logical dependency names to unique `Symbol` values.
+ * - Used to register and retrieve dependencies in the DI container.
+ * - Categories include Services, Repositories, Use Cases, and Controllers.
+ *
+ * DI_RETURN_TYPES:
+ * - TypeScript interface that maps each DI symbol to its concrete type.
+ * - Ensures type safety when retrieving dependencies from the DI container.
+ *
+ * Example usage:
+ * ```ts
+ * const authService: DI_RETURN_TYPES['IAuthenticationService'] = getInjection('IAuthenticationService');
+ * ```
+ */
+
 import type { IAddSolvedProblemController } from '@/interface-adapters/controllers/add-solved-problem.controller';
 import type { IGetLatestSolvesController } from '@/interface-adapters/controllers/get-latest-solves.controller';
 import type { ICreateCountryController } from '@/interface-adapters/controllers/create-country.controller';

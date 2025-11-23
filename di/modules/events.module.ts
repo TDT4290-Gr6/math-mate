@@ -5,6 +5,22 @@ import { LogEventUseCase } from '@/application/use-cases/log-event.use-case';
 import { createModule } from '@evyweb/ioctopus';
 import { DI_SYMBOLS } from '../types';
 
+/**
+ * eventsModule
+ *
+ * Configures and returns the dependency injection module for event logging and tracking.
+ *
+ * - Binds `IEventsRepository` to a mock implementation (`MockEventsRepository`) when testing,
+ *   or to the real `EventsRepository` in production.
+ * - Binds `ILogEventUseCase` to `LogEventUseCase`, injecting `IEventsRepository`.
+ * - Binds `ICreateEventController` to `createEventController`, injecting `ILogEventUseCase`
+ *   and `IAuthenticationService`.
+ *
+ * This module centralizes all dependencies for logging and managing events within the application,
+ * ensuring that events are recorded consistently for analytics and user activity tracking.
+ *
+ * @returns {Module} The configured DI module for event-related services.
+ */
 export function eventsModule() {
     const events = createModule();
 

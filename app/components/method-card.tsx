@@ -2,7 +2,7 @@ import { LaTeXFormattedText } from './latex-formatted-text';
 import { useState, useEffect, useRef } from 'react';
 import { extractPlainTextMath } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { Card } from './card';
+import { Card } from './ui/card';
 import Title from './title';
 
 /**

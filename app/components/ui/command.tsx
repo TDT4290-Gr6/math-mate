@@ -13,6 +13,17 @@ import {
 } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 
+/**
+ * Base wrapper around `cmdk`'s `Command` primitive.
+ *
+ * Provides a full-width, full-height container for command items with
+ * custom styling for background, text, rounding, and overflow handling.
+ *
+ * Accepts all props from `CommandPrimitive`.
+ *
+ * @param className Optional Tailwind classes to extend/override styles.
+ * @param props All other props forwarded to `CommandPrimitive`.
+ */
 function Command({
     className,
     ...props
@@ -29,6 +40,23 @@ function Command({
     );
 }
 
+/**
+ * Dialog wrapper for a command palette.
+ *
+ * Features:
+ * - Provides a title and description (defaulting to "Command Palette")
+ * - Renders children inside a styled command container
+ * - Supports optional close button
+ *
+ * Accepts all props from `Dialog`.
+ *
+ * @param title Optional title of the dialog.
+ * @param description Optional description/help text.
+ * @param children Command items or groups.
+ * @param className Optional className for the dialog content.
+ * @param showCloseButton Whether to display the close button (default: true).
+ * @param props Other props forwarded to `Dialog`.
+ */
 function CommandDialog({
     title = 'Command Palette',
     description = 'Search for a command to run...',
@@ -60,6 +88,15 @@ function CommandDialog({
     );
 }
 
+/**
+ * Input field for the command palette.
+ *
+ * Includes a search icon and styling for focus, disabled, and placeholder states.
+ * Accepts all props from `CommandPrimitive.Input`.
+ *
+ * @param className Optional Tailwind classes for the input element.
+ * @param props All other props forwarded to `CommandPrimitive.Input`.
+ */
 function CommandInput({
     className,
     ...props
@@ -82,6 +119,14 @@ function CommandInput({
     );
 }
 
+/**
+ * Scrollable list container for command items.
+ *
+ * Accepts all props from `CommandPrimitive.List`.
+ *
+ * @param className Optional Tailwind classes for the list.
+ * @param props Other props forwarded to `CommandPrimitive.List`.
+ */
 function CommandList({
     className,
     ...props
@@ -98,6 +143,13 @@ function CommandList({
     );
 }
 
+/**
+ * Displayed when no command matches the search query.
+ *
+ * Accepts all props from `CommandPrimitive.Empty`.
+ *
+ * @param props Props forwarded to `CommandPrimitive.Empty`.
+ */
 function CommandEmpty({
     ...props
 }: React.ComponentProps<typeof CommandPrimitive.Empty>) {
@@ -110,6 +162,15 @@ function CommandEmpty({
     );
 }
 
+/**
+ * Group container for organizing command items.
+ *
+ * Applies padding and muted styling for group headings.
+ * Accepts all props from `CommandPrimitive.Group`.
+ *
+ * @param className Optional Tailwind classes.
+ * @param props Other props forwarded to `CommandPrimitive.Group`.
+ */
 function CommandGroup({
     className,
     ...props
@@ -126,6 +187,14 @@ function CommandGroup({
     );
 }
 
+/**
+ * Separator line between command groups or items.
+ *
+ * Accepts all props from `CommandPrimitive.Separator`.
+ *
+ * @param className Optional Tailwind classes.
+ * @param props Other props forwarded to `CommandPrimitive.Separator`.
+ */
 function CommandSeparator({
     className,
     ...props
@@ -139,6 +208,15 @@ function CommandSeparator({
     );
 }
 
+/**
+ * Individual selectable command item.
+ *
+ * Supports selected, disabled, and icon styling.
+ * Accepts all props from `CommandPrimitive.Item`.
+ *
+ * @param className Optional Tailwind classes.
+ * @param props Other props forwarded to `CommandPrimitive.Item`.
+ */
 function CommandItem({
     className,
     ...props
@@ -155,6 +233,14 @@ function CommandItem({
     );
 }
 
+/**
+ * Displays a keyboard shortcut associated with a command item.
+ *
+ * Typically used as a child of `CommandItem`.
+ *
+ * @param className Optional Tailwind classes.
+ * @param props Props forwarded to the underlying `<span>`.
+ */
 function CommandShortcut({
     className,
     ...props

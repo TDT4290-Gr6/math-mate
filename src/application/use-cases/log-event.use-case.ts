@@ -4,7 +4,20 @@ import { insertEventSchema } from '@/entities/models/event';
 
 export type ILogEventUseCase = ReturnType<typeof LogEventUseCase>;
 
-// Executes the use case to create an event
+/**
+ * Factory function that creates the `LogEventUseCase`.
+ *
+ * This use case is responsible for logging events by validating the input,
+ * adding default values if necessary, and persisting the event using
+ * the provided events repository.
+ *
+ * @param eventRepository - An implementation of `IEventsRepository` used to persist events.
+ * @returns An object containing the `execute` function, which logs a new event.
+ *
+ * @example
+ * const logEvent = LogEventUseCase(eventsRepository);
+ * const event = await logEvent.execute({ sessionId: 1, actionName: "chat_message_sent", payload: "{}" });
+ */
 export const LogEventUseCase = (eventRepository: IEventsRepository) => ({
     async execute(
         input: InsertEvent | Omit<InsertEvent, 'loggedAt'>,

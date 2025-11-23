@@ -10,6 +10,28 @@ interface SubjectCheckboxProps {
     onToggle: (subject: Subject) => void;
 }
 
+/**
+ * SubjectCheckbox component
+ *
+ * Renders a labeled checkbox for selecting a subject with an associated icon.
+ * The checkbox can be rendered in either 'small' or 'large' size.
+ *
+ * Props:
+ * @param subject - The subject name corresponding to the checkbox.
+ * @param checked - Whether the checkbox is currently selected.
+ * @param size - Determines the size of the checkbox and label ('small' | 'large').
+ * @param onToggle - Callback invoked when the checkbox is toggled, passing the subject.
+ *
+ * Usage:
+ * ```tsx
+ * <SubjectCheckbox
+ *   subject="Math"
+ *   checked={true}
+ *   size="large"
+ *   onToggle={(subject) => console.log(subject)}
+ * />
+ * ```
+ */
 export default function SubjectCheckbox({
     subject,
     checked,

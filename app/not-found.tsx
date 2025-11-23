@@ -1,9 +1,18 @@
 'use client';
 import { PanelsTopLeft, Search } from 'lucide-react';
 import { Button } from './components/ui/button';
-import Title from './components/ui/title';
+import Title from './components/title';
 import Link from 'next/link';
 
+/**
+ * NotFoundPage
+ *
+ * A client-side 404 page displayed when a user navigates to a route
+ * that does not exist. Includes a styled error message, a decorative
+ * icon stack, and a button linking back to the main menu.
+ *
+ * @returns A React component rendering the 404 error page.
+ */
 export default function NotFoundPage() {
     return (
         <div className="flex min-h-screen flex-col items-center justify-center gap-6">
