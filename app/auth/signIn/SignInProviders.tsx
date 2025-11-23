@@ -23,6 +23,26 @@ const providerConfig: Record<string, { icon: JSX.Element; color: string }> = {
     },
 };
 
+/**
+ * Renders a list of authentication provider sign-in buttons.
+ *
+ * This component receives a list of providers (id + name)
+ * and displays a styled button for each one. Each button
+ * includes the provider’s configured icon and colors, and
+ * triggers `next-auth`'s `signIn` flow when clicked.
+ *
+ * Behavior:
+ * - If no providers are supplied, a descriptive message is shown.
+ * - Button appearance is determined by `providerConfig`, which maps
+ *   provider IDs to icons and color classes.
+ * - On click, users are redirected to the NextAuth sign-in flow with
+ *   a fixed callback URL (`/protected/start`).
+ *
+ * Props:
+ * @param providers — Array of available authentication providers, or null.
+ *
+ * @returns A list of provider buttons or a fallback message.
+ */
 export default function SignInProviders({
     providers,
 }: {
