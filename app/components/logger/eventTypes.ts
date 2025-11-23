@@ -1,3 +1,24 @@
+/**
+ * A mapping of all analytics event names used throughout the application
+ * to the shape of the data payload each event expects.
+ *
+ * This type ensures type-safe tracking by defining, for every event key,
+ * the exact structure of the associated event properties. It is intended
+ * for use with analytics logging utilities to enforce consistency and
+ * prevent invalid event payloads.
+ *
+ * Event Categories:
+ * - Page interactions (e.g., `page_view`, navigation events)
+ * - Chat events (open, close, messages sent/received, step progression)
+ * - Answer/solution flow events (next step, reveal answer, evaluations)
+ * - Subject selection and practice session events
+ * - UI actions (sidebar, theme toggle, popups)
+ * - Authentication events (`sign_in`, `sign_out`)
+ *
+ * Each event key maps to an object representing the payload expected
+ * when that event is tracked.
+ */
+
 export type AnalyticsEventMap = {
     page_view: { page: string };
     submit_country: { countryId: number };
