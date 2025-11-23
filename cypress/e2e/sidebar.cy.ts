@@ -2,7 +2,7 @@
 
 describe('sidebar', () => {
     it('opens and closes', () => {
-        cy.login('cypress-sidebar');
+        cy.login();
 
         // Go to another page than the start page to skip country selection
         cy.visit('/protected/problem');
@@ -41,7 +41,7 @@ describe('sidebar', () => {
 
     describe('theme toggle', () => {
         it('successfully toggles light/darkmode', () => {
-            cy.login('cypress-theme-1');
+            cy.login();
 
             // Go to another page than the start page to skip country selection
             cy.visit('/protected/problem');
@@ -69,7 +69,7 @@ describe('sidebar', () => {
         });
 
         it('successfully persists theme changes on page reload', () => {
-            cy.login('cypress-theme-2');
+            cy.login();
 
             // Go to another page than the start page to skip country selection
             cy.visit('/protected/problem');
@@ -123,7 +123,7 @@ describe('sidebar', () => {
             .should('be.visible')
             .click();
         cy.get('button').contains('No').should('be.visible').click();
-        cy.get('button[aria-label="Rate difficulty 1"]')
+        cy.get('button[aria-label="Rate difficulty 1 out of 5, easy"]')
             .should('be.visible')
             .click();
         cy.get('button').contains('Next question').should('be.visible').click();

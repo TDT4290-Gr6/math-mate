@@ -6,7 +6,7 @@ describe('start to problem flow', () => {
     });
 
     it('lets authenticated user pick a subject and navigate to problems', () => {
-        cy.login('cypress-start');
+        cy.login();
         cy.visit('/protected/start');
 
         // Verify the start page content is visible
@@ -120,7 +120,7 @@ describe('start to problem flow', () => {
         cy.contains('button', 'Yes').should('be.visible').click();
         cy.wait(500);
         // Rate difficulty as 3
-        cy.get('button[aria-label="Rate difficulty 3"]')
+        cy.get('button[aria-label="Rate difficulty 3 out of 5, medium"]')
             .should('be.visible')
             .click();
         // Finish by going to the next question

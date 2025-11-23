@@ -39,8 +39,9 @@ describe('chatbot UI (mocked)', () => {
         );
 
         // Close the chatbot (click the chevron down inside the chat window)
-        // the chevron SVG has class 'cursor-pointer' in the component
-        cy.get('svg.cursor-pointer', { timeout: 2000 }).first().click();
+        cy.get('button[aria-label="Close chat"]', { timeout: 2000 })
+            .first()
+            .click();
 
         // Ensure the chat input is gone (chat closed) before moving on
         cy.get('input[placeholder="Ask a question..."]', {
