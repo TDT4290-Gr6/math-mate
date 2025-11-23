@@ -33,8 +33,8 @@ export function cn(...inputs: ClassValue[]) {
  *
  * @example
  * ```ts
- * const plainText = extractPlainTextMath('Die Formel ist $$E=mc^2$$ und <b>bold</b>');
- * Returns: "Formel: E=mc^2 und bold"
+ * const plainText = extractPlainTextMath('Formula $$E=mc^2$$ und <b>bold</b>');
+ * // Returns: "Formula E=mc^2 und bold"
  * ```
  */
 export function extractPlainTextMath(text: string): string {
