@@ -13,6 +13,27 @@ const LogEventDTO = z.object({
 });
 
 export type ICreateEventController = ReturnType<typeof createEventController>;
+
+/**
+ * Factory function that creates the `createEventController`.
+ *
+ * @param logEventUseCase - Use case responsible for logging events in the system.
+ * @param authenticationService - Service to obtain the current authenticated user's ID.
+ * @returns A controller function that validates input, ensures the user is authenticated,
+ *          logs the event, and returns the created event's ID and timestamp.
+ *
+ * @throws InputParseError - If the input fails validation.
+ *
+ * @example
+ * const controller = createEventController(logEventUseCase, authService);
+ * const result = await controller({
+ *   sessionId: 1,
+ *   actionName: 'view_problem',
+ *   problemId: 123,
+ *   payload: '{"extra":"data"}'
+ * });
+ * // result -> { id: 42, loggedAt: 2025-11-23T10:15:00.000Z }
+ */
 export const createEventController =
     (
         logEventUseCase: ILogEventUseCase,

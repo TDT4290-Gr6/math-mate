@@ -5,6 +5,21 @@ import { UnauthenticatedError } from '@/entities/errors/auth';
 
 export type IGetCountriesController = ReturnType<typeof getCountriesController>;
 
+/**
+ * Factory function that creates the `getCountriesController`.
+ *
+ * @param getCountriesUseCase - Use case responsible for fetching all countries.
+ * @param authenticationService - Service to verify if the user is authenticated.
+ * @returns A controller function that ensures the user is authenticated,
+ *          fetches the list of countries, and formats them using the presenter.
+ *
+ * @throws UnauthenticatedError - If the user is not logged in.
+ *
+ * @example
+ * const controller = getCountriesController(getCountriesUseCase, authService);
+ * const countries = await controller();
+ * // countries -> formatted list of countries
+ */
 export const getCountriesController =
     (
         getCountriesUseCase: IGetCountriesUseCase,

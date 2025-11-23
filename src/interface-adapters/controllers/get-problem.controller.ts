@@ -12,6 +12,21 @@ const inputSchema = z.object({
 export type IGetProblemInput = z.infer<typeof inputSchema>;
 export type IGetProblemController = ReturnType<typeof getProblemController>;
 
+/**
+ * Factory function that creates the `getProblemController`.
+ *
+ * @param getProblemUseCase - Use case responsible for fetching a single problem by ID.
+ * @param authenticationService - Service to verify if the user is authenticated.
+ * @returns A controller function that validates input, ensures the user is authenticated,
+ *          fetches the problem, and formats it using the presenter.
+ *
+ * @throws UnauthenticatedError - If the user is not logged in.
+ * @throws InputParseError - If the input is invalid (e.g., negative or missing problemId).
+ *
+ * @example
+ * const controller = getProblemController(getProblemUseCase, authService);
+ * const formattedProblem = await controller({ problemId: 42 });
+ */
 export const getProblemController =
     (
         getProblemUseCase: IGetProblemUseCase,

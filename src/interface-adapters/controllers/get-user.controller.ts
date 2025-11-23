@@ -6,6 +6,24 @@ import { InputParseError } from '@/entities/errors/common';
 
 export type IGetUserController = ReturnType<typeof getUserController>;
 
+/**
+ * Factory function that creates the `getUserController`.
+ *
+ * @param getUserUseCase - Use case to retrieve a user's data by their ID.
+ * @param authenticationService - Service to verify if the user is authenticated and obtain their ID.
+ * @returns A controller function that:
+ *   - Ensures the user is authenticated,
+ *   - Retrieves the current user's ID from the authentication service,
+ *   - Fetches the user's data from the use case,
+ *   - Formats the user data using the presenter.
+ *
+ * @throws UnauthenticatedError - If the user is not logged in or user ID is not set.
+ * @throws InputParseError - If the user cannot be found in the repository.
+ *
+ * @example
+ * const controller = getUserController(getUserUseCase, authService);
+ * const formattedUser = await controller();
+ */
 export const getUserController =
     (
         getUserUseCase: IGetUserUseCase,
