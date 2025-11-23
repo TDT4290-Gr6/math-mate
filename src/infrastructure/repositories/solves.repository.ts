@@ -4,7 +4,23 @@ import { DatabaseOperationError } from '@/entities/errors/common';
 import { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 
+/**
+ * Implementation of `ISolvesRepository` using Prisma as the database client.
+ *
+ * Provides methods to manage solves in a persistent database, including
+ * retrieving, creating, updating, and deleting solves. Also handles
+ * user score calculation based on solved problems.
+ *
+ * All methods wrap potential database errors in `DatabaseOperationError`
+ * to provide consistent error handling.
+ */
 export class SolvesRepository implements ISolvesRepository {
+    /**
+     * Retrieves a solve by its ID.
+     * @param id - The ID of the solve to fetch.
+     * @returns The solve if found, or null if it does not exist.
+     * @throws DatabaseOperationError if the database query fails.
+     */
     async getById(id: number): Promise<Solve | null> {
         try {
             const solve = await prisma.solves.findUnique({
@@ -17,6 +33,12 @@ export class SolvesRepository implements ISolvesRepository {
             });
         }
     }
+    /**
+     * Retrieves all solves for a given user.
+     * @param userId - The ID of the user.
+     * @returns Array of solves belonging to the user.
+     * @throws DatabaseOperationError if the database query fails.
+     */
     async getByUserId(userId: number): Promise<Solve[]> {
         try {
             const solves = await prisma.solves.findMany({
@@ -32,6 +54,12 @@ export class SolvesRepository implements ISolvesRepository {
             );
         }
     }
+    /**
+     * Retrieves the latest solve per problem for a user, ordered by completion time.
+     * @param userId - The ID of the user.
+     * @returns Array of latest solves, one per problem.
+     * @throws DatabaseOperationError if the database query fails.
+     */
     async getLatestByUserId(userId: number): Promise<Solve[]> {
         try {
             const solves = await prisma.solves.findMany({
@@ -61,7 +89,12 @@ export class SolvesRepository implements ISolvesRepository {
             );
         }
     }
-
+    /**
+     * Retrieves all solves for a specific problem.
+     * @param problemId - The ID of the problem.
+     * @returns Array of solves for the problem.
+     * @throws DatabaseOperationError if the database query fails.
+     */
     async getByProblemId(problemId: number): Promise<Solve[]> {
         try {
             const solves = await prisma.solves.findMany({
@@ -80,6 +113,14 @@ export class SolvesRepository implements ISolvesRepository {
             throw error;
         }
     }
+
+    /**
+     * Counts the number of attempts a user has made for a given problem.
+     * @param userId - The ID of the user.
+     * @param problemId - The ID of the problem.
+     * @returns The total number of attempts.
+     * @throws DatabaseOperationError if the database query fails.
+     */
     async getAttemptCount(userId: number, problemId: number): Promise<number> {
         try {
             const count = await prisma.solves.count({
@@ -95,6 +136,13 @@ export class SolvesRepository implements ISolvesRepository {
             });
         }
     }
+
+    /**
+     * Creates a new solve record.
+     * @param solve - The solve data to insert.
+     * @returns The created solve including its ID and attempts count.
+     * @throws DatabaseOperationError if the database operation fails.
+     */
     async createSolve(solve: SolveInsert): Promise<Solve> {
         try {
             const attemptsUsed = await this.getAttemptCount(
@@ -124,6 +172,14 @@ export class SolvesRepository implements ISolvesRepository {
             });
         }
     }
+
+    /**
+     * Updates an existing solve.
+     * @param id - The ID of the solve to update.
+     * @param solve - Partial data to update.
+     * @returns The updated solve.
+     * @throws DatabaseOperationError if the database operation fails.
+     */
     async updateSolve(id: number, solve: Partial<SolveInsert>): Promise<Solve> {
         try {
             const updatedSolve = await prisma.solves.update({
@@ -137,6 +193,13 @@ export class SolvesRepository implements ISolvesRepository {
             });
         }
     }
+
+    /**
+     * Deletes a solve by its ID.
+     * @param id - The ID of the solve to delete.
+     * @returns The deleted solve.
+     * @throws DatabaseOperationError if the database operation fails.
+     */
     async deleteSolve(id: number): Promise<Solve> {
         try {
             const deletedSolve = await prisma.solves.delete({
@@ -150,6 +213,10 @@ export class SolvesRepository implements ISolvesRepository {
         }
     }
 
+    /**
+     * Recalculates and updates a user's score based on correct solves.
+     * @param userId - The ID of the user.
+     */
     private async updateUserScore(userId: number): Promise<void> {
         const score = await this.calculateScore(userId);
         await prisma.user.update({
