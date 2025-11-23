@@ -6,30 +6,65 @@ import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
+/**
+ * Root container for a dialog using Radix UI's DialogPrimitive.
+ *
+ * Wrap your dialog components with this to initialize the dialog context.
+ *
+ * Accepts all props from `DialogPrimitive.Root`.
+ */
 function Dialog({
     ...props
 }: React.ComponentProps<typeof DialogPrimitive.Root>) {
     return <DialogPrimitive.Root data-slot="dialog" {...props} />;
 }
 
+/**
+ * Trigger element for opening a dialog.
+ *
+ * Accepts all props from `DialogPrimitive.Trigger`.
+ *
+ * Typically a button or interactive element.
+ */
 function DialogTrigger({
     ...props
 }: React.ComponentProps<typeof DialogPrimitive.Trigger>) {
     return <DialogPrimitive.Trigger data-slot="dialog-trigger" {...props} />;
 }
 
+/**
+ * Portal wrapper for rendering dialog content outside of normal DOM flow.
+ *
+ * Accepts all props from `DialogPrimitive.Portal`.
+ */
 function DialogPortal({
     ...props
 }: React.ComponentProps<typeof DialogPrimitive.Portal>) {
     return <DialogPrimitive.Portal data-slot="dialog-portal" {...props} />;
 }
 
+/**
+ * Close button or element for a dialog.
+ *
+ * Accepts all props from `DialogPrimitive.Close`.
+ *
+ * Used to dismiss the dialog.
+ */
 function DialogClose({
     ...props
 }: React.ComponentProps<typeof DialogPrimitive.Close>) {
     return <DialogPrimitive.Close data-slot="dialog-close" {...props} />;
 }
 
+/**
+ * Overlay backdrop behind the dialog.
+ *
+ * Provides semi-transparent background and open/close animations.
+ *
+ * Accepts all props from `DialogPrimitive.Overlay`.
+ *
+ * @param className Optional Tailwind classes for customization.
+ */
 function DialogOverlay({
     className,
     ...props
@@ -46,6 +81,18 @@ function DialogOverlay({
     );
 }
 
+/**
+ * Main content container of the dialog.
+ *
+ * Handles centering, max width, padding, border, shadow, and animations.
+ * Automatically includes an optional close button in the top-right.
+ *
+ * Accepts all props from `DialogPrimitive.Content`.
+ *
+ * @param className Optional Tailwind classes.
+ * @param children Content to render inside the dialog.
+ * @param showCloseButton Whether to display a close button (default: true).
+ */
 function DialogContent({
     className,
     children,
@@ -80,6 +127,13 @@ function DialogContent({
     );
 }
 
+/**
+ * Header section of the dialog.
+ *
+ * Typically contains `DialogTitle` and optional description.
+ *
+ * Accepts all native `<div>` props.
+ */
 function DialogHeader({ className, ...props }: React.ComponentProps<'div'>) {
     return (
         <div
@@ -93,6 +147,13 @@ function DialogHeader({ className, ...props }: React.ComponentProps<'div'>) {
     );
 }
 
+/**
+ * Footer section of the dialog.
+ *
+ * Typically contains action buttons.
+ *
+ * Accepts all native `<div>` props.
+ */
 function DialogFooter({ className, ...props }: React.ComponentProps<'div'>) {
     return (
         <div
@@ -106,6 +167,13 @@ function DialogFooter({ className, ...props }: React.ComponentProps<'div'>) {
     );
 }
 
+/**
+ * Title text of the dialog.
+ *
+ * Accepts all props from `DialogPrimitive.Title`.
+ *
+ * @param className Optional Tailwind classes.
+ */
 function DialogTitle({
     className,
     ...props
@@ -119,6 +187,13 @@ function DialogTitle({
     );
 }
 
+/**
+ * Description or subtitle of the dialog.
+ *
+ * Accepts all props from `DialogPrimitive.Description`.
+ *
+ * @param className Optional Tailwind classes.
+ */
 function DialogDescription({
     className,
     ...props

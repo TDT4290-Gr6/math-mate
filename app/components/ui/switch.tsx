@@ -5,6 +5,19 @@ import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
+/**
+ * Switch component built on top of Radix UI's `SwitchPrimitive.Root`.
+ *
+ * Features:
+ * - Styled toggle switch with checked/unchecked states
+ * - Includes a thumb that animates between positions
+ * - Handles focus, disabled, and dark mode states
+ *
+ * Accepts all props from `SwitchPrimitive.Root`.
+ *
+ * @param className Optional Tailwind classes to extend or override styling.
+ * @param props Other props forwarded to the underlying `SwitchPrimitive.Root`.
+ */
 function Switch({
     className,
     ...props

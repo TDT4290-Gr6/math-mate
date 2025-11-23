@@ -4,6 +4,17 @@ import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
+/**
+ * A class-variance-authority (CVA) configuration object that defines
+ * all visual variants and sizes for the `Button` component.
+ *
+ * This centralizes Tailwind classes for:
+ * - `variant` — visual style (default, secondary, ghost, transparent, link)
+ * - `size` — layout and padding presets (default, sm, lg, icon)
+ *
+ * The returned function can be used to generate the appropriate
+ * className string based on variant/size combinations.
+ */
 const buttonVariants = cva(
     "inline-flex items-center cursor-pointer justify-center hover:brightness-80 disabled:opacity-50 disabled:pointer-events-none rounded-[30px] text-base font-medium [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
     {
@@ -29,6 +40,23 @@ const buttonVariants = cva(
     },
 );
 
+/**
+ * A polymorphic, variant-driven button component built on top of
+ * `class-variance-authority` and Radix UI's `Slot`.
+ *
+ * Features:
+ * - Supports multiple visual variants and sizes via `buttonVariants`
+ * - Can render as a different element using `asChild` (useful for links)
+ * - Automatically merges additional `className` values
+ * - Accepts all native `<button>` props
+ *
+ * @param className — Additional Tailwind classes to merge.
+ * @param variant — Visual style defined in `buttonVariants`.
+ * @param size — Size preset defined in `buttonVariants`.
+ * @param asChild — If true, renders a Radix `Slot` instead of `<button>`.
+ *
+ * @returns A styled button or button-like element.
+ */
 function Button({
     className,
     variant,

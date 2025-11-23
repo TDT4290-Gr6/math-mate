@@ -6,6 +6,16 @@ import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
+/**
+ * Checkbox component built on top of Radix UI's CheckboxPrimitive.
+ *
+ * - Supports all props from `CheckboxPrimitive.Root`.
+ * - Applies Tailwind-based styling for checked/unchecked, focus, disabled, and invalid states.
+ * - Renders a checkmark icon when checked.
+ *
+ * @param className Optional Tailwind classes to extend or override the default styling.
+ * @param props Additional props forwarded to `CheckboxPrimitive.Root`.
+ */
 function Checkbox({
     className,
     ...props
